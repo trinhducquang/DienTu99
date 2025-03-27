@@ -1,0 +1,66 @@
+/* Add Product Form Styles */
+.root {
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-background-color: #f4f4f4;
+}
+
+.dialog-container {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);
+}
+
+.dialog-header {
+    -fx-background-color: #4CA1F3;
+    -fx-padding: 15px;
+    -fx-background-radius: 10px 10px 0 0;
+}
+
+.dialog-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+}
+
+.form-label {
+    -fx-text-fill: #4CA1F3;
+    -fx-font-weight: bold;
+}
+
+.text-field, .combo-box {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
+    -fx-padding: 8px;
+}
+
+.text-field:focused, .combo-box:focused {
+    -fx-border-color: #4CA1F3;
+}
+
+.button {
+    -fx-background-radius: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 20px;
+}
+
+.button-cancel {
+    -fx-background-color: #E0E0E0;
+    -fx-text-fill: #757575;
+}
+
+.button-save {
+    -fx-background-color: #4CA1F3;
+    -fx-text-fill: white;
+}
+
+.button-cancel:hover {
+    -fx-background-color: #D0D0D0;
+}
+
+.button-save:hover {
+    -fx-background-color: #3090E3;
+}

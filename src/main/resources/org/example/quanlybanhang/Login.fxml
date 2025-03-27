@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.quanlybanhang.controller.LoginController"
+      alignment="CENTER"
+      spacing="20"
+      style="-fx-background-color: linear-gradient(to bottom right, #3494E6, #2196F3);">
+
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+
+    <StackPane prefWidth="400" prefHeight="400">
+        <!-- Đăng Nhập Pane -->
+        <VBox fx:id="dangNhapPane"
+              spacing="20"
+              alignment="CENTER"
+              style="-fx-background-color: white;
+                     -fx-background-radius: 10;
+                     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+
+            <Label text="Đăng Nhập"
+                   style="-fx-font-size: 24px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: #2196F3;"/>
+
+            <TextField fx:id="tenDangNhapField"
+                       promptText="Tên Đăng Nhập"
+                       style="-fx-background-radius: 20;
+                              -fx-padding: 10px;
+                              -fx-background-color: #F0F0F0;"/>
+
+            <PasswordField fx:id="matKhauField"
+                           promptText="Mật Khẩu"
+                           style="-fx-background-radius: 20;
+                                  -fx-padding: 10px;
+                                  -fx-background-color: #F0F0F0;"/>
+
+            <Button text="Đăng Nhập"
+                    onAction="#xuLyDangNhap"
+                    style="-fx-background-color: #2196F3;
+                           -fx-text-fill: white;
+                           -fx-background-radius: 20;
+                           -fx-padding: 10px 20px;"/>
+        </VBox>
+    </StackPane>
+</VBox>

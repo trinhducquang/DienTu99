@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="600.0" prefWidth="800" spacing="15" stylesheets="@report.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+
+    <VBox styleClass="page-header">
+        <Label styleClass="page-title" text="Báo Cáo Tổng Quan" />
+    </VBox>
+
+    <HBox spacing="10" styleClass="filter-container">
+        <ComboBox promptText="Loại Báo Cáo" styleClass="filter-combo" />
+        <DatePicker promptText="Từ Ngày" styleClass="filter-date" />
+        <DatePicker promptText="Đến Ngày" styleClass="filter-date" />
+        <Button styleClass="export-button" text="Xuất Báo Cáo" />
+    </HBox>
+
+    <HBox spacing="15" styleClass="chart-container">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label styleClass="chart-title" text="Doanh Thu Theo Danh Mục" />
+            <PieChart styleClass="pie-chart" />
+        </VBox>
+
+        <VBox HBox.hgrow="ALWAYS">
+            <Label styleClass="chart-title" text="Số Lượng Bán Theo Sản Phẩm" />
+            <BarChart>
+                <xAxis>
+                    <CategoryAxis label="Sản Phẩm" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis label="Số Lượng" />
+                </yAxis>
+            </BarChart>
+        </VBox>
+    </HBox>
+
+    <VBox styleClass="table-container" VBox.vgrow="ALWAYS">
+        <Label styleClass="table-title" text="Chi Tiết Báo Cáo" />
+        <TableView>
+            <columns>
+                <TableColumn prefWidth="157.0" text="STT" />
+                <TableColumn minWidth="8.0" prefWidth="176.0" text="Ngày" />
+                <TableColumn prefWidth="119.0" text="Loại" />
+                <TableColumn prefWidth="175.0" text="Số Lượng" />
+                <TableColumn prefWidth="174.0" text="Doanh Thu" />
+                <TableColumn prefWidth="168.0" text="Lợi Nhuận" />
+            </columns>
+        </TableView>
+    </VBox>
+
+    <HBox spacing="20" styleClass="summary-container">
+        <VBox styleClass="summary-box">
+            <Label styleClass="summary-label" text="Tổng Doanh Thu" />
+            <Label styleClass="summary-value" text="1,234,567,000 VND" />
+        </VBox>
+        <VBox styleClass="summary-box">
+            <Label styleClass="summary-label" text="Tổng Lợi Nhuận" />
+            <Label styleClass="summary-value" text="345,678,000 VND" />
+        </VBox>
+        <VBox styleClass="summary-box">
+            <Label styleClass="summary-label" text="Sản Phẩm Bán Chạy" />
+            <Label styleClass="summary-value" text="Laptop Gaming" />
+        </VBox>
+    </HBox>
+</VBox>
