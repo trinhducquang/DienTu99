@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table quanlybanhang.categories: ~0 rows (approximately)
+-- Dumping data for table quanlybanhang.categories: ~3 rows (approximately)
 INSERT INTO `categories` (`id`, `name`, `description`) VALUES
 	(1, 'Laptop', 'Các dòng laptop từ phổ thông đến cao cấp'),
 	(2, 'Phụ kiện', 'Chuột, bàn phím, tai nghe và các phụ kiện khác'),
@@ -56,8 +56,11 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `total_price` decimal(10,2) NOT NULL,
   `order_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `status` enum('pending','completed','cancelled') NOT NULL,
+  `customer_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `employee_id` (`employee_id`),
+  KEY `fk_orders_customers` (`customer_id`),
+  CONSTRAINT `fk_orders_customers` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE,
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -95,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table quanlybanhang.products: ~0 rows (approximately)
+-- Dumping data for table quanlybanhang.products: ~12 rows (approximately)
 INSERT INTO `products` (`id`, `name`, `category_id`, `description`, `price`, `stock_quantity`, `created_at`, `updated_at`) VALUES
 	(1, 'Laptop Dell Inspiron', 1, 'Laptop Dell mạnh mẽ cho doanh nhân', 18000000.00, 10, '2025-03-27 16:08:11', '2025-03-27 16:08:11'),
 	(2, 'MacBook Air M1', 1, 'MacBook Air M1 siêu nhẹ, pin trâu', 22000000.00, 8, '2025-03-27 16:08:11', '2025-03-27 16:08:11'),
