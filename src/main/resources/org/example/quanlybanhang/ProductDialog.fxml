@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="571.0" prefWidth="500" spacing="20" stylesheets="@product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:controller="org.example.quanlybanhang.controller.ProductDialogController" alignment="CENTER" prefHeight="571.0" prefWidth="500" spacing="20" stylesheets="@product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
 
     <VBox styleClass="dialog-header">
         <Label styleClass="dialog-title" text="Thêm Sản Phẩm" />
@@ -18,22 +18,22 @@
 
     <GridPane hgap="15" styleClass="input-grid" vgap="15">
         <Label styleClass="input-label" text="Mã Sản Phẩm" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <TextField prefHeight="39.0" prefWidth="338.0" promptText="Nhập mã sản phẩm" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <TextField fx:id="productIdField" prefHeight="39.0" prefWidth="338.0" promptText="Nhập mã sản phẩm" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
         <Label styleClass="input-label" text="Tên Sản Phẩm" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-        <TextField promptText="Nhập tên sản phẩm" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <TextField fx:id="productNameField" promptText="Nhập tên sản phẩm" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
         <Label styleClass="input-label" text="Danh Mục" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-        <ComboBox promptText="Chọn danh mục" styleClass="input-combo" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <ComboBox fx:id="categoryComboBox" promptText="Chọn danh mục" styleClass="input-combo" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
         <Label styleClass="input-label" text="Giá" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-        <TextField promptText="Nhập giá" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <TextField fx:id="priceField" promptText="Nhập giá" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
         <Label styleClass="input-label" text="Số Lượng" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-        <TextField promptText="Nhập số lượng" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <TextField fx:id="stockQuantityField" promptText="Nhập số lượng" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
         <Label styleClass="input-label" text="Mô Tả" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-        <TextField promptText="Nhập mô tả sản phẩm" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        <TextField fx:id="descriptionField" promptText="Nhập mô tả sản phẩm" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="5" />
       <columnConstraints>
          <ColumnConstraints />
          <ColumnConstraints />
@@ -49,7 +49,7 @@
     </GridPane>
 
     <HBox alignment="CENTER" prefHeight="114.0" prefWidth="500.0" spacing="20" styleClass="button-container">
-        <Button styleClass="cancel-button" text="Hủy" />
-        <Button styleClass="save-button" text="Lưu" />
+        <Button fx:id="cancelButton" styleClass="cancel-button" text="Hủy" />
+        <Button fx:id="saveButton" styleClass="save-button" text="Lưu" />
     </HBox>
 </VBox>

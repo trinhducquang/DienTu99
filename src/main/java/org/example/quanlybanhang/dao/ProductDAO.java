@@ -32,6 +32,31 @@ public class ProductDAO {
         return products;
     }
 
+    public void insertProduct(Product product) throws SQLException {
+        String sql = "INSERT INTO products (name, category_id, description, price, stock_quantity, created_at, updated_at) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, product.getName());
+            statement.setInt(2, product.getCategoryId());
+            statement.setString(3, product.getDescription());
+            statement.setDouble(4, product.getPrice());
+            statement.setInt(5, product.getStockQuantity());
+            statement.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+            statement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        product.setId(generatedKeys.getInt(1));
+                    }
+                }
+            }
+        }
+    }
+
+
     private Product extractProductFromResultSet(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         String name = resultSet.getString("name");
