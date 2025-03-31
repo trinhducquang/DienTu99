@@ -1,5 +1,6 @@
 package org.example.quanlybanhang.dao;
 
+import org.example.quanlybanhang.enums.ProductStatus;
 import org.example.quanlybanhang.model.Product;
 
 import java.sql.*;
@@ -16,7 +17,7 @@ public class ProductDAO {
 
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT * FROM products";
+        String sql = "SELECT p.*, c.name AS category_name FROM products p JOIN categories c ON p.category_id = c.id";
 
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
@@ -28,22 +29,36 @@ public class ProductDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return products;
     }
 
     public void insertProduct(Product product) throws SQLException {
-        String sql = "INSERT INTO products (name, category_id, description, price, stock_quantity, created_at, updated_at) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String getCategorySql = "SELECT id FROM categories WHERE name = ?";
+        int categoryId = -1;
 
+        try (PreparedStatement categoryStatement = connection.prepareStatement(getCategorySql)) {
+            categoryStatement.setString(1, product.getCategoryName());
+            try (ResultSet categoryResult = categoryStatement.executeQuery()) {
+                if (categoryResult.next()) {
+                    categoryId = categoryResult.getInt("id");
+                } else {
+                    throw new SQLException("Không tìm thấy danh mục: " + product.getCategoryName());
+                }
+            }
+        }
+
+        String sql = "INSERT INTO products (name, category_id, description, price, stock_quantity, status, created_at, updated_at, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, product.getName());
-            statement.setInt(2, product.getCategoryId());
+            statement.setInt(2, categoryId);
             statement.setString(3, product.getDescription());
             statement.setDouble(4, product.getPrice());
             statement.setInt(5, product.getStockQuantity());
-            statement.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+            ProductStatus status = (product.getStockQuantity() > 0) ? ProductStatus.CON_HANG : ProductStatus.HET_HANG;
+            statement.setString(6, status.toString());
             statement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+            statement.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
+            statement.setString(9, product.getImageUrl());
 
             int affectedRows = statement.executeUpdate();
             if (affectedRows > 0) {
@@ -56,20 +71,44 @@ public class ProductDAO {
         }
     }
 
+    public void updateProduct(Product product) {
+        if (product.getStatus() != ProductStatus.DA_HUY) {
+            product.setStatus(product.getStockQuantity() > 0 ? ProductStatus.CON_HANG : ProductStatus.HET_HANG);
+        }
+
+        String sql = "UPDATE products SET name = ?, description = ?, price = ?, stock_quantity = ?, status = ?, updated_at = ?, image_url = ? WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, product.getName());
+            statement.setString(2, product.getDescription());
+            statement.setDouble(3, product.getPrice());
+            statement.setInt(4, product.getStockQuantity());
+            statement.setString(5, product.getStatus().toString());
+            statement.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+            statement.setString(7, product.getImageUrl());
+            statement.setInt(8, product.getId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     private Product extractProductFromResultSet(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         String name = resultSet.getString("name");
-        int categoryId = resultSet.getInt("category_id");
+        String categoryName = resultSet.getString("category_name");
         String description = resultSet.getString("description");
         double price = resultSet.getDouble("price");
         int stockQuantity = resultSet.getInt("stock_quantity");
         Timestamp createdAtTimestamp = resultSet.getTimestamp("created_at");
         Timestamp updatedAtTimestamp = resultSet.getTimestamp("updated_at");
+        String statusText = resultSet.getString("status");
+        String imageUrl = resultSet.getString("image_url");
 
-        LocalDateTime createdAt = createdAtTimestamp != null ? createdAtTimestamp.toLocalDateTime() : null;
-        LocalDateTime updatedAt = updatedAtTimestamp != null ? updatedAtTimestamp.toLocalDateTime() : null;
+        LocalDateTime createdAt = (createdAtTimestamp != null) ? createdAtTimestamp.toLocalDateTime() : null;
+        LocalDateTime updatedAt = (updatedAtTimestamp != null) ? updatedAtTimestamp.toLocalDateTime() : null;
+        ProductStatus status = ProductStatus.fromString(statusText);
 
-        return new Product(id, name, categoryId, description, price, stockQuantity, createdAt, updatedAt);
+        return new Product(id, name, categoryName, description, price, stockQuantity, createdAt, updatedAt, status, imageUrl);
     }
 }

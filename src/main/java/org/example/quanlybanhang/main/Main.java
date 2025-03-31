@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.example.quanlybanhang.database.DatabaseConnection;
+import org.example.quanlybanhang.utils.DatabaseConnection;
 
 import java.sql.Connection;
 
@@ -16,7 +16,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/org/example/quanlybanhang/Login.fxml"));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Quản Lý Bán Hàng");
+        primaryStage.setTitle("Quản Lý Bán Hàng Đồ điện tử");
         primaryStage.show();
         Connection conn = DatabaseConnection.getConnection();
         if (conn != null) {

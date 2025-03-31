@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.UserDAO;
-import org.example.quanlybanhang.database.DatabaseConnection;
+import org.example.quanlybanhang.utils.DatabaseConnection;
 import org.example.quanlybanhang.model.User;
 
 import java.sql.Connection;

@@ -1,20 +1,27 @@
 package org.example.quanlybanhang.service;
 
-import org.example.quanlybanhang.model.Product;
-
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SearchService {
 
-    public static List<Product> searchProducts(List<Product> products, String keyword) {
+    @SafeVarargs
+    public static <T> List<T> search(List<T> list, String keyword, Function<T, String>... fieldExtractors) {
         if (keyword == null || keyword.trim().isEmpty()) {
-            return products;
+            return list;
         }
 
         String lowerKeyword = keyword.toLowerCase();
-        return products.stream()
-                .filter(product -> product.getName().toLowerCase().contains(lowerKeyword))
+        return list.stream()
+                .filter(item -> {
+                    for (Function<T, String> extractor : fieldExtractors) {
+                        if (extractor.apply(item).toLowerCase().contains(lowerKeyword)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
                 .collect(Collectors.toList());
     }
 }

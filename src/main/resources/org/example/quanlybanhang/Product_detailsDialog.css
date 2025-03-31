@@ -1,0 +1,260 @@
+/* product-detail.css */
+
+/* Định dạng chung */
+.root {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-background-color: #f0f2f5;
+}
+
+/* Header styles */
+.header-box {
+    -fx-background-color: #3498db;
+}
+
+.subheader-box {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.header-title {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.logout-button {
+    -fx-background-color: white;
+    -fx-text-fill: #3498db;
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+}
+
+.back-button {
+    -fx-background-color: #e0e0e0;
+    -fx-cursor: hand;
+    -fx-background-radius: 4px;
+}
+
+.page-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+/* Content styles */
+.content-pane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.content-box {
+    -fx-background-color: transparent;
+}
+
+/* Product main info box */
+.product-main-info-box {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 3);
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-margin: 0 0 20 0;
+}
+
+.info-section {
+    -fx-spacing: 10px;
+    -fx-padding: 0 0 10 0;
+}
+
+/* Product info styles */
+.product-name {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.product-id {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666;
+}
+
+.product-category {
+    -fx-font-size: 14px;
+    -fx-padding: 5 0 0 0;
+}
+
+.label-text {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.product-price {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e74c3c;
+}
+
+.product-status {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.product-status:text-contains("Còn hàng") {
+    -fx-text-fill: #27ae60;
+}
+
+.product-status:text-contains("Hết hàng") {
+    -fx-text-fill: #e74c3c;
+}
+
+.product-status:text-contains("Ngừng Bán") {
+    -fx-text-fill: #7f8c8d;
+}
+
+.product-quantity {
+    -fx-font-size: 14px;
+}
+
+.edit-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-min-width: 100px;
+    -fx-background-radius: 4px;
+}
+
+.delete-button {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-min-width: 100px;
+    -fx-background-radius: 4px;
+}
+
+/* Description styles */
+.description-box {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 3);
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-margin: 20 0 20 0;
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+
+.description-text {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 14px;
+}
+
+/* Specifications styles */
+.specs-box {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 3);
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-margin: 20 0 20 0;
+}
+
+.specs-grid {
+    -fx-padding: 5px;
+}
+
+.spec-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.spec-value {
+    -fx-font-size: 14px;
+}
+
+/* Reviews styles */
+.reviews-box {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 3);
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-margin: 20 0 20 0;
+}
+
+.rating-value {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.rating-count {
+    -fx-font-size: 14px;
+    -fx-text-fill: #666;
+}
+
+.reviews-list {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+/* Related products styles */
+.related-products-box {
+    -fx-background-color: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 3);
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-margin: 20 0 20 0;
+}
+
+.related-product {
+    -fx-border-color: #ddd;
+    -fx-padding: 10px;
+    -fx-pref-width: 180px;
+    -fx-cursor: hand;
+    -fx-background-color: #f8f9fa;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+}
+
+.related-product:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
+    -fx-background-color: #f0f0f0;
+}
+
+.product-thumbnail {
+    -fx-border-color: #eee;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);
+}
+
+.related-product-name {
+    -fx-font-weight: bold;
+    -fx-padding: 5 0 0 0;
+}
+
+.related-product-price {
+    -fx-text-fill: #e74c3c;
+}
+
+/* Footer styles */
+.footer {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1 0 0 0;
+}
+
+.footer-text {
+    -fx-text-fill: #666;
+}

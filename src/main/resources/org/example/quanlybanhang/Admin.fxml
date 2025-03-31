@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" spacing="20.0" stylesheets="@dashboard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:id="adminContentPane" fx:controller="org.example.quanlybanhang.controller.AdminController">
+<VBox fx:id="adminContentPane" alignment="TOP_CENTER" stylesheets="@dashboard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.AdminController">
 
     <!-- Top Navigation Bar -->
     <HBox alignment="CENTER_LEFT" prefHeight="60" styleClass="top-nav">
@@ -20,23 +20,27 @@
 
         <HBox HBox.hgrow="ALWAYS" />
 
-        <Button fx:id="logoutButton" prefHeight="27.0" prefWidth="101.0"  styleClass="logout-button" text="Đăng Xuất" />
+        <Button fx:id="logoutButton" prefHeight="27.0" prefWidth="101.0" styleClass="logout-button" text="Đăng Xuất" />
     </HBox>
 
     <!-- Main Content Area -->
-    <HBox prefHeight="585.0" prefWidth="995.0" spacing="20.0" HBox.hgrow="ALWAYS">
+    <HBox prefHeight="615.0" prefWidth="1205.0" spacing="20.0" HBox.hgrow="ALWAYS">
         <!-- Side Navigation -->
-        <VBox prefHeight="616.0" prefWidth="228.0" spacing="10" styleClass="side-nav">
+        <VBox prefHeight="606.0" prefWidth="210.0" spacing="10" styleClass="side-nav">
             <Button fx:id="btnDashboard" styleClass="nav-button" text="Tổng Quan" />
+            <Button fx:id="btnEmployee" styleClass="nav-button" text="Nhân viên" />
             <Button fx:id="btnProduct" styleClass="nav-button" text="Sản Phẩm" />
             <Button fx:id="btnOrders" styleClass="nav-button" text="Đơn Hàng" />
             <Button fx:id="btnCustomers" styleClass="nav-button" text="Khách Hàng" />
             <Button fx:id="btnReports" styleClass="nav-button" text="Báo Cáo" />
         </VBox>
         <!-- Main Content -->
-        <VBox spacing="20" HBox.hgrow="ALWAYS" fx:id="mainContentPane">
+        <VBox fx:id="mainContentPane" prefHeight="605.0" prefWidth="765.0" spacing="20" HBox.hgrow="ALWAYS">
             <!-- Dashboard Title -->
-            <Label styleClass="dashboard-title" text="Tổng Quan" />
+            <Label styleClass="dashboard-title" text="Tổng Quan">
+            <VBox.margin>
+               <Insets top="5.0" />
+            </VBox.margin></Label>
 
             <!-- Summary Cards -->
             <HBox spacing="20">
@@ -54,16 +58,21 @@
                     <Label styleClass="card-title" text="Khách Hàng" />
                     <Label styleClass="card-value" text="1,256" />
                 </VBox>
+
+                <VBox styleClass="summary-card" HBox.hgrow="ALWAYS">
+                    <Label styleClass="card-title" text="Sản phẩm bán chạy nhất" />
+                    <Label styleClass="card-value" text="Laptop Gaming" />
+                </VBox>
             </HBox>
 
             <!-- Recent Orders Table -->
-            <TableView prefHeight="450.0" prefWidth="738.0" styleClass="orders-table">
+            <TableView prefHeight="450.0" prefWidth="543.0" styleClass="orders-table">
                 <columns>
                     <TableColumn prefWidth="169.0" text="Mã Đơn Hàng" />
                     <TableColumn prefWidth="116.0" text="Khách Hàng" />
                     <TableColumn prefWidth="144.0" text="Ngày Đặt" />
-                    <TableColumn prefWidth="136.0" text="Tổng Tiền" />
-                    <TableColumn prefWidth="183.0" text="Trạng Thái" />
+                    <TableColumn prefWidth="158.0" text="Tổng Tiền" />
+                    <TableColumn prefWidth="198.0" text="Trạng Thái" />
                 </columns>
             </TableView>
         </VBox>

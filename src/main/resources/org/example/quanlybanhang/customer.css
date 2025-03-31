@@ -12,7 +12,7 @@
 }
 
 .search-container {
-    -fx-padding: 10px 15px;
+    -fx-padding: 10px 0px 15px;
     -fx-background-color: white;
 }
 

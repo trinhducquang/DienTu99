@@ -10,6 +10,6 @@ public class OrderController {
 
     @FXML
     public void initialize() {
-        addOrderButton.setOnAction(event -> DialogHelper.showDialog("/org/example/quanlybanhang/OrderDialog.fxml", "Thêm Đơn Hàng Mới"));
+        addOrderButton.setOnAction(event -> DialogHelper.showDialog("/org/example/quanlybanhang/AddOrderDialog.fxml", "Thêm Đơn Hàng Mới"));
     }
 }

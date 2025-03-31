@@ -22,8 +22,8 @@
         <Label styleClass="input-label" text="Tên Sản Phẩm" GridPane.columnIndex="0" GridPane.rowIndex="1" />
         <TextField fx:id="productNameField" prefHeight="39.0" prefWidth="339.0" promptText="Nhập tên sản phẩm" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-        <Label styleClass="input-label" text="Danh Mục" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-        <ComboBox fx:id="categoryComboBox" prefHeight="49.0" prefWidth="340.0" promptText="Chọn danh mục" styleClass="input-combo" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Label styleClass="input-label" text="Trạng Thái" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <ComboBox fx:id="categoryComboBox" prefHeight="49.0" prefWidth="340.0" promptText="Chọn trạng thái" styleClass="input-combo" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <items>
                 <FXCollections fx:factory="observableArrayList" />
             </items>
@@ -38,21 +38,18 @@
 
         <Label styleClass="input-label" text="Mô Tả" GridPane.columnIndex="0" GridPane.rowIndex="5" />
         <TextField fx:id="descriptionField" promptText="Nhập mô tả sản phẩm" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-
-        <Label styleClass="input-label" text="Url hình ảnh" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-        <TextField fx:id="imageUrlField" promptText="Nhập url hình ảnh" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-      <columnConstraints>
-         <ColumnConstraints />
-         <ColumnConstraints />
-      </columnConstraints>
-      <rowConstraints>
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-         <RowConstraints />
-      </rowConstraints>
+        <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
     </GridPane>
 
     <HBox alignment="CENTER" prefHeight="114.0" prefWidth="500.0" spacing="20" styleClass="button-container">

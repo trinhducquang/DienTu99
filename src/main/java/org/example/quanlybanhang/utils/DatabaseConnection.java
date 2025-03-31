@@ -1,4 +1,4 @@
-package org.example.quanlybanhang.database;
+package org.example.quanlybanhang.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

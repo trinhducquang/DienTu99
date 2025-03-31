@@ -9,13 +9,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:controller="org.example.quanlybanhang.controller.ProductController" alignment="TOP_CENTER" spacing="10" stylesheets="@product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" prefHeight="516.0" prefWidth="1088.0" spacing="10" stylesheets="@product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.ProductController">
 
     <!-- Main Content Area -->
     <HBox spacing="20" HBox.hgrow="ALWAYS">
 
         <!-- Main Content -->
-        <VBox spacing="20" HBox.hgrow="ALWAYS">
+        <VBox prefHeight="516.0" prefWidth="1004.0" spacing="20" HBox.hgrow="ALWAYS">
             <!-- Page Title -->
             <Label styleClass="dashboard-title" text="Quản Lý Sản Phẩm" />
 
@@ -30,12 +30,14 @@
             <TableView fx:id="productsTable" styleClass="products-table">
                 <columns>
                     <TableColumn fx:id="idColumn" prefWidth="80" text="Mã SP" />
-                    <TableColumn fx:id="nameColumn" prefWidth="200" text="Tên Sản Phẩm" />
-                    <TableColumn fx:id="categoryIdColumn" prefWidth="100" text="Danh Mục" />
-                    <TableColumn fx:id="priceColumn" prefWidth="100" text="Giá" />
-                    <TableColumn fx:id="stockQuantityColumn" prefWidth="109.0" text="Số Lượng" />
-                    <TableColumn fx:id="descriptionColumn" prefWidth="130.0" text="Mô Tả" />
-                    <TableColumn fx:id="actionColumn" prefWidth="111.0" text="Thao Tác" />
+                    <TableColumn fx:id="nameColumn" prefWidth="191.0" text="Tên Sản Phẩm" />
+                    <TableColumn fx:id="categoryNameColumn" prefWidth="120.0" text="Danh Mục" />
+                    <TableColumn fx:id="priceColumn" prefWidth="94.0" text="Giá" />
+                    <TableColumn fx:id="stockQuantityColumn" prefWidth="85.0" text="Số Lượng" />
+                    <TableColumn fx:id="descriptionColumn" prefWidth="173.0" text="Mô Tả" />
+                    <TableColumn fx:id="imageColumn" minWidth="0.0" prefWidth="110.0" text="Url Hình Ảnh" />
+                    <TableColumn fx:id="statusColumn" prefWidth="112.0" text="Trạng Thái" />
+                    <TableColumn fx:id="OperationColumn" maxWidth="122.0" prefWidth="122.0" text="Thao tác" />
                 </columns>
             </TableView>
         </VBox>
