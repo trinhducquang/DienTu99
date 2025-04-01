@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="702.0" prefWidth="1123.0" stylesheets="@Product_detailsDialog.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.ProductDetailController">
+<BorderPane prefHeight="702.0" prefWidth="1123.0" stylesheets="@Product_detailsDialog.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.ProductDetailDialogController">
     <top>
         <VBox spacing="0">
             <HBox alignment="CENTER_LEFT" spacing="20" styleClass="header-box">
@@ -44,7 +44,7 @@
                        <VBox alignment="CENTER" minWidth="320" spacing="10">
                      <ImageView fx:id="productImage" fitHeight="280" fitWidth="280" preserveRatio="true">
                          <image>
-                             <Image url="@../images/placeholder.png" />
+                             <Image url="https://hoangkhue.vn/wp-content/uploads/2023/10/lg_27gp850_gearvn_c200874aca254feba98022332254b1a5.webp" />
                          </image>
                      </ImageView>
 
@@ -97,27 +97,27 @@
                             <ColumnConstraints hgrow="ALWAYS" />
                         </columnConstraints>
 
-         
+
                         <Label styleClass="spec-label" text="Cấu hình &amp; Bộ nhớ:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <Label fx:id="configMemoryLabel" styleClass="spec-value" text="Intel Core i7, 16GB RAM, 512GB SSD" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-         
+
                         <Label styleClass="spec-label" text="Camera &amp; Màn hình:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                         <Label fx:id="cameraDisplayLabel" styleClass="spec-value" text="15.6-inch, 1920x1080, HD Webcam" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-         
+
                         <Label styleClass="spec-label" text="Pin &amp; Sạc:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                         <Label fx:id="batteryLabel" styleClass="spec-value" text="50Wh, Fast charging" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-         
+
                         <Label styleClass="spec-label" text="Tiện ích:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
                         <Label fx:id="featuresLabel" styleClass="spec-value" text="Backlit keyboard, Fingerprint sensor" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-         
+
                         <Label styleClass="spec-label" text="Kết nối:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                         <Label fx:id="connectivityLabel" styleClass="spec-value" text="WiFi 6, Bluetooth 5.0, 2x USB-C, 1x HDMI" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-         
+
                         <Label styleClass="spec-label" text="Thiết kế  &amp; Chất liệu:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
                         <Label fx:id="designMaterialsLabel" styleClass="spec-value" text="Aluminum body, 1.5kg" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <rowConstraints>

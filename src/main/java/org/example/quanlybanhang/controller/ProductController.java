@@ -84,7 +84,7 @@ public class ProductController {
                 detailButton.setOnAction(event -> {
                     Product product = getTableView().getItems().get(getIndex());
                     if (product != null) {
-                        DialogHelper.showDialog("/org/example/quanlybanhang/Product_detailsDialog.fxml", "Chi tiết sản phẩm");
+                        DialogHelper.showDialog("/org/example/quanlybanhang/Product_detailsDialog.fxml", "Chi tiết sản phẩm", product.getId());
                     }
                 });
             }
@@ -96,6 +96,7 @@ public class ProductController {
             }
         });
     }
+
 
     private void setEditableColumns() {
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());

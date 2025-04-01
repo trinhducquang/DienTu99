@@ -78,7 +78,7 @@ public class ProductDialogController {
             int stockQuantity = Integer.parseInt(stockQuantityField.getText());
             String imageUrl = imageUrlField.getText();
 
-            Product newProduct = new Product(0, name, categoryName, description, price, stockQuantity, LocalDateTime.now(), LocalDateTime.now(), null, imageUrl);
+            Product newProduct = new Product(0, name, categoryName, description, price, stockQuantity, LocalDateTime.now(), LocalDateTime.now(), null, imageUrl, null);
             productDAO.insertProduct(newProduct);
 
             closeDialog();

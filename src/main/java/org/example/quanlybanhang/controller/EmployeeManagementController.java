@@ -8,6 +8,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.converter.IntegerStringConverter;
 import org.example.quanlybanhang.dao.EmployeeDAO;
+import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Employee;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 
@@ -68,7 +69,8 @@ public class EmployeeManagementController {
         colEmail.setOnEditCommit(event -> updateEmployee(event.getRowValue(), "email", event.getNewValue()));
         colPhone.setOnEditCommit(event -> updateEmployee(event.getRowValue(), "phone", event.getNewValue()));
 
-        addEmployeeButton.setOnAction(event -> System.out.println("Mở form thêm nhân viên"));
+        addEmployeeButton.setOnAction(event -> DialogHelper.showDialog("/org/example/quanlybanhang/employeeManagementDialog.fxml", "Thêm Nhân Viên bán Mới"));
+
 
         loadEmployees();
 

@@ -32,6 +32,22 @@ public class ProductDAO {
         return products;
     }
 
+    public Product getProductById(int productId) {
+        String sql = "SELECT p.*, c.name AS category_name FROM products p JOIN categories c ON p.category_id = c.id WHERE p.id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, productId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return extractProductFromResultSet(resultSet);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void insertProduct(Product product) throws SQLException {
         String getCategorySql = "SELECT id FROM categories WHERE name = ?";
         int categoryId = -1;
@@ -47,7 +63,8 @@ public class ProductDAO {
             }
         }
 
-        String sql = "INSERT INTO products (name, category_id, description, price, stock_quantity, status, created_at, updated_at, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO products (name, category_id, description, price, stock_quantity, status, created_at, updated_at, image_url, specifications) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, product.getName());
             statement.setInt(2, categoryId);
@@ -59,6 +76,7 @@ public class ProductDAO {
             statement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
             statement.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
             statement.setString(9, product.getImageUrl());
+            statement.setString(10, product.getSpecifications());
 
             int affectedRows = statement.executeUpdate();
             if (affectedRows > 0) {
@@ -76,7 +94,7 @@ public class ProductDAO {
             product.setStatus(product.getStockQuantity() > 0 ? ProductStatus.CON_HANG : ProductStatus.HET_HANG);
         }
 
-        String sql = "UPDATE products SET name = ?, description = ?, price = ?, stock_quantity = ?, status = ?, updated_at = ?, image_url = ? WHERE id = ?";
+        String sql = "UPDATE products SET name = ?, description = ?, price = ?, stock_quantity = ?, status = ?, updated_at = ?, image_url = ?, specifications = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, product.getName());
             statement.setString(2, product.getDescription());
@@ -85,7 +103,8 @@ public class ProductDAO {
             statement.setString(5, product.getStatus().toString());
             statement.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
             statement.setString(7, product.getImageUrl());
-            statement.setInt(8, product.getId());
+            statement.setString(8, product.getSpecifications());
+            statement.setInt(9, product.getId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -104,11 +123,12 @@ public class ProductDAO {
         Timestamp updatedAtTimestamp = resultSet.getTimestamp("updated_at");
         String statusText = resultSet.getString("status");
         String imageUrl = resultSet.getString("image_url");
+        String specifications = resultSet.getString("specifications");  // Thêm specifications
 
         LocalDateTime createdAt = (createdAtTimestamp != null) ? createdAtTimestamp.toLocalDateTime() : null;
         LocalDateTime updatedAt = (updatedAtTimestamp != null) ? updatedAtTimestamp.toLocalDateTime() : null;
         ProductStatus status = ProductStatus.fromString(statusText);
 
-        return new Product(id, name, categoryName, description, price, stockQuantity, createdAt, updatedAt, status, imageUrl);
+        return new Product(id, name, categoryName, description, price, stockQuantity, createdAt, updatedAt, status, imageUrl, specifications);
     }
 }

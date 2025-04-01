@@ -13,11 +13,12 @@ public class Product {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private ProductStatus status;
-    private String imageUrl; // Thêm thuộc tính lưu URL hình ảnh
+    private String imageUrl;
+    private String specifications;
 
     public Product(int id, String name, String categoryName, String description,
                    double price, int stockQuantity, LocalDateTime createdAt,
-                   LocalDateTime updatedAt, ProductStatus status, String imageUrl) {
+                   LocalDateTime updatedAt, ProductStatus status, String imageUrl, String specifications) {
         this.id = id;
         this.name = name;
         this.categoryName = categoryName;
@@ -28,6 +29,7 @@ public class Product {
         this.updatedAt = updatedAt;
         this.status = status;
         this.imageUrl = imageUrl;
+        this.specifications = specifications;
     }
 
     public int getId() { return id; }
@@ -59,4 +61,7 @@ public class Product {
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public String getSpecifications() { return specifications; }
+    public void setSpecifications(String specifications) { this.specifications = specifications; }
 }
