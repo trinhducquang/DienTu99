@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.converter.IntegerStringConverter;
 import org.example.quanlybanhang.dao.EmployeeDAO;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Employee;

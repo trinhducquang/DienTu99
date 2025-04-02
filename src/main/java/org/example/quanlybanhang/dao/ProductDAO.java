@@ -2,7 +2,6 @@ package org.example.quanlybanhang.dao;
 
 import org.example.quanlybanhang.enums.ProductStatus;
 import org.example.quanlybanhang.model.Product;
-
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

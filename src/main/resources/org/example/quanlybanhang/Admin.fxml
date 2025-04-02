@@ -24,7 +24,7 @@
     </HBox>
 
     <!-- Main Content Area -->
-    <HBox prefHeight="615.0" prefWidth="1205.0" spacing="20.0" HBox.hgrow="ALWAYS">
+    <HBox prefHeight="615.0" prefWidth="1330" spacing="20.0" HBox.hgrow="ALWAYS">
         <!-- Side Navigation -->
         <VBox prefHeight="606.0" prefWidth="210.0" spacing="10" styleClass="side-nav">
             <Button fx:id="btnDashboard" styleClass="nav-button" text="Tổng Quan" />
@@ -32,6 +32,7 @@
             <Button fx:id="btnProduct" styleClass="nav-button" text="Sản Phẩm" />
             <Button fx:id="btnOrders" styleClass="nav-button" text="Đơn Hàng" />
             <Button fx:id="btnCustomers" styleClass="nav-button" text="Khách Hàng" />
+            <Button fx:id="btnCategory" styleClass="nav-button" text="Danh Mục" />
             <Button fx:id="btnReports" styleClass="nav-button" text="Báo Cáo" />
         </VBox>
         <!-- Main Content -->

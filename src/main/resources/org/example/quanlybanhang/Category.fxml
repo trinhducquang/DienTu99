@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.CategoryController">
+    <center>
+        <AnchorPane prefHeight="500" prefWidth="800" style="-fx-background-color: white;">
+            <children>
+                <Label layoutX="32" layoutY="32" style="-fx-font-size: 24px; -fx-text-fill: #459CD3;" text="Quản Lý Danh Mục">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+
+                <HBox layoutX="32" layoutY="80" prefWidth="736" spacing="10">
+                    <children>
+                        <TextField fx:id="searchField" prefHeight="35" promptText="Tìm kiếm danh mục" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="addCategoryButton" prefHeight="35" style="-fx-background-color: #459CD3; -fx-text-fill: white;" text="Thêm Danh Mục" />
+                    </children>
+                </HBox>
+
+                <TableView fx:id="categoryTable" layoutX="32" layoutY="130" prefHeight="330" prefWidth="736" AnchorPane.leftAnchor="32" AnchorPane.rightAnchor="32">
+                    <columns>
+                        <TableColumn fx:id="idColumn" prefWidth="50" text="ID" />
+                        <TableColumn fx:id="nameColumn" prefWidth="300" text="Nhóm Sản Phẩm" />
+                        <TableColumn fx:id="descriptionColumn" prefWidth="289.0" text="Mô tả" />
+                        <TableColumn fx:id="actionsColumn" prefWidth="96.0" text="Thao tác" />
+                    </columns>
+                    <placeholder>
+                        <Label text="No content in table" />
+                    </placeholder>
+                </TableView>
+            </children>
+        </AnchorPane>
+    </center>
+    <right>
+        <AnchorPane prefWidth="320" style="-fx-background-color: white; -fx-border-color: #EEEEEE; -fx-border-width: 0 0 0 1;">
+            <children>
+                <Label layoutX="20" layoutY="32" style="-fx-font-size: 18px;" text="Chi Tiết Danh Mục">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+
+                <Label layoutX="20.0" layoutY="82.0" text="Nhóm Sản Phẩm" />
+                <TextField fx:id="nameField" layoutX="20.0" layoutY="128.0" prefHeight="35" prefWidth="280" />
+
+                <Label layoutX="20.0" layoutY="183.0" text="Mô tả:" />
+                <TextArea fx:id="descriptionArea" layoutX="20.0" layoutY="215.0" prefHeight="100" prefWidth="280" wrapText="true" />
+
+                <Label layoutX="23.0" layoutY="327.0" text="Dòng sản phẩm" />
+                <ComboBox fx:id="childCategoryCombo" layoutX="20.0" layoutY="361.0" prefHeight="35.0" prefWidth="280" />
+
+                <HBox layoutX="20" layoutY="430" spacing="10">
+                    <children>
+                        <Button fx:id="saveButton" prefHeight="40" prefWidth="135" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Lưu" />
+                        <Button fx:id="cancelButton" prefHeight="40" prefWidth="135" style="-fx-background-color: #F44336; -fx-text-fill: white;" text="Hủy" />
+                    </children>
+                </HBox>
+            </children>
+        </AnchorPane>
+    </right>
+</BorderPane>
