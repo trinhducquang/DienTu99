@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" spacing="10" stylesheets="@Employee.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="org.example.quanlybanhang.controller.EmployeeController">
+<VBox alignment="TOP_CENTER" spacing="10" stylesheets="@Employee.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="org.example.quanlybanhang.controller.employee.EmployeeController">
 
     <!-- Top Navigation Bar -->
     <HBox alignment="CENTER_LEFT" prefHeight="60" styleClass="top-nav">

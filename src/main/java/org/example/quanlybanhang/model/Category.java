@@ -28,4 +28,26 @@ public class Category {
     public int getParentId() {
         return parentId;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
 }

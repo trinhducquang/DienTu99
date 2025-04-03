@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="535.0" prefWidth="500" spacing="20" stylesheets="@product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.ProductDialogController">
+<VBox alignment="CENTER" prefHeight="535.0" prefWidth="500" spacing="20" stylesheets="@product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.product.ProductDialogController">
 
     <VBox styleClass="dialog-header">
         <Label styleClass="dialog-title" text="Thêm Sản Phẩm" />

@@ -1,4 +1,4 @@
-package org.example.quanlybanhang.controller;
+package org.example.quanlybanhang.controller.category;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,6 +8,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.example.quanlybanhang.dao.CategoryDAO;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Category;
+import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 
 import java.sql.Connection;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class CategoryController {
     @FXML
-    public TextField searchField;
+    public TextField searchField; // Trường tìm kiếm
     @FXML
     private Button addCategoryButton;
     @FXML
@@ -33,6 +34,8 @@ public class CategoryController {
     private TextArea descriptionArea;
     @FXML
     private ComboBox<String> childCategoryCombo; // Đổi tên để phản ánh đúng chức năng
+    @FXML
+    private Button saveButton;
 
     private CategoryDAO categoryDAO;
     private ObservableList<Category> categoryList;
@@ -62,8 +65,14 @@ public class CategoryController {
             }
         });
 
-        addCategoryButton.setOnAction(event -> DialogHelper.showDialog("/org/example/quanlybanhang/employeeManagementDialog.fxml", "Thêm Danh Mục Mới"));
+        addCategoryButton.setOnAction(event -> DialogHelper.showDialog("/org/example/quanlybanhang/AddCategoryDialog.fxml", "Thêm Danh Mục Mới"));
 
+        saveButton.setOnAction(event -> handleSaveAction());
+
+        // Thêm sự kiện khi người dùng thay đổi giá trị trong ô tìm kiếm
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchCategories(newValue);
+        });
     }
 
     private void loadCategories() {
@@ -83,4 +92,34 @@ public class CategoryController {
         }
     }
 
+    @FXML
+    private void handleSaveAction() {
+        Category selectedCategory = categoryTable.getSelectionModel().getSelectedItem();
+        if (selectedCategory != null) {
+            String name = nameField.getText().trim();
+            String description = descriptionArea.getText().trim();
+
+            selectedCategory.setName(name);
+            selectedCategory.setDescription(description);
+
+            boolean success = categoryDAO.updateCategory(selectedCategory);
+            if (success) {
+                loadCategories();
+                categoryTable.refresh();
+                System.out.println("Cập nhật thành công!");
+            } else {
+                System.out.println("Cập nhật thất bại!");
+            }
+        }
+    }
+
+
+    private void searchCategories(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            loadCategories();
+        } else {
+            List<Category> filteredCategories = SearchService.search(categoryList, keyword, Category::getName, Category::getDescription);
+            categoryTable.setItems(FXCollections.observableArrayList(filteredCategories));
+        }
+    }
 }

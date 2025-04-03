@@ -1,4 +1,4 @@
-package org.example.quanlybanhang.controller;
+package org.example.quanlybanhang.controller.report;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

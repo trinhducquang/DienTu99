@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.order.OrderDetailsDialogController">
+
+    <!-- Top Bar -->
+    <top>
+        <VBox style="-fx-background-color: #3498db;">
+            <HBox alignment="CENTER_LEFT" prefHeight="56.0" prefWidth="1000.0" style="-fx-padding: 0 20 10 20;">
+                <Label fx:id="orderDetailsTitle" style="-fx-text-fill: white; -fx-font-size: 16px;" text="Chi Tiết Đơn Hàng" />
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <VBox prefHeight="645.0" prefWidth="870.0" spacing="15.0" style="-fx-padding: 20;">
+
+            <!-- Order Header Info -->
+            <GridPane hgap="20" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="100" />
+                    <ColumnConstraints minWidth="200" />
+                    <ColumnConstraints minWidth="100" />
+                    <ColumnConstraints minWidth="200" />
+                </columnConstraints>
+
+                <Label style="-fx-font-weight: bold;" text="Mã Đơn Hàng:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <Label fx:id="orderId" text="2" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                <Label style="-fx-font-weight: bold;" text="Ngày Đặt:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                <Label fx:id="orderDate" text="2025-04-03 17:22:54" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                <Label style="-fx-font-weight: bold;" text="Khách Hàng:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <Label fx:id="customerName" text="Tran Thi B (ID: 2)" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                <Label style="-fx-font-weight: bold;" text="Trạng Thái:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <Label fx:id="orderStatus" text="Đang xử lý" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                <Label style="-fx-font-weight: bold;" text="Tổng Tiền:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <Label fx:id="totalAmount" text="500,000.0 đ" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                <Label style="-fx-font-weight: bold;" text="Nhân viên xử lý:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <Label fx:id="processedBy" text="ID: 1" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+
+                <rowConstraints>
+                    <RowConstraints />
+                    <RowConstraints />
+                    <RowConstraints />
+                </rowConstraints>
+            </GridPane>
+
+            <Separator />
+
+            <!-- Order Products Section -->
+            <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Chi tiết sản phẩm" />
+
+            <!-- Product List with Images -->
+            <ScrollPane fx:id="productScrollPane" fitToWidth="true" prefHeight="216.0" prefWidth="883.0" style="-fx-background-color: transparent; -fx-border-color: #dddddd;" VBox.vgrow="ALWAYS">
+                <VBox fx:id="productListContainer" spacing="15" style="-fx-padding: 10;">
+                    <!-- Product Items Will Be Added Dynamically -->
+                </VBox>
+            </ScrollPane>
+
+            <!-- Order Details Summary -->
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <VBox alignment="CENTER_RIGHT" spacing="5">
+                    <HBox spacing="10">
+                        <Label style="-fx-font-weight: bold;" text="Tổng số sản phẩm:" />
+                        <Label fx:id="totalProducts"/>
+                    </HBox>
+                    <HBox spacing="10">
+                        <Label style="-fx-font-weight: bold;" text="Tổng tiền hàng:" />
+                        <Label fx:id="subtotalAmount"/>
+                    </HBox>
+                    <HBox spacing="10">
+                        <Label style="-fx-font-weight: bold;" text="Phí vận chuyển:" />
+                        <Label fx:id="shippingFee"/>
+                    </HBox>
+                    <HBox spacing="10">
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 14px;" text="Tổng thanh toán:" />
+                        <Label fx:id="finalAmount" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #e74c3c;" text="400,000.0 đ" />
+                    </HBox>
+                </VBox>
+            </HBox>
+
+            <Separator />
+
+            <!-- Action Buttons -->
+            <HBox alignment="CENTER_RIGHT" spacing="10">
+                <Button fx:id="printOrderBtn" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="In đơn hàng" />
+                <Button fx:id="updateStatusBtn" style="-fx-background-color: #2ecc71; -fx-text-fill: white;" text="Cập nhật trạng thái" />
+                <Button fx:id="backBtn" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Quay lại" />
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

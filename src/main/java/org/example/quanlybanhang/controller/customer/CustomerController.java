@@ -1,4 +1,4 @@
-package org.example.quanlybanhang.controller;
+package org.example.quanlybanhang.controller.customer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

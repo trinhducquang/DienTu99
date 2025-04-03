@@ -1,59 +1,172 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.collections.FXCollections?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="535.0" prefWidth="500" spacing="20" stylesheets="@product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.ProductDialogController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox prefHeight="600.0" prefWidth="800.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="800.0" style="-fx-background-color: #3498db;">
+                    <children>
+                        <Label text="Thêm Đơn Hàng" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="24.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets left="20.0" />
+                            </HBox.margin>
+                        </Label>
+                        <Region prefHeight="60.0" HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" style="-fx-background-color: white;" text="Quay Lại">
+                            <HBox.margin>
+                                <Insets right="20.0" />
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                </HBox>
 
-    <VBox styleClass="dialog-header">
-        <Label styleClass="dialog-title" text="Thêm Sản Phẩm" />
-    </VBox>
+                <ScrollPane fitToWidth="true" prefHeight="540.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox prefWidth="780.0" spacing="20.0">
+                            <padding>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                            </padding>
+                            <children>
+                                <!-- Thông tin đơn hàng -->
+                                <TitledPane animated="false" text="Thông Tin Đơn Hàng" collapsible="false">
+                                    <content>
+                                        <GridPane hgap="15.0" vgap="15.0">
+                                            <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                            </padding>
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Label text="Mã Đơn Hàng:" />
+                                                <TextField editable="false" promptText="Tự động tạo" GridPane.columnIndex="1" />
 
-    <GridPane hgap="15" styleClass="input-grid" vgap="15">
+                                                <Label text="Ngày Đặt:" GridPane.columnIndex="2" />
+                                                <DatePicker prefWidth="200.0" promptText="Chọn ngày" GridPane.columnIndex="3" />
 
-        <Label styleClass="input-label" text="Tên Sản Phẩm" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-        <TextField fx:id="productNameField" prefHeight="39.0" prefWidth="339.0" promptText="Nhập tên sản phẩm" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <Label text="Khách Hàng:" GridPane.rowIndex="1" />
+                                                <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <ComboBox prefWidth="150.0" promptText="Chọn khách hàng" />
+                                                        <Button mnemonicParsing="false" text="+" />
+                                                    </children>
+                                                </HBox>
 
-        <Label styleClass="input-label" text="Trạng Thái" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-        <ComboBox fx:id="categoryComboBox" prefHeight="49.0" prefWidth="340.0" promptText="Chọn trạng thái" styleClass="input-combo" GridPane.columnIndex="1" GridPane.rowIndex="2">
-            <items>
-                <FXCollections fx:factory="observableArrayList" />
-            </items>
-        </ComboBox>
+                                                <Label text="Trạng Thái:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <ComboBox prefWidth="200.0" promptText="Chọn trạng thái" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                            </children>
+                                        </GridPane>
+                                    </content>
+                                </TitledPane>
 
+                                <!-- Chi tiết sản phẩm -->
+                                <TitledPane animated="false" text="Chi Tiết Sản Phẩm" collapsible="false">
+                                    <content>
+                                        <VBox spacing="10.0">
+                                            <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                            </padding>
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                    <children>
+                                                        <ComboBox prefWidth="250.0" promptText="Chọn sản phẩm" />
+                                                        <Label text="Số lượng:" />
+                                                        <Spinner prefWidth="80.0" />
+                                                        <Button mnemonicParsing="false" style="-fx-background-color: #2ecc71;" text="Thêm Sản Phẩm" textFill="WHITE" />
+                                                    </children>
+                                                </HBox>
 
-        <Label styleClass="input-label" text="Giá" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-        <TextField fx:id="priceField" promptText="Nhập giá" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                <TableView prefHeight="200.0">
+                                                    <columns>
+                                                        <TableColumn prefWidth="50.0" text="STT" />
+                                                        <TableColumn prefWidth="80.0" text="Mã SP" />
+                                                        <TableColumn prefWidth="250.0" text="Tên Sản Phẩm" />
+                                                        <TableColumn prefWidth="80.0" text="Số Lượng" />
+                                                        <TableColumn prefWidth="120.0" text="Đơn Giá" />
+                                                        <TableColumn prefWidth="120.0" text="Thành Tiền" />
+                                                        <TableColumn prefWidth="80.0" text="Thao Tác" />
+                                                    </columns>
+                                                </TableView>
+                                            </children>
+                                        </VBox>
+                                    </content>
+                                </TitledPane>
 
-        <Label styleClass="input-label" text="Số Lượng" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-        <TextField fx:id="stockQuantityField" promptText="Nhập số lượng" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                <!-- Phí vận chuyển & tổng tiền -->
+                                <TitledPane animated="false" text="Thanh Toán" collapsible="false">
+                                    <content>
+                                        <GridPane hgap="15.0" vgap="15.0">
+                                            <padding>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                            </padding>
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <children>
+                                                <Label text="Tổng Tiền Hàng:" />
+                                                <TextField editable="false" GridPane.columnIndex="1" />
 
-        <Label styleClass="input-label" text="Mô Tả" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-        <TextField fx:id="descriptionField" promptText="Nhập mô tả sản phẩm" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-        <columnConstraints>
-            <ColumnConstraints />
-            <ColumnConstraints />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-        </rowConstraints>
-    </GridPane>
+                                                <Label text="Phí Vận Chuyển:" GridPane.rowIndex="1" />
+                                                <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-    <HBox alignment="CENTER" prefHeight="114.0" prefWidth="500.0" spacing="20" styleClass="button-container">
-        <Button fx:id="cancelButton" styleClass="cancel-button" text="Hủy" />
-        <Button fx:id="saveButton" styleClass="save-button" text="Lưu" />
-    </HBox>
-</VBox>
+                                                <Label style="-fx-font-weight: bold;" text="Tổng Thanh Toán:" GridPane.rowIndex="2" />
+                                                <TextField editable="false" style="-fx-font-weight: bold; -fx-text-fill: #e74c3c;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                                <Label text="Nhân Viên Xử Lý:" GridPane.columnIndex="2" />
+                                                <ComboBox prefWidth="200.0" GridPane.columnIndex="3" />
+
+                                                <Label text="Ghi Chú:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                <TextArea prefHeight="60.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                                            </children>
+                                        </GridPane>
+                                    </content>
+                                </TitledPane>
+
+                                <!-- Buttons -->
+                                <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                                    <children>
+                                        <Button mnemonicParsing="false" style="-fx-background-color: #e74c3c;" text="Hủy" textFill="WHITE">
+                                            <padding>
+                                                <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                                            </padding>
+                                        </Button>
+                                        <Button defaultButton="true" mnemonicParsing="false" style="-fx-background-color: #2ecc71;" text="Lưu Đơn Hàng" textFill="WHITE">
+                                            <padding>
+                                                <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                                            </padding>
+                                        </Button>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

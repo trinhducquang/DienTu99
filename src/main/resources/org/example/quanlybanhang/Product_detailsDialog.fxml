@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="702.0" prefWidth="1123.0" stylesheets="@Product_detailsDialog.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.ProductDetailDialogController">
+<BorderPane prefHeight="702.0" prefWidth="1123.0" stylesheets="@Product_detailsDialog.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.product.ProductDetailDialogController">
     <top>
         <VBox spacing="0">
             <HBox alignment="CENTER_LEFT" spacing="20" styleClass="header-box">

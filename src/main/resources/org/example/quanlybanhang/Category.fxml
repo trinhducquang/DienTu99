@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.CategoryController">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.category.CategoryController">
     <center>
         <AnchorPane prefHeight="500" prefWidth="800" style="-fx-background-color: white;">
             <children>
@@ -61,10 +61,9 @@
                 <Label layoutX="23.0" layoutY="327.0" text="Dòng sản phẩm" />
                 <ComboBox fx:id="childCategoryCombo" layoutX="20.0" layoutY="361.0" prefHeight="35.0" prefWidth="280" />
 
-                <HBox layoutX="20" layoutY="430" spacing="10">
+                <HBox layoutX="20" layoutY="430" prefHeight="40.0" prefWidth="279.0" spacing="10">
                     <children>
-                        <Button fx:id="saveButton" prefHeight="40" prefWidth="135" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Lưu" />
-                        <Button fx:id="cancelButton" prefHeight="40" prefWidth="135" style="-fx-background-color: #F44336; -fx-text-fill: white;" text="Hủy" />
+                        <Button fx:id="saveButton" prefHeight="40" prefWidth="281.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Lưu" />
                     </children>
                 </HBox>
             </children>

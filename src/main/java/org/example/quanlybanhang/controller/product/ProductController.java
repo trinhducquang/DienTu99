@@ -1,4 +1,4 @@
-package org.example.quanlybanhang.controller;
+package org.example.quanlybanhang.controller.product;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -84,7 +84,7 @@ public class ProductController {
                 detailButton.setOnAction(event -> {
                     Product product = getTableView().getItems().get(getIndex());
                     if (product != null) {
-                        DialogHelper.showDialog("/org/example/quanlybanhang/Product_detailsDialog.fxml", "Chi tiết sản phẩm", product.getId());
+                        DialogHelper.showProductDialog("/org/example/quanlybanhang/Product_detailsDialog.fxml", "Chi tiết sản phẩm", product.getId());
                     }
                 });
             }

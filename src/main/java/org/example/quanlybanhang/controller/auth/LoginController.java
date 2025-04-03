@@ -1,4 +1,4 @@
-package org.example.quanlybanhang.controller;
+package org.example.quanlybanhang.controller.auth;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
