@@ -14,8 +14,6 @@ public class EmployeeDAO {
     public EmployeeDAO(Connection connection) {
         this.connection = connection;
     }
-
-    // Lấy danh sách nhân viên
     public List<Employee> getAllEmployees() {
         List<Employee> employees = new ArrayList<>();
         String query = "SELECT id, full_name, username, password, email, phone, role FROM users";

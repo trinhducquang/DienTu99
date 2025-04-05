@@ -10,10 +10,15 @@ import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.helpers.ButtonTableCell;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Order;
+import org.example.quanlybanhang.utils.MoneyUtils; // ✅ Import MoneyUtils
 
 import java.util.List;
 
 public class OrderController {
+    @FXML
+    public Button addOrderButton;
+    @FXML
+    public TableColumn<Order, String> noteColumn;
     @FXML
     private TableView<Order> ordersTable;
     @FXML
@@ -46,6 +51,10 @@ public class OrderController {
 
         // Nạp dữ liệu vào bảng
         loadOrders();
+
+        addOrderButton.setOnAction(event -> {
+            DialogHelper.showDialog("/org/example/quanlybanhang/AddOrderDialog.fxml", "Thêm Đơn Hàng Mới");
+        });
     }
 
     private void setupTableColumns() {
@@ -53,14 +62,42 @@ public class OrderController {
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         orderNameColumn.setCellValueFactory(new PropertyValueFactory<>("productNames"));
-        shippingFeeColumn.setCellValueFactory(new PropertyValueFactory<>("shippingFee"));
+        noteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
         orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
-        totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
 
+        // ✅ Format tiền cho cột shippingFeeColumn
+        shippingFeeColumn.setCellValueFactory(new PropertyValueFactory<>("shippingFee"));
+        shippingFeeColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(MoneyUtils.formatVN(item));
+                }
+            }
+        });
+
+        // ✅ Format tiền cho cột totalPriceColumn
+        totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
+        totalPriceColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(MoneyUtils.formatVN(item));
+                }
+            }
+        });
+
+        // Trạng thái
         statusColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getStatus().getText()));
 
-        // Gán action mở dialog chi tiết đơn hàng
+        // Nút chi tiết đơn hàng
         actionsColumn.setCellFactory(param ->
                 new ButtonTableCell<>("Chi tiết đơn hàng", order -> {
                     DialogHelper.showOrderDialog("/org/example/quanlybanhang/orderDetailsDialog.fxml", "Chi tiết đơn hàng", order.getId());

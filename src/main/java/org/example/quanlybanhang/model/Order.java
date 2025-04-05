@@ -13,10 +13,11 @@ public class Order {
     private LocalDateTime orderDate;
     private OrderStatus status;
     private String productNames;
+    private String note;
 
     // Constructor
     public Order(int id, int employeeId, int customerId, String customerName, double totalPrice, double shippingFee,
-                 LocalDateTime orderDate, OrderStatus status, String productNames) {
+                 LocalDateTime orderDate, OrderStatus status, String productNames, String note) {
         this.id = id;
         this.employeeId = employeeId;
         this.customerId = customerId;
@@ -26,6 +27,7 @@ public class Order {
         this.orderDate = orderDate;
         this.status = status;
         this.productNames = productNames;
+        this.note = note;
     }
 
     // Getters và Setters
@@ -64,5 +66,13 @@ public class Order {
 
     public void setProductNames(String productNames) {
         this.productNames = productNames;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

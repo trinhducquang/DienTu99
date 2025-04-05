@@ -64,4 +64,10 @@ public class Product {
 
     public String getSpecifications() { return specifications; }
     public void setSpecifications(String specifications) { this.specifications = specifications; }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
 }

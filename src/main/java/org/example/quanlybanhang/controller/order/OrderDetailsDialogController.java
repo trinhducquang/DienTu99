@@ -7,8 +7,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.utils.DatabaseConnection;
+import org.example.quanlybanhang.utils.MoneyUtils;
 
 import java.io.File;
 import java.sql.Connection;
@@ -55,9 +57,13 @@ public class OrderDetailsDialogController {
                 customerName.setText(resultSet.getString("customer_name"));
                 currentOrderStatus = resultSet.getString("status");
                 orderStatus.setText(currentOrderStatus);
-                totalAmount.setText(resultSet.getDouble("total_price") + " đ");
-                shippingFee.setText(resultSet.getDouble("shipping_fee") + " đ");
-                finalAmount.setText((resultSet.getDouble("total_price") + resultSet.getDouble("shipping_fee")) + " đ");
+
+                double totalPrice = resultSet.getDouble("total_price");
+                double fee = resultSet.getDouble("shipping_fee");
+
+                totalAmount.setText(MoneyUtils.formatVN(totalPrice));
+                shippingFee.setText(MoneyUtils.formatVN(fee));
+                finalAmount.setText(MoneyUtils.formatVN(totalPrice + fee));
                 processedBy.setText("ID: " + resultSet.getInt("employee_id"));
             }
         } catch (SQLException e) {
@@ -97,7 +103,7 @@ public class OrderDetailsDialogController {
             }
 
             totalProducts.setText(String.valueOf(totalItems));
-            subtotalAmount.setText(totalOrderValue + " đ");
+            subtotalAmount.setText(MoneyUtils.formatVN(totalOrderValue));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -118,11 +124,11 @@ public class OrderDetailsDialogController {
         Label lblProductId = new Label("Mã sản phẩm: " + productId);
         lblProductId.setStyle("-fx-text-fill: #7f8c8d;");
 
-        Label lblPrice = new Label(price + " đ");
+        Label lblPrice = new Label(MoneyUtils.formatVN(price));
         lblPrice.setStyle("-fx-font-weight: bold; -fx-text-fill: #e74c3c;");
 
         Label lblQuantity = new Label("Số lượng: " + quantity);
-        Label lblTotal = new Label("Thành tiền: " + total + " đ");
+        Label lblTotal = new Label("Thành tiền: " + MoneyUtils.formatVN(total));
         lblTotal.setStyle("-fx-font-weight: bold;");
 
         detailsBox.getChildren().addAll(lblName, lblProductId, lblQuantity, lblTotal);
@@ -134,7 +140,7 @@ public class OrderDetailsDialogController {
             Button decreaseButton = new Button("❌");
             decreaseButton.setOnAction(e -> {
                 orderDAO.decreaseProductQuantity(currentOrderId, productId);
-                loadOrderProducts(); // Cập nhật lại danh sách sản phẩm sau khi giảm số lượng
+                loadOrderDetails(); // ✅ cập nhật toàn bộ đơn hàng
             });
             priceBox.getChildren().add(decreaseButton);
         }
@@ -162,7 +168,6 @@ public class OrderDetailsDialogController {
         return productBox;
     }
 
-
     @FXML
     private void handlePrintOrder() {
         System.out.println("In đơn hàng: " + currentOrderId);
@@ -175,6 +180,7 @@ public class OrderDetailsDialogController {
 
     @FXML
     private void handleBack() {
-        System.out.println("Quay lại danh sách đơn hàng");
+        Stage stage = (Stage) backBtn.getScene().getWindow();
+        stage.close();
     }
 }

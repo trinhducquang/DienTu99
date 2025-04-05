@@ -36,4 +36,10 @@ public class Employee {
     public void setEmail(String email) { this.email = email; }
     public void setPhone(String phone) { this.phone = phone; }
     public void setRole(String role) { this.role = role; }
+
+    @Override
+    public String toString() {
+        return id + " - " + fullName;
+    }
+
 }
