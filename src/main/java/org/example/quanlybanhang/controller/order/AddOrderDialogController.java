@@ -251,13 +251,15 @@ public class AddOrderDialogController {
         EmployeeDAO employeeDAO = new EmployeeDAO(DatabaseConnection.getConnection());
         List<Employee> allEmployees = employeeDAO.getAllEmployees();
 
+        // Dùng enum để filter nhân viên kho
         List<Employee> filteredEmployees = allEmployees.stream()
-                .filter(emp -> "nhanvien".equalsIgnoreCase(emp.getRole()))
+                .filter(emp -> UserRole.NHAN_VIEN_KHO.getValue().equalsIgnoreCase(emp.getRole()))
                 .toList();
 
         cbEmployee.getItems().clear();
         cbEmployee.getItems().addAll(filteredEmployees);
     }
+
 
     @FXML
     private void handleSaveOrder() {

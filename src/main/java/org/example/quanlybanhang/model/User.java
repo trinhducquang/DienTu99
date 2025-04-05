@@ -1,5 +1,7 @@
 package org.example.quanlybanhang.model;
 
+import org.example.quanlybanhang.enums.UserRole;
+
 public class User {
     private int id;
     private String username;
@@ -7,9 +9,9 @@ public class User {
     private String fullName;
     private String email;
     private String phone;
-    private String role;
+    private UserRole role;
 
-    public User(int id, String username, String password, String fullName, String email, String phone, String role) {
+    public User(int id, String username, String password, String fullName, String email, String phone, UserRole role) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -38,8 +40,6 @@ public class User {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
-
+    public UserRole getRole() { return role; }
+    public void setRole(UserRole role) { this.role = role; }
 }
-

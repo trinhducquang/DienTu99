@@ -45,7 +45,7 @@ public class EmployeeManagementDialogController {
                     phoneField.getText(),
                     "nhanvien" // Role luôn là "nhanvien"
             );
-            employeeDAO.addEmployee(employee);
+            employeeDAO.addEmployee(employee, passwordField.getText());
         }
         closeDialog(); // Đóng cửa sổ ngay sau khi lưu
     }

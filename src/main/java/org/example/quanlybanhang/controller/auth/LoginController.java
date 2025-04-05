@@ -28,17 +28,21 @@ public class LoginController {
         User user = userDAO.dangNhap(tenDangNhap, matKhau);
 
         if (user != null) {
-            if ("admin".equalsIgnoreCase(user.getRole())) {
-                chuyenScene("Admin.fxml");
-            } else if ("nhanvien".equalsIgnoreCase(user.getRole())) {
-                chuyenScene("Employee.fxml");
-            } else {
-                hienThiThongBao("Lỗi", "Vai trò không hợp lệ!");
+            switch (user.getRole()) {
+                case ADMIN:
+                    chuyenScene("Admin.fxml");
+                    break;
+                case NHAN_VIEN:
+                    chuyenScene("Employee.fxml");
+                    break;
+                default:
+                    hienThiThongBao("Lỗi", "Vai trò không hợp lệ!");
             }
         } else {
             hienThiThongBao("Lỗi Đăng Nhập", "Tên đăng nhập hoặc mật khẩu không đúng");
         }
     }
+
 
     private void chuyenScene(String fxmlFile) {
         try {

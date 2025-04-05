@@ -3,6 +3,10 @@ module org.example.quanlybanhang {
     requires javafx.fxml;
     requires java.sql;
     requires mysql.connector.j;
+    requires javafx.graphics;
+    requires de.mkammerer.argon2.nolibs;
+    requires io.github.cdimascio.dotenv.java;
+    requires com.sun.jna;
 
 
     opens org.example.quanlybanhang.main to javafx.fxml;
