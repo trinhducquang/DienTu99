@@ -15,8 +15,10 @@ import org.example.quanlybanhang.model.User;
 import java.sql.Connection;
 
 public class LoginController {
+
     @FXML private TextField tenDangNhapField;
     @FXML private PasswordField matKhauField;
+    @FXML private PasswordField reTypePasswordField;
 
     @FXML
     private void xuLyDangNhap() {

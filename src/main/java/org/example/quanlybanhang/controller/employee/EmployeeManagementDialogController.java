@@ -18,6 +18,8 @@ public class EmployeeManagementDialogController {
     @FXML
     private TextField passwordField;
     @FXML
+    private TextField retypepasswordField;
+    @FXML
     private TextField emailField;
     @FXML
     private TextField phoneField;
@@ -33,6 +35,14 @@ public class EmployeeManagementDialogController {
     }
 
     private void saveEmployee() {
+        String password = passwordField.getText();
+        String retypePassword = retypepasswordField.getText();
+
+        if (!password.equals(retypePassword)) {
+            System.out.println("❌ Mật khẩu không khớp!");
+            return;
+        }
+
         Connection connection = DatabaseConnection.getConnection();
         if (connection != null) {
             EmployeeDAO employeeDAO = new EmployeeDAO(connection);
@@ -40,15 +50,18 @@ public class EmployeeManagementDialogController {
                     0,
                     nameField.getText(),
                     usernameField.getText(),
-                    passwordField.getText(),
+                    password,
                     emailField.getText(),
                     phoneField.getText(),
-                    "nhanvien" // Role luôn là "nhanvien"
+                    "nhanvien"
             );
-            employeeDAO.addEmployee(employee, passwordField.getText());
+            boolean success = employeeDAO.addEmployee(employee, password);
+            System.out.println(success ? "✅ Thêm nhân viên thành công!" : "❌ Thêm nhân viên thất bại!");
         }
-        closeDialog(); // Đóng cửa sổ ngay sau khi lưu
+
+        closeDialog();
     }
+
 
     private void closeDialog() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
