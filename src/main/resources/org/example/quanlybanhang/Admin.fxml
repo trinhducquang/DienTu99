@@ -34,6 +34,7 @@
             <Button fx:id="btnCustomers" styleClass="nav-button" text="Khách Hàng" />
             <Button fx:id="btnCategory" styleClass="nav-button" text="Danh Mục" />
             <Button fx:id="btnReports" styleClass="nav-button" text="Báo Cáo" />
+            <Button fx:id="btnWarehouse" styleClass="nav-button" text="Quản lí kho"/>
         </VBox>
         <!-- Main Content -->
         <VBox fx:id="mainContentPane" prefHeight="605.0" prefWidth="765.0" spacing="20" HBox.hgrow="ALWAYS">

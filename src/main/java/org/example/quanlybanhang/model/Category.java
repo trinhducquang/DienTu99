@@ -4,13 +4,15 @@ public class Category {
     private int id;
     private String name;
     private String description;
-    private int parentId; // Thêm parentId
+    private int parentId;
+    private String category;
 
-    public Category(int id, String name, String description, int parentId) {
+    public Category(int id, String name, String description, int parentId, String category) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.parentId = parentId;
+        this.category = category;
     }
 
     public int getId() {
@@ -43,6 +45,14 @@ public class Category {
 
     public void setParentId(int parentId) {
         this.parentId = parentId;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     @Override

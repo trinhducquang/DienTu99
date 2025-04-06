@@ -9,7 +9,7 @@ import org.example.quanlybanhang.helpers.LogoutHandler;
 public class AdminController {
     @FXML private Pane mainContentPane;
     @FXML private Pane adminContentPane;
-    @FXML private Button btnEmployee, btnDashboard, btnProduct, btnOrders, btnCustomers, btnCategory, btnReports, logoutButton;
+    @FXML private Button btnEmployee, btnDashboard, btnProduct, btnOrders, btnCustomers, btnCategory, btnReports, btnWarehouse, logoutButton;
 
     @FXML
     private void initialize() {
@@ -25,5 +25,7 @@ public class AdminController {
         btnOrders.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "order.fxml"));
         btnCustomers.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "customer.fxml"));
         btnReports.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "report.fxml"));
+        btnWarehouse.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "Warehouse.fxml"));
+
     }
 }

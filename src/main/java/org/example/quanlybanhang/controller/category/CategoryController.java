@@ -17,13 +17,15 @@ import java.util.stream.Collectors;
 
 public class CategoryController {
     @FXML
-    public TextField searchField; // Trường tìm kiếm
+    public TextField searchField;
     @FXML
     private Button addCategoryButton;
     @FXML
     private TableView<Category> categoryTable;
     @FXML
     private TableColumn<Category, Integer> idColumn;
+    @FXML
+    public TableColumn<Category, String> categoryColum;
     @FXML
     private TableColumn<Category, String> nameColumn;
     @FXML
@@ -33,10 +35,15 @@ public class CategoryController {
     @FXML
     private TextArea descriptionArea;
     @FXML
-    private ComboBox<String> childCategoryCombo; // Đổi tên để phản ánh đúng chức năng
+    private ComboBox<String> childCategoryCombo;
     @FXML
     private Button saveButton;
+    @FXML
+    private RadioButton radioParent;
+    @FXML
+    private RadioButton radioChild;
 
+    private ToggleGroup categoryTypeGroup;
     private CategoryDAO categoryDAO;
     private ObservableList<Category> categoryList;
 
@@ -48,19 +55,33 @@ public class CategoryController {
     @FXML
     public void initialize() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        categoryColum.setCellValueFactory(new PropertyValueFactory<>("category"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 
+        // Setup radio group
+        categoryTypeGroup = new ToggleGroup();
+        radioParent.setToggleGroup(categoryTypeGroup);
+        radioChild.setToggleGroup(categoryTypeGroup);
+        radioParent.setSelected(true); // mặc định
+
         loadCategories();
 
-        // Thêm sự kiện khi click vào hàng trong bảng
+        // Click vào hàng để fill data
         categoryTable.setOnMouseClicked(event -> {
             Category selectedCategory = categoryTable.getSelectionModel().getSelectedItem();
             if (selectedCategory != null) {
                 nameField.setText(selectedCategory.getName());
                 descriptionArea.setText(selectedCategory.getDescription());
 
-                // Load danh mục con thay vì danh mục cha
+                // Thiết lập lại radio
+                if (selectedCategory.getParentId() == 0) {
+                    radioParent.setSelected(true);
+                } else {
+                    radioChild.setSelected(true);
+                }
+
+                // Load danh mục con
                 loadChildCategories(selectedCategory.getId());
             }
         });
@@ -69,7 +90,6 @@ public class CategoryController {
 
         saveButton.setOnAction(event -> handleSaveAction());
 
-        // Thêm sự kiện khi người dùng thay đổi giá trị trong ô tìm kiếm
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             searchCategories(newValue);
         });
@@ -102,6 +122,22 @@ public class CategoryController {
             selectedCategory.setName(name);
             selectedCategory.setDescription(description);
 
+            // Xử lý danh mục cha hoặc con dựa trên radio
+            if (radioParent.isSelected()) {
+                selectedCategory.setParentId(0);
+            } else if (radioChild.isSelected()) {
+                String parentName = childCategoryCombo.getValue();
+                if (parentName != null) {
+                    Category parentCategory = categoryList.stream()
+                            .filter(cat -> cat.getName().equals(parentName))
+                            .findFirst()
+                            .orElse(null);
+                    if (parentCategory != null) {
+                        selectedCategory.setParentId(parentCategory.getId());
+                    }
+                }
+            }
+
             boolean success = categoryDAO.updateCategory(selectedCategory);
             if (success) {
                 loadCategories();
@@ -112,7 +148,6 @@ public class CategoryController {
             }
         }
     }
-
 
     private void searchCategories(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {

@@ -16,19 +16,19 @@
 
     <StackPane prefHeight="400" prefWidth="400">
         <!-- Đăng Nhập Pane -->
-        <VBox fx:id="dangNhapPane" alignment="CENTER" spacing="20" style="-fx-background-color: white;                      -fx-background-radius: 10;                      -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
+        <VBox fx:id="dangNhapPane" alignment="CENTER" spacing="20" style="-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
 
             <padding>
                 <Insets bottom="30" left="30" right="30" top="30" />
             </padding>
 
-            <Label style="-fx-font-size: 24px;                           -fx-font-weight: bold;                           -fx-text-fill: #2196F3;" text="Đăng Nhập" />
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2196F3;" text="Đăng Nhập" />
 
-            <TextField fx:id="tenDangNhapField" promptText="Tên Đăng Nhập" style="-fx-background-radius: 20;                               -fx-padding: 10px;                               -fx-background-color: #F0F0F0;" />
+            <TextField fx:id="tenDangNhapField" promptText="Tên Đăng Nhập" style="-fx-background-radius: 20; -fx-padding: 10px; -fx-background-color: #F0F0F0;" />
 
-            <PasswordField fx:id="matKhauField" promptText="Mật Khẩu" style="-fx-background-radius: 20;                                   -fx-padding: 10px;                                   -fx-background-color: #F0F0F0;" />
+            <PasswordField fx:id="matKhauField" promptText="Mật Khẩu" style="-fx-background-radius: 20; -fx-padding: 10px; -fx-background-color: #F0F0F0;" />
 
-            <Button onAction="#xuLyDangNhap" style="-fx-background-color: #2196F3;                            -fx-text-fill: white;                            -fx-background-radius: 20;                            -fx-padding: 10px 20px;" text="Đăng Nhập" />
+            <Button onAction="#xuLyDangNhap" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 10px 20px;" text="Đăng Nhập" />
         </VBox>
     </StackPane>
 </VBox>

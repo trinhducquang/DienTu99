@@ -15,7 +15,9 @@ public class CategoryDAO {
 
     public List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
-        String sql = "SELECT * FROM categories";
+        String sql = "SELECT id, name, description, parent_id, " +
+                "CASE WHEN parent_id IS NULL THEN 'Danh mục cha' ELSE 'Danh mục con' END AS category " +
+                "FROM categories";
 
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
@@ -36,13 +38,16 @@ public class CategoryDAO {
         String name = resultSet.getString("name");
         String description = resultSet.getString("description");
         int parentId = resultSet.getInt("parent_id");
+        String categoryType = resultSet.getString("category");
 
-        return new Category(id, name, description, parentId);
+        return new Category(id, name, description, parentId, categoryType);
     }
 
     public List<Category> getChildCategories(int parentId) {
         List<Category> childCategories = new ArrayList<>();
-        String sql = "SELECT * FROM categories WHERE parent_id = ?";
+        String sql = "SELECT id, name, description, parent_id, " +
+                "CASE WHEN parent_id IS NULL THEN 'Danh mục cha' ELSE 'Danh mục con' END AS category " +
+                "FROM categories WHERE parent_id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, parentId);
@@ -60,20 +65,26 @@ public class CategoryDAO {
     }
 
     public boolean updateCategory(Category category) {
-        String sql = "UPDATE categories SET name = ?, description = ? WHERE id = ?";
+        String sql = "UPDATE categories SET name = ?, description = ?, parent_id = ? WHERE id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, category.getName());
             statement.setString(2, category.getDescription());
-            statement.setInt(3, category.getId());
+            if (category.getParentId() > 0) {
+                statement.setInt(3, category.getParentId());
+            } else {
+                statement.setNull(3, Types.INTEGER);
+            }
+            statement.setInt(4, category.getId());
 
             int rowsUpdated = statement.executeUpdate();
-            return rowsUpdated > 0; // Trả về true nếu có dòng được cập nhật
+            return rowsUpdated > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+
 
     public boolean createCategory(Category category) {
         String sql = "INSERT INTO categories (name, description, parent_id) VALUES (?, ?, ?)";

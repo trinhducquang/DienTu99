@@ -6,7 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.utils.DatabaseConnection;
-
 import java.sql.Connection;
 
 

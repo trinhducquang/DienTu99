@@ -62,7 +62,7 @@ public class AddCategoryDialogController {
             return;
         }
 
-        Category newCategory = new Category(0, name, description, parentId);
+        Category newCategory = new Category(0, name, description, parentId, null);
 
         Connection connection = DatabaseConnection.getConnection();
         CategoryDAO categoryDAO = new CategoryDAO(connection);
