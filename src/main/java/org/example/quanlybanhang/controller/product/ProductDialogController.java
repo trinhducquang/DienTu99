@@ -72,13 +72,13 @@ public class ProductDialogController {
                 return;
             }
 
-            String categoryName = selectedCategory.getName(); // Giờ không bị lỗi nữa
+            String categoryName = selectedCategory.getName();
             String description = descriptionField.getText();
             double price = Double.parseDouble(priceField.getText());
             int stockQuantity = Integer.parseInt(stockQuantityField.getText());
             String imageUrl = imageUrlField.getText();
 
-            Product newProduct = new Product(0, name, categoryName, description, price, stockQuantity, LocalDateTime.now(), LocalDateTime.now(), null, imageUrl, null);
+            Product newProduct = new Product(0, name, categoryName, null, description, price, stockQuantity, LocalDateTime.now(), LocalDateTime.now(), null, imageUrl, null);
             productDAO.insertProduct(newProduct);
 
             closeDialog();

@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProductController {
-    @FXML private TableColumn<Product, Void> OperationColumn;
-    @FXML private Button addProductButton;
     @FXML private TableView<Product> productsTable;
     @FXML private TableColumn<Product, Integer> idColumn;
     @FXML private TableColumn<Product, String> nameColumn;
@@ -29,81 +27,54 @@ public class ProductController {
     @FXML private TableColumn<Product, String> descriptionColumn;
     @FXML private TableColumn<Product, ProductStatus> statusColumn;
     @FXML private TableColumn<Product, String> imageColumn;
+    @FXML private TableColumn<Product, Void> OperationColumn;
+
     @FXML private ComboBox<Category> categoryFilter;
     @FXML private TextField searchField;
+    @FXML private Button addProductButton;
 
     private final ObservableList<Product> productList = FXCollections.observableArrayList();
     private final ObservableList<Product> allProducts = FXCollections.observableArrayList();
+    private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         productsTable.setEditable(true);
+        setupTableColumns();
+        loadCategoryData(); // setEditableColumns được gọi sau khi load xong
+        loadProductData();
+        productsTable.setItems(productList);
 
+        setupSearchAndFilter();
+        setupAddProductButton();
+        addButtonToActionColumn();
+    }
+
+    private void setupTableColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         categoryNameColumn.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-
-        // ✅ Hiển thị có định dạng tiền VNĐ khi không chỉnh sửa
-        priceColumn.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
-            @Override
-            public String toString(Double value) {
-                if (value == null) return "";
-                return MoneyUtils.formatVN(value); // Hiển thị tiền tệ đẹp
-            }
-
-            @Override
-            public Double fromString(String string) {
-                try {
-                    String cleaned = string.replaceAll("[^\\d]", "");
-                    return Double.parseDouble(cleaned);
-                } catch (NumberFormatException e) {
-                    return 0.0;
-                }
-            }
-        }));
-
         stockQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("stockQuantity"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("imageUrl"));
 
-        setEditableColumns();
-        loadProductData();
-        loadCategoryData();
-        productsTable.setItems(productList);
-        addButtonToActionColumn();
-
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> filterBySearch(newVal));
-        addProductButton.setOnAction(event ->
-                DialogHelper.showDialog("/org/example/quanlybanhang/ProductDialog.fxml", "Thêm Sản Phẩm Mới")
-        );
-        categoryFilter.setOnAction(event -> filterProducts());
-    }
-
-    private void addButtonToActionColumn() {
-        OperationColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button detailButton = new Button("Chi tiết sản phẩm");
-
-            {
-                detailButton.setOnAction(event -> {
-                    Product product = getTableView().getItems().get(getIndex());
-                    if (product != null) {
-                        DialogHelper.showProductDialog(
-                                "/org/example/quanlybanhang/Product_detailsDialog.fxml",
-                                "Chi tiết sản phẩm",
-                                product.getId()
-                        );
-                    }
-                });
+        priceColumn.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<>() {
+            @Override
+            public String toString(Double value) {
+                return value == null ? "" : MoneyUtils.formatVN(value);
             }
 
             @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : detailButton);
+            public Double fromString(String string) {
+                try {
+                    return Double.parseDouble(string.replaceAll("[^\\d]", ""));
+                } catch (NumberFormatException e) {
+                    return 0.0;
+                }
             }
-        });
+        }));
     }
 
     private void setEditableColumns() {
@@ -118,7 +89,25 @@ public class ProductController {
             Product product = event.getRowValue();
             product.setPrice(event.getNewValue());
             updateProductInDatabase(product);
-            productsTable.refresh(); // Refresh bảng để hiển thị lại định dạng tiền
+            productsTable.refresh();
+        });
+
+        categoryNameColumn.setCellFactory(ComboBoxTableCell.forTableColumn(
+                FXCollections.observableArrayList(
+                        categoryList.stream().map(Category::getName).toList()
+                )
+        ));
+        categoryNameColumn.setOnEditCommit(event -> {
+            Product product = event.getRowValue();
+            String newCategoryName = event.getNewValue();
+            product.setCategoryName(newCategoryName);
+
+            categoryList.stream()
+                    .filter(c -> c.getName().equals(newCategoryName))
+                    .findFirst()
+                    .ifPresent(c -> product.setCategoryId(c.getId()));
+
+            updateProductInDatabase(product);
         });
 
         stockQuantityColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
@@ -151,11 +140,47 @@ public class ProductController {
         });
     }
 
+    private void addButtonToActionColumn() {
+        OperationColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button detailButton = new Button("Chi tiết sản phẩm");
+
+            {
+                detailButton.setOnAction(event -> {
+                    Product product = getTableView().getItems().get(getIndex());
+                    if (product != null) {
+                        DialogHelper.showProductDialog(
+                                "/org/example/quanlybanhang/Product_detailsDialog.fxml",
+                                "Chi tiết sản phẩm",
+                                product.getId()
+                        );
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : detailButton);
+            }
+        });
+    }
+
+    private void setupSearchAndFilter() {
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> filterBySearch(newVal));
+        categoryFilter.setOnAction(event -> filterProducts());
+    }
+
+    private void setupAddProductButton() {
+        addProductButton.setOnAction(event ->
+                DialogHelper.showDialog("/org/example/quanlybanhang/ProductDialog.fxml", "Thêm Sản Phẩm Mới")
+        );
+    }
+
     private void updateProductInDatabase(Product product) {
         Connection connection = DatabaseConnection.getConnection();
         ProductDAO productDAO = new ProductDAO(connection);
         productDAO.updateProduct(product);
-        loadProductData();
+        loadProductData(); // refresh
     }
 
     private void loadProductData() {
@@ -170,24 +195,35 @@ public class ProductController {
         Connection connection = DatabaseConnection.getConnection();
         CategoryDAO categoryDAO = new CategoryDAO(connection);
         List<Category> categories = categoryDAO.getAllCategories();
-        categoryFilter.setItems(FXCollections.observableArrayList(categories));
+        categoryList.setAll(categories);
+        categoryFilter.setItems(categoryList);
+
+        // Gọi sau khi danh sách danh mục đã có
+        setEditableColumns();
     }
 
     private void filterBySearch(String keyword) {
-        List<Product> filteredProducts = SearchService.search(allProducts, keyword, Product::getName);
-        productList.setAll(filteredProducts);
+        List<Product> filtered = SearchService.search(allProducts, keyword,
+                e -> String.valueOf(e.getId()),
+                e -> String.valueOf(e.getPrice()),
+                e -> String.valueOf(e.getStockQuantity()),
+                Product::getName,
+                Product::getCategoryName,
+                Product::getDescription
+        );
+        productList.setAll(filtered);
     }
 
     private void filterProducts() {
-        Category selectedCategory = categoryFilter.getValue();
-        if (selectedCategory == null) {
+        Category selected = categoryFilter.getValue();
+        if (selected == null) {
             productList.setAll(allProducts);
         } else {
-            String selectedCategoryName = selectedCategory.getName();
-            List<Product> filteredProducts = allProducts.stream()
-                    .filter(product -> selectedCategoryName.equals(product.getCategoryName()))
+            String name = selected.getName();
+            List<Product> filtered = allProducts.stream()
+                    .filter(p -> name.equals(p.getCategoryName()))
                     .collect(Collectors.toList());
-            productList.setAll(filteredProducts);
+            productList.setAll(filtered);
         }
     }
 }

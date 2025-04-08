@@ -16,7 +16,7 @@
             <Insets left="20" right="20" />
         </padding>
 
-        <Label styleClass="title-label" text="Quản Lý Bán Hàng" />
+        <Label styleClass="title-label" text="Điện Tử 99" />
 
         <HBox HBox.hgrow="ALWAYS" />
 

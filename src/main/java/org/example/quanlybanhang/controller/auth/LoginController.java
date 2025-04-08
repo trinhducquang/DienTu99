@@ -18,7 +18,7 @@ public class LoginController {
 
     @FXML private TextField tenDangNhapField;
     @FXML private PasswordField matKhauField;
-    @FXML private PasswordField reTypePasswordField;
+
 
     @FXML
     private void xuLyDangNhap() {

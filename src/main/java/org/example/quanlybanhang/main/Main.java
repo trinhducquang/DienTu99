@@ -15,7 +15,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/org/example/quanlybanhang/Login.fxml"));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Quản Lý Bán Hàng Đồ điện tử");
+        primaryStage.setTitle("Điện tử 99");
         primaryStage.show();
         Connection conn = DatabaseConnection.getConnection();
         if (conn != null) {

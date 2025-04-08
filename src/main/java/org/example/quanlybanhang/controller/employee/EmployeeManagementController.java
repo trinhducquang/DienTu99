@@ -11,6 +11,7 @@ import org.example.quanlybanhang.dao.EmployeeDAO;
 import org.example.quanlybanhang.enums.UserRole;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Employee;
+import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 
 import java.sql.Connection;
@@ -51,8 +52,6 @@ public class EmployeeManagementController {
         employeeTable.setEditable(true);
 
         // Editable columns (excluding password)
-        colFullName.setCellFactory(TextFieldTableCell.forTableColumn());
-        colUsername.setCellFactory(TextFieldTableCell.forTableColumn());
         colEmail.setCellFactory(TextFieldTableCell.forTableColumn());
         colPhone.setCellFactory(TextFieldTableCell.forTableColumn());
 
@@ -100,12 +99,19 @@ public class EmployeeManagementController {
     }
 
     private void filterEmployees(String keyword) {
-        List<Employee> filtered = allEmployees.stream()
-                .filter(e -> e.getFullName().toLowerCase().contains(keyword.toLowerCase()) ||
-                        e.getUsername().toLowerCase().contains(keyword.toLowerCase()))
-                .collect(Collectors.toList());
+        List<Employee> filtered = SearchService.search(
+                allEmployees,
+                keyword,
+                e -> String.valueOf(e.getId()),
+                Employee::getFullName,
+                Employee::getUsername,
+                Employee::getEmail,
+                Employee::getPhone,
+                Employee::getRole
+        );
         employeeList.setAll(filtered);
     }
+
 
     private void updateEmployee(Employee employee, String field, String newValue) {
         switch (field) {

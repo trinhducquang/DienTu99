@@ -47,6 +47,23 @@ public class ProductDAO {
         return null;
     }
 
+    public List<String> getAllCategoryNames() {
+        List<String> names = new ArrayList<>();
+        String sql = "SELECT name FROM categories";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                names.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return names;
+    }
+
+
     public void insertProduct(Product product) throws SQLException {
         String getCategorySql = "SELECT id FROM categories WHERE name = ?";
         int categoryId = -1;
@@ -93,17 +110,19 @@ public class ProductDAO {
             product.setStatus(product.getStockQuantity() > 0 ? ProductStatus.CON_HANG : ProductStatus.HET_HANG);
         }
 
-        String sql = "UPDATE products SET name = ?, description = ?, price = ?, stock_quantity = ?, status = ?, updated_at = ?, image_url = ?, specifications = ? WHERE id = ?";
+        String sql = "UPDATE products SET name = ?, category_id = ?, description = ?, price = ?, stock_quantity = ?, status = ?, updated_at = ?, image_url = ?, specifications = ? WHERE id = ?";
+
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, product.getName());
-            statement.setString(2, product.getDescription());
-            statement.setDouble(3, product.getPrice());
-            statement.setInt(4, product.getStockQuantity());
-            statement.setString(5, product.getStatus().toString());
-            statement.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
-            statement.setString(7, product.getImageUrl());
-            statement.setString(8, product.getSpecifications());
-            statement.setInt(9, product.getId());
+            statement.setInt(2, product.getCategoryId()); // 👈 thêm dòng này để cập nhật category_id
+            statement.setString(3, product.getDescription());
+            statement.setDouble(4, product.getPrice());
+            statement.setInt(5, product.getStockQuantity());
+            statement.setString(6, product.getStatus().toString());
+            statement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+            statement.setString(8, product.getImageUrl());
+            statement.setString(9, product.getSpecifications());
+            statement.setInt(10, product.getId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -111,10 +130,12 @@ public class ProductDAO {
         }
     }
 
+
     private Product extractProductFromResultSet(ResultSet resultSet) throws SQLException {
         int id = resultSet.getInt("id");
         String name = resultSet.getString("name");
         String categoryName = resultSet.getString("category_name");
+        int categoryId = resultSet.getInt("category_id");
         String description = resultSet.getString("description");
         double price = resultSet.getDouble("price");
         int stockQuantity = resultSet.getInt("stock_quantity");
@@ -122,12 +143,12 @@ public class ProductDAO {
         Timestamp updatedAtTimestamp = resultSet.getTimestamp("updated_at");
         String statusText = resultSet.getString("status");
         String imageUrl = resultSet.getString("image_url");
-        String specifications = resultSet.getString("specifications");  // Thêm specifications
+        String specifications = resultSet.getString("specifications");
 
         LocalDateTime createdAt = (createdAtTimestamp != null) ? createdAtTimestamp.toLocalDateTime() : null;
         LocalDateTime updatedAt = (updatedAtTimestamp != null) ? updatedAtTimestamp.toLocalDateTime() : null;
         ProductStatus status = ProductStatus.fromString(statusText);
 
-        return new Product(id, name, categoryName, description, price, stockQuantity, createdAt, updatedAt, status, imageUrl, specifications);
+        return new Product(id, name, categoryName, categoryId, description, price, stockQuantity, createdAt, updatedAt, status, imageUrl, specifications);
     }
 }

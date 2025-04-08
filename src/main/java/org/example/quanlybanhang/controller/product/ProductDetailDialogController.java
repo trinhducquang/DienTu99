@@ -1,11 +1,13 @@
 package org.example.quanlybanhang.controller.product;
 
+import com.google.gson.Gson;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import org.example.quanlybanhang.dto.ProductDetailSpecificationsDTO;
 import org.example.quanlybanhang.model.Product;
 import org.example.quanlybanhang.dao.ProductDAO;  // Import ProductDAO
 import org.example.quanlybanhang.utils.DatabaseConnection;  // Import DatabaseConnection
@@ -110,14 +112,18 @@ public class ProductDetailDialogController {
             return;
         }
 
-        String[] specs = specifications.split(";");
-        configMemoryLabel.setText(specs.length > 0 ? specs[0] : "N/A");
-        cameraDisplayLabel.setText(specs.length > 1 ? specs[1] : "N/A");
-        batteryLabel.setText(specs.length > 2 ? specs[2] : "N/A");
-        featuresLabel.setText(specs.length > 3 ? specs[3] : "N/A");
-        connectivityLabel.setText(specs.length > 4 ? specs[4] : "N/A");
-        designMaterialsLabel.setText(specs.length > 5 ? specs[5] : "N/A");
+        // Sử dụng Gson để chuyển chuỗi JSON thành đối tượng DTO
+        Gson gson = new Gson();
+        ProductDetailSpecificationsDTO specsDTO = gson.fromJson(specifications, ProductDetailSpecificationsDTO.class);
+
+        configMemoryLabel.setText(specsDTO.getConfigMemory() != null ? specsDTO.getConfigMemory() : "N/A");
+        cameraDisplayLabel.setText(specsDTO.getCamera() != null ? specsDTO.getCamera() : "N/A");
+        batteryLabel.setText(specsDTO.getBattery() != null ? specsDTO.getBattery() : "N/A");
+        featuresLabel.setText(specsDTO.getFeatures() != null ? specsDTO.getFeatures() : "N/A");
+        connectivityLabel.setText(specsDTO.getConnectivity() != null ? specsDTO.getConnectivity() : "N/A");
+        designMaterialsLabel.setText(specsDTO.getDesignMaterials() != null ? specsDTO.getDesignMaterials() : "N/A");
     }
+
 
     @FXML
     private void handleBackAction() {

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="795.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhang.controller.WarehouseInputController">
+    <top>
+        <VBox spacing="10">
+            <children>
+                <BorderPane styleClass="header-pane">
+                    <left>
+                        <Label styleClass="header-label" text="Thêm Phiếu Nhập Kho" />
+                    </left>
+                    <right>
+                        <Button onAction="#handleBack" styleClass="back-button" text="Quay Lại" />
+                    </right>
+                    <padding>
+                        <Insets bottom="15" left="15" right="15" top="15" />
+                    </padding>
+                </BorderPane>
+            </children>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="15" styleClass="content-pane">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="15" />
+            </padding>
+
+            <!-- Transaction Information Section -->
+            <TitledPane expanded="true" styleClass="section-pane" text="Thông Tin Giao Dịch">
+                <content>
+                    <GridPane hgap="15" vgap="10">
+                        <padding>
+                            <Insets bottom="10" left="10" right="10" top="10" />
+                        </padding>
+
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="150" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="200" prefWidth="250" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="150" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="200" prefWidth="250" />
+                        </columnConstraints>
+
+                        <!-- Row 0 -->
+                        <Label text="Mã Giao Dịch:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <TextField fx:id="transactionCodeField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                        <Label text="Ngày Tạo:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <HBox spacing="5" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                            <DatePicker fx:id="createdAtDatePicker" prefHeight="31.0" prefWidth="277.0" />
+                        </HBox>
+
+                        <!-- Row 1 -->
+                        <Label text="Người Tạo:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="createdByComboBox" prefWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                        <Label text="Loại Giao Dịch:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="transactionTypeComboBox" prefWidth="Infinity" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <rowConstraints>
+                     <RowConstraints />
+                     <RowConstraints />
+                  </rowConstraints>
+                    </GridPane>
+                </content>
+            </TitledPane>
+
+            <!-- Product Details Section -->
+            <TitledPane expanded="true" styleClass="section-pane" text="Chi Tiết Sản Phẩm">
+                <content>
+                    <VBox spacing="10">
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <ComboBox fx:id="productComboBox" prefWidth="300" promptText="Chọn sản phẩm" />
+                            <Label text="Số Lượng:" />
+                            <TextField fx:id="quantityField" prefWidth="100" />
+                            <Label text="Đơn Giá:" />
+                            <TextField fx:id="unitPriceField" prefWidth="120" />
+                            <Button onAction="#handleAddProduct" styleClass="add-button" text="Thêm Sản Phẩm" />
+                        </HBox>
+
+                        <TableView fx:id="productTableView" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="indexColumn" prefWidth="50" text="STT" />
+                                <TableColumn fx:id="productIdColumn" prefWidth="100" text="Mã SP" />
+                                <TableColumn fx:id="productNameColumn" prefWidth="250" text="Tên Sản Phẩm" />
+                                <TableColumn fx:id="quantityColumn" prefWidth="100" text="Số Lượng" />
+                                <TableColumn fx:id="unitPriceColumn" prefWidth="120" text="Đơn Giá" />
+                                <TableColumn fx:id="totalColumn" prefWidth="120" text="Thành Tiền" />
+                                <TableColumn fx:id="actionColumn" prefWidth="100" text="Thao Tác" />
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </content>
+            </TitledPane>
+
+            <!-- Additional Information Section -->
+            <TitledPane expanded="true" styleClass="section-pane" text="Thông Tin Bổ Sung">
+                <content>
+                    <GridPane hgap="15" vgap="10">
+                        <padding>
+                            <Insets bottom="10" left="10" right="10" top="10" />
+                        </padding>
+
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="150" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="200" prefWidth="250" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="100" prefWidth="150" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="200" prefWidth="250" />
+                        </columnConstraints>
+
+                        <!-- Row 0 -->
+                        <Label text="Tổng Tiền:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <TextField fx:id="totalAmountField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                        <Label text="Số Lượng Dư:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <TextField fx:id="excessQuantityField" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                        <!-- Row 1 -->
+                        <Label text="Số Lượng Thiếu:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <TextField fx:id="deficientQuantityField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                        <Label text="Ghi Chú:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <TextArea fx:id="noteTextArea" prefHeight="60" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                  <rowConstraints>
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                  </rowConstraints>
+                    </GridPane>
+                </content>
+            </TitledPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="10" styleClass="button-bar">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="15" />
+            </padding>
+            <Button onAction="#handleCancel" styleClass="cancel-button" text="Hủy" />
+            <Button onAction="#handleSave" styleClass="save-button" text="Lưu Phiếu Nhập" />
+        </HBox>
+    </bottom>
+</BorderPane>

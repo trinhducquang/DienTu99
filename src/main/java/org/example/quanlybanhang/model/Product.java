@@ -7,6 +7,7 @@ public class Product {
     private int id;
     private String name;
     private String categoryName;
+    private Integer categoryId;
     private String description;
     private double price;
     private int stockQuantity;
@@ -16,12 +17,13 @@ public class Product {
     private String imageUrl;
     private String specifications;
 
-    public Product(int id, String name, String categoryName, String description,
+    public Product(int id, String name, String categoryName, Integer categoryId, String description,
                    double price, int stockQuantity, LocalDateTime createdAt,
                    LocalDateTime updatedAt, ProductStatus status, String imageUrl, String specifications) {
         this.id = id;
         this.name = name;
         this.categoryName = categoryName;
+        this.categoryId = categoryId;
         this.description = description;
         this.price = price;
         this.stockQuantity = stockQuantity;
@@ -40,6 +42,14 @@ public class Product {
 
     public String getCategoryName() { return categoryName; }
     public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
