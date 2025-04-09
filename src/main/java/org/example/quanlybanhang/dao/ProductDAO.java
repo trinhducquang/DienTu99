@@ -1,5 +1,6 @@
 package org.example.quanlybanhang.dao;
 
+import org.example.quanlybanhang.dao.base.CrudDao;
 import org.example.quanlybanhang.enums.ProductStatus;
 import org.example.quanlybanhang.model.Product;
 import java.sql.*;
@@ -7,14 +8,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDAO {
-    private Connection connection;
+public class ProductDAO implements CrudDao<Product> {
+    private final Connection connection;
 
     public ProductDAO(Connection connection) {
         this.connection = connection;
     }
 
-    public List<Product> getAllProducts() {
+    public List<Product> getAll() {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT p.*, c.name AS category_name FROM products p JOIN categories c ON p.category_id = c.id";
 
@@ -31,7 +32,8 @@ public class ProductDAO {
         return products;
     }
 
-    public Product getProductById(int productId) {
+    @Override
+    public Product findById(int productId) {
         String sql = "SELECT p.*, c.name AS category_name FROM products p JOIN categories c ON p.category_id = c.id WHERE p.id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -47,49 +49,59 @@ public class ProductDAO {
         return null;
     }
 
-
-    public void insertProduct(Product product) throws SQLException {
+    @Override
+    public void save(Product product) {
         String getCategorySql = "SELECT id FROM categories WHERE name = ?";
-        int categoryId = -1;
+        int categoryId;
 
-        try (PreparedStatement categoryStatement = connection.prepareStatement(getCategorySql)) {
-            categoryStatement.setString(1, product.getCategoryName());
-            try (ResultSet categoryResult = categoryStatement.executeQuery()) {
+        try (PreparedStatement categoryStmt = connection.prepareStatement(getCategorySql)) {
+            categoryStmt.setString(1, product.getCategoryName());
+            try (ResultSet categoryResult = categoryStmt.executeQuery()) {
                 if (categoryResult.next()) {
                     categoryId = categoryResult.getInt("id");
                 } else {
                     throw new SQLException("Không tìm thấy danh mục: " + product.getCategoryName());
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return;
         }
 
         String sql = "INSERT INTO products (name, category_id, description, price, stock_quantity, status, created_at, updated_at, image_url, specifications) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, product.getName());
-            statement.setInt(2, categoryId);
-            statement.setString(3, product.getDescription());
-            statement.setDouble(4, product.getPrice());
-            statement.setInt(5, product.getStockQuantity());
-            ProductStatus status = (product.getStockQuantity() > 0) ? ProductStatus.CON_HANG : ProductStatus.HET_HANG;
-            statement.setString(6, status.toString());
-            statement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
-            statement.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
-            statement.setString(9, product.getImageUrl());
-            statement.setString(10, product.getSpecifications());
 
-            int affectedRows = statement.executeUpdate();
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, product.getName());
+            stmt.setInt(2, categoryId);
+            stmt.setString(3, product.getDescription());
+            stmt.setDouble(4, product.getPrice());
+            stmt.setInt(5, product.getStockQuantity());
+
+            ProductStatus status = product.getStockQuantity() > 0 ? ProductStatus.CON_HANG : ProductStatus.HET_HANG;
+            stmt.setString(6, status.toString());
+
+            LocalDateTime now = LocalDateTime.now();
+            stmt.setTimestamp(7, Timestamp.valueOf(now));
+            stmt.setTimestamp(8, Timestamp.valueOf(now));
+            stmt.setString(9, product.getImageUrl());
+            stmt.setString(10, product.getSpecifications());
+
+            int affectedRows = stmt.executeUpdate();
             if (affectedRows > 0) {
-                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        product.setId(generatedKeys.getInt(1));
+                try (ResultSet keys = stmt.getGeneratedKeys()) {
+                    if (keys.next()) {
+                        product.setId(keys.getInt(1));
                     }
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    public void updateProduct(Product product) {
+    @Override
+    public void update(Product product) {
         if (product.getStatus() != ProductStatus.DA_HUY) {
             product.setStatus(product.getStockQuantity() > 0 ? ProductStatus.CON_HANG : ProductStatus.HET_HANG);
         }
@@ -112,6 +124,11 @@ public class ProductDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void delete(Product product) {
+        System.out.println("Chưa có gì");
     }
 
 

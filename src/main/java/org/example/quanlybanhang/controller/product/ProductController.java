@@ -179,14 +179,14 @@ public class ProductController {
     private void updateProductInDatabase(Product product) {
         Connection connection = DatabaseConnection.getConnection();
         ProductDAO productDAO = new ProductDAO(connection);
-        productDAO.updateProduct(product);
+        productDAO.update(product);
         loadProductData(); // refresh
     }
 
     private void loadProductData() {
         Connection connection = DatabaseConnection.getConnection();
         ProductDAO productDAO = new ProductDAO(connection);
-        List<Product> products = productDAO.getAllProducts();
+        List<Product> products = productDAO.getAll();
         allProducts.setAll(products);
         productList.setAll(products);
     }

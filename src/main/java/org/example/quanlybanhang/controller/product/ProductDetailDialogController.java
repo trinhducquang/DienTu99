@@ -47,7 +47,7 @@ public class ProductDetailDialogController {
 
     public void setProductById(int productId) {
         ThreadManager.runBackground(() -> {
-            Product productData = productDAO.getProductById(productId);
+            Product productData = productDAO.findById(productId);
             if (productData != null) {
                 ThreadManager.runOnUiThread(() -> {
                     this.product = productData;

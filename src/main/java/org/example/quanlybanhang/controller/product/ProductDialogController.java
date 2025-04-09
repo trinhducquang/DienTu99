@@ -112,7 +112,7 @@ public class ProductDialogController {
             newProduct.setImageUrl(imageUrl);
             newProduct.setSpecifications(specifications);
 
-            productDAO.insertProduct(newProduct);
+            productDAO.save(newProduct);
             closeDialog();
 
         } catch (Exception e) {

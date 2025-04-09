@@ -205,7 +205,7 @@ public class AddOrderDialogController {
     }
 
     private void loadProducts() {
-        allProducts = productDAO.getAllProducts();
+        allProducts = productDAO.getAll();
         cbProduct.getItems().clear();
         productMap.clear();
 
