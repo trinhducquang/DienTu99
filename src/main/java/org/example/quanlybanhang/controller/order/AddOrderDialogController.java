@@ -224,7 +224,7 @@ public class AddOrderDialogController {
     }
 
     private void loadEmployees() {
-        List<Employee> employees = new EmployeeDAO(DatabaseConnection.getConnection()).getAllEmployees();
+        List<Employee> employees = new EmployeeDAO(DatabaseConnection.getConnection()).getAll();
         cbEmployee.getItems().addAll(employees.stream()
                 .filter(e -> UserRole.NHAN_VIEN_KHO.getValue().equalsIgnoreCase(e.getRole()))
                 .toList());

@@ -7,10 +7,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import org.example.quanlybanhang.dao.EmployeeDAO;
 import org.example.quanlybanhang.enums.UserRole;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Employee;
+import org.example.quanlybanhang.service.EmployeeService;
 import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 
@@ -34,11 +34,11 @@ public class EmployeeManagementController {
 
     private final ObservableList<Employee> employeeList = FXCollections.observableArrayList();
     private final ObservableList<Employee> allEmployees = FXCollections.observableArrayList();
-    private EmployeeDAO employeeDAO;
+    private EmployeeService employeeService;
 
     public void initialize() {
         Connection connection = DatabaseConnection.getConnection();
-        employeeDAO = new EmployeeDAO(connection);
+        employeeService = new EmployeeService(connection);
 
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colFullName.setCellValueFactory(new PropertyValueFactory<>("fullName"));
@@ -51,7 +51,7 @@ public class EmployeeManagementController {
         // Table editable
         employeeTable.setEditable(true);
 
-        // Editable columns (excluding password)
+        // Editable columns
         colEmail.setCellFactory(TextFieldTableCell.forTableColumn());
         colPhone.setCellFactory(TextFieldTableCell.forTableColumn());
 
@@ -73,14 +73,17 @@ public class EmployeeManagementController {
         });
 
         // Update handlers
-        colFullName.setOnEditCommit(event -> updateEmployee(event.getRowValue(), "fullName", event.getNewValue()));
-        colUsername.setOnEditCommit(event -> updateEmployee(event.getRowValue(), "username", event.getNewValue()));
-        colEmail.setOnEditCommit(event -> updateEmployee(event.getRowValue(), "email", event.getNewValue()));
-        colPhone.setOnEditCommit(event -> updateEmployee(event.getRowValue(), "phone", event.getNewValue()));
+        colFullName.setOnEditCommit(event ->
+                updateEmployee(event.getRowValue(), "fullName", event.getNewValue()));
+        colUsername.setOnEditCommit(event ->
+                updateEmployee(event.getRowValue(), "username", event.getNewValue()));
+        colEmail.setOnEditCommit(event ->
+                updateEmployee(event.getRowValue(), "email", event.getNewValue()));
+        colPhone.setOnEditCommit(event ->
+                updateEmployee(event.getRowValue(), "phone", event.getNewValue()));
         colRole.setOnEditCommit(event -> {
-            Employee employee = event.getRowValue();
-            employee.setRole(event.getNewValue());
-            employeeDAO.updateEmployee(employee);
+            employeeService.updateRole(event.getRowValue(), event.getNewValue());
+            employeeTable.refresh();
         });
 
         addEmployeeButton.setOnAction(event ->
@@ -92,7 +95,7 @@ public class EmployeeManagementController {
     }
 
     private void loadEmployees() {
-        List<Employee> employees = employeeDAO.getAllEmployees();
+        List<Employee> employees = employeeService.getAllEmployees();
         allEmployees.setAll(employees);
         employeeList.setAll(employees);
         employeeTable.setItems(employeeList);
@@ -114,14 +117,7 @@ public class EmployeeManagementController {
 
 
     private void updateEmployee(Employee employee, String field, String newValue) {
-        switch (field) {
-            case "fullName": employee.setFullName(newValue); break;
-            case "username": employee.setUsername(newValue); break;
-            case "email":    employee.setEmail(newValue); break;
-            case "phone":    employee.setPhone(newValue); break;
-        }
-
-        employeeDAO.updateEmployee(employee);
+        employeeService.updateField(employee, field, newValue);
         employeeTable.refresh();
     }
 }

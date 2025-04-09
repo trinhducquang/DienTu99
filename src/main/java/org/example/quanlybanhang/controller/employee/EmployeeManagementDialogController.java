@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.EmployeeDAO;
+import org.example.quanlybanhang.service.EmployeeService;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 import org.example.quanlybanhang.model.Employee;
 
@@ -35,32 +36,26 @@ public class EmployeeManagementDialogController {
     }
 
     private void saveEmployee() {
-        String password = passwordField.getText();
-        String retypePassword = retypepasswordField.getText();
-
-        if (!password.equals(retypePassword)) {
-            System.out.println("❌ Mật khẩu không khớp!");
-            return;
-        }
-
         Connection connection = DatabaseConnection.getConnection();
         if (connection != null) {
-            EmployeeDAO employeeDAO = new EmployeeDAO(connection);
+            EmployeeService employeeService = new EmployeeService(connection);
             Employee employee = new Employee(
                     0,
                     nameField.getText(),
                     usernameField.getText(),
-                    password,
+                    passwordField.getText(),
                     emailField.getText(),
                     phoneField.getText(),
                     "nhanvien"
             );
-            boolean success = employeeDAO.addEmployee(employee, password);
+
+            boolean success = employeeService.addEmployee(employee, retypepasswordField.getText());
             System.out.println(success ? "✅ Thêm nhân viên thành công!" : "❌ Thêm nhân viên thất bại!");
         }
 
         closeDialog();
     }
+
 
 
     private void closeDialog() {

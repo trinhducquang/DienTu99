@@ -1,7 +1,8 @@
 package org.example.quanlybanhang.dao;
 
-import org.example.quanlybanhang.enums.UserRole;
+import org.example.quanlybanhang.dao.base.CrudDao;
 import org.example.quanlybanhang.model.Employee;
+import org.example.quanlybanhang.enums.UserRole;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -12,7 +13,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeDAO {
+public class EmployeeDAO implements CrudDao<Employee> {
     private final Connection connection;
     private final Dotenv dotenv = Dotenv.load();
     private final String PEPPER = dotenv.get("PEPPER_KEY");
@@ -21,7 +22,33 @@ public class EmployeeDAO {
         this.connection = connection;
     }
 
-    public List<Employee> getAllEmployees() {
+    @Override
+    public Employee findById(int id) {
+        String query = "SELECT id, full_name, username, password, email, phone, role FROM users WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new Employee(
+                        resultSet.getInt("id"),
+                        resultSet.getString("full_name"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password"),
+                        resultSet.getString("email"),
+                        resultSet.getString("phone"),
+                        resultSet.getString("role")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Employee> getAll() {
         List<Employee> employees = new ArrayList<>();
         String query = "SELECT id, full_name, username, password, email, phone, role FROM users";
 
@@ -47,7 +74,13 @@ public class EmployeeDAO {
         return employees;
     }
 
-    public boolean addEmployee(Employee employee, String rawPassword) {
+    @Override
+    public void save(Employee employee) {
+        // Giả định bạn truyền vào rawPassword để xử lý mã hóa phía ngoài (nếu không cần có thể chỉnh lại)
+        throw new UnsupportedOperationException("Use save(Employee, rawPassword) instead.");
+    }
+
+    public boolean save(Employee employee, String rawPassword) {
         String query = "INSERT INTO users (full_name, username, password, email, phone, role) VALUES (?, ?, ?, ?, ?, ?)";
 
         String passwordToHash = rawPassword + PEPPER;
@@ -70,8 +103,8 @@ public class EmployeeDAO {
         return false;
     }
 
-    // Cập nhật thông tin không bao gồm mật khẩu
-    public boolean updateEmployee(Employee employee) {
+    @Override
+    public void update(Employee employee) {
         String query = "UPDATE users SET full_name = ?, username = ?, email = ?, phone = ?, role = ? WHERE id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -82,11 +115,21 @@ public class EmployeeDAO {
             statement.setString(5, employee.getRole());
             statement.setInt(6, employee.getId());
 
-            return statement.executeUpdate() > 0;
+            statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
-        return false;
+    @Override
+    public void delete(Employee employee) {
+        String query = "DELETE FROM users WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, employee.getId());
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
