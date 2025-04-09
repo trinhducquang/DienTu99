@@ -10,6 +10,8 @@ import org.example.quanlybanhang.dao.*;
 import org.example.quanlybanhang.enums.*;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.*;
+import org.example.quanlybanhang.service.CategoryService;
+import org.example.quanlybanhang.service.ProductService;
 import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.*;
 
@@ -36,6 +38,10 @@ public class ProductController {
     private final ObservableList<Product> productList = FXCollections.observableArrayList();
     private final ObservableList<Product> allProducts = FXCollections.observableArrayList();
     private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
+    private final ProductService productService = new ProductService();
+    private final CategoryService categoryService = new CategoryService();
+
+
 
     @FXML
     public void initialize() {
@@ -160,10 +166,15 @@ public class ProductController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : detailButton);
+                if (empty || getIndex() >= getTableView().getItems().size() || getTableView().getItems().get(getIndex()) == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(detailButton);
+                }
             }
         });
     }
+
 
     private void setupSearchAndFilter() {
         searchField.textProperty().addListener((obs, oldVal, newVal) -> filterBySearch(newVal));
@@ -177,29 +188,24 @@ public class ProductController {
     }
 
     private void updateProductInDatabase(Product product) {
-        Connection connection = DatabaseConnection.getConnection();
-        ProductDAO productDAO = new ProductDAO(connection);
-        productDAO.update(product);
-        loadProductData(); // refresh
+        productService.updateProduct(product);
+        loadProductData();
     }
 
     private void loadProductData() {
-        Connection connection = DatabaseConnection.getConnection();
-        ProductDAO productDAO = new ProductDAO(connection);
-        List<Product> products = productDAO.getAll();
+        List<Product> products = productService.getAllProducts();
         allProducts.setAll(products);
         productList.setAll(products);
     }
 
+
     private void loadCategoryData() {
-        Connection connection = DatabaseConnection.getConnection();
-        CategoryDAO categoryDAO = new CategoryDAO(connection);
-        List<Category> categories = categoryDAO.getAllCategories();
-        categoryList.setAll(categories);
+        categoryList.setAll(categoryService.getAllCategories());
         categoryFilter.setItems(categoryList);
 
-        setEditableColumns();
+        setEditableColumns(); // Vẫn giữ lại dòng này để gọi sau khi load xong danh mục
     }
+
 
     private void filterBySearch(String keyword) {
         List<Product> filtered = SearchService.search(allProducts, keyword,

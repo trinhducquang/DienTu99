@@ -12,42 +12,38 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.example.quanlybanhang.dao.ProductDAO;
 import org.example.quanlybanhang.dto.ProductDetailSpecificationsDTO;
 import org.example.quanlybanhang.model.Product;
-import org.example.quanlybanhang.utils.DatabaseConnection;
+import org.example.quanlybanhang.service.ProductService;
 import org.example.quanlybanhang.utils.ThreadManager;
 
-import java.sql.Connection;
 import java.util.List;
+
 
 public class ProductDetailDialogController {
 
-    @FXML private Label productNameLabel, productIdLabel, categoryLabel, priceLabel, statusLabel, quantityLabel;
-    @FXML private Label configMemoryField, cameraDisplayField, batteryField, featuresField, connectivityField, designMaterialsField;
-    @FXML private ImageView productImage;
-    @FXML private HBox relatedProductsContainer;
-    @FXML private Button backButton;
+    @FXML
+    private Label productNameLabel, productIdLabel, categoryLabel, priceLabel, statusLabel, quantityLabel;
+    @FXML
+    private Label configMemoryField, cameraDisplayField, batteryField, featuresField, connectivityField, designMaterialsField;
+    @FXML
+    private ImageView productImage;
+    @FXML
+    private HBox relatedProductsContainer;
+    @FXML
+    private Button backButton;
 
+    private final ProductService productService = new ProductService(); // sử dụng service
     private Product product;
-    private ProductDAO productDAO;
+
     private int totalRelatedCount = 0;
     private int totalPages = 0;
     private int currentPage = 0;
     private final int itemsPerPage = 7;
 
-    public ProductDetailDialogController() {
-        try {
-            Connection connection = DatabaseConnection.getConnection();
-            productDAO = new ProductDAO(connection);
-        } catch (Exception e) {
-            System.err.println("Error: Could not establish database connection - " + e.getMessage());
-        }
-    }
-
     public void setProductById(int productId) {
         ThreadManager.runBackground(() -> {
-            Product productData = productDAO.findById(productId);
+            Product productData = productService.getProductById(productId);
             if (productData != null) {
                 ThreadManager.runOnUiThread(() -> {
                     this.product = productData;
@@ -62,18 +58,17 @@ public class ProductDetailDialogController {
 
     private void loadRelatedProducts(int categoryId, int excludedId) {
         currentPage = 0;
-        totalRelatedCount = productDAO.countRelatedProducts(categoryId, excludedId);
+        totalRelatedCount = productService.countRelatedProducts(categoryId, excludedId);
         totalPages = (int) Math.ceil((double) totalRelatedCount / itemsPerPage);
-        updateRelatedProductsView(false); // mặc định từ phải sang
+        updateRelatedProductsView(false);
     }
-
 
     private void updateRelatedProductsView(boolean slideFromLeft) {
         relatedProductsContainer.setTranslateX(slideFromLeft ? -800 : 800);
         relatedProductsContainer.getChildren().clear();
 
         int offset = currentPage * itemsPerPage;
-        List<Product> visibleProducts = productDAO.getRelatedProducts(product.getCategoryId(), product.getId(), offset, itemsPerPage);
+        List<Product> visibleProducts = productService.getRelatedProducts(product.getCategoryId(), product.getId(), offset, itemsPerPage);
 
         for (Product p : visibleProducts) {
             VBox productBox = createProductBox(p);
