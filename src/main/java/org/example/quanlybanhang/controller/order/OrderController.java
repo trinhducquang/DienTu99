@@ -6,11 +6,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.enums.OrderStatus;
 import org.example.quanlybanhang.helpers.ButtonTableCell;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Order;
+import org.example.quanlybanhang.service.OrderService;
 import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.MoneyUtils;
 
@@ -37,12 +37,13 @@ public class OrderController {
     @FXML private TableColumn<Order, String> noteColumn;
     @FXML private TableColumn<Order, Void> actionsColumn;
 
-    private OrderDAO orderDAO;
+    private OrderService orderService;
     private ObservableList<Order> orderList;
 
     public void initialize() {
-        orderDAO = new OrderDAO();
+        orderService = new OrderService();
 
+        // Thiết lập combobox lọc trạng thái
         ObservableList<String> statusOptions = FXCollections.observableArrayList("Tất cả");
         for (OrderStatus status : OrderStatus.values()) {
             statusOptions.add(status.getText());
@@ -50,9 +51,9 @@ public class OrderController {
         statusFilterComboBox.setItems(statusOptions);
         statusFilterComboBox.setValue("Tất cả");
 
-
         setupTableColumns();
         loadOrders();
+
         searchField.textProperty().addListener((obs, oldVal, newVal) -> performSearch(newVal));
         statusFilterComboBox.setOnAction(event -> filterOrdersByStatus());
 
@@ -77,7 +78,6 @@ public class OrderController {
         ordersTable.setItems(FXCollections.observableArrayList(filtered));
     }
 
-
     private void filterOrdersByStatus() {
         String selected = statusFilterComboBox.getValue();
         if (selected == null || selected.equals("Tất cả")) {
@@ -90,19 +90,14 @@ public class OrderController {
         }
     }
 
-
     private void setupTableColumns() {
-        // 🆔 ID và thông tin khách hàng
         orderIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
-
-        // 📦 Tên sản phẩm, ghi chú, ngày đặt
         orderNameColumn.setCellValueFactory(new PropertyValueFactory<>("productNames"));
         noteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
         orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
 
-        // 💰 Định dạng số tiền
         shippingFeeColumn.setCellValueFactory(new PropertyValueFactory<>("shippingFee"));
         shippingFeeColumn.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -121,11 +116,9 @@ public class OrderController {
             }
         });
 
-        // 🔁 Trạng thái
         statusColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getStatus().getText()));
 
-        // 📎 Nút hành động
         actionsColumn.setCellFactory(param ->
                 new ButtonTableCell<>("Chi tiết đơn hàng", order -> {
                     DialogHelper.showOrderDialog("/org/example/quanlybanhang/orderDetailsDialog.fxml", "Chi tiết đơn hàng", order.getId());
@@ -134,7 +127,7 @@ public class OrderController {
     }
 
     private void loadOrders() {
-        List<Order> orders = orderDAO.getAllOrders();
+        List<Order> orders = orderService.getAllOrders();
         orderList = FXCollections.observableArrayList(orders);
         ordersTable.setItems(orderList);
     }

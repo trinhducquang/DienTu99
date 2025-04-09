@@ -8,11 +8,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.example.quanlybanhang.dao.OrderDAO;
-import org.example.quanlybanhang.dao.ProductDAO;
 import org.example.quanlybanhang.dto.OrderSummaryDTO;
-import org.example.quanlybanhang.model.OrderDetail;
-import org.example.quanlybanhang.model.Product;
+import org.example.quanlybanhang.dto.ProductDisplayInfoDTO;
+import org.example.quanlybanhang.service.OrderService;
 import org.example.quanlybanhang.utils.MoneyUtils;
 
 import java.io.File;
@@ -27,12 +25,10 @@ public class OrderDetailsDialogController {
 
     private int currentOrderId;
     private String currentOrderStatus;
-    private OrderDAO orderDAO;
-
+    private final OrderService orderService = new OrderService();
 
     public void initialize() {
-        orderDAO = new OrderDAO();
-
+        System.out.println("chả có gì =))");
     }
 
     public void setOrderById(Integer orderId) {
@@ -41,7 +37,7 @@ public class OrderDetailsDialogController {
     }
 
     private void loadOrderDetails() {
-        OrderSummaryDTO summary = orderDAO.getOrderSummaryById(currentOrderId);
+        OrderSummaryDTO summary = orderService.getOrderSummaryById(currentOrderId);
         if (summary == null) return;
 
         orderId.setText(String.valueOf(summary.getId()));
@@ -55,50 +51,34 @@ public class OrderDetailsDialogController {
         finalAmount.setText(MoneyUtils.formatVN(summary.getTotalPrice() + summary.getShippingFee()));
         processedBy.setText("ID: " + summary.getEmployeeId());
 
-        loadOrderProducts();
+        loadProductDisplayList();
     }
 
-    private void loadOrderProducts() {
-        OrderSummaryDTO summary = orderDAO.getOrderSummaryById(currentOrderId);
-        if (summary == null) return;
-
+    private void loadProductDisplayList() {
+        List<ProductDisplayInfoDTO> productList = orderService.getProductDisplayInfoList(currentOrderId);
         productListContainer.getChildren().clear();
+
         int totalItems = 0;
         double totalOrderValue = 0;
 
-        String[] ids = summary.getProductIds().split(",");
-        String[] names = summary.getProductNames().split(",\\s*");
-        String[] images = summary.getProductImages().split(",\\s*");
-        String[] quantities = summary.getProductQuantities().split(",");
-        String[] prices = summary.getProductPrices().split(",");
-
-        for (int i = 0; i < names.length; i++) {
-            int productId = i < ids.length ? Integer.parseInt(ids[i]) : -1;
-            String name = names[i];
-            String imageUrl = i < images.length ? images[i] : null;
-            int quantity = i < quantities.length ? Integer.parseInt(quantities[i]) : 0;
-            double price = i < prices.length ? Double.parseDouble(prices[i]) : 0.0;
-            double total = quantity * price;
-
-            totalItems += quantity;
-            totalOrderValue += total;
-
+        for (ProductDisplayInfoDTO product : productList) {
             HBox productBox = createProductBox(
-                    productId,
-                    name,
-                    imageUrl,
-                    quantity,
-                    price,
-                    total
+                    product.id(),
+                    product.name(),
+                    product.imageUrl(),
+                    product.quantity(),
+                    product.unitPrice(),
+                    product.totalPrice()
             );
+
+            totalItems += product.quantity();
+            totalOrderValue += product.totalPrice();
             productListContainer.getChildren().add(productBox);
         }
 
         totalProducts.setText(String.valueOf(totalItems));
         subtotalAmount.setText(MoneyUtils.formatVN(totalOrderValue));
     }
-
-
 
     private HBox createProductBox(int productId, String name, String imageUrl, int quantity, double price, double total) {
         HBox productBox = new HBox();

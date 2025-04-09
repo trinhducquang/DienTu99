@@ -1,5 +1,6 @@
 package org.example.quanlybanhang.dao;
 
+import org.example.quanlybanhang.dao.base.CrudDao;
 import org.example.quanlybanhang.dto.OrderSummaryDTO;
 import org.example.quanlybanhang.enums.OrderStatus;
 import org.example.quanlybanhang.model.Order;
@@ -11,23 +12,36 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDAO {
-    private Connection connection;
+public class OrderDAO implements CrudDao<Order> {
+    private final Connection connection;
 
     public OrderDAO() {
         this.connection = DatabaseConnection.getConnection();
     }
 
-    public List<Order> getAllOrders() {
+    @Override
+    public Order findById(int id) {
+        String sql = "SELECT * FROM order_summary WHERE order_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return extractOrderFromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Order> getAll() {
         List<Order> orders = new ArrayList<>();
-
         String sql = "SELECT * FROM order_summary";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-                orders.add(extractOrderFromResultSet(resultSet));
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                orders.add(extractOrderFromResultSet(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -35,21 +49,35 @@ public class OrderDAO {
         return orders;
     }
 
-    private Order extractOrderFromResultSet(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt("order_id");
-        int employeeId = resultSet.getInt("employee_id");
-        int customerId = resultSet.getInt("customer_id");
-        String customerName = resultSet.getString("customer_name");
-        double totalPrice = resultSet.getDouble("total_price");
-        double shippingFee = resultSet.getDouble("shipping_fee");
-        LocalDateTime orderDate = resultSet.getTimestamp("order_date").toLocalDateTime();
-        OrderStatus status = OrderStatus.fromString(resultSet.getString("status"));
-        String productNames = resultSet.getString("product_names");
-        String note = resultSet.getString("note");
-
-        return new Order(id, employeeId, customerId, customerName, totalPrice, shippingFee, orderDate, status, productNames, note);
+    @Override
+    public boolean save(Order order) {
+        throw new UnsupportedOperationException("Use addOrder(order, orderDetails) instead");
     }
 
+    @Override
+    public boolean update(Order order) {
+        String sql = "UPDATE orders SET status = ?, note = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, order.getStatus().getText());
+            stmt.setString(2, order.getNote());
+            stmt.setInt(3, order.getId());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public void delete(Order order) {
+        String sql = "DELETE FROM orders WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, order.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public int addOrder(Order order, List<OrderDetail> orderDetails) {
         String insertOrderSQL = "INSERT INTO orders (employee_id, customer_id, total_price, shipping_fee, order_date, status, note) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -123,6 +151,22 @@ public class OrderDAO {
         return null;
     }
 
+
+    private Order extractOrderFromResultSet(ResultSet rs) throws SQLException {
+        return new Order(
+                rs.getInt("order_id"),
+                rs.getInt("employee_id"),
+                rs.getInt("customer_id"),
+                rs.getString("customer_name"),
+                rs.getDouble("total_price"),
+                rs.getDouble("shipping_fee"),
+                rs.getTimestamp("order_date").toLocalDateTime(),
+                OrderStatus.fromString(rs.getString("status")),
+                rs.getString("product_names"),
+                rs.getString("note")
+        );
+    }
+
     private OrderSummaryDTO extractOrderSummaryDTO(ResultSet rs) throws SQLException {
         return new OrderSummaryDTO(
                 rs.getInt("order_id"),
@@ -141,6 +185,7 @@ public class OrderDAO {
                 rs.getString("note")
         );
     }
-
-
 }
+
+
+
