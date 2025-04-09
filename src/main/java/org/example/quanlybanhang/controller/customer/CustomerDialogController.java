@@ -4,8 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.example.quanlybanhang.dao.CustomerDAO;
 import org.example.quanlybanhang.model.Customer;
+import org.example.quanlybanhang.service.CustomerService;
 
 public class CustomerDialogController {
 
@@ -21,6 +21,8 @@ public class CustomerDialogController {
     private Button saveButton;
     @FXML
     private Button cancelButton;
+
+    private final CustomerService customerService = new CustomerService();
 
     @FXML
     public void initialize() {
@@ -40,7 +42,7 @@ public class CustomerDialogController {
         }
 
         Customer newCustomer = new Customer(0, name, phone, email, address);
-        boolean success = CustomerDAO.addCustomer(newCustomer);
+        boolean success = customerService.addCustomer(newCustomer);
 
         if (success) {
             System.out.println("Thêm khách hàng thành công!");

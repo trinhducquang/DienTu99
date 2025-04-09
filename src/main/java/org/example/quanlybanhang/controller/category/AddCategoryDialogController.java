@@ -3,12 +3,8 @@ package org.example.quanlybanhang.controller.category;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.example.quanlybanhang.dao.CategoryDAO;
 import org.example.quanlybanhang.model.Category;
-import org.example.quanlybanhang.utils.DatabaseConnection;
-
-import java.sql.Connection;
-import java.util.List;
+import org.example.quanlybanhang.service.CategoryService;
 
 public class AddCategoryDialogController {
 
@@ -23,6 +19,8 @@ public class AddCategoryDialogController {
 
     @FXML
     private RadioButton rootCategoryRadio;
+
+    private final CategoryService categoryService = new CategoryService();
 
     @FXML
     public void initialize() {
@@ -39,13 +37,7 @@ public class AddCategoryDialogController {
     }
 
     private void loadParentCategories() {
-        Connection connection = DatabaseConnection.getConnection();
-        CategoryDAO categoryDAO = new CategoryDAO(connection);
-        List<Category> categories = categoryDAO.getAllCategories();
-
-        if (parentCategoryComboBox != null) {
-            parentCategoryComboBox.getItems().setAll(categories);
-        }
+        parentCategoryComboBox.setItems(categoryService.getAllCategories());
     }
 
     @FXML
@@ -53,26 +45,23 @@ public class AddCategoryDialogController {
         String name = categoryNameField.getText().trim();
         String description = descriptionField.getText().trim();
 
+        if (name.isEmpty()) {
+            showAlert("Lỗi", "Tên danh mục không được để trống.");
+            return;
+        }
+
         int parentId = (rootCategoryRadio.isSelected() || parentCategoryComboBox.getValue() == null)
                 ? 0
                 : parentCategoryComboBox.getValue().getId();
 
-        if (name.isEmpty()) {
-            showAlert("Error", "Category name cannot be empty.");
-            return;
-        }
-
         Category newCategory = new Category(0, name, description, parentId, null);
-
-        Connection connection = DatabaseConnection.getConnection();
-        CategoryDAO categoryDAO = new CategoryDAO(connection);
-        boolean success = categoryDAO.createCategory(newCategory);
+        boolean success = categoryService.addCategory(newCategory);
 
         if (success) {
-            showAlert("Success", "Category thêm thành công.");
+            showAlert("Thành công", "Thêm danh mục thành công.");
             closeDialog();
         } else {
-            showAlert("Error", "Unable to add category.");
+            showAlert("Lỗi", "Không thể thêm danh mục.");
         }
     }
 

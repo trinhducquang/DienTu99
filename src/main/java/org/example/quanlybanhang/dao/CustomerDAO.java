@@ -1,14 +1,40 @@
 package org.example.quanlybanhang.dao;
 
-import org.example.quanlybanhang.utils.DatabaseConnection;
+import org.example.quanlybanhang.dao.base.CrudDao;
 import org.example.quanlybanhang.model.Customer;
+import org.example.quanlybanhang.utils.DatabaseConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerDAO {
+public class CustomerDAO implements CrudDao<Customer> {
 
-    public static List<Customer> getAllCustomers() {
+    @Override
+    public Customer findById(int id) {
+        String query = "SELECT id, name, phone, email, address FROM customers WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, id);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Customer(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("phone"),
+                            rs.getString("email"),
+                            rs.getString("address")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Customer> getAll() {
         List<Customer> customers = new ArrayList<>();
         String query = "SELECT id, name, phone, email, address FROM customers";
 
@@ -31,7 +57,8 @@ public class CustomerDAO {
         return customers;
     }
 
-    public static boolean addCustomer(Customer customer) {
+    @Override
+    public boolean save(Customer customer) {
         String query = "INSERT INTO customers (name, phone, email, address) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -42,15 +69,15 @@ public class CustomerDAO {
             pstmt.setString(3, customer.getEmail());
             pstmt.setString(4, customer.getAddress());
 
-            int rowsInserted = pstmt.executeUpdate();
-            return rowsInserted > 0;
+            return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    public static boolean updateCustomer(Customer customer) {
+    @Override
+    public boolean update(Customer customer) {
         String query = "UPDATE customers SET name = ?, phone = ?, email = ?, address = ? WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -62,11 +89,15 @@ public class CustomerDAO {
             pstmt.setString(4, customer.getAddress());
             pstmt.setInt(5, customer.getId());
 
-            int rowsUpdated = pstmt.executeUpdate();
-            return rowsUpdated > 0;
+            return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public void delete(Customer customer) {
+        System.out.println("chưa sử dụng");
     }
 }

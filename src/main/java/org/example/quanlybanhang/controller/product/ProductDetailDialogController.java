@@ -17,6 +17,8 @@ import org.example.quanlybanhang.model.Product;
 import org.example.quanlybanhang.service.ProductService;
 import org.example.quanlybanhang.utils.ThreadManager;
 
+import javafx.scene.shape.Rectangle;
+
 import java.util.List;
 
 
@@ -83,13 +85,19 @@ public class ProductDetailDialogController {
         VBox productBox = new VBox();
         productBox.setAlignment(Pos.TOP_CENTER);
         productBox.getStyleClass().add("related-product");
-        productBox.setPrefSize(150, 120);
+        productBox.setPrefSize(130, 110);
 
-        Image image = loadProductImageSafe(p.getImageUrl());
+        // 🟩 Load ảnh với kích thước lớn hơn hiển thị
+        Image image = new Image(p.getImageUrl(), 260, 220, true, true); // gấp đôi
         ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(150);
-        imageView.setFitHeight(120);
+        imageView.setFitWidth(130);
+        imageView.setFitHeight(110);
         imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+
+        // 🟩 Cắt ảnh đúng kích thước hiển thị (nếu cần)
+        Rectangle clip = new Rectangle(130, 110);
+        imageView.setClip(clip);
 
         Label nameLabel = new Label(p.getName());
         nameLabel.getStyleClass().add("related-product-name");
@@ -107,6 +115,7 @@ public class ProductDetailDialogController {
 
         return productBox;
     }
+
 
     private Image loadProductImageSafe(String url) {
         try {

@@ -12,7 +12,7 @@ import org.example.quanlybanhang.dao.*;
 import org.example.quanlybanhang.enums.*;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.*;
-import org.example.quanlybanhang.service.SearchService;
+import org.example.quanlybanhang.service.*;
 import org.example.quanlybanhang.utils.*;
 
 import java.sql.Connection;
@@ -46,6 +46,9 @@ public class AddOrderDialogController {
     private Map<Integer, String> productMap = new HashMap<>();
     private ObservableList<OrderDetail> orderDetailsList = FXCollections.observableArrayList();
     private List<Product> allProducts = new ArrayList<>();
+    private CustomerDAO customerDAO;
+
+
     //endregion
 
     @FXML
@@ -62,10 +65,12 @@ public class AddOrderDialogController {
 
     }
 
+
     private void setupServices() {
         Connection connection = DatabaseConnection.getConnection();
         orderDAO = new OrderDAO();
         productDAO = new ProductDAO(connection);
+        customerDAO = new CustomerDAO(); // <-- thêm dòng này
     }
 
     private void setupUIComponents() {
@@ -219,9 +224,11 @@ public class AddOrderDialogController {
 
     private void loadCustomers() {
         cbCustomer.getItems().clear();
-        CustomerDAO.getAllCustomers().forEach(c ->
-                cbCustomer.getItems().add(c.getId() + " - " + c.getName()));
+        customerDAO.getAll().forEach(c ->
+                cbCustomer.getItems().add(c.getId() + " - " + c.getName())
+        );
     }
+
 
     private void loadEmployees() {
         List<Employee> employees = new EmployeeDAO(DatabaseConnection.getConnection()).getAll();

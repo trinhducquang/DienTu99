@@ -75,7 +75,7 @@ public class EmployeeDAO implements CrudDao<Employee> {
     }
 
     @Override
-    public void save(Employee employee) {
+    public boolean save(Employee employee) {
         // Giả định bạn truyền vào rawPassword để xử lý mã hóa phía ngoài (nếu không cần có thể chỉnh lại)
         throw new UnsupportedOperationException("Use save(Employee, rawPassword) instead.");
     }
@@ -104,7 +104,7 @@ public class EmployeeDAO implements CrudDao<Employee> {
     }
 
     @Override
-    public void update(Employee employee) {
+    public boolean update(Employee employee) {
         String query = "UPDATE users SET full_name = ?, username = ?, email = ?, phone = ?, role = ? WHERE id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -119,6 +119,7 @@ public class EmployeeDAO implements CrudDao<Employee> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     @Override

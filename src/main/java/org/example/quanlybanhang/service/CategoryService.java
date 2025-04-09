@@ -18,9 +18,23 @@ public class CategoryService {
     }
 
     public ObservableList<Category> getAllCategories() {
-        List<Category> categories = categoryDAO.getAllCategories();
+        List<Category> categories = categoryDAO.getAll();
         return FXCollections.observableArrayList(categories);
     }
+
+    public boolean addCategory(Category category) {
+        return categoryDAO.save(category);
+    }
+
+    public ObservableList<Category> getChildCategories(int parentId) {
+        List<Category> children = categoryDAO.getChildCategories(parentId);
+        return FXCollections.observableArrayList(children);
+    }
+
+    public boolean updateCategory(Category category) {
+        return categoryDAO.update(category);
+    }
+
 
 
 }

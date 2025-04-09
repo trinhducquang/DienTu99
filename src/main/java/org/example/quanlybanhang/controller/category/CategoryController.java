@@ -5,52 +5,58 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.example.quanlybanhang.dao.CategoryDAO;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Category;
+import org.example.quanlybanhang.service.CategoryService;
 import org.example.quanlybanhang.service.SearchService;
-import org.example.quanlybanhang.utils.DatabaseConnection;
 
-import java.sql.Connection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CategoryController {
+
     @FXML
-    public TextField searchField;
+    private TextField searchField;
+
     @FXML
     private Button addCategoryButton;
+
     @FXML
     private TableView<Category> categoryTable;
+
     @FXML
     private TableColumn<Category, Integer> idColumn;
+
     @FXML
-    public TableColumn<Category, String> categoryColum;
+    private TableColumn<Category, String> categoryColum;
+
     @FXML
     private TableColumn<Category, String> nameColumn;
+
     @FXML
     private TableColumn<Category, String> descriptionColumn;
+
     @FXML
     private TextField nameField;
+
     @FXML
     private TextArea descriptionArea;
+
     @FXML
     private ComboBox<String> childCategoryCombo;
+
     @FXML
     private Button saveButton;
+
     @FXML
     private RadioButton radioParent;
+
     @FXML
     private RadioButton radioChild;
 
     private ToggleGroup categoryTypeGroup;
-    private CategoryDAO categoryDAO;
     private ObservableList<Category> categoryList;
-
-    public CategoryController() {
-        Connection connection = DatabaseConnection.getConnection();
-        categoryDAO = new CategoryDAO(connection);
-    }
+    private final CategoryService categoryService = new CategoryService();
 
     @FXML
     public void initialize() {
@@ -86,23 +92,43 @@ public class CategoryController {
             }
         });
 
-        addCategoryButton.setOnAction(event -> DialogHelper.showDialog("/org/example/quanlybanhang/AddCategoryDialog.fxml", "Thêm Danh Mục Mới"));
+        addCategoryButton.setOnAction(event ->
+                DialogHelper.showDialog("/org/example/quanlybanhang/AddCategoryDialog.fxml", "Thêm Danh Mục Mới")
+        );
 
         saveButton.setOnAction(event -> handleSaveAction());
 
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            searchCategories(newValue);
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> searchCategories(newValue));
+
+        radioChild.setOnAction(event -> {
+            loadParentCategories();  // Gọi method mới để load danh mục cha vào combo box
         });
     }
 
+    private void loadParentCategories() {
+        List<Category> parentCategories = categoryList.stream()
+                .filter(cat -> cat.getParentId() == 0)
+                .toList();
+
+        List<String> parentNames = parentCategories.stream()
+                .map(Category::getName)
+                .collect(Collectors.toList());
+
+        childCategoryCombo.setItems(FXCollections.observableArrayList(parentNames));
+
+        if (!parentNames.isEmpty()) {
+            childCategoryCombo.setValue(parentNames.getFirst());
+        }
+    }
+
+
     private void loadCategories() {
-        List<Category> categories = categoryDAO.getAllCategories();
-        categoryList = FXCollections.observableArrayList(categories);
+        categoryList = categoryService.getAllCategories();
         categoryTable.setItems(categoryList);
     }
 
     private void loadChildCategories(int parentId) {
-        List<Category> childCategories = categoryDAO.getChildCategories(parentId);
+        ObservableList<Category> childCategories = categoryService.getChildCategories(parentId);
         List<String> childCategoryNames = childCategories.stream()
                 .map(Category::getName)
                 .collect(Collectors.toList());
@@ -122,10 +148,10 @@ public class CategoryController {
             selectedCategory.setName(name);
             selectedCategory.setDescription(description);
 
-            // Xử lý danh mục cha hoặc con dựa trên radio
+            // Xử lý danh mục cha hoặc con
             if (radioParent.isSelected()) {
                 selectedCategory.setParentId(0);
-            } else if (radioChild.isSelected()) {
+            } else {
                 String parentName = childCategoryCombo.getValue();
                 if (parentName != null) {
                     Category parentCategory = categoryList.stream()
@@ -138,7 +164,7 @@ public class CategoryController {
                 }
             }
 
-            boolean success = categoryDAO.updateCategory(selectedCategory);
+            boolean success = categoryService.updateCategory(selectedCategory);
             if (success) {
                 loadCategories();
                 categoryTable.refresh();
@@ -153,7 +179,8 @@ public class CategoryController {
         if (keyword == null || keyword.trim().isEmpty()) {
             loadCategories();
         } else {
-            List<Category> filteredCategories = SearchService.search(categoryList, keyword, Category::getName, Category::getDescription);
+            List<Category> filteredCategories = SearchService.search(categoryList, keyword,
+                    Category::getName, Category::getDescription);
             categoryTable.setItems(FXCollections.observableArrayList(filteredCategories));
         }
     }

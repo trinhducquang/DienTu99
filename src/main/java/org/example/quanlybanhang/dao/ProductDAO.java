@@ -50,7 +50,7 @@ public class ProductDAO implements CrudDao<Product> {
     }
 
     @Override
-    public void save(Product product) {
+    public boolean save(Product product) {
         String getCategorySql = "SELECT id FROM categories WHERE name = ?";
         int categoryId;
 
@@ -65,7 +65,7 @@ public class ProductDAO implements CrudDao<Product> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return;
+            return false;
         }
 
         String sql = "INSERT INTO products (name, category_id, description, price, stock_quantity, status, created_at, updated_at, image_url, specifications) " +
@@ -98,10 +98,11 @@ public class ProductDAO implements CrudDao<Product> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     @Override
-    public void update(Product product) {
+    public boolean update(Product product) {
         if (product.getStatus() != ProductStatus.DA_HUY) {
             product.setStatus(product.getStockQuantity() > 0 ? ProductStatus.CON_HANG : ProductStatus.HET_HANG);
         }
@@ -124,6 +125,7 @@ public class ProductDAO implements CrudDao<Product> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     @Override

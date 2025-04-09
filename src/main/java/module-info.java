@@ -8,7 +8,7 @@ module org.example.quanlybanhang {
     requires com.sun.jna;
     requires com.google.gson;
     requires java.sql;
-
+    requires java.desktop;
 
 
     opens org.example.quanlybanhang.main to javafx.fxml;

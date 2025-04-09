@@ -6,9 +6,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import org.example.quanlybanhang.dao.CustomerDAO;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Customer;
+import org.example.quanlybanhang.service.CustomerService;
 import org.example.quanlybanhang.service.SearchService;
 
 import java.util.List;
@@ -23,7 +23,8 @@ public class CustomerController {
     @FXML private TableColumn<Customer, String> addressColumn;
     @FXML private TextField searchField;
 
-    private ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+    private final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+    private final CustomerService customerService = new CustomerService();
 
     @FXML
     public void initialize() {
@@ -51,11 +52,11 @@ public class CustomerController {
             loadCustomerData();
         });
 
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> searchCustomers(newValue));
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> searchCustomers(newVal));
     }
 
     private void loadCustomerData() {
-        allCustomers.setAll(CustomerDAO.getAllCustomers());
+        allCustomers.setAll(customerService.getAllCustomers());
         customerTable.setItems(allCustomers);
     }
 
@@ -66,19 +67,11 @@ public class CustomerController {
 
     private void updateCustomer(Customer customer, String field, String newValue) {
         switch (field) {
-            case "name":
-                customer.setName(newValue);
-                break;
-            case "phone":
-                customer.setPhone(newValue);
-                break;
-            case "email":
-                customer.setEmail(newValue);
-                break;
-            case "address":
-                customer.setAddress(newValue);
-                break;
+            case "name" -> customer.setName(newValue);
+            case "phone" -> customer.setPhone(newValue);
+            case "email" -> customer.setEmail(newValue);
+            case "address" -> customer.setAddress(newValue);
         }
-        CustomerDAO.updateCustomer(customer);
+        customerService.updateCustomer(customer);
     }
 }
