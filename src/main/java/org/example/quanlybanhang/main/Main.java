@@ -6,13 +6,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.utils.DatabaseConnection;
+import org.example.quanlybanhang.utils.ThreadManager;
+
 import java.sql.Connection;
+import java.util.Objects;
 
 
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/org/example/quanlybanhang/Login.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/org/example/quanlybanhang/Login.fxml")));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Điện tử 99");
@@ -23,6 +26,12 @@ public class Main extends Application {
         } else {
             System.out.println("Kết nối thất bại!");
         }
+    }
+
+    public void stop() {
+        System.out.println("Ứng dụng đang tắt, giải phóng tài nguyên...");
+        ThreadManager.shutdown();
+        System.out.println("Đã shutdown thread pool.");
     }
 
     public static void main(String[] args) {

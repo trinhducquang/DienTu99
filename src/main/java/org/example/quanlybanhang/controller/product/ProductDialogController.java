@@ -1,5 +1,6 @@
 package org.example.quanlybanhang.controller.product;
 
+import com.google.gson.Gson;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -14,7 +15,9 @@ import org.example.quanlybanhang.utils.DatabaseConnection;
 
 import java.sql.Connection;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProductDialogController {
     private ProductDAO productDAO;
@@ -22,6 +25,13 @@ public class ProductDialogController {
 
     @FXML
     private TextField productNameField, priceField, stockQuantityField, descriptionField, imageUrlField;
+
+    @FXML private TextField configMemoryField;
+    @FXML private TextField cameraField;
+    @FXML private TextField batteryField;
+    @FXML private TextField featuresField;
+    @FXML private TextField connectivityField;
+    @FXML private TextField designMaterialsField;
 
     @FXML
     private ComboBox<Category> categoryComboBox;
@@ -78,14 +88,39 @@ public class ProductDialogController {
             int stockQuantity = Integer.parseInt(stockQuantityField.getText());
             String imageUrl = imageUrlField.getText();
 
-            Product newProduct = new Product(0, name, categoryName, null, description, price, stockQuantity, LocalDateTime.now(), LocalDateTime.now(), null, imageUrl, null);
-            productDAO.insertProduct(newProduct);
+            // Tạo specifications dưới dạng JSON bằng Gson
+            Gson gson = new Gson();
+            Map<String, String> specs = new LinkedHashMap<>();
+            specs.put("configMemory", configMemoryField.getText());
+            specs.put("camera", cameraField.getText());
+            specs.put("battery", batteryField.getText());
+            specs.put("features", featuresField.getText());
+            specs.put("connectivity", connectivityField.getText());
+            specs.put("designMaterials", designMaterialsField.getText());
+            String specifications = gson.toJson(specs);
 
+            Product newProduct = new Product();
+
+
+            newProduct.setName(name);
+            newProduct.setCategoryName(categoryName);
+            newProduct.setDescription(description);
+            newProduct.setPrice(price);
+            newProduct.setStockQuantity(stockQuantity);
+            newProduct.setCreatedAt(LocalDateTime.now());
+            newProduct.setUpdatedAt(LocalDateTime.now());
+            newProduct.setImageUrl(imageUrl);
+            newProduct.setSpecifications(specifications);
+
+            productDAO.insertProduct(newProduct);
             closeDialog();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 
     private void closeDialog() {
         Stage stage = (Stage) saveButton.getScene().getWindow();

@@ -9,25 +9,25 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="516.0" prefWidth="1085.0" spacing="10" stylesheets="@Order.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.order.OrderController">
+<VBox alignment="TOP_CENTER" prefHeight="747.0" prefWidth="1013.0" spacing="10" stylesheets="@Order.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.order.OrderController">
 
     <!-- Main Content Area -->
-    <HBox spacing="20" HBox.hgrow="ALWAYS">
+    <HBox prefHeight="754.0" prefWidth="1013.0" spacing="20" HBox.hgrow="ALWAYS">
 
         <!-- Main Content -->
-        <VBox prefHeight="504.0" prefWidth="1079.0" spacing="20" HBox.hgrow="ALWAYS">
+        <VBox prefHeight="747.0" prefWidth="1013.0" spacing="20" HBox.hgrow="ALWAYS">
             <!-- Page Title -->
             <Label styleClass="dashboard-title" text="Quản Lý Đơn Hàng" />
 
             <!-- Search and Action Area -->
             <HBox alignment="CENTER_LEFT" spacing="10">
                 <TextField fx:id="searchField" promptText="Tìm kiếm đơn hàng" styleClass="search-field" HBox.hgrow="ALWAYS" />
-                <ComboBox fx:id="statusFilter" promptText="Trạng Thái" styleClass="status-filter" />
+                <ComboBox fx:id="statusFilterComboBox" promptText="Trạng Thái" styleClass="status-filter" />
                 <Button fx:id="addOrderButton" styleClass="add-button" text="Thêm Đơn Hàng" />
             </HBox>
 
             <!-- Orders Table -->
-            <TableView fx:id="ordersTable" styleClass="orders-table">
+            <TableView fx:id="ordersTable" prefHeight="594.0" prefWidth="1013.0" styleClass="orders-table">
                 <columns>
                     <TableColumn fx:id="orderIdColumn" prefWidth="105.0" text="Mã Đơn Hàng" />
                     <TableColumn fx:id="customerIdColumn" prefWidth="114.0" text="Id Khách Hàng" />

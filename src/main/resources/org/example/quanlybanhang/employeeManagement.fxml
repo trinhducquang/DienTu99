@@ -8,13 +8,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" spacing="10" stylesheets="@product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.employee.EmployeeManagementController">
+<VBox alignment="TOP_CENTER" prefHeight="747.0" prefWidth="1013.0" spacing="10" stylesheets="@product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.employee.EmployeeManagementController">
 
     <!-- Main Content Area -->
-    <HBox spacing="20" HBox.hgrow="ALWAYS">
+    <HBox prefHeight="947.0" prefWidth="1013.0" spacing="20" HBox.hgrow="ALWAYS">
 
         <!-- Main Content -->
-        <VBox prefHeight="516.0" prefWidth="1004.0" spacing="20" HBox.hgrow="ALWAYS">
+        <VBox prefHeight="729.0" prefWidth="1013.0" spacing="20" HBox.hgrow="ALWAYS">
             <!-- Page Title -->
             <Label fx:id="titleLabel" prefHeight="35.0" prefWidth="249.0" styleClass="dashboard-title" text=" Quản Lý Nhân Viên" />
 
@@ -25,7 +25,7 @@
             </HBox>
 
             <!-- Employee Table -->
-            <TableView fx:id="employeeTable" styleClass="products-table">
+            <TableView fx:id="employeeTable" prefHeight="747.0" prefWidth="1013.0" styleClass="products-table">
                 <columns>
                     <TableColumn fx:id="colId" prefWidth="91.0" text="ID" />
                     <TableColumn fx:id="colFullName" prefWidth="189.0" text="Tên Nhân Viên" />

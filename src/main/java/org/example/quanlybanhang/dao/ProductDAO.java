@@ -47,22 +47,6 @@ public class ProductDAO {
         return null;
     }
 
-    public List<String> getAllCategoryNames() {
-        List<String> names = new ArrayList<>();
-        String sql = "SELECT name FROM categories";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                names.add(rs.getString("name"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return names;
-    }
-
 
     public void insertProduct(Product product) throws SQLException {
         String getCategorySql = "SELECT id FROM categories WHERE name = ?";
@@ -151,4 +135,48 @@ public class ProductDAO {
 
         return new Product(id, name, categoryName, categoryId, description, price, stockQuantity, createdAt, updatedAt, status, imageUrl, specifications);
     }
+
+    public List<Product> getRelatedProducts(int categoryId, int excludedProductId, int offset, int limit) {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT id, name, price, image_url FROM products WHERE category_id = ? AND id != ? LIMIT ? OFFSET ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, categoryId);
+            stmt.setInt(2, excludedProductId);
+            stmt.setInt(3, limit);
+            stmt.setInt(4, offset);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setName(rs.getString("name"));
+                product.setPrice(rs.getDouble("price"));
+                product.setImageUrl(rs.getString("image_url"));
+                products.add(product);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return products;
+    }
+
+    public int countRelatedProducts(int categoryId, int excludedProductId) {
+        String sql = "SELECT COUNT(*) FROM products WHERE category_id = ? AND id != ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, categoryId);
+            stmt.setInt(2, excludedProductId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
 }

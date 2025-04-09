@@ -11,9 +11,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="702.0" prefWidth="1123.0" stylesheets="@Product_detailsDialog.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.product.ProductDetailDialogController">
+<BorderPane prefHeight="741.0" prefWidth="1233.0" stylesheets="@Product_detailsDialog.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.product.ProductDetailDialogController">
     <top>
         <VBox spacing="0">
             <HBox alignment="CENTER_LEFT" spacing="20" styleClass="header-box">
@@ -22,7 +23,7 @@
                 </padding>
                 <Label styleClass="header-title" text="Điện Tử 99" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Button prefHeight="29.0" prefWidth="80.0" styleClass="logout-button" text="Quay Lại" />
+                <Button fx:id="backButton" onAction="#handleBackAction" prefHeight="29.0" prefWidth="80.0" styleClass="logout-button" text="Quay Lại" />
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="subheader-box">
                 <padding>
@@ -34,9 +35,9 @@
     </top>
 
     <center>
-        <VBox spacing="0" styleClass="content-box">
+        <VBox prefHeight="725.0" prefWidth="1233.0" spacing="0" styleClass="content-box">
             <!-- Thông tin chính sản phẩm -->
-            <HBox prefHeight="283.0" prefWidth="1076.0" styleClass="product-main-info-box">
+            <HBox prefHeight="283.0" prefWidth="1233.0" styleClass="product-main-info-box">
                 <padding>
                     <Insets bottom="20.0" left="20.0" right="10.0" top="20.0" />
                 </padding>
@@ -50,13 +51,13 @@
                     <HBox alignment="CENTER" spacing="10" />
                 </VBox>
 
-                <VBox prefHeight="267.0" prefWidth="397.0" HBox.hgrow="ALWAYS">
+                <VBox prefHeight="300.0" prefWidth="271.0" HBox.hgrow="ALWAYS">
                     <padding>
                         <Insets bottom="10.0" left="20.0" right="10.0" top="10.0" />
                     </padding>
 
-                    <VBox prefHeight="170.0" prefWidth="387.0" styleClass="info-section">
-                        <Label fx:id="productNameLabel" alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="132.0" prefWidth="387.0" styleClass="product-name" text="Tên Sản Phẩm" wrapText="true" />
+                    <VBox prefHeight="170.0" prefWidth="393.0" styleClass="info-section">
+                        <Label fx:id="productNameLabel" alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="99.0" prefWidth="463.0" styleClass="product-name" text="Tên Sản phẩm" wrapText="true" />
                         <Label fx:id="productIdLabel" styleClass="product-id" text="Mã SP: 1" />
                         <Label fx:id="categoryLabel" styleClass="product-category" text="Danh Mục: Laptop" />
                     </VBox>
@@ -80,7 +81,7 @@
                 </VBox>
 
                 <!-- Thông số kỹ thuật -->
-                <VBox prefHeight="250.0" prefWidth="420.0" styleClass="specs-box">
+                <VBox prefHeight="300.0" prefWidth="517.0" styleClass="specs-box">
                     <padding>
                         <Insets bottom="15.0" left="15.0" right="15.0" top="10.0" />
                     </padding>
@@ -97,22 +98,22 @@
                         </columnConstraints>
 
                         <Label styleClass="spec-label" text="Cấu hình &amp; Bộ nhớ:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                        <Label fx:id="configMemoryLabel" styleClass="spec-value" text="Intel Core i7, 16GB RAM, 512GB SSD" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <Label fx:id="configMemoryField" styleClass="spec-value" text="Intel Core i7, 16GB RAM, 512GB SSD" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                         <Label styleClass="spec-label" text="Camera &amp; Màn hình:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <Label fx:id="cameraDisplayLabel" styleClass="spec-value" text="15.6-inch, 1920x1080, HD Webcam" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="cameraDisplayField" styleClass="spec-value" text="15.6-inch, 1920x1080, HD Webcam" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
                         <Label styleClass="spec-label" text="Pin &amp; Sạc:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                        <Label fx:id="batteryLabel" styleClass="spec-value" text="50Wh, Fast charging" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label fx:id="batteryField" styleClass="spec-value" text="50Wh, Fast charging" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                         <Label styleClass="spec-label" text="Tiện ích:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                        <Label fx:id="featuresLabel" styleClass="spec-value" text="Backlit keyboard, Fingerprint sensor" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label fx:id="featuresField" styleClass="spec-value" text="Backlit keyboard, Fingerprint sensor" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
                         <Label styleClass="spec-label" text="Kết nối:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                        <Label fx:id="connectivityLabel" styleClass="spec-value" text="WiFi 6, Bluetooth 5.0, 2x USB-C, 1x HDMI" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label fx:id="connectivityField" styleClass="spec-value" text="WiFi 6, Bluetooth 5.0, 2x USB-C, 1x HDMI" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
                         <Label styleClass="spec-label" text="Thiết kế &amp; Chất liệu:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-                        <Label fx:id="designMaterialsLabel" styleClass="spec-value" text="Aluminum body, 1.5kg" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label fx:id="designMaterialsField" styleClass="spec-value" text="Aluminum body, 1.5kg" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                         <rowConstraints>
                             <RowConstraints minHeight="30" />
                             <RowConstraints minHeight="30" />
@@ -128,32 +129,23 @@
             <!-- Sản phẩm tương tự -->
             <VBox styleClass="related-products-box">
                 <padding>
-                    <Insets bottom="20" left="20" right="20" top="15" />
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
                 </padding>
-                <Label styleClass="section-title" text="Sản Phẩm Tương Tự" />
-
-                <HBox alignment="CENTER_LEFT" spacing="20">
-                    <padding>
-                        <Insets bottom="0" left="0" right="0" top="15" />
-                    </padding>
-                    <VBox fx:id="relatedProduct1" prefWidth="220" spacing="5" styleClass="related-product">
-                        <ImageView fitHeight="120" fitWidth="160" preserveRatio="true" styleClass="product-thumbnail" />
-                        <Label styleClass="related-product-name" text="Laptop XYZ" wrapText="true" />
-                        <Label styleClass="related-product-price" text="4,500,000 VND" />
-                    </VBox>
-
-                    <VBox fx:id="relatedProduct2" prefWidth="220" spacing="5" styleClass="related-product">
-                        <ImageView fitHeight="120" fitWidth="160" preserveRatio="true" styleClass="product-thumbnail" />
-                        <Label styleClass="related-product-name" text="Laptop ABC" wrapText="true" />
-                        <Label styleClass="related-product-price" text="5,200,000 VND" />
-                    </VBox>
-
-                    <VBox fx:id="relatedProduct3" prefWidth="220" spacing="5" styleClass="related-product">
-                        <ImageView fitHeight="120" fitWidth="160" preserveRatio="true" styleClass="product-thumbnail" />
-                        <Label styleClass="related-product-name" text="Laptop DEF" wrapText="true" />
-                        <Label styleClass="related-product-price" text="4,800,000 VND" />
-                    </VBox>
+                <Label styleClass="section-title" text="Sản Phẩm Tương Tự">
+               <VBox.margin>
+                  <Insets left="40.0" />
+               </VBox.margin></Label>
+                <HBox alignment="CENTER" spacing="10">
+                    <Button fx:id="btnPrevious" onAction="#handlePrevious" text="◀" />
+                    <StackPane fx:id="relatedProductsContainerWrapper" alignment="CENTER" prefWidth="800">
+                        <HBox fx:id="relatedProductsContainer" alignment="TOP_LEFT" spacing="10">
+                            <!-- Các sản phẩm sẽ được thêm bằng code -->
+                        </HBox>
+                    </StackPane>
+                    <Button fx:id="btnNext" onAction="#handleNext" text="▶" />
                 </HBox>
+
+
             </VBox>
         </VBox>
     </center>

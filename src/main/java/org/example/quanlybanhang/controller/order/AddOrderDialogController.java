@@ -8,10 +8,11 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.stage.Stage;
-
 import org.example.quanlybanhang.dao.*;
 import org.example.quanlybanhang.enums.*;
+import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.*;
+import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.*;
 
 import java.sql.Connection;
@@ -20,311 +21,258 @@ import java.util.*;
 
 public class AddOrderDialogController {
 
-    @FXML
-    private TextField txtOrderId;
-    @FXML
-    private DatePicker dateOrderDate;
-    @FXML
-    private ComboBox<String> cbCustomer;
-    @FXML
-    private ComboBox<OrderStatus> cbOrderStatus;
-    @FXML
-    private ComboBox<Employee> cbEmployee;
-    @FXML
-    private TextArea txtNote;
-    @FXML
-    private TextField txtShippingFee;
-    @FXML
-    private TextField txtTotalPrice;
-    @FXML
-    private ComboBox<Product> cbProduct;
-    @FXML
-    private Spinner<Integer> spQuantity;
-    @FXML
-    private Button btnAddProduct;
-    @FXML
-    private TableView<OrderDetail> tableOrderDetails;
-    @FXML
-    private TableColumn<OrderDetail, Integer> colSTT;
-    @FXML
-    private TableColumn<OrderDetail, Integer> colProductId;
-    @FXML
-    private TableColumn<OrderDetail, String> colProductName;
-    @FXML
-    private TableColumn<OrderDetail, Integer> colQuantity;
-    @FXML
-    private TableColumn<OrderDetail, Double> colPrice;
-    @FXML
-    private TableColumn<OrderDetail, Double> colTotal;
-    @FXML
-    private TableColumn<OrderDetail, Button> colAction;
-    @FXML
-    public TextField txtFinalTotal;
-    @FXML
-    private Button btnCancel;
-    @FXML
-    private Button btnSaveOrder;
-    @FXML
-    private Button btnBack;
 
+    //region FXML Components
+    @FXML private Button btnAddCustomer;
+    @FXML private TextField findProducts, txtOrderId, txtShippingFee, txtTotalPrice, txtFinalTotal;
+    @FXML private DatePicker dateOrderDate;
+    @FXML private ComboBox<String> cbCustomer;
+    @FXML private ComboBox<OrderStatus> cbOrderStatus;
+    @FXML private ComboBox<Employee> cbEmployee;
+    @FXML private ComboBox<Product> cbProduct;
+    @FXML private Spinner<Integer> spQuantity;
+    @FXML private TextArea txtNote;
+    @FXML private Button btnAddProduct, btnCancel, btnSaveOrder, btnBack;
+    @FXML private TableView<OrderDetail> tableOrderDetails;
+    @FXML private TableColumn<OrderDetail, Integer> colSTT, colProductId, colQuantity;
+    @FXML private TableColumn<OrderDetail, String> colProductName;
+    @FXML private TableColumn<OrderDetail, Double> colPrice, colTotal;
+    @FXML private TableColumn<OrderDetail, Button> colAction;
+    //endregion
+
+    //region Services and Data
     private OrderDAO orderDAO;
-    private Map<Integer, String> productMap = new HashMap<>();
     private ProductDAO productDAO;
+    private Map<Integer, String> productMap = new HashMap<>();
     private ObservableList<OrderDetail> orderDetailsList = FXCollections.observableArrayList();
+    private List<Product> allProducts = new ArrayList<>();
+    //endregion
 
     @FXML
     private void initialize() {
+        setupServices();
+        setupUIComponents();
+        setupComboBoxes();
+        setupTableView();
+        setupSearch();
+        setupEvents();
+        btnAddCustomer.setOnAction(event -> {
+            DialogHelper.showDialog("/org/example/quanlybanhang/CustomerDialog.fxml", "Thêm Khách Hàng Mới");
+        });
+
+    }
+
+    private void setupServices() {
         Connection connection = DatabaseConnection.getConnection();
         orderDAO = new OrderDAO();
-        CustomerDAO customerDAO = new CustomerDAO();
-        ProductDAO productDAO = new ProductDAO(connection);
-        cbOrderStatus.getItems().setAll(OrderStatus.values());
+        productDAO = new ProductDAO(connection);
+    }
 
-        int nextOrderId = orderDAO.getNextOrderId();
-        txtOrderId.setText(String.valueOf(nextOrderId));
+    private void setupUIComponents() {
+        txtOrderId.setText(String.valueOf(orderDAO.getNextOrderId()));
         txtOrderId.setDisable(true);
-
         dateOrderDate.setValue(LocalDate.now());
+    }
 
+    private void setupComboBoxes() {
+        cbOrderStatus.getItems().setAll(OrderStatus.values());
         loadCustomers();
-        loadProducts(productDAO);
+        loadProducts();
         loadEmployees();
+    }
 
-        cbProduct.setOnAction(event -> {
-            Product selectedProduct = cbProduct.getValue();
-            if (selectedProduct != null) {
-                if (selectedProduct.getStatus() != ProductStatus.CON_HANG &&
-                        selectedProduct.getStatus() != ProductStatus.DANG_CHO) {
-                    showAlert(Alert.AlertType.WARNING, "Sản phẩm không hợp lệ", "Sản phẩm đã hết hàng hoặc không thể đặt.");
-                    cbProduct.setValue(null);
-                    spQuantity.setValueFactory(null);
-                    return;
-                }
+    private void setupSearch() {
+        findProducts.textProperty().addListener((obs, oldText, newText) -> {
+            List<Product> filtered = SearchService.search(
+                    allProducts, newText, Product::getName,
+                    product -> String.valueOf(product.getId())
+            );
+            List<Product> valid = filtered.stream()
+                    .filter(p -> p.getStatus() == ProductStatus.CON_HANG)
+                    .toList();
 
-                int stockQuantity = selectedProduct.getStockQuantity();
-                SpinnerValueFactory<Integer> valueFactory =
-                        new SpinnerValueFactory.IntegerSpinnerValueFactory(1, stockQuantity, 1);
-                spQuantity.setValueFactory(valueFactory);
-                valueFactory.setWrapAround(true);
-            }
+            cbProduct.getItems().setAll(valid);
+            if (!valid.isEmpty()) cbProduct.setValue(valid.getFirst());
         });
+    }
 
-        colSTT.setCellValueFactory(cellData ->
-                new ReadOnlyObjectWrapper<>(tableOrderDetails.getItems().indexOf(cellData.getValue()) + 1)
-        );
+    private void setupEvents() {
+        cbProduct.setOnAction(event -> updateSpinnerForProduct(cbProduct.getValue()));
+        txtShippingFee.textProperty().addListener((obs, oldVal, newVal) -> updateTotalPrices());
+    }
 
+    private void setupTableView() {
+        colSTT.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(tableOrderDetails.getItems().indexOf(cell.getValue()) + 1));
         colProductId.setCellValueFactory(new PropertyValueFactory<>("productId"));
-
-        colProductName.setCellValueFactory(cellData -> {
-            int productId = cellData.getValue().getProductId();
-            String productName = productMap.getOrDefault(productId, "Không tìm thấy");
-            return new SimpleStringProperty(productName);
-        });
-
+        colProductName.setCellValueFactory(cell -> new SimpleStringProperty(
+                productMap.getOrDefault(cell.getValue().getProductId(), "Không tìm thấy")));
         colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-        colPrice.setCellFactory(column -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(MoneyUtils.formatVN(item));
-                }
-            }
-        });
-
+        colPrice.setCellFactory(col -> getCurrencyCell());
         colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
-        colTotal.setCellFactory(column -> new TableCell<>() {
+        colTotal.setCellFactory(col -> getCurrencyCell());
+        colAction.setCellFactory(col -> getDeleteButtonCell());
+        tableOrderDetails.setItems(orderDetailsList);
+    }
+
+    private TableCell<OrderDetail, Double> getCurrencyCell() {
+        return new TableCell<>() {
             @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(MoneyUtils.formatVN(item));
-                }
+            protected void updateItem(Double value, boolean empty) {
+                super.updateItem(value, empty);
+                setText(empty || value == null ? null : MoneyUtils.formatVN(value));
             }
-        });
+        };
+    }
 
-        colAction.setCellFactory(param -> new TableCell<>() {
+    private TableCell<OrderDetail, Button> getDeleteButtonCell() {
+        return new TableCell<>() {
             private final Button btnDelete = new Button("Xóa");
-
             @Override
             protected void updateItem(Button item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    btnDelete.setOnAction(event -> {
-                        OrderDetail detail = getTableView().getItems().get(getIndex());
-                        orderDetailsList.remove(detail);
+                    btnDelete.setOnAction(e -> {
+                        orderDetailsList.remove(getTableView().getItems().get(getIndex()));
                         updateTotalPrices();
                     });
                     setGraphic(btnDelete);
                 }
             }
-        });
+        };
+    }
 
-        txtShippingFee.textProperty().addListener((obs, oldVal, newVal) -> updateTotalPrices());
-        tableOrderDetails.setItems(orderDetailsList);
+    private void updateSpinnerForProduct(Product product) {
+        if (product == null) return;
+
+        if (product.getStatus() != ProductStatus.CON_HANG) {
+            showAlert(Alert.AlertType.WARNING, "Sản phẩm không hợp lệ", "Sản phẩm đã hết hàng hoặc không thể đặt.");
+            cbProduct.setValue(null);
+            spQuantity.setValueFactory(null);
+            return;
+        }
+
+        spQuantity.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, product.getStockQuantity(), 1));
     }
 
     @FXML
     private void handleAddProduct() {
-        Product selectedProduct = cbProduct.getValue();
+        Product product = cbProduct.getValue();
         Integer quantity = spQuantity.getValue();
 
-        if (selectedProduct == null || quantity == null || quantity <= 0) {
+        if (product == null || quantity == null || quantity <= 0) {
             showAlert(Alert.AlertType.WARNING, "Lỗi", "Vui lòng chọn sản phẩm và số lượng hợp lệ!");
             return;
         }
 
-        if (selectedProduct.getStatus() != ProductStatus.CON_HANG &&
-                selectedProduct.getStatus() != ProductStatus.DANG_CHO) {
-            showAlert(Alert.AlertType.WARNING, "Lỗi", "Sản phẩm không còn hàng hoặc không thể đặt.");
+        int availableStock = product.getStockQuantity();
+        OrderDetail existing = orderDetailsList.stream()
+                .filter(d -> d.getProductId() == product.getId())
+                .findFirst().orElse(null);
+
+        int currentQty = existing != null ? existing.getQuantity() : 0;
+        int totalQty = currentQty + quantity;
+
+        if (totalQty > availableStock) {
+            showAlert(Alert.AlertType.WARNING, "Lỗi", "Tồn kho chỉ còn " + availableStock + " sản phẩm.");
             return;
         }
 
-        OrderDetail existingDetail = orderDetailsList.stream()
-                .filter(detail -> detail.getProductId() == selectedProduct.getId())
-                .findFirst()
-                .orElse(null);
-
-        if (existingDetail != null) {
-            existingDetail.setQuantity(existingDetail.getQuantity() + quantity);
+        if (existing != null) {
+            existing.setQuantity(totalQty);
         } else {
-            OrderDetail detail = new OrderDetail(
-                    orderDetailsList.size() + 1,
-                    Integer.parseInt(txtOrderId.getText()),
-                    selectedProduct.getId(),
-                    quantity,
-                    selectedProduct.getPrice()
-            );
-            orderDetailsList.add(detail);
+            orderDetailsList.add(new OrderDetail(orderDetailsList.size() + 1,
+                    Integer.parseInt(txtOrderId.getText()), product.getId(), quantity, product.getPrice()));
         }
 
         tableOrderDetails.refresh();
         updateTotalPrices();
+        spQuantity.getValueFactory().setValue(1);
     }
 
     private void updateTotalPrices() {
-        double totalPrice = orderDetailsList.stream()
-                .mapToDouble(detail -> detail.getQuantity() * detail.getPrice())
-                .sum();
-
-        txtTotalPrice.setText(MoneyUtils.formatVN(totalPrice));
+        double total = orderDetailsList.stream().mapToDouble(d -> d.getQuantity() * d.getPrice()).sum();
+        txtTotalPrice.setText(MoneyUtils.formatVN(total));
 
         try {
             double shippingFee = Double.parseDouble(txtShippingFee.getText());
-            double finalTotal = totalPrice + shippingFee;
-            txtFinalTotal.setText(MoneyUtils.formatVN(finalTotal));
+            txtFinalTotal.setText(MoneyUtils.formatVN(total + shippingFee));
         } catch (NumberFormatException e) {
-            txtFinalTotal.setText(MoneyUtils.formatVN(totalPrice));
+            txtFinalTotal.setText(MoneyUtils.formatVN(total));
         }
     }
 
-    private void loadProducts(ProductDAO productDAO) {
-        List<Product> products = productDAO.getAllProducts();
+    private void loadProducts() {
+        allProducts = productDAO.getAllProducts();
         cbProduct.getItems().clear();
         productMap.clear();
 
-        for (Product product : products) {
-            if (product.getStatus() == ProductStatus.CON_HANG || product.getStatus() == ProductStatus.DANG_CHO) {
-                cbProduct.getItems().add(product);
-                productMap.put(product.getId(), product.getName());
+        for (Product p : allProducts) {
+            if (p.getStatus() == ProductStatus.CON_HANG) {
+                cbProduct.getItems().add(p);
+                productMap.put(p.getId(), p.getName());
             }
         }
     }
 
     private void loadCustomers() {
-        List<Customer> customers = CustomerDAO.getAllCustomers();
         cbCustomer.getItems().clear();
-
-        for (Customer customer : customers) {
-            cbCustomer.getItems().add(customer.getId() + " - " + customer.getName());
-        }
+        CustomerDAO.getAllCustomers().forEach(c ->
+                cbCustomer.getItems().add(c.getId() + " - " + c.getName()));
     }
 
     private void loadEmployees() {
-        EmployeeDAO employeeDAO = new EmployeeDAO(DatabaseConnection.getConnection());
-        List<Employee> allEmployees = employeeDAO.getAllEmployees();
-
-        // Dùng enum để filter nhân viên kho
-        List<Employee> filteredEmployees = allEmployees.stream()
-                .filter(emp -> UserRole.NHAN_VIEN_KHO.getValue().equalsIgnoreCase(emp.getRole()))
-                .toList();
-
-        cbEmployee.getItems().clear();
-        cbEmployee.getItems().addAll(filteredEmployees);
+        List<Employee> employees = new EmployeeDAO(DatabaseConnection.getConnection()).getAllEmployees();
+        cbEmployee.getItems().addAll(employees.stream()
+                .filter(e -> UserRole.NHAN_VIEN_KHO.getValue().equalsIgnoreCase(e.getRole()))
+                .toList());
     }
-
 
     @FXML
     private void handleSaveOrder() {
         try {
-            Employee selectedEmployee = cbEmployee.getValue();
-            if (selectedEmployee == null) {
-                showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng chọn nhân viên.");
+            Employee emp = cbEmployee.getValue();
+            String cust = cbCustomer.getValue();
+            if (emp == null || cust == null || !cust.contains("-")) {
+                showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng chọn khách hàng và nhân viên.");
                 return;
             }
-            int employeeId = selectedEmployee.getId();
 
-            String customerStr = cbCustomer.getValue();
-            if (customerStr == null || !customerStr.contains("-")) {
-                showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng chọn khách hàng hợp lệ.");
-                return;
-            }
-            int customerId = Integer.parseInt(customerStr.split("-")[0].trim());
-
+            int customerId = Integer.parseInt(cust.split("-")[0].trim());
             double shippingFee = Double.parseDouble(txtShippingFee.getText());
             LocalDateTime orderDate = dateOrderDate.getValue().atStartOfDay();
-            OrderStatus status = cbOrderStatus.getValue();
-            String note = txtNote.getText();
+            List<OrderDetail> details = new ArrayList<>(tableOrderDetails.getItems());
 
-            List<OrderDetail> orderDetails = new ArrayList<>(tableOrderDetails.getItems());
+            double totalPrice = details.stream().mapToDouble(d -> d.getQuantity() * d.getPrice()).sum();
+            Order order = new Order(0, emp.getId(), customerId, "", totalPrice, shippingFee,
+                    orderDate, cbOrderStatus.getValue(), "", txtNote.getText());
 
-            double totalPrice = orderDetails.stream()
-                    .mapToDouble(detail -> detail.getQuantity() * detail.getPrice())
-                    .sum();
-
-            Order newOrder = new Order(0, employeeId, customerId, "", totalPrice, shippingFee, orderDate, status, "", note);
-
-            int orderId = orderDAO.addOrder(newOrder, orderDetails);
-            if (orderId > 0) {
+            int newId = orderDAO.addOrder(order, details);
+            if (newId > 0) {
                 showAlert(Alert.AlertType.INFORMATION, "Thành công", "Đơn hàng đã được lưu.");
                 closeDialogFromEvent(null);
             } else {
                 showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu đơn hàng.");
             }
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng nhập đầy đủ thông tin.");
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng kiểm tra lại thông tin.");
         }
     }
 
-    @FXML
-    private void handleCancel(ActionEvent event) {
-        closeDialogFromEvent(event);
-    }
-
-    @FXML
-    private void handleBack(ActionEvent event) {
-        closeDialogFromEvent(event);
-    }
+    @FXML private void handleCancel(ActionEvent event) { closeDialogFromEvent(event); }
+    @FXML private void handleBack(ActionEvent event) { closeDialogFromEvent(event); }
 
     private void closeDialogFromEvent(ActionEvent event) {
-        if (event != null) {
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.close();
-        } else if (btnCancel != null) {
-            Stage stage = (Stage) btnCancel.getScene().getWindow();
-            stage.close();
-        }
+        Stage stage = event != null
+                ? (Stage) ((Node) event.getSource()).getScene().getWindow()
+                : (Stage) btnCancel.getScene().getWindow();
+        stage.close();
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String message) {
-        Alert alert = new Alert(alertType);
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

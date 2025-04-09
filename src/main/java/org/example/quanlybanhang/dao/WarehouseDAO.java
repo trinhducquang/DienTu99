@@ -60,4 +60,48 @@ public class WarehouseDAO {
 
         return warehouseDTOList;
     }
+
+    public List<WarehouseDTO> getAllWarehouseProducts() {
+        List<WarehouseDTO> productList = new ArrayList<>();
+        String query = "SELECT * FROM warehouse_transaction_details"; // Hoặc SELECT DISTINCT nếu cần
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn != null ? conn.createStatement() : null;
+             ResultSet rs = stmt != null ? stmt.executeQuery(query) : null) {
+
+            if (rs != null) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    int productId = rs.getInt("product_id");
+                    String sku = rs.getString("sku");
+                    String productName = rs.getString("product_name");
+                    String categoryName = rs.getString("category_name");
+//                  int quantity = rs.getInt("stock_quality"); // Đây là tồn kho
+                    BigDecimal unitPrice = rs.getBigDecimal("unit_price");
+//                    BigDecimal sellPrice = rs.getBigDecimal("sell_price");
+//                    LocalDateTime updatedAt = rs.getTimestamp("updated_at").toLocalDateTime();
+
+                    WarehouseDTO dto = new WarehouseDTO();
+                    dto.setId(id);
+                    dto.setProductId(productId);
+                    dto.setSku(sku);
+                    dto.setProductName(productName);
+                    dto.setCategoryName(categoryName);
+//                    dto.setQuantity(quantity);
+                    dto.setUnitPrice(unitPrice);
+//                    dto.setTotalAmount(sellPrice);
+//                    dto.setCreatedAt(updatedAt);
+
+                    productList.add(dto);
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi truy vấn danh sách tồn kho:");
+            e.printStackTrace();
+        }
+
+        return productList;
+    }
+
 }

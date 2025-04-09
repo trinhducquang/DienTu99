@@ -35,7 +35,7 @@
                             </HBox.margin>
                         </Label>
                         <Region prefHeight="60.0" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnback" onAction="#handleBack" mnemonicParsing="false" style="-fx-background-color: white;" text="Quay Lại">
+                        <Button fx:id="btnback" mnemonicParsing="false" onAction="#handleBack" style="-fx-background-color: white;" text="Quay Lại">
                             <HBox.margin>
                                 <Insets right="20.0" />
                             </HBox.margin>
@@ -95,12 +95,13 @@
                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </padding>
                                     <children>
-                                        <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                        <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="649.0" spacing="10.0">
                                             <children>
                                                 <ComboBox fx:id="cbProduct" prefWidth="250.0" promptText="Chọn sản phẩm" />
                                                 <Label text="Số lượng:" />
                                                 <Spinner fx:id="spQuantity" prefWidth="80.0" />
-                                                <Button fx:id="btnAddProduct" onAction="#handleAddProduct" mnemonicParsing="false" style="-fx-background-color: #2ecc71;" text="Thêm Sản Phẩm" textFill="WHITE" />
+                                                <Button fx:id="btnAddProduct" mnemonicParsing="false" onAction="#handleAddProduct" style="-fx-background-color: #2ecc71;" text="Thêm Sản Phẩm" textFill="WHITE" />
+                                                <TextField fx:id="findProducts" editable="true" prefHeight="491.0" prefWidth="175.0" promptText="Tìm Sản phẩm" />
                                             </children>
                                         </HBox>
 
@@ -151,7 +152,7 @@
                                         <Label text="Nhân Viên Xử Lý:" GridPane.columnIndex="2" />
                                         <ComboBox fx:id="cbEmployee" prefWidth="200.0" GridPane.columnIndex="3" />
 
-                                        <Label  text="Ghi Chú:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <Label text="Ghi Chú:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                         <TextArea fx:id="txtNote" prefHeight="60.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.rowSpan="2" />
                                     </children>
                                 </GridPane>
@@ -161,12 +162,12 @@
                         <!-- Buttons -->
                         <HBox alignment="CENTER_RIGHT" spacing="15.0">
                             <children>
-                                <Button fx:id="btnCancel" onAction="#handleCancel" mnemonicParsing="false" style="-fx-background-color: #e74c3c;" text="Hủy" textFill="WHITE">
+                                <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#handleCancel" style="-fx-background-color: #e74c3c;" text="Hủy" textFill="WHITE">
                                     <padding>
                                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                                     </padding>
                                 </Button>
-                                <Button fx:id="btnSaveOrder" onAction="#handleSaveOrder" defaultButton="true" mnemonicParsing="false" style="-fx-background-color: #2ecc71;" text="Lưu Đơn Hàng" textFill="WHITE">
+                                <Button fx:id="btnSaveOrder" defaultButton="true" mnemonicParsing="false" onAction="#handleSaveOrder" style="-fx-background-color: #2ecc71;" text="Lưu Đơn Hàng" textFill="WHITE">
                                     <padding>
                                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                                     </padding>

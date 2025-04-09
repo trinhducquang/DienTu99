@@ -1,5 +1,6 @@
 package org.example.quanlybanhang.dao;
 
+import org.example.quanlybanhang.dto.OrderSummaryDTO;
 import org.example.quanlybanhang.enums.OrderStatus;
 import org.example.quanlybanhang.model.Order;
 import org.example.quanlybanhang.model.OrderDetail;
@@ -35,7 +36,7 @@ public class OrderDAO {
     }
 
     private Order extractOrderFromResultSet(ResultSet resultSet) throws SQLException {
-        int id = resultSet.getInt("id");
+        int id = resultSet.getInt("order_id");
         int employeeId = resultSet.getInt("employee_id");
         int customerId = resultSet.getInt("customer_id");
         String customerName = resultSet.getString("customer_name");
@@ -49,39 +50,6 @@ public class OrderDAO {
         return new Order(id, employeeId, customerId, customerName, totalPrice, shippingFee, orderDate, status, productNames, note);
     }
 
-    public void decreaseProductQuantity(int orderId, int productId) {
-        String checkQuantitySQL = "SELECT quantity FROM order_details WHERE order_id = ? AND product_id = ?";
-        String updateSQL = "UPDATE order_details SET quantity = quantity - 1 WHERE order_id = ? AND product_id = ?";
-        String deleteSQL = "DELETE FROM order_details WHERE order_id = ? AND product_id = ?";
-
-        try (PreparedStatement checkStmt = connection.prepareStatement(checkQuantitySQL)) {
-            checkStmt.setInt(1, orderId);
-            checkStmt.setInt(2, productId);
-            var resultSet = checkStmt.executeQuery();
-
-            if (resultSet.next()) {
-                int currentQuantity = resultSet.getInt("quantity");
-                if (currentQuantity > 1) {
-                    try (PreparedStatement updateStmt = connection.prepareStatement(updateSQL)) {
-                        updateStmt.setInt(1, orderId);
-                        updateStmt.setInt(2, productId);
-                        updateStmt.executeUpdate();
-                    }
-                } else {
-                    try (PreparedStatement deleteStmt = connection.prepareStatement(deleteSQL)) {
-                        deleteStmt.setInt(1, orderId);
-                        deleteStmt.setInt(2, productId);
-                        deleteStmt.executeUpdate();
-                    }
-                }
-
-                // 🔄 Cập nhật lại tổng tiền sau khi thay đổi
-                updateTotalPrice(orderId);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public int addOrder(Order order, List<OrderDetail> orderDetails) {
         String insertOrderSQL = "INSERT INTO orders (employee_id, customer_id, total_price, shipping_fee, order_date, status, note) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -141,38 +109,38 @@ public class OrderDAO {
         return 1;
     }
 
-    // ✅ Tính lại tổng tiền dựa trên order_details
-    public double calculateTotalPriceFromOrderDetails(int orderId) {
-        String sql = "SELECT quantity, price FROM order_details WHERE order_id = ?";
-        double total = 0.0;
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, orderId);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                int quantity = rs.getInt("quantity");
-                double price = rs.getDouble("price");
-                total += quantity * price;
+    public OrderSummaryDTO getOrderSummaryById(int orderId) {
+        String sql = "SELECT * FROM order_summary WHERE order_id  = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, orderId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return extractOrderSummaryDTO(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return total;
+        return null;
     }
 
-    // ✅ Cập nhật lại total_price của đơn hàng
-    public void updateTotalPrice(int orderId) {
-        double newTotal = calculateTotalPriceFromOrderDetails(orderId);
-        String sql = "UPDATE orders SET total_price = ? WHERE id = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setDouble(1, newTotal);
-            stmt.setInt(2, orderId);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    private OrderSummaryDTO extractOrderSummaryDTO(ResultSet rs) throws SQLException {
+        return new OrderSummaryDTO(
+                rs.getInt("order_id"),
+                rs.getString("product_ids"),
+                rs.getInt("employee_id"),
+                rs.getInt("customer_id"),
+                rs.getString("customer_name"),
+                rs.getDouble("total_price"),
+                rs.getDouble("shipping_fee"),
+                rs.getTimestamp("order_date").toLocalDateTime(),
+                OrderStatus.fromString(rs.getString("status")),
+                rs.getString("product_names"),
+                rs.getString("product_images"),
+                rs.getString("product_quantities"),
+                rs.getString("product_prices"),
+                rs.getString("note")
+        );
     }
+
+
 }

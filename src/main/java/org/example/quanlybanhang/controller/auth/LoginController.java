@@ -54,6 +54,14 @@ public class LoginController {
             Stage stage = (Stage) tenDangNhapField.getScene().getWindow();
 
             stage.setScene(new Scene(root));
+            stage.setMaximized(true);
+            stage.maximizedProperty().addListener((obs, wasMaximized, isNowMaximized) -> {
+                if (!isNowMaximized) {
+                    stage.setWidth(1280);
+                    stage.setHeight(720);
+                    stage.centerOnScreen();
+                }
+            });
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();

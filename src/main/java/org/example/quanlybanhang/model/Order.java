@@ -7,7 +7,7 @@ public class Order {
     private int id;
     private int employeeId;
     private int customerId;
-    private String customerName; // Thêm tên khách hàng
+    private String customerName;
     private double totalPrice;
     private double shippingFee;
     private LocalDateTime orderDate;

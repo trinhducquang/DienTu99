@@ -8,13 +8,14 @@ import java.time.LocalDateTime;
 public class WarehouseDTO {
     private int id;
     private int productId;
+    private String sku;
     private String transactionCode;
     private String productName;
     private String categoryName;
     private int quantity;
     private BigDecimal unitPrice;
     private BigDecimal totalAmount;
-    private WarehouseType type; // Đổi từ String sang Enum
+    private WarehouseType type;
     private String note;
     private String createdByName;
     private LocalDateTime createdAt;
@@ -93,6 +94,14 @@ public class WarehouseDTO {
 
     public BigDecimal getUnitPrice() {
         return unitPrice;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
     public void setUnitPrice(BigDecimal unitPrice) {

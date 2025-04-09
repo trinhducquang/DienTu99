@@ -34,6 +34,10 @@ public class Product {
         this.specifications = specifications;
     }
 
+    public Product() {
+
+    }
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

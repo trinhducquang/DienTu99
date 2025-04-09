@@ -3,7 +3,6 @@ package org.example.quanlybanhang.enums;
 public enum ProductStatus {
     CON_HANG("Còn hàng"),
     HET_HANG("Hết hàng"),
-    DANG_CHO("Đang chờ"),
     DA_HUY("Ngừng Bán");
 
     private final String value;

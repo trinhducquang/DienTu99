@@ -9,14 +9,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.OrderDAO;
-import org.example.quanlybanhang.utils.DatabaseConnection;
+import org.example.quanlybanhang.dao.ProductDAO;
+import org.example.quanlybanhang.dto.OrderSummaryDTO;
+import org.example.quanlybanhang.model.OrderDetail;
+import org.example.quanlybanhang.model.Product;
 import org.example.quanlybanhang.utils.MoneyUtils;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
 
 public class OrderDetailsDialogController {
 
@@ -25,14 +25,14 @@ public class OrderDetailsDialogController {
     @FXML private VBox productListContainer;
     @FXML private Button printOrderBtn, updateStatusBtn, backBtn;
 
-    private Connection connection;
     private int currentOrderId;
     private String currentOrderStatus;
     private OrderDAO orderDAO;
 
+
     public void initialize() {
-        connection = DatabaseConnection.getConnection();
         orderDAO = new OrderDAO();
+
     }
 
     public void setOrderById(Integer orderId) {
@@ -41,74 +41,64 @@ public class OrderDetailsDialogController {
     }
 
     private void loadOrderDetails() {
-        String sql = "SELECT o.id, o.order_date, c.name AS customer_name, o.status, " +
-                "o.total_price, o.shipping_fee, o.employee_id " +
-                "FROM orders o " +
-                "JOIN customers c ON o.customer_id = c.id " +
-                "WHERE o.id = ?";
+        OrderSummaryDTO summary = orderDAO.getOrderSummaryById(currentOrderId);
+        if (summary == null) return;
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, currentOrderId);
-            ResultSet resultSet = statement.executeQuery();
+        orderId.setText(String.valueOf(summary.getId()));
+        orderDate.setText(summary.getOrderDate().toString());
+        customerName.setText(summary.getCustomerName());
+        currentOrderStatus = summary.getStatus().getText();
+        orderStatus.setText(currentOrderStatus);
 
-            if (resultSet.next()) {
-                orderId.setText(String.valueOf(resultSet.getInt("id")));
-                orderDate.setText(resultSet.getString("order_date"));
-                customerName.setText(resultSet.getString("customer_name"));
-                currentOrderStatus = resultSet.getString("status");
-                orderStatus.setText(currentOrderStatus);
-
-                double totalPrice = resultSet.getDouble("total_price");
-                double fee = resultSet.getDouble("shipping_fee");
-
-                totalAmount.setText(MoneyUtils.formatVN(totalPrice));
-                shippingFee.setText(MoneyUtils.formatVN(fee));
-                finalAmount.setText(MoneyUtils.formatVN(totalPrice + fee));
-                processedBy.setText("ID: " + resultSet.getInt("employee_id"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        totalAmount.setText(MoneyUtils.formatVN(summary.getTotalPrice()));
+        shippingFee.setText(MoneyUtils.formatVN(summary.getShippingFee()));
+        finalAmount.setText(MoneyUtils.formatVN(summary.getTotalPrice() + summary.getShippingFee()));
+        processedBy.setText("ID: " + summary.getEmployeeId());
 
         loadOrderProducts();
     }
 
     private void loadOrderProducts() {
-        String sql = "SELECT p.id, p.name, p.image_url, od.quantity, p.price " +
-                "FROM order_details od " +
-                "JOIN products p ON od.product_id = p.id " +
-                "WHERE od.order_id = ?";
+        OrderSummaryDTO summary = orderDAO.getOrderSummaryById(currentOrderId);
+        if (summary == null) return;
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, currentOrderId);
-            ResultSet resultSet = statement.executeQuery();
+        productListContainer.getChildren().clear();
+        int totalItems = 0;
+        double totalOrderValue = 0;
 
-            productListContainer.getChildren().clear();
-            int totalItems = 0;
-            double totalOrderValue = 0;
+        String[] ids = summary.getProductIds().split(",");
+        String[] names = summary.getProductNames().split(",\\s*");
+        String[] images = summary.getProductImages().split(",\\s*");
+        String[] quantities = summary.getProductQuantities().split(",");
+        String[] prices = summary.getProductPrices().split(",");
 
-            while (resultSet.next()) {
-                int productId = resultSet.getInt("id");
-                String productName = resultSet.getString("name");
-                String imageUrl = resultSet.getString("image_url");
-                int quantity = resultSet.getInt("quantity");
-                double price = resultSet.getDouble("price");
-                double total = quantity * price;
+        for (int i = 0; i < names.length; i++) {
+            int productId = i < ids.length ? Integer.parseInt(ids[i]) : -1;
+            String name = names[i];
+            String imageUrl = i < images.length ? images[i] : null;
+            int quantity = i < quantities.length ? Integer.parseInt(quantities[i]) : 0;
+            double price = i < prices.length ? Double.parseDouble(prices[i]) : 0.0;
+            double total = quantity * price;
 
-                totalItems += quantity;
-                totalOrderValue += total;
+            totalItems += quantity;
+            totalOrderValue += total;
 
-                HBox productBox = createProductBox(productId, productName, imageUrl, quantity, price, total);
-                productListContainer.getChildren().add(productBox);
-            }
-
-            totalProducts.setText(String.valueOf(totalItems));
-            subtotalAmount.setText(MoneyUtils.formatVN(totalOrderValue));
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+            HBox productBox = createProductBox(
+                    productId,
+                    name,
+                    imageUrl,
+                    quantity,
+                    price,
+                    total
+            );
+            productListContainer.getChildren().add(productBox);
         }
+
+        totalProducts.setText(String.valueOf(totalItems));
+        subtotalAmount.setText(MoneyUtils.formatVN(totalOrderValue));
     }
+
+
 
     private HBox createProductBox(int productId, String name, String imageUrl, int quantity, double price, double total) {
         HBox productBox = new HBox();
@@ -135,15 +125,6 @@ public class OrderDetailsDialogController {
 
         HBox priceBox = new HBox(lblPrice);
         priceBox.setSpacing(10);
-
-        if (currentOrderStatus.equals("Đang xử lý")) {
-            Button decreaseButton = new Button("❌");
-            decreaseButton.setOnAction(e -> {
-                orderDAO.decreaseProductQuantity(currentOrderId, productId);
-                loadOrderDetails(); // ✅ cập nhật toàn bộ đơn hàng
-            });
-            priceBox.getChildren().add(decreaseButton);
-        }
 
         if (imageUrl != null && !imageUrl.trim().isEmpty()) {
             try {

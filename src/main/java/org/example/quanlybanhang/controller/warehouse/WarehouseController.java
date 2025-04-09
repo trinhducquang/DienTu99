@@ -8,7 +8,9 @@ import javafx.collections.ObservableList;
 import org.example.quanlybanhang.dto.WarehouseDTO;
 import org.example.quanlybanhang.dao.WarehouseDAO;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class WarehouseController {
 
@@ -69,6 +71,21 @@ public class WarehouseController {
     private TableColumn<WarehouseDTO, LocalDate> colCreatedDate;
 
     @FXML
+    private TableView<WarehouseDTO> tableWarehouseProducts;
+
+    @FXML private TableColumn<WarehouseDTO, Integer> colId;
+    @FXML private TableColumn<WarehouseDTO, Integer> colProductId;
+    @FXML private TableColumn<WarehouseDTO, String> colSku;
+    @FXML private TableColumn<WarehouseDTO, String> colnameProduct;
+    @FXML private TableColumn<WarehouseDTO, Integer> colStock;
+    @FXML private TableColumn<WarehouseDTO, BigDecimal> colImportPrice;
+    @FXML private TableColumn<WarehouseDTO, BigDecimal> colSellPrice;
+    @FXML private TableColumn<WarehouseDTO, String> colNamecategory;
+    @FXML private TableColumn<WarehouseDTO, LocalDateTime> colUpdatedAt;
+    @FXML private TableColumn<WarehouseDTO, Void> colAction;
+
+
+    @FXML
     public void initialize() {
         loadTransactions();
     }
@@ -76,6 +93,7 @@ public class WarehouseController {
     private void loadTransactions() {
         WarehouseDAO dao = new WarehouseDAO();
         ObservableList<WarehouseDTO> warehouseList = FXCollections.observableArrayList(dao.getAllWarehouseDetails());
+        ObservableList<WarehouseDTO> warehouseProductList = FXCollections.observableArrayList(dao.getAllWarehouseProducts());
 
         colTransId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colProductCode.setCellValueFactory(new PropertyValueFactory<>("productId"));
@@ -90,6 +108,19 @@ public class WarehouseController {
         colCreatedBy.setCellValueFactory(new PropertyValueFactory<>("createdByName"));
         colCreatedDate.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
 
+
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colProductId.setCellValueFactory(new PropertyValueFactory<>("productId"));
+        colSku.setCellValueFactory(new PropertyValueFactory<>("sku"));
+        colnameProduct.setCellValueFactory(new PropertyValueFactory<>("productName"));
+//        colStock.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
+//        colId.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
+        colImportPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+//        colSellPrice.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
+       colNamecategory.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
+//        colUpdatedAt.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
+
         tblTransactions.setItems(warehouseList);
+        tableWarehouseProducts.setItems(warehouseProductList);
     }
 }

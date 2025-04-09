@@ -50,15 +50,13 @@
 }
 
 .content-box {
-    -fx-background-color: transparent;
+    -fx-background-color: white;
 }
 
 /* Product main info box */
 .product-main-info-box {
     -fx-background-color: white;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 3);
-    -fx-background-radius: 4px;
-    -fx-border-radius: 4px;
     -fx-border-color: #e0e0e0;
     -fx-border-width: 1px;
     -fx-margin: 0 0 20 0;
@@ -160,8 +158,6 @@
 .specs-box {
     -fx-background-color: white;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 3);
-    -fx-background-radius: 4px;
-    -fx-border-radius: 4px;
     -fx-border-color: #e0e0e0;
     -fx-border-width: 1px;
     -fx-margin: 20 0 20 0;
@@ -212,8 +208,6 @@
 .related-products-box {
     -fx-background-color: white;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 3);
-    -fx-background-radius: 4px;
-    -fx-border-radius: 4px;
     -fx-border-color: #e0e0e0;
     -fx-border-width: 1px;
     -fx-margin: 20 0 20 0;
@@ -222,11 +216,9 @@
 .related-product {
     -fx-border-color: #ddd;
     -fx-padding: 10px;
-    -fx-pref-width: 180px;
     -fx-cursor: hand;
     -fx-background-color: #f8f9fa;
-    -fx-background-radius: 4px;
-    -fx-border-radius: 4px;
+
 }
 
 .related-product:hover {

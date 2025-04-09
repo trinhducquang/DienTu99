@@ -198,7 +198,6 @@ public class ProductController {
         categoryList.setAll(categories);
         categoryFilter.setItems(categoryList);
 
-        // Gọi sau khi danh sách danh mục đã có
         setEditableColumns();
     }
 
