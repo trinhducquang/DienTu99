@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="795.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.quanlybanhang.controller.WarehouseInputController">
+<BorderPane prefHeight="636.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.warehouse.WarehouseOperationsDialog">
     <top>
         <VBox spacing="10">
             <children>
@@ -26,7 +26,7 @@
                         <Label styleClass="header-label" text="Thêm Phiếu Nhập Kho" />
                     </left>
                     <right>
-                        <Button onAction="#handleBack" styleClass="back-button" text="Quay Lại" />
+                        <Button styleClass="back-button" text="Quay Lại" />
                     </right>
                     <padding>
                         <Insets bottom="15" left="15" right="15" top="15" />
@@ -37,7 +37,7 @@
     </top>
 
     <center>
-        <VBox spacing="15" styleClass="content-pane">
+        <VBox prefHeight="611.0" prefWidth="898.0" spacing="15" styleClass="content-pane">
             <padding>
                 <Insets bottom="15" left="15" right="15" top="15" />
             </padding>
@@ -81,7 +81,7 @@
             </TitledPane>
 
             <!-- Product Details Section -->
-            <TitledPane expanded="true" styleClass="section-pane" text="Chi Tiết Sản Phẩm">
+            <TitledPane expanded="true" prefHeight="343.0" prefWidth="868.0" styleClass="section-pane" text="Chi Tiết Sản Phẩm">
                 <content>
                     <VBox spacing="10">
                         <HBox alignment="CENTER_LEFT" spacing="10">
@@ -90,10 +90,10 @@
                             <TextField fx:id="quantityField" prefWidth="100" />
                             <Label text="Đơn Giá:" />
                             <TextField fx:id="unitPriceField" prefWidth="120" />
-                            <Button onAction="#handleAddProduct" styleClass="add-button" text="Thêm Sản Phẩm" />
+                            <Button styleClass="add-button" text="Thêm Sản Phẩm" />
                         </HBox>
 
-                        <TableView fx:id="productTableView" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="productTableView" prefHeight="194.0" prefWidth="842.0" VBox.vgrow="ALWAYS">
                             <columns>
                                 <TableColumn fx:id="indexColumn" prefWidth="50" text="STT" />
                                 <TableColumn fx:id="productIdColumn" prefWidth="100" text="Mã SP" />
@@ -152,8 +152,8 @@
             <padding>
                 <Insets bottom="15" left="15" right="15" top="15" />
             </padding>
-            <Button onAction="#handleCancel" styleClass="cancel-button" text="Hủy" />
-            <Button onAction="#handleSave" styleClass="save-button" text="Lưu Phiếu Nhập" />
+            <Button styleClass="cancel-button" text="Hủy" />
+            <Button styleClass="save-button" text="Lưu Phiếu Nhập" />
         </HBox>
     </bottom>
 </BorderPane>

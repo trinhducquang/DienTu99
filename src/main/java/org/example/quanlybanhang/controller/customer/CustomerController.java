@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Customer;
 import org.example.quanlybanhang.service.CustomerService;
@@ -48,7 +49,7 @@ public class CustomerController {
         loadCustomerData();
 
         addCustomerButton.setOnAction(event -> {
-            DialogHelper.showDialog("/org/example/quanlybanhang/CustomerDialog.fxml", "Thêm Khách Hàng Mới");
+            DialogHelper.showDialog("/org/example/quanlybanhang/CustomerDialog.fxml", "Thêm Khách Hàng Mới",  (Stage) addCustomerButton.getScene().getWindow());
             loadCustomerData();
         });
 

@@ -1,16 +1,17 @@
-package org.example.quanlybanhang.controller.auth;
+package org.example.quanlybanhang.controller.login;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.UserDAO;
-import org.example.quanlybanhang.utils.DatabaseConnection;
 import org.example.quanlybanhang.model.User;
+import org.example.quanlybanhang.security.auth.AuthService;
+import org.example.quanlybanhang.utils.DatabaseConnection;
 
 import java.sql.Connection;
 
@@ -19,7 +20,6 @@ public class LoginController {
     @FXML private TextField tenDangNhapField;
     @FXML private PasswordField matKhauField;
 
-
     @FXML
     private void xuLyDangNhap() {
         String tenDangNhap = tenDangNhapField.getText();
@@ -27,18 +27,14 @@ public class LoginController {
 
         Connection conn = DatabaseConnection.getConnection();
         UserDAO userDAO = new UserDAO(conn);
-        User user = userDAO.dangNhap(tenDangNhap, matKhau);
+        AuthService authService = new AuthService(userDAO);
+        User user = authService.login(tenDangNhap, matKhau);
 
         if (user != null) {
             switch (user.getRole()) {
-                case ADMIN:
-                    chuyenScene("Admin.fxml");
-                    break;
-                case NHAN_VIEN:
-                    chuyenScene("Employee.fxml");
-                    break;
-                default:
-                    hienThiThongBao("Lỗi", "Vai trò không hợp lệ!");
+                case ADMIN -> chuyenScene("Admin.fxml");
+                case NHAN_VIEN -> chuyenScene("Employee.fxml");
+                default -> hienThiThongBao("Lỗi", "Vai trò không hợp lệ!");
             }
         } else {
             hienThiThongBao("Lỗi Đăng Nhập", "Tên đăng nhập hoặc mật khẩu không đúng");
@@ -50,7 +46,6 @@ public class LoginController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/quanlybanhang/" + fxmlFile));
             Parent root = loader.load();
-
             Stage stage = (Stage) tenDangNhapField.getScene().getWindow();
 
             stage.setScene(new Scene(root));
@@ -76,5 +71,4 @@ public class LoginController {
         alert.setContentText(noiDung);
         alert.showAndWait();
     }
-
 }

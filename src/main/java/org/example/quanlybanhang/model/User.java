@@ -11,6 +11,9 @@ public class User {
     private String phone;
     private UserRole role;
 
+    public User() {
+    }
+
     public User(int id, String username, String password, String fullName, String email, String phone, UserRole role) {
         this.id = id;
         this.username = username;
@@ -42,4 +45,10 @@ public class User {
 
     public UserRole getRole() { return role; }
     public void setRole(UserRole role) { this.role = role; }
+
+    @Override
+    public String toString() {
+        return id + " - " + fullName;
+    }
+
 }

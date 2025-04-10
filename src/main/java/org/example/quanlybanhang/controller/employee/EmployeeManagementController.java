@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
 import org.example.quanlybanhang.enums.UserRole;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Employee;
@@ -87,7 +88,7 @@ public class EmployeeManagementController {
         });
 
         addEmployeeButton.setOnAction(event ->
-                DialogHelper.showDialog("/org/example/quanlybanhang/employeeManagementDialog.fxml", "Thêm Nhân Viên Mới"));
+                DialogHelper.showDialog("/org/example/quanlybanhang/employeeManagementDialog.fxml", "Thêm Nhân Viên Mới", (Stage) addEmployeeButton.getScene().getWindow()));
 
         loadEmployees();
 

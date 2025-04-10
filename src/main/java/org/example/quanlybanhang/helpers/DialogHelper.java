@@ -10,15 +10,12 @@ import org.example.quanlybanhang.controller.product.ProductDetailDialogControlle
 import org.example.quanlybanhang.controller.order.OrderDetailsDialogController;
 
 public class DialogHelper {
-    public static void showDialog(String fxmlPath, String title, Integer id, String type) {
+    public static void showDialog(String fxmlPath, String title, Integer id, String type, Stage ownerStage) {
         try {
             FXMLLoader loader = new FXMLLoader(DialogHelper.class.getResource(fxmlPath));
             Parent root = loader.load();
 
-            // Lấy controller của cửa sổ
             Object controller = loader.getController();
-
-            // Xác định kiểu dữ liệu để truyền vào đúng controller
             if (id != null) {
                 if ("product".equals(type) && controller instanceof ProductDetailDialogController) {
                     ((ProductDetailDialogController) controller).setProductById(id);
@@ -29,31 +26,33 @@ public class DialogHelper {
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle(title);
-            dialogStage.initModality(Modality.APPLICATION_MODAL);
             dialogStage.initStyle(StageStyle.UTILITY);
+            dialogStage.initModality(Modality.NONE);
+
+            if (ownerStage != null) {
+                dialogStage.initOwner(ownerStage);
+            }
 
             Scene scene = new Scene(root);
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
 
-            dialogStage.showAndWait();
+            dialogStage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // Overload phương thức cho sản phẩm
-    public static void showProductDialog(String fxmlPath, String title, Integer productId) {
-        showDialog(fxmlPath, title, productId, "product");
+    // Overload cho sản phẩm
+    public static void showProductDialog(String fxmlPath, String title, Integer productId, Stage ownerStage) {
+        showDialog(fxmlPath, title, productId, "product", ownerStage);
     }
 
-    // Overload phương thức cho đơn hàng
-    public static void showOrderDialog(String fxmlPath, String title, Integer orderId) {
-        showDialog(fxmlPath, title, orderId, "order");
+    public static void showOrderDialog(String fxmlPath, String title, Integer orderId, Stage ownerStage) {
+        showDialog(fxmlPath, title, orderId, "order", ownerStage);
     }
 
-    // Overload giữ khả năng tương thích ngược
-    public static void showDialog(String fxmlPath, String title) {
-        showDialog(fxmlPath, title, null, null);
+    public static void showDialog(String fxmlPath, String title, Stage ownerStage) {
+        showDialog(fxmlPath, title, null, null, ownerStage);
     }
 }

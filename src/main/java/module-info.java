@@ -16,8 +16,8 @@ module org.example.quanlybanhang {
     exports org.example.quanlybanhang.model;
     opens org.example.quanlybanhang.controller.warehouse to javafx.fxml;
     opens org.example.quanlybanhang.model to javafx.fxml;
-    exports org.example.quanlybanhang.controller.auth;
-    opens org.example.quanlybanhang.controller.auth to javafx.fxml;
+    exports org.example.quanlybanhang.controller.login;
+    opens org.example.quanlybanhang.controller.login to javafx.fxml;
     exports org.example.quanlybanhang.controller.category;
     opens org.example.quanlybanhang.controller.category to javafx.fxml;
     exports org.example.quanlybanhang.controller.customer;

@@ -1,5 +1,6 @@
 package org.example.quanlybanhang.dto;
 
+import org.example.quanlybanhang.enums.InventoryStatus;
 import org.example.quanlybanhang.enums.WarehouseType;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ public class WarehouseDTO {
     private String sku;
     private String transactionCode;
     private String productName;
+    private BigDecimal sellPrice;
     private String categoryName;
     private int quantity;
     private BigDecimal unitPrice;
@@ -19,17 +21,27 @@ public class WarehouseDTO {
     private String note;
     private String createdByName;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime inventoryDate;
+    private String inventoryNote;
+    private InventoryStatus inventoryStatus;
+    private int excessQuantity;
+    private int deficientQuantity;
+    private int missing;
+
 
     public WarehouseDTO() {
     }
 
-    public WarehouseDTO(int id, int productId, String transactionCode, String productName, String categoryName,
-                        int quantity, BigDecimal unitPrice, WarehouseType type, // Enum ở đây
-                        String note, String createdByName, LocalDateTime createdAt) {
+    public WarehouseDTO(int id, int productId, String transactionCode, String productName, BigDecimal sellPrice, String categoryName,
+                        int quantity, BigDecimal unitPrice, WarehouseType type,
+                        String note, String createdByName, LocalDateTime createdAt, LocalDateTime updatedAt,
+                        LocalDateTime inventoryDate, String inventoryNote, InventoryStatus inventoryStatus) {
         this.id = id;
         this.productId = productId;
         this.transactionCode = transactionCode;
         this.productName = productName;
+        this.sellPrice = sellPrice;
         this.categoryName = categoryName;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
@@ -38,6 +50,10 @@ public class WarehouseDTO {
         this.note = note;
         this.createdByName = createdByName;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.inventoryDate = inventoryDate;
+        this.inventoryNote = inventoryNote;
+        this.inventoryStatus = inventoryStatus;
     }
 
     // Getters & Setters
@@ -58,6 +74,24 @@ public class WarehouseDTO {
     public void setProductId(int productId) {
         this.productId = productId;
     }
+
+    public BigDecimal getSellPrice() {
+        return sellPrice;
+    }
+
+    public void setSellPrice(BigDecimal sellPrice) {
+        this.sellPrice = sellPrice;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+
 
     public String getTransactionCode() {
         return transactionCode;
@@ -150,4 +184,53 @@ public class WarehouseDTO {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    public LocalDateTime getInventoryDate() {
+        return inventoryDate;
+    }
+
+    public void setInventoryDate(LocalDateTime inventoryDate) {
+        this.inventoryDate = inventoryDate;
+    }
+
+    public String getInventoryNote() {
+        return inventoryNote;
+    }
+
+    public void setInventoryNote(String inventoryNote) {
+        this.inventoryNote = inventoryNote;
+    }
+
+    public InventoryStatus getInventoryStatus() {
+        return inventoryStatus;
+    }
+
+    public void setInventoryStatus(InventoryStatus inventoryStatus) {
+        this.inventoryStatus = inventoryStatus;
+    }
+
+    public int getExcessQuantity() {
+        return excessQuantity;
+    }
+
+    public void setExcessQuantity(int excessQuantity) {
+        this.excessQuantity = excessQuantity;
+    }
+
+    public int getDeficientQuantity() {
+        return deficientQuantity;
+    }
+
+    public void setDeficientQuantity(int deficientQuantity) {
+        this.deficientQuantity = deficientQuantity;
+    }
+
+    public int getMissing() {
+        return missing;
+    }
+
+    public void setMissing(int missing) {
+        this.missing = missing;
+    }
+
 }

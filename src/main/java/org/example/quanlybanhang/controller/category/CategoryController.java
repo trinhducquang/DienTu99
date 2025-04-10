@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Category;
 import org.example.quanlybanhang.service.CategoryService;
@@ -93,7 +94,8 @@ public class CategoryController {
         });
 
         addCategoryButton.setOnAction(event ->
-                DialogHelper.showDialog("/org/example/quanlybanhang/AddCategoryDialog.fxml", "Thêm Danh Mục Mới")
+                DialogHelper.showDialog("/org/example/quanlybanhang/AddCategoryDialog.fxml", "Thêm Danh Mục Mới", (Stage) addCategoryButton.getScene().getWindow()
+                )
         );
 
         saveButton.setOnAction(event -> handleSaveAction());

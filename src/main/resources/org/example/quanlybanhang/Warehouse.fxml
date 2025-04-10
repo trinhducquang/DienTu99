@@ -102,7 +102,6 @@
                                                 <TableColumn fx:id="colSellPrice" maxWidth="300.0" prefWidth="123.0" text="Giá Bán" />
                                                 <TableColumn fx:id="colNamecategory" maxWidth="300.0" prefWidth="107.0" text="Danh Mục" />
                                                 <TableColumn fx:id="colUpdatedAt" maxWidth="300.0" prefWidth="153.0" text="Ngày Cập Nhật" />
-                                                <TableColumn fx:id="colAction" maxWidth="300.0" prefWidth="147.0" text="Thao Tác" />
                                             </columns>
                                         </TableView>
 
@@ -132,18 +131,18 @@
                                     <DatePicker promptText="Đến ngày" />
                                             </children>
                                         </HBox>
-                                        <TableView VBox.vgrow="ALWAYS">
+                                        <TableView fx:id="tableWarehouseCheck" VBox.vgrow="ALWAYS">
                                             <columns>
-                                                <TableColumn prefWidth="133.0" text="Mã Giao Dịch" />
-                                                <TableColumn prefWidth="124.0" text="Ngày Kiểm" />
-                                                <TableColumn prefWidth="123.0" text="Người Kiểm" />
-                                                <TableColumn prefWidth="100.0" text="Số SP" />
-                                                <TableColumn prefWidth="100.0" text="SP Thừa" />
-                                                <TableColumn prefWidth="100.0" text="SP Thiếu" />
-                                    <TableColumn prefWidth="77.0" text="SP Lỗi" />
-                                                <TableColumn prefWidth="123.0" text="Trạng Thái" />
-                                                <TableColumn prefWidth="223.0" text="Ghi Chú" />
-                                                <TableColumn maxWidth="214.0" prefWidth="197.0" text="Thao Tác" />
+                                                <TableColumn fx:id="colIdCheck" prefWidth="133.0" text="Mã Giao Dịch" />
+                                                <TableColumn fx:id="colCheckdate" prefWidth="124.0" text="Ngày Kiểm" />
+                                                <TableColumn fx:id="checker" prefWidth="123.0" text="Người Kiểm" />
+                                                <TableColumn fx:id="colcheckProduct" prefWidth="123.0" text="Sản Phẩm Kiểm" />
+                                                <TableColumn fx:id="colProductNumber" prefWidth="100.0" text="Số SP" />
+                                                <TableColumn fx:id="colExcessProduct" prefWidth="100.0" text="SP Thừa" />
+                                                <TableColumn fx:id="colmissingProduct" prefWidth="100.0" text="SP Thiếu" />
+                                                <TableColumn fx:id="colDefectiveProduct" prefWidth="77.0" text="SP Lỗi" />
+                                                <TableColumn fx:id="colCheckStatus" prefWidth="123.0" text="Trạng Thái" />
+                                                <TableColumn fx:id="colcheckNote" maxWidth="300.0" prefWidth="112.0" text="Ghi Chú" />
                                             </columns>
                                         </TableView>
                                     </children>

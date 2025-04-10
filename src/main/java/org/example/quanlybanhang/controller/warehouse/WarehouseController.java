@@ -1,12 +1,14 @@
 package org.example.quanlybanhang.controller.warehouse;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import org.example.quanlybanhang.dto.WarehouseDTO;
+import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.WarehouseDAO;
+import org.example.quanlybanhang.dto.WarehouseDTO;
+import org.example.quanlybanhang.helpers.DialogHelper;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -73,27 +75,64 @@ public class WarehouseController {
     @FXML
     private TableView<WarehouseDTO> tableWarehouseProducts;
 
-    @FXML private TableColumn<WarehouseDTO, Integer> colId;
-    @FXML private TableColumn<WarehouseDTO, Integer> colProductId;
-    @FXML private TableColumn<WarehouseDTO, String> colSku;
-    @FXML private TableColumn<WarehouseDTO, String> colnameProduct;
-    @FXML private TableColumn<WarehouseDTO, Integer> colStock;
-    @FXML private TableColumn<WarehouseDTO, BigDecimal> colImportPrice;
-    @FXML private TableColumn<WarehouseDTO, BigDecimal> colSellPrice;
-    @FXML private TableColumn<WarehouseDTO, String> colNamecategory;
-    @FXML private TableColumn<WarehouseDTO, LocalDateTime> colUpdatedAt;
-    @FXML private TableColumn<WarehouseDTO, Void> colAction;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colId;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colProductId;
+    @FXML
+    private TableColumn<WarehouseDTO, String> colSku;
+    @FXML
+    private TableColumn<WarehouseDTO, String> colnameProduct;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colStock;
+    @FXML
+    private TableColumn<WarehouseDTO, BigDecimal> colImportPrice;
+    @FXML
+    private TableColumn<WarehouseDTO, BigDecimal> colSellPrice;
+    @FXML
+    private TableColumn<WarehouseDTO, String> colNamecategory;
+    @FXML
+    private TableColumn<WarehouseDTO, LocalDateTime> colUpdatedAt;
 
+    //
+    @FXML
+    private TableView <WarehouseDTO> tableWarehouseCheck;
+    @FXML
+    private TableColumn <WarehouseDTO, String> colIdCheck;
+    @FXML
+    private TableColumn colCheckdate;
+    @FXML
+    private TableColumn checker;
+    @FXML
+    private TableColumn colcheckProduct;
+    @FXML
+    private TableColumn colProductNumber;
+    @FXML
+    private TableColumn colExcessProduct;
+    @FXML
+    private TableColumn colmissingProduct;
+    @FXML
+    private TableColumn colDefectiveProduct;
+    @FXML
+    private TableColumn colCheckStatus;
+    @FXML
+    private TableColumn colcheckNote;
 
     @FXML
     public void initialize() {
         loadTransactions();
+        btnCreateTransaction.setOnAction(event -> openCreateTransactionDialog());
+    }
+
+    private void openCreateTransactionDialog() {
+        DialogHelper.showDialog("/org/example/quanlybanhang/warehouseOperations.fxml", "Tạo phiếu kiểm kho", (Stage) tblTransactions.getScene().getWindow());
     }
 
     private void loadTransactions() {
         WarehouseDAO dao = new WarehouseDAO();
         ObservableList<WarehouseDTO> warehouseList = FXCollections.observableArrayList(dao.getAllWarehouseDetails());
         ObservableList<WarehouseDTO> warehouseProductList = FXCollections.observableArrayList(dao.getAllWarehouseProducts());
+        ObservableList<WarehouseDTO> warehouseCheckList = FXCollections.observableArrayList(dao.getAllWarehouseCheck());
 
         colTransId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colProductCode.setCellValueFactory(new PropertyValueFactory<>("productId"));
@@ -113,13 +152,26 @@ public class WarehouseController {
         colProductId.setCellValueFactory(new PropertyValueFactory<>("productId"));
         colSku.setCellValueFactory(new PropertyValueFactory<>("sku"));
         colnameProduct.setCellValueFactory(new PropertyValueFactory<>("productName"));
-//        colStock.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
-//        colId.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
         colImportPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
-//        colSellPrice.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
-       colNamecategory.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
-//        colUpdatedAt.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
+        colSellPrice.setCellValueFactory(new PropertyValueFactory<>("sellPrice"));
 
+        colNamecategory.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
+        colUpdatedAt.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
+
+//
+        colIdCheck.setCellValueFactory(new PropertyValueFactory<>("transactionCode"));
+        colCheckdate.setCellValueFactory(new PropertyValueFactory<>("inventoryDate"));
+        checker.setCellValueFactory(new PropertyValueFactory<>("createdByName"));
+        colcheckProduct.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        colProductNumber.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        colExcessProduct.setCellValueFactory(new PropertyValueFactory<>("excessQuantity"));
+        colmissingProduct.setCellValueFactory(new PropertyValueFactory<>("missing"));
+        colDefectiveProduct.setCellValueFactory(new PropertyValueFactory<>("deficientQuantity"));
+        colCheckStatus.setCellValueFactory(new PropertyValueFactory<>("inventoryStatus"));
+        colcheckNote.setCellValueFactory(new PropertyValueFactory<>("InventoryNote"));
+
+
+        tableWarehouseCheck.setItems(warehouseCheckList);
         tblTransactions.setItems(warehouseList);
         tableWarehouseProducts.setItems(warehouseProductList);
     }

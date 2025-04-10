@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20" style="-fx-background-color: linear-gradient(to bottom right, #3494E6, #2196F3);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.auth.LoginController">
+<VBox alignment="CENTER" spacing="20" style="-fx-background-color: linear-gradient(to bottom right, #3494E6, #2196F3);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.login.LoginController">
 
     <padding>
         <Insets bottom="40" left="40" right="40" top="40" />
