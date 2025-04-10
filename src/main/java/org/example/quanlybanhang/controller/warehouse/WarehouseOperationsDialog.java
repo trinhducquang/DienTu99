@@ -2,6 +2,7 @@ package org.example.quanlybanhang.controller.warehouse;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.example.quanlybanhang.enums.WarehouseType;
 import org.example.quanlybanhang.model.User;
 import org.example.quanlybanhang.service.UserService;
 import org.example.quanlybanhang.service.WarehouseService;
@@ -25,7 +26,7 @@ public class WarehouseOperationsDialog {
     private ComboBox<User> createdByComboBox;
 
     @FXML
-    private ComboBox<String> transactionTypeComboBox;
+    private ComboBox<WarehouseType> transactionTypeComboBox;
 
     // --- Chi Tiết Sản Phẩm ---
     @FXML
@@ -84,5 +85,10 @@ public class WarehouseOperationsDialog {
 
         List<User> staffNames = userService.getWarehouseStaffNames();
         createdByComboBox.getItems().addAll(staffNames);
+        createdByComboBox.getSelectionModel().selectFirst();
+
+
+        transactionTypeComboBox.getItems().addAll(WarehouseType.values());
+        transactionTypeComboBox.getSelectionModel().selectFirst();
     }
 }
