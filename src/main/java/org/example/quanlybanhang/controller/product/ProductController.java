@@ -6,7 +6,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
-import org.example.quanlybanhang.dao.*;
 import org.example.quanlybanhang.enums.*;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.*;

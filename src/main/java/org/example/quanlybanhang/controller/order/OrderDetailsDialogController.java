@@ -40,19 +40,29 @@ public class OrderDetailsDialogController {
         OrderSummaryDTO summary = orderService.getOrderSummaryById(currentOrderId);
         if (summary == null) return;
 
-        orderId.setText(String.valueOf(summary.getId()));
-        orderDate.setText(summary.getOrderDate().toString());
-        customerName.setText(summary.getCustomerName());
-        currentOrderStatus = summary.getStatus().getText();
+        // Đặt thông tin đơn hàng
+        orderId.setText(String.valueOf(summary.id()));
+        orderDate.setText(summary.orderDate().toString());
+        customerName.setText(summary.customerName());
+        currentOrderStatus = summary.status().getText();
         orderStatus.setText(currentOrderStatus);
 
-        totalAmount.setText(MoneyUtils.formatVN(summary.getTotalPrice()));
-        shippingFee.setText(MoneyUtils.formatVN(summary.getShippingFee()));
-        finalAmount.setText(MoneyUtils.formatVN(summary.getTotalPrice() + summary.getShippingFee()));
-        processedBy.setText("ID: " + summary.getEmployeeId());
+        // Đặt thông tin giá tiền
+        double total = summary.totalPrice();
+        double shipping = summary.shippingFee();
+        double finalTotal = total + shipping;
 
+        totalAmount.setText(MoneyUtils.formatVN(total));
+        shippingFee.setText(MoneyUtils.formatVN(shipping));
+        finalAmount.setText(MoneyUtils.formatVN(finalTotal));
+
+        // Đặt thông tin người xử lý
+        processedBy.setText("ID: " + summary.employeeId());
+
+        // Load danh sách sản phẩm
         loadProductDisplayList();
     }
+
 
     private void loadProductDisplayList() {
         List<ProductDisplayInfoDTO> productList = orderService.getProductDisplayInfoList(currentOrderId);

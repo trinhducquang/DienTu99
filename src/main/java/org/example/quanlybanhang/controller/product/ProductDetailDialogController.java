@@ -184,12 +184,13 @@ public class ProductDetailDialogController {
         Gson gson = new Gson();
         ProductDetailSpecificationsDTO specsDTO = gson.fromJson(specifications, ProductDetailSpecificationsDTO.class);
 
-        configMemoryField.setText(nullToNA(specsDTO.getConfigMemory()));
-        cameraDisplayField.setText(nullToNA(specsDTO.getCamera()));
-        batteryField.setText(nullToNA(specsDTO.getBattery()));
-        featuresField.setText(nullToNA(specsDTO.getFeatures()));
-        connectivityField.setText(nullToNA(specsDTO.getConnectivity()));
-        designMaterialsField.setText(nullToNA(specsDTO.getDesignMaterials()));
+        configMemoryField.setText(nullToNA(specsDTO.configMemory()));
+        cameraDisplayField.setText(nullToNA(specsDTO.camera()));
+        batteryField.setText(nullToNA(specsDTO.battery()));
+        featuresField.setText(nullToNA(specsDTO.features()));
+        connectivityField.setText(nullToNA(specsDTO.connectivity()));
+        designMaterialsField.setText(nullToNA(specsDTO.designMaterials()));
+
     }
 
     private void setAllSpecsNA() {

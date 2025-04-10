@@ -1,33 +1,61 @@
- package org.example.quanlybanhang.utils;
+package org.example.quanlybanhang.utils;
 
- import org.example.quanlybanhang.dto.OrderSummaryDTO;
- import org.example.quanlybanhang.dto.ProductDisplayInfoDTO;
+import org.example.quanlybanhang.dto.OrderSummaryDTO;
+import org.example.quanlybanhang.dto.ProductDisplayInfoDTO;
 
- import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
- public class OrderConverter {
+public class OrderConverter {
+
     public static List<ProductDisplayInfoDTO> toProductDisplayInfoList(OrderSummaryDTO summary) {
-        if (summary == null) return List.of();
+        if (summary == null) return Collections.emptyList();
 
-        String[] ids = summary.getProductIds().split(",");
-        String[] names = summary.getProductNames().split(",\\s*");
-        String[] images = summary.getProductImages().split(",\\s*");
-        String[] quantities = summary.getProductQuantities().split(",");
-        String[] prices = summary.getProductPrices().split(",");
+        String[] ids = safeSplit(summary.productIds());
+        String[] names = safeSplit(summary.productNames());
+        String[] images = safeSplit(summary.productImages());
+        String[] quantities = safeSplit(summary.productQuantities());
+        String[] prices = safeSplit(summary.productPrices());
 
-        List<ProductDisplayInfoDTO> productList = new java.util.ArrayList<>();
+        int maxLength = names.length;
+        List<ProductDisplayInfoDTO> productList = new ArrayList<>();
 
-        for (int i = 0; i < names.length; i++) {
-            int id = i < ids.length ? Integer.parseInt(ids[i]) : -1;
-            String name = names[i];
-            String image = i < images.length ? images[i] : null;
-            int quantity = i < quantities.length ? Integer.parseInt(quantities[i]) : 0;
-            double price = i < prices.length ? Double.parseDouble(prices[i]) : 0;
-            double total = quantity * price;
+        for (int i = 0; i < maxLength; i++) {
+            int id = parseSafeInt(getSafe(ids, i), -1);
+            String name = getSafe(names, i);
+            String image = getSafe(images, i);
+            int quantity = parseSafeInt(getSafe(quantities, i), 0);
+            double unitPrice = parseSafeDouble(getSafe(prices, i));
+            double total = quantity * unitPrice;
 
-            productList.add(new ProductDisplayInfoDTO(id, name, image, quantity, price, total));
+            productList.add(new ProductDisplayInfoDTO(id, name, image, quantity, unitPrice, total));
         }
 
         return productList;
+    }
+
+    private static String[] safeSplit(String input) {
+        return (input == null || input.isBlank()) ? new String[0] : input.split(",\\s*");
+    }
+
+    private static String getSafe(String[] array, int index) {
+        return index < array.length ? array[index] : "";
+    }
+
+    private static int parseSafeInt(String value, int defaultValue) {
+        try {
+            return Integer.parseInt(value);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
+    private static double parseSafeDouble(String value) {
+        try {
+            return Double.parseDouble(value);
+        } catch (Exception e) {
+            return 0.0;
+        }
     }
 }
