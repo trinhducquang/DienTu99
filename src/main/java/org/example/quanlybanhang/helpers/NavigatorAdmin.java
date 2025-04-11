@@ -8,7 +8,7 @@ public class NavigatorAdmin {
 
     public static void navigate(Pane mainContentPane, String fxmlFile) {
         try {
-            FXMLLoader loader = new FXMLLoader(NavigatorAdmin.class.getResource("/org/example/quanlybanhang/" + fxmlFile));
+            FXMLLoader loader = new FXMLLoader(NavigatorAdmin.class.getResource("/org/example/quanlybanhang/views/" + fxmlFile));
             Pane newPane = loader.load();
             mainContentPane.getChildren().setAll(newPane);
         } catch (IOException e) {

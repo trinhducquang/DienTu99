@@ -2,7 +2,7 @@ package org.example.quanlybanhang.controller.order;
 
 import static org.example.quanlybanhang.utils.MoneyUtils.formatVN;
 import static org.example.quanlybanhang.utils.TableCellFactoryUtils.currencyCellFactory;
-import javafx.beans.property.SimpleDoubleProperty;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -63,7 +63,7 @@ public class OrderController {
         statusFilterComboBox.setOnAction(event -> filterOrdersByStatus());
 
         addOrderButton.setOnAction(event -> {
-            DialogHelper.showDialog("/org/example/quanlybanhang/AddOrderDialog.fxml", "Thêm Đơn Hàng Mới",  (Stage) addOrderButton.getScene().getWindow());
+            DialogHelper.showDialog("/org/example/quanlybanhang/views/order/AddOrderDialog.fxml", "Thêm Đơn Hàng Mới",  (Stage) addOrderButton.getScene().getWindow());
         });
     }
 
@@ -121,7 +121,7 @@ public class OrderController {
 
         actionsColumn.setCellFactory(param ->
                 new ButtonTableCell<>("Chi tiết đơn hàng", order -> {
-                    DialogHelper.showOrderDialog("/org/example/quanlybanhang/orderDetailsDialog.fxml", "Chi tiết đơn hàng", order.getId(), (Stage) ordersTable.getScene().getWindow());
+                    DialogHelper.showOrderDialog("/org/example/quanlybanhang/views/order/orderDetailsDialog.fxml", "Chi tiết đơn hàng", order.getId(), (Stage) ordersTable.getScene().getWindow());
                 })
         );
     }

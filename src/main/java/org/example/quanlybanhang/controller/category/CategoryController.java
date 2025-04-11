@@ -94,7 +94,7 @@ public class CategoryController {
         });
 
         addCategoryButton.setOnAction(event ->
-                DialogHelper.showDialog("/org/example/quanlybanhang/AddCategoryDialog.fxml", "Thêm Danh Mục Mới", (Stage) addCategoryButton.getScene().getWindow()
+                DialogHelper.showDialog("/org/example/quanlybanhang/views/category/AddCategoryDialog.fxml", "Thêm Danh Mục Mới", (Stage) addCategoryButton.getScene().getWindow()
                 )
         );
 

@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import org.example.quanlybanhang.enums.*;
 import org.example.quanlybanhang.helpers.DialogHelper;
@@ -16,7 +15,6 @@ import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.*;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -144,7 +142,7 @@ public class ProductController {
                     Product product = getTableView().getItems().get(getIndex());
                     if (product != null) {
                         DialogHelper.showProductDialog(
-                                "/org/example/quanlybanhang/Product_detailsDialog.fxml",
+                                "/org/example/quanlybanhang/views/product/Product_detailsDialog.fxml",
                                 "Chi tiết sản phẩm",
                                 product.getId(), (Stage) detailButton.getScene().getWindow()
                         );
@@ -172,7 +170,7 @@ public class ProductController {
 
     private void setupAddProductButton() {
         addProductButton.setOnAction(event ->
-                DialogHelper.showDialog("/org/example/quanlybanhang/ProductDialog.fxml", "Thêm Sản Phẩm Mới" , (Stage) addProductButton.getScene().getWindow())
+                DialogHelper.showDialog("/org/example/quanlybanhang/views/product/ProductDialog.fxml", "Thêm Sản Phẩm Mới" , (Stage) addProductButton.getScene().getWindow())
         );
     }
 

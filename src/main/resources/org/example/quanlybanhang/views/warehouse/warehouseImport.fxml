@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="636.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.warehouse.WarehouseOperationsDialog">
+<BorderPane prefHeight="636.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.warehouse.WarehouseImportDialog">
     <top>
         <VBox spacing="10">
             <children>
@@ -88,7 +88,7 @@
                             <ComboBox fx:id="productComboBox" prefWidth="300" promptText="Chọn sản phẩm" />
                             <Label text="Số Lượng:" />
                             <TextField fx:id="quantityField" prefWidth="100" />
-                            <Label text="Đơn Giá:" />
+                            <Label fx:id="unitPriceLabel" text="Đơn Giá:" />
                             <TextField fx:id="unitPriceField" prefWidth="120" />
                             <Button styleClass="add-button" onAction="#onAddProduct" text="Thêm Sản Phẩm" />
                         </HBox>
@@ -124,7 +124,7 @@
                         </columnConstraints>
 
                         <!-- Row 0 -->
-                        <Label text="Tổng Tiền:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label fx:id="totalAmountLabel" text="Tổng Tiền:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <TextField fx:id="totalAmountField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                         <Label text="Số Lượng Dư:" GridPane.columnIndex="2" GridPane.rowIndex="0" />

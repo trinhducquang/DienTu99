@@ -18,14 +18,14 @@ public class AdminController {
     }
 
     private void setupNavigation() {
-        btnDashboard.setOnAction(event -> NavigatorAdmin.navigate(adminContentPane, "Admin.fxml"));
-        btnEmployee.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "employeeManagement.fxml"));
-        btnCategory.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "Category.fxml"));
-        btnProduct.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "product.fxml"));
-        btnOrders.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "order.fxml"));
-        btnCustomers.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "customer.fxml"));
-        btnReports.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "report.fxml"));
-        btnWarehouse.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "Warehouse.fxml"));
+        btnDashboard.setOnAction(event -> NavigatorAdmin.navigate(adminContentPane, "admin/Admin.fxml"));
+        btnEmployee.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "employee/employeeManagement.fxml"));
+        btnCategory.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "category/Category.fxml"));
+        btnProduct.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "product/product.fxml"));
+        btnOrders.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "order/order.fxml"));
+        btnCustomers.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "customer/customer.fxml"));
+        btnReports.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "report/report.fxml"));
+        btnWarehouse.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "warehouse/Warehouse.fxml"));
 
     }
 }

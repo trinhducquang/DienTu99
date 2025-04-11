@@ -49,7 +49,7 @@ public class CustomerController {
         loadCustomerData();
 
         addCustomerButton.setOnAction(event -> {
-            DialogHelper.showDialog("/org/example/quanlybanhang/CustomerDialog.fxml", "Thêm Khách Hàng Mới",  (Stage) addCustomerButton.getScene().getWindow());
+            DialogHelper.showDialog("/org/example/quanlybanhang/views/customer/CustomerDialog.fxml", "Thêm Khách Hàng Mới",  (Stage) addCustomerButton.getScene().getWindow());
             loadCustomerData();
         });
 

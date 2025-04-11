@@ -131,7 +131,7 @@ public class WarehouseController {
     }
 
     private void openCreateTransactionDialog() {
-        DialogHelper.showDialog("/org/example/quanlybanhang/warehouseOperations.fxml", "Tạo phiếu kiểm kho", (Stage) tblTransactions.getScene().getWindow());
+        DialogHelper.showDialog("/org/example/quanlybanhang/views/warehouse/WarehouseImport.fxml", "Tạo phiếu kiểm kho", (Stage) tblTransactions.getScene().getWindow());
     }
 
     private void loadTransactions() {

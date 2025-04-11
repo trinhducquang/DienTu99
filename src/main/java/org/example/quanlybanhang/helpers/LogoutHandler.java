@@ -11,7 +11,7 @@ public class LogoutHandler {
         System.out.println("Logout button clicked!");
         try {
             // Load màn hình đăng nhập
-            Parent root = FXMLLoader.load(LogoutHandler.class.getResource("/org/example/quanlybanhang/Login.fxml"));
+            Parent root = FXMLLoader.load(LogoutHandler.class.getResource("/org/example/quanlybanhang/views/login/Login.fxml"));
 
             // Lấy stage hiện tại
             Stage stage = (Stage) button.getScene().getWindow();

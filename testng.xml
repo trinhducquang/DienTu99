@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd"><suite name="All Test Suite"><test verbose="2" preserve-order="true" name="C:/Users/Quang/Downloads/QuanLyBanHang/src/main/resources/org/example/quanlybanhang/ProductDialog.fxml"><classes/></test></suite>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd"><suite name="All Test Suite"><test verbose="2" preserve-order="true" name="C:/Users/Quang/Downloads/QuanLyBanHang/src/main/resources/org/example/quanlybanhang/views/warehouse/warehouseCheck.fxml"><classes/></test></suite>

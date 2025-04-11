@@ -88,7 +88,7 @@ public class EmployeeManagementController {
         });
 
         addEmployeeButton.setOnAction(event ->
-                DialogHelper.showDialog("/org/example/quanlybanhang/employeeManagementDialog.fxml", "Thêm Nhân Viên Mới", (Stage) addEmployeeButton.getScene().getWindow()));
+                DialogHelper.showDialog("/org/example/quanlybanhang/views/employee/employeeManagementDialog.fxml", "Thêm Nhân Viên Mới", (Stage) addEmployeeButton.getScene().getWindow()));
 
         loadEmployees();
 

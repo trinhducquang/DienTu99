@@ -44,7 +44,7 @@ public class LoginController {
 
     private void chuyenScene(String fxmlFile) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/quanlybanhang/" + fxmlFile));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/quanlybanhang/views/admin/Admin.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) tenDangNhapField.getScene().getWindow();
 

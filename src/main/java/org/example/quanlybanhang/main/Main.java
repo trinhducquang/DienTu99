@@ -15,7 +15,7 @@ import java.util.Objects;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/org/example/quanlybanhang/Login.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/org/example/quanlybanhang/views/login/Login.fxml")));
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Điện tử 99");

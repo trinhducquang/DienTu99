@@ -64,7 +64,7 @@ public class AddOrderDialogController {
         setupSearch();
         setupEvents();
         btnAddCustomer.setOnAction(event -> {
-            DialogHelper.showDialog("/org/example/quanlybanhang/CustomerDialog.fxml", "Thêm Khách Hàng Mới", (Stage) btnAddCustomer.getScene().getWindow());
+            DialogHelper.showDialog("/org/example/quanlybanhang/views/customer/CustomerDialog.fxml", "Thêm Khách Hàng Mới", (Stage) btnAddCustomer.getScene().getWindow());
         });
 
 
