@@ -1,15 +1,13 @@
 package org.example.quanlybanhang.dao;
 
 import org.example.quanlybanhang.dao.base.CrudDao;
-import org.example.quanlybanhang.dto.OrderSummaryDTO;
+import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
 import org.example.quanlybanhang.enums.OrderStatus;
 import org.example.quanlybanhang.model.Order;
 import org.example.quanlybanhang.model.OrderDetail;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 
-import java.math.BigDecimal;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

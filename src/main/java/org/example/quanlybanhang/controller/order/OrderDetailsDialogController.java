@@ -8,8 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.example.quanlybanhang.dto.OrderSummaryDTO;
-import org.example.quanlybanhang.dto.ProductDisplayInfoDTO;
+import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
+import org.example.quanlybanhang.dto.productDTO.ProductDisplayInfoDTO;
 import org.example.quanlybanhang.service.OrderService;
 import org.example.quanlybanhang.utils.MoneyUtils;
 

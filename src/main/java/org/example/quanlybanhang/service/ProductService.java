@@ -41,6 +41,7 @@ public class ProductService {
         return productDAO.getRelatedProducts(categoryId, excludedId, offset, limit);
     }
 
+
     public void saveProduct(Product product) {
         productDAO.save(product);
     }

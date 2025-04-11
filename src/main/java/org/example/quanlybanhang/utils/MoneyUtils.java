@@ -18,13 +18,17 @@ public class MoneyUtils {
 
     // Parse chuỗi tiền tệ về BigDecimal (ví dụ: "1.000 ₫" => BigDecimal 1000)
     public static BigDecimal parseCurrencyText(String text) {
-        if (text == null || text.isEmpty()) return BigDecimal.ZERO;
+        if (text == null || text.trim().isEmpty()) return BigDecimal.ZERO;
+
+        String cleaned = text.replace(".", "").trim();
 
         try {
-            Number parsed = FORMATTER.parse(text);
-            return new BigDecimal(parsed.toString());
-        } catch (ParseException e) {
+            return new BigDecimal(cleaned);
+        } catch (NumberFormatException e) {
             return BigDecimal.ZERO;
         }
     }
+
+
+
 }

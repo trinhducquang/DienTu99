@@ -1,6 +1,6 @@
 package org.example.quanlybanhang.dao;
 
-import org.example.quanlybanhang.dto.WarehouseDTO;
+import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
 import org.example.quanlybanhang.enums.InventoryStatus;
 import org.example.quanlybanhang.enums.WarehouseType;
 import org.example.quanlybanhang.utils.DatabaseConnection;

@@ -32,7 +32,9 @@ module org.example.quanlybanhang {
     opens org.example.quanlybanhang.controller.admin to javafx.fxml;
     exports org.example.quanlybanhang.controller.report;
     opens org.example.quanlybanhang.controller.report to javafx.fxml;
-    opens org.example.quanlybanhang.dto to com.google.gson, javafx.base;
+    opens org.example.quanlybanhang.dto.orderDTO to com.google.gson, javafx.base;
+    opens org.example.quanlybanhang.dto.productDTO to com.google.gson, javafx.base;
+    opens org.example.quanlybanhang.dto.warehouseDTO to com.google.gson, javafx.base;
 
 
 }

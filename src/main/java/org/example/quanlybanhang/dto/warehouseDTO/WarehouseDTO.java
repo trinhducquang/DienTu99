@@ -1,4 +1,4 @@
-package org.example.quanlybanhang.dto;
+package org.example.quanlybanhang.dto.warehouseDTO;
 
 import org.example.quanlybanhang.enums.InventoryStatus;
 import org.example.quanlybanhang.enums.WarehouseType;

@@ -12,7 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.example.quanlybanhang.dto.ProductDetailSpecificationsDTO;
+import org.example.quanlybanhang.dto.productDTO.ProductDetailSpecificationsDTO;
 import org.example.quanlybanhang.model.Product;
 import org.example.quanlybanhang.service.ProductService;
 import org.example.quanlybanhang.utils.ThreadManager;

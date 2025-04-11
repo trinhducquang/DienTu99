@@ -110,7 +110,9 @@ public class OrderController {
 
 
         totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
-        shippingFeeColumn.setCellFactory(currencyCellFactory());
+        totalPriceColumn.setCellFactory(currencyCellFactory());
+
+
 
 
 

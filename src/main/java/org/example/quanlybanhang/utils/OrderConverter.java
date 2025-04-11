@@ -1,7 +1,7 @@
 package org.example.quanlybanhang.utils;
 
-import org.example.quanlybanhang.dto.OrderSummaryDTO;
-import org.example.quanlybanhang.dto.ProductDisplayInfoDTO;
+import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
+import org.example.quanlybanhang.dto.productDTO.ProductDisplayInfoDTO;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

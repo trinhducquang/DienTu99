@@ -90,12 +90,12 @@
                             <TextField fx:id="quantityField" prefWidth="100" />
                             <Label text="Đơn Giá:" />
                             <TextField fx:id="unitPriceField" prefWidth="120" />
-                            <Button styleClass="add-button" text="Thêm Sản Phẩm" />
+                            <Button styleClass="add-button" onAction="#onAddProduct" text="Thêm Sản Phẩm" />
                         </HBox>
 
                         <TableView fx:id="productTableView" prefHeight="194.0" prefWidth="842.0" VBox.vgrow="ALWAYS">
                             <columns>
-                                <TableColumn fx:id="indexColumn" prefWidth="50" text="STT" />
+                                <TableColumn fx:id="sttColumn" prefWidth="50" text="STT" />
                                 <TableColumn fx:id="productIdColumn" prefWidth="100" text="Mã SP" />
                                 <TableColumn fx:id="productNameColumn" prefWidth="250" text="Tên Sản Phẩm" />
                                 <TableColumn fx:id="quantityColumn" prefWidth="100" text="Số Lượng" />

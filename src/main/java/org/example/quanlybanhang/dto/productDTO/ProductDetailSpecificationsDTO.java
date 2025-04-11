@@ -1,4 +1,4 @@
-package org.example.quanlybanhang.dto;
+package org.example.quanlybanhang.dto.productDTO;
 
 public record ProductDetailSpecificationsDTO(
         String configMemory,

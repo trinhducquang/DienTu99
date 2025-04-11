@@ -1,4 +1,4 @@
-package org.example.quanlybanhang.dto;
+package org.example.quanlybanhang.dto.orderDTO;
 
 import org.example.quanlybanhang.enums.OrderStatus;
 

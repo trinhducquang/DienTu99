@@ -7,7 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.WarehouseDAO;
-import org.example.quanlybanhang.dto.WarehouseDTO;
+import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
 import org.example.quanlybanhang.helpers.DialogHelper;
 
 import java.math.BigDecimal;
