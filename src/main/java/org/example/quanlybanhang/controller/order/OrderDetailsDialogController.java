@@ -14,6 +14,7 @@ import org.example.quanlybanhang.service.OrderService;
 import org.example.quanlybanhang.utils.MoneyUtils;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class OrderDetailsDialogController {
@@ -48,9 +49,9 @@ public class OrderDetailsDialogController {
         orderStatus.setText(currentOrderStatus);
 
         // Đặt thông tin giá tiền
-        double total = summary.totalPrice();
-        double shipping = summary.shippingFee();
-        double finalTotal = total + shipping;
+        BigDecimal total = summary.totalPrice();
+        BigDecimal shipping = summary.shippingFee();
+        BigDecimal finalTotal = total.add(shipping);
 
         totalAmount.setText(MoneyUtils.formatVN(total));
         shippingFee.setText(MoneyUtils.formatVN(shipping));
@@ -63,13 +64,12 @@ public class OrderDetailsDialogController {
         loadProductDisplayList();
     }
 
-
     private void loadProductDisplayList() {
         List<ProductDisplayInfoDTO> productList = orderService.getProductDisplayInfoList(currentOrderId);
         productListContainer.getChildren().clear();
 
         int totalItems = 0;
-        double totalOrderValue = 0;
+        BigDecimal totalOrderValue = BigDecimal.ZERO;
 
         for (ProductDisplayInfoDTO product : productList) {
             HBox productBox = createProductBox(
@@ -81,8 +81,8 @@ public class OrderDetailsDialogController {
                     product.totalPrice()
             );
 
-            totalItems += product.quantity();
-            totalOrderValue += product.totalPrice();
+            totalItems += product.quantity().intValue();
+            totalOrderValue = totalOrderValue.add(product.totalPrice());
             productListContainer.getChildren().add(productBox);
         }
 
@@ -90,7 +90,8 @@ public class OrderDetailsDialogController {
         subtotalAmount.setText(MoneyUtils.formatVN(totalOrderValue));
     }
 
-    private HBox createProductBox(int productId, String name, String imageUrl, int quantity, double price, double total) {
+    private HBox createProductBox(int productId, String name, String imageUrl, BigDecimal quantity, BigDecimal price, BigDecimal total)
+    {
         HBox productBox = new HBox();
         productBox.setSpacing(15);
         productBox.setStyle("-fx-background-color: white; -fx-padding: 10; -fx-border-color: #dddddd; -fx-border-radius: 5;");

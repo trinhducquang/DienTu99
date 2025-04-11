@@ -1,11 +1,13 @@
 package org.example.quanlybanhang.dto;
 
+import java.math.BigDecimal;
+
 public record ProductDisplayInfoDTO(
         int id,
         String name,
         String imageUrl,
-        int quantity,
-        double unitPrice,
-        double totalPrice
+        BigDecimal quantity,
+        BigDecimal unitPrice,
+        BigDecimal totalPrice
 ) {
 }

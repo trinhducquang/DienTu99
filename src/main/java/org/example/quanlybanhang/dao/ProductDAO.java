@@ -3,6 +3,8 @@ package org.example.quanlybanhang.dao;
 import org.example.quanlybanhang.dao.base.CrudDao;
 import org.example.quanlybanhang.enums.ProductStatus;
 import org.example.quanlybanhang.model.Product;
+
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -75,7 +77,7 @@ public class ProductDAO implements CrudDao<Product> {
             stmt.setString(1, product.getName());
             stmt.setInt(2, categoryId);
             stmt.setString(3, product.getDescription());
-            stmt.setDouble(4, product.getPrice());
+            stmt.setBigDecimal(4, product.getPrice());
             stmt.setInt(5, product.getStockQuantity());
 
             ProductStatus status = product.getStockQuantity() > 0 ? ProductStatus.CON_HANG : ProductStatus.HET_HANG;
@@ -113,7 +115,7 @@ public class ProductDAO implements CrudDao<Product> {
             statement.setString(1, product.getName());
             statement.setInt(2, product.getCategoryId()); // 👈 thêm dòng này để cập nhật category_id
             statement.setString(3, product.getDescription());
-            statement.setDouble(4, product.getPrice());
+            statement.setBigDecimal(4, product.getPrice());
             statement.setInt(5, product.getStockQuantity());
             statement.setString(6, product.getStatus().toString());
             statement.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
@@ -140,7 +142,7 @@ public class ProductDAO implements CrudDao<Product> {
         String categoryName = resultSet.getString("category_name");
         int categoryId = resultSet.getInt("category_id");
         String description = resultSet.getString("description");
-        double price = resultSet.getDouble("price");
+        BigDecimal price = resultSet.getBigDecimal("price");
         int stockQuantity = resultSet.getInt("stock_quantity");
         Timestamp createdAtTimestamp = resultSet.getTimestamp("created_at");
         Timestamp updatedAtTimestamp = resultSet.getTimestamp("updated_at");
@@ -170,7 +172,7 @@ public class ProductDAO implements CrudDao<Product> {
                 Product product = new Product();
                 product.setId(rs.getInt("id"));
                 product.setName(rs.getString("name"));
-                product.setPrice(rs.getDouble("price"));
+                product.setPrice(rs.getBigDecimal("price"));
                 product.setImageUrl(rs.getString("image_url"));
                 products.add(product);
             }

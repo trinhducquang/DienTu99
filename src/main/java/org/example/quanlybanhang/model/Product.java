@@ -1,6 +1,8 @@
 package org.example.quanlybanhang.model;
 
 import org.example.quanlybanhang.enums.ProductStatus;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Product {
@@ -9,7 +11,7 @@ public class Product {
     private String categoryName;
     private Integer categoryId;
     private String description;
-    private double price;
+    private BigDecimal price;
     private int stockQuantity;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -18,7 +20,7 @@ public class Product {
     private String specifications;
 
     public Product(int id, String name, String categoryName, Integer categoryId, String description,
-                   double price, int stockQuantity, LocalDateTime createdAt,
+                   BigDecimal price, int stockQuantity, LocalDateTime createdAt,
                    LocalDateTime updatedAt, ProductStatus status, String imageUrl, String specifications) {
         this.id = id;
         this.name = name;
@@ -58,8 +60,13 @@ public class Product {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
 
     public int getStockQuantity() { return stockQuantity; }
     public void setStockQuantity(int stockQuantity) { this.stockQuantity = stockQuantity; }

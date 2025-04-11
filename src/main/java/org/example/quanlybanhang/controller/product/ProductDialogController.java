@@ -8,6 +8,7 @@ import javafx.util.StringConverter;
 import org.example.quanlybanhang.model.*;
 import org.example.quanlybanhang.service.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -58,7 +59,7 @@ public class ProductDialogController {
             }
 
             String description = descriptionField.getText();
-            double price = Double.parseDouble(priceField.getText());
+            BigDecimal price = new BigDecimal(priceField.getText().replace(",", "").trim());
             int stockQuantity = Integer.parseInt(stockQuantityField.getText());
             String imageUrl = imageUrlField.getText();
 

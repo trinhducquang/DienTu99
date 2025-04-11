@@ -3,6 +3,7 @@ package org.example.quanlybanhang.utils;
 import org.example.quanlybanhang.dto.OrderSummaryDTO;
 import org.example.quanlybanhang.dto.ProductDisplayInfoDTO;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,12 +26,14 @@ public class OrderConverter {
             int id = parseSafeInt(getSafe(ids, i), -1);
             String name = getSafe(names, i);
             String image = getSafe(images, i);
-            int quantity = parseSafeInt(getSafe(quantities, i), 0);
-            double unitPrice = parseSafeDouble(getSafe(prices, i));
-            double total = quantity * unitPrice;
+
+            BigDecimal quantity = parseSafeBigDecimal(getSafe(quantities, i), BigDecimal.ZERO);
+            BigDecimal unitPrice = parseSafeBigDecimal(getSafe(prices, i), BigDecimal.ZERO);
+            BigDecimal total = quantity.multiply(unitPrice);
 
             productList.add(new ProductDisplayInfoDTO(id, name, image, quantity, unitPrice, total));
         }
+
 
         return productList;
     }
@@ -51,11 +54,13 @@ public class OrderConverter {
         }
     }
 
-    private static double parseSafeDouble(String value) {
+    private static BigDecimal parseSafeBigDecimal(String value, BigDecimal defaultValue) {
         try {
-            return Double.parseDouble(value);
+            return new BigDecimal(value.replaceAll("[^\\d.,-]", "").replace(",", ""));
         } catch (Exception e) {
-            return 0.0;
+            return defaultValue;
         }
     }
+
+
 }

@@ -2,6 +2,7 @@ package org.example.quanlybanhang.dto;
 
 import org.example.quanlybanhang.enums.OrderStatus;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public record OrderSummaryDTO(
@@ -10,8 +11,8 @@ public record OrderSummaryDTO(
         int employeeId,
         int customerId,
         String customerName,
-        double totalPrice,
-        double shippingFee,
+        BigDecimal totalPrice,
+        BigDecimal shippingFee,
         LocalDateTime orderDate,
         OrderStatus status,
         String productNames,

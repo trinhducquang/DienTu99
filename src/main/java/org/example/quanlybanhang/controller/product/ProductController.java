@@ -15,6 +15,7 @@ import org.example.quanlybanhang.service.ProductService;
 import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.*;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class ProductController {
     @FXML private TableColumn<Product, Integer> idColumn;
     @FXML private TableColumn<Product, String> nameColumn;
     @FXML private TableColumn<Product, String> categoryNameColumn;
-    @FXML private TableColumn<Product, Double> priceColumn;
+    @FXML private TableColumn<Product, BigDecimal> priceColumn;
     @FXML private TableColumn<Product, Integer> stockQuantityColumn;
     @FXML private TableColumn<Product, String> descriptionColumn;
     @FXML private TableColumn<Product, ProductStatus> statusColumn;
@@ -66,21 +67,8 @@ public class ProductController {
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         imageColumn.setCellValueFactory(new PropertyValueFactory<>("imageUrl"));
 
-        priceColumn.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<>() {
-            @Override
-            public String toString(Double value) {
-                return value == null ? "" : MoneyUtils.formatVN(value);
-            }
+        priceColumn.setCellFactory(TableCellFactoryUtils.currencyCellFactory());
 
-            @Override
-            public Double fromString(String string) {
-                try {
-                    return Double.parseDouble(string.replaceAll("[^\\d]", ""));
-                } catch (NumberFormatException e) {
-                    return 0.0;
-                }
-            }
-        }));
     }
 
     private void setEditableColumns() {
@@ -91,6 +79,7 @@ public class ProductController {
             updateProductInDatabase(product);
         });
 
+        priceColumn.setCellFactory(TableCellFactoryUtils.editableCurrencyCellFactory());
         priceColumn.setOnEditCommit(event -> {
             Product product = event.getRowValue();
             product.setPrice(event.getNewValue());

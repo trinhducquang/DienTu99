@@ -1,5 +1,8 @@
 package org.example.quanlybanhang.controller.order;
 
+import static org.example.quanlybanhang.utils.MoneyUtils.formatVN;
+import static org.example.quanlybanhang.utils.TableCellFactoryUtils.currencyCellFactory;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,8 +16,9 @@ import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Order;
 import org.example.quanlybanhang.service.OrderService;
 import org.example.quanlybanhang.service.SearchService;
-import org.example.quanlybanhang.utils.MoneyUtils;
 
+
+import java.math.BigDecimal;
 import java.util.List;
 
 public class OrderController {
@@ -32,8 +36,8 @@ public class OrderController {
     @FXML private TableColumn<Order, String> customerNameColumn;
     @FXML private TableColumn<Order, String> orderNameColumn;
     @FXML private TableColumn<Order, String> orderDateColumn;
-    @FXML private TableColumn<Order, Double> shippingFeeColumn;
-    @FXML private TableColumn<Order, Double> totalPriceColumn;
+    @FXML private TableColumn<Order, BigDecimal> shippingFeeColumn;
+    @FXML private TableColumn<Order, BigDecimal> totalPriceColumn;
     @FXML private TableColumn<Order, String> statusColumn;
     @FXML private TableColumn<Order, String> noteColumn;
     @FXML private TableColumn<Order, Void> actionsColumn;
@@ -72,12 +76,13 @@ public class OrderController {
                 Order::getCustomerName,
                 Order::getProductNames,
                 Order::getNote,
-                order -> MoneyUtils.formatVN(order.getShippingFee()),
+                order -> formatVN(order.getShippingFee()),
                 order -> order.getOrderDate().toString(),
-                order -> MoneyUtils.formatVN(order.getTotalPrice())
+                order -> formatVN(order.getTotalPrice())
         );
         ordersTable.setItems(FXCollections.observableArrayList(filtered));
     }
+
 
     private void filterOrdersByStatus() {
         String selected = statusFilterComboBox.getValue();
@@ -100,22 +105,14 @@ public class OrderController {
         orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
 
         shippingFeeColumn.setCellValueFactory(new PropertyValueFactory<>("shippingFee"));
-        shippingFeeColumn.setCellFactory(column -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                setText((empty || item == null) ? null : MoneyUtils.formatVN(item));
-            }
-        });
+        shippingFeeColumn.setCellFactory(currencyCellFactory());
+
+
 
         totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
-        totalPriceColumn.setCellFactory(column -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                setText((empty || item == null) ? null : MoneyUtils.formatVN(item));
-            }
-        });
+        shippingFeeColumn.setCellFactory(currencyCellFactory());
+
+
 
         statusColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getStatus().getText()));

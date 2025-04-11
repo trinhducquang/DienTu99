@@ -7,6 +7,7 @@ import org.example.quanlybanhang.model.Order;
 import org.example.quanlybanhang.model.OrderDetail;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -88,8 +89,8 @@ public class OrderDAO implements CrudDao<Order> {
         try (PreparedStatement orderStmt = connection.prepareStatement(insertOrderSQL, Statement.RETURN_GENERATED_KEYS)) {
             orderStmt.setInt(1, order.getEmployeeId());
             orderStmt.setInt(2, order.getCustomerId());
-            orderStmt.setDouble(3, order.getTotalPrice());
-            orderStmt.setDouble(4, order.getShippingFee());
+            orderStmt.setBigDecimal(3, order.getTotalPrice());
+            orderStmt.setBigDecimal(4, order.getShippingFee());
             orderStmt.setTimestamp(5, Timestamp.valueOf(order.getOrderDate()));
             orderStmt.setString(6, order.getStatus().getText());
             orderStmt.setString(7, order.getNote());
@@ -112,7 +113,7 @@ public class OrderDAO implements CrudDao<Order> {
                     detailStmt.setInt(1, orderId);
                     detailStmt.setInt(2, detail.getProductId());
                     detailStmt.setInt(3, detail.getQuantity());
-                    detailStmt.setDouble(4, detail.getPrice());
+                    detailStmt.setBigDecimal(4, detail.getPrice());
                     detailStmt.addBatch();
                 }
                 detailStmt.executeBatch();
@@ -158,8 +159,8 @@ public class OrderDAO implements CrudDao<Order> {
                 rs.getInt("employee_id"),
                 rs.getInt("customer_id"),
                 rs.getString("customer_name"),
-                rs.getDouble("total_price"),
-                rs.getDouble("shipping_fee"),
+                rs.getBigDecimal("total_price"),
+                rs.getBigDecimal("shipping_fee"),
                 rs.getTimestamp("order_date").toLocalDateTime(),
                 OrderStatus.fromString(rs.getString("status")),
                 rs.getString("product_names"),
@@ -174,8 +175,8 @@ public class OrderDAO implements CrudDao<Order> {
                 rs.getInt("employee_id"),
                 rs.getInt("customer_id"),
                 rs.getString("customer_name"),
-                rs.getDouble("total_price"),
-                rs.getDouble("shipping_fee"),
+                rs.getBigDecimal("total_price"),
+                rs.getBigDecimal("shipping_fee"),
                 rs.getTimestamp("order_date").toLocalDateTime(),
                 OrderStatus.fromString(rs.getString("status")),
                 rs.getString("product_names"),

@@ -1,20 +1,26 @@
 package org.example.quanlybanhang.model;
 
+import java.math.BigDecimal;
+
 public class OrderDetail {
     private int id;
     private int orderId;
     private int productId;
     private int quantity;
-    private double price;
-    private double total;
+    private BigDecimal price;
+    private BigDecimal total;
 
-    public OrderDetail(int id, int orderId, int productId, int quantity, double price) {
+    public OrderDetail(int id, int orderId, int productId, int quantity, BigDecimal price) {
         this.id = id;
         this.orderId = orderId;
         this.productId = productId;
         this.quantity = quantity;
         this.price = price;
-        this.total = quantity * price; // ✅ Tính thành tiền tự động
+        this.total = calculateTotal();
+    }
+
+    private BigDecimal calculateTotal() {
+        return price.multiply(BigDecimal.valueOf(quantity));
     }
 
     public int getId() { return id; }
@@ -29,16 +35,16 @@ public class OrderDetail {
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-        this.total = this.quantity * this.price;
+        this.total = calculateTotal();
     }
 
-    public double getPrice() { return price; }
-    public void setPrice(double price) {
+    public BigDecimal getPrice() { return price; }
+    public void setPrice(BigDecimal price) {
         this.price = price;
-        this.total = this.quantity * this.price;
+        this.total = calculateTotal();
     }
 
-    public double getTotal() { return total; }
+    public BigDecimal getTotal() { return total; }
 
     @Override
     public String toString() {
@@ -51,5 +57,4 @@ public class OrderDetail {
                 ", total=" + total +
                 '}';
     }
-
 }

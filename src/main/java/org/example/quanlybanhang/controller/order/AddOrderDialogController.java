@@ -1,5 +1,7 @@
 package org.example.quanlybanhang.controller.order;
 
+import static org.example.quanlybanhang.utils.TableCellFactoryUtils.currencyCellFactory;
+import static org.example.quanlybanhang.utils.MoneyUtils.formatVN;
 import javafx.beans.property.*;
 import javafx.collections.*;
 import javafx.event.ActionEvent;
@@ -15,6 +17,7 @@ import org.example.quanlybanhang.model.*;
 import org.example.quanlybanhang.service.*;
 import org.example.quanlybanhang.utils.*;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.time.*;
 import java.util.*;
@@ -36,7 +39,7 @@ public class AddOrderDialogController {
     @FXML private TableView<OrderDetail> tableOrderDetails;
     @FXML private TableColumn<OrderDetail, Integer> colSTT, colProductId, colQuantity;
     @FXML private TableColumn<OrderDetail, String> colProductName;
-    @FXML private TableColumn<OrderDetail, Double> colPrice, colTotal;
+    @FXML private TableColumn<OrderDetail, BigDecimal> colPrice, colTotal;
     @FXML private TableColumn<OrderDetail, Button> colAction;
     //endregion
 
@@ -64,6 +67,8 @@ public class AddOrderDialogController {
             DialogHelper.showDialog("/org/example/quanlybanhang/CustomerDialog.fxml", "Thêm Khách Hàng Mới", (Stage) btnAddCustomer.getScene().getWindow());
         });
 
+
+
     }
 
 
@@ -78,6 +83,7 @@ public class AddOrderDialogController {
         txtOrderId.setText(String.valueOf(orderDAO.getNextOrderId()));
         txtOrderId.setDisable(true);
         dateOrderDate.setValue(LocalDate.now());
+        TextFieldFormatterUtils.applyBlazingFastCurrencyFormat(txtShippingFee);
     }
 
     private void setupComboBoxes() {
@@ -110,26 +116,22 @@ public class AddOrderDialogController {
     private void setupTableView() {
         colSTT.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(tableOrderDetails.getItems().indexOf(cell.getValue()) + 1));
         colProductId.setCellValueFactory(new PropertyValueFactory<>("productId"));
-        colProductName.setCellValueFactory(cell -> new SimpleStringProperty(
-                productMap.getOrDefault(cell.getValue().getProductId(), "Không tìm thấy")));
+        colProductName.setCellValueFactory(cell -> new SimpleStringProperty(productMap.getOrDefault(cell.getValue().getProductId(), "Không tìm thấy")));
         colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         colPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-        colPrice.setCellFactory(col -> getCurrencyCell());
-        colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
-        colTotal.setCellFactory(col -> getCurrencyCell());
+        colPrice.setCellFactory(currencyCellFactory());
+
+        colTotal.setCellValueFactory(cell -> new SimpleObjectProperty<>(
+                cell.getValue().getPrice().multiply(BigDecimal.valueOf(cell.getValue().getQuantity()))
+        ));
+
+        colTotal.setCellFactory(currencyCellFactory());
+
+
         colAction.setCellFactory(col -> getDeleteButtonCell());
         tableOrderDetails.setItems(orderDetailsList);
     }
 
-    private TableCell<OrderDetail, Double> getCurrencyCell() {
-        return new TableCell<>() {
-            @Override
-            protected void updateItem(Double value, boolean empty) {
-                super.updateItem(value, empty);
-                setText(empty || value == null ? null : MoneyUtils.formatVN(value));
-            }
-        };
-    }
 
     private TableCell<OrderDetail, Button> getDeleteButtonCell() {
         return new TableCell<>() {
@@ -199,16 +201,23 @@ public class AddOrderDialogController {
     }
 
     private void updateTotalPrices() {
-        double total = orderDetailsList.stream().mapToDouble(d -> d.getQuantity() * d.getPrice()).sum();
-        txtTotalPrice.setText(MoneyUtils.formatVN(total));
+        BigDecimal total = orderDetailsList.stream()
+                .map(d -> d.getPrice().multiply(BigDecimal.valueOf(d.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+
+        txtTotalPrice.setText(formatVN(total));
 
         try {
-            double shippingFee = Double.parseDouble(txtShippingFee.getText());
-            txtFinalTotal.setText(MoneyUtils.formatVN(total + shippingFee));
+            BigDecimal shippingFee = TextFieldFormatterUtils.parseCurrencyText(txtShippingFee.getText());
+            BigDecimal finalTotal = total.add(shippingFee);
+            txtFinalTotal.setText(formatVN(finalTotal));
         } catch (NumberFormatException e) {
-            txtFinalTotal.setText(MoneyUtils.formatVN(total));
+            txtFinalTotal.setText(formatVN(total));
         }
     }
+
+
 
     private void loadProducts() {
         allProducts = productDAO.getAll();
@@ -249,13 +258,27 @@ public class AddOrderDialogController {
             }
 
             int customerId = Integer.parseInt(cust.split("-")[0].trim());
-            double shippingFee = Double.parseDouble(txtShippingFee.getText());
+            BigDecimal shippingFee = TextFieldFormatterUtils.parseCurrencyText(txtShippingFee.getText());
             LocalDateTime orderDate = dateOrderDate.getValue().atStartOfDay();
             List<OrderDetail> details = new ArrayList<>(tableOrderDetails.getItems());
 
-            double totalPrice = details.stream().mapToDouble(d -> d.getQuantity() * d.getPrice()).sum();
-            Order order = new Order(0, emp.getId(), customerId, "", totalPrice, shippingFee,
-                    orderDate, cbOrderStatus.getValue(), "", txtNote.getText());
+            BigDecimal totalPrice = details.stream()
+                    .map(d -> d.getPrice().multiply(BigDecimal.valueOf(d.getQuantity())))
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+
+            Order order = new Order(
+                    0,
+                    emp.getId(),
+                    customerId,
+                    "",
+                    totalPrice,
+                    shippingFee,
+                    orderDate,
+                    cbOrderStatus.getValue(),
+                    "",
+                    txtNote.getText()
+            );
 
             int newId = orderDAO.addOrder(order, details);
             if (newId > 0) {
@@ -268,6 +291,7 @@ public class AddOrderDialogController {
             showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng kiểm tra lại thông tin.");
         }
     }
+
 
     @FXML private void handleCancel(ActionEvent event) { closeDialogFromEvent(event); }
     @FXML private void handleBack(ActionEvent event) { closeDialogFromEvent(event); }

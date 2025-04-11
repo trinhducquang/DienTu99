@@ -1,6 +1,8 @@
 package org.example.quanlybanhang.model;
 
 import org.example.quanlybanhang.enums.OrderStatus;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Order {
@@ -8,15 +10,15 @@ public class Order {
     private int employeeId;
     private int customerId;
     private String customerName;
-    private double totalPrice;
-    private double shippingFee;
+    private BigDecimal totalPrice;
+    private BigDecimal shippingFee;
     private LocalDateTime orderDate;
     private OrderStatus status;
     private String productNames;
     private String note;
 
     // Constructor
-    public Order(int id, int employeeId, int customerId, String customerName, double totalPrice, double shippingFee,
+    public Order(int id, int employeeId, int customerId, String customerName, BigDecimal totalPrice, BigDecimal shippingFee,
                  LocalDateTime orderDate, OrderStatus status, String productNames, String note) {
         this.id = id;
         this.employeeId = employeeId;
@@ -43,16 +45,21 @@ public class Order {
     public String getCustomerName() { return customerName; }
     public void setCustomerName(String customerName) { this.customerName = customerName; }
 
-    public double getShippingFee() {
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public BigDecimal getShippingFee() {
         return shippingFee;
     }
 
-    public void setShippingFee(double shippingFee) {
+    public void setShippingFee(BigDecimal shippingFee) {
         this.shippingFee = shippingFee;
     }
-
-    public double getTotalPrice() { return totalPrice; }
-    public void setTotalPrice(double totalPrice) { this.totalPrice = totalPrice; }
 
     public LocalDateTime getOrderDate() { return orderDate; }
     public void setOrderDate(LocalDateTime orderDate) { this.orderDate = orderDate; }

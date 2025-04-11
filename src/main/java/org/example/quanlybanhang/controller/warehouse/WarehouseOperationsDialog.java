@@ -3,9 +3,11 @@ package org.example.quanlybanhang.controller.warehouse;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.example.quanlybanhang.enums.WarehouseType;
+import org.example.quanlybanhang.model.Product;
 import org.example.quanlybanhang.model.User;
-import org.example.quanlybanhang.service.UserService;
-import org.example.quanlybanhang.service.WarehouseService;
+import org.example.quanlybanhang.service.*;
+import org.example.quanlybanhang.utils.TextFieldFormatterUtils;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -77,18 +79,43 @@ public class WarehouseOperationsDialog {
 
     @FXML
     private void initialize() {
-        // Gọi từ service thay vì viết hàm thủ công
+        initializeTransactionInfo();
+        initializeStaffComboBox();
+        initializeTransactionTypeComboBox();
+        initializeProductComboBox();
+
+        TextFieldFormatterUtils.applyBlazingFastCurrencyFormat(unitPriceField);
+        TextFieldFormatterUtils.applyBlazingFastCurrencyFormat(totalAmountField);
+
+
+
+    }
+
+    private void initializeTransactionInfo() {
         String generatedCode = warehouseService.generateTransactionCode();
         transactionCodeField.setText(generatedCode);
-
         createdAtDatePicker.setValue(LocalDate.now());
+    }
 
+    private void initializeStaffComboBox() {
         List<User> staffNames = userService.getWarehouseStaffNames();
         createdByComboBox.getItems().addAll(staffNames);
         createdByComboBox.getSelectionModel().selectFirst();
+    }
 
-
+    private void initializeTransactionTypeComboBox() {
         transactionTypeComboBox.getItems().addAll(WarehouseType.values());
         transactionTypeComboBox.getSelectionModel().selectFirst();
     }
+
+    private void initializeProductComboBox() {
+        ProductService productService = new ProductService();
+        List<String> productNames = productService.getAllProducts()
+                .stream()
+                .map(Product::getName)
+                .toList();
+        productComboBox.getItems().addAll(productNames);
+        productComboBox.getSelectionModel().selectFirst();
+    }
+
 }

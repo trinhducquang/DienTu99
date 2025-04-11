@@ -14,6 +14,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static org.example.quanlybanhang.utils.TableCellFactoryUtils.*;
+
+
 public class WarehouseController {
 
 
@@ -55,10 +58,10 @@ public class WarehouseController {
     private TableColumn<WarehouseDTO, Integer> colQuantity;
 
     @FXML
-    private TableColumn<WarehouseDTO, Double> colUnitPrice;
+    private TableColumn<WarehouseDTO, BigDecimal> colUnitPrice;
 
     @FXML
-    private TableColumn<WarehouseDTO, Double> colTotalAmount;
+    private TableColumn<WarehouseDTO, BigDecimal> colTotalAmount;
 
 //    @FXML
 //    private TableColumn<WarehouseDTO, String> colType;
@@ -96,27 +99,30 @@ public class WarehouseController {
 
     //
     @FXML
-    private TableView <WarehouseDTO> tableWarehouseCheck;
+    private TableView<WarehouseDTO> tableWarehouseCheck;
     @FXML
-    private TableColumn <WarehouseDTO, String> colIdCheck;
+    private TableColumn<WarehouseDTO, String> colIdCheck;
+
+    //
     @FXML
-    private TableColumn colCheckdate;
+    private TableColumn<WarehouseDTO, LocalDateTime> colCheckdate;
     @FXML
-    private TableColumn checker;
+    private TableColumn<WarehouseDTO, String> checker;
     @FXML
-    private TableColumn colcheckProduct;
+    private TableColumn<WarehouseDTO, String> colcheckProduct;
     @FXML
-    private TableColumn colProductNumber;
+    private TableColumn<WarehouseDTO, Integer> colProductNumber;
     @FXML
-    private TableColumn colExcessProduct;
+    private TableColumn<WarehouseDTO, Integer> colExcessProduct;
     @FXML
-    private TableColumn colmissingProduct;
+    private TableColumn<WarehouseDTO, Integer> colmissingProduct;
     @FXML
-    private TableColumn colDefectiveProduct;
+    private TableColumn<WarehouseDTO, Integer> colDefectiveProduct;
     @FXML
-    private TableColumn colCheckStatus;
+    private TableColumn<WarehouseDTO, Enum<?>> colCheckStatus; // hoặc cụ thể hơn là <WarehouseDTO, InventoryStatus>
     @FXML
-    private TableColumn colcheckNote;
+    private TableColumn<WarehouseDTO, String> colcheckNote;
+
 
     @FXML
     public void initialize() {
@@ -141,7 +147,10 @@ public class WarehouseController {
         colCategory.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
         colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        colUnitPrice.setCellFactory(currencyCellFactory());
+
         colTotalAmount.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
+        colTotalAmount.setCellFactory(currencyCellFactory());
 //        colType.setCellValueFactory(new PropertyValueFactory<>("type"));
         colNote.setCellValueFactory(new PropertyValueFactory<>("note"));
         colCreatedBy.setCellValueFactory(new PropertyValueFactory<>("createdByName"));
@@ -153,7 +162,10 @@ public class WarehouseController {
         colSku.setCellValueFactory(new PropertyValueFactory<>("sku"));
         colnameProduct.setCellValueFactory(new PropertyValueFactory<>("productName"));
         colImportPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        colImportPrice.setCellFactory(currencyCellFactory());
         colSellPrice.setCellValueFactory(new PropertyValueFactory<>("sellPrice"));
+        colSellPrice.setCellFactory(currencyCellFactory());
+
 
         colNamecategory.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
         colUpdatedAt.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
