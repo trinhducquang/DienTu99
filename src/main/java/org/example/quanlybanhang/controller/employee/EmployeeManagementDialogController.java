@@ -48,7 +48,8 @@ public class EmployeeManagementDialogController {
                     passwordField.getText(),
                     emailField.getText(),
                     phoneField.getText(),
-                    UserRole.NHAN_VIEN
+                    UserRole.NHAN_VIEN,
+                    UserStatus.UNLOCK
 
             );
 

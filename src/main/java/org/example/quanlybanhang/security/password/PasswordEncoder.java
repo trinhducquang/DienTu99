@@ -14,9 +14,13 @@ public class PasswordEncoder {
         this.argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
     }
 
+    public String encode(String rawPassword) {
+        String inputWithPepper = rawPassword + PEPPER;
+        return argon2.hash(2, 65536, 1, inputWithPepper.toCharArray());
+    }
+
     public boolean verify(String hashedPassword, String rawPassword) {
         String inputWithPepper = rawPassword + PEPPER;
         return argon2.verify(hashedPassword, inputWithPepper.toCharArray());
     }
 }
-

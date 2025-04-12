@@ -5,8 +5,7 @@ public enum UserRole {
     NHAN_VIEN("Nhân Viên"),
     NHAN_VIEN_KHO("Nhân viên kho"),
     THU_NGAN("Nhân viên thu ngân"),
-    BAN_HANG("Nhân viên bán hàng"),
-    LOCK("Lock");
+    BAN_HANG("Nhân viên bán hàng");
 
     private final String value;
 
@@ -18,9 +17,16 @@ public enum UserRole {
         return value;
     }
 
-    public static UserRole fromString(String text) {
+    // Hiển thị đẹp trong UI như ComboBox, TableView, v.v.
+    @Override
+    public String toString() {
+        return value;
+    }
+
+    // Tìm UserRole từ value (hiển thị)
+    public static UserRole fromString(String value) {
         for (UserRole role : UserRole.values()) {
-            if (role.value.equalsIgnoreCase(text)) {
+            if (role.value.equalsIgnoreCase(value)) {
                 return role;
             }
         }

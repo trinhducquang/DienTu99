@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="747.0" prefWidth="1013.0" spacing="10" stylesheets="@../product/product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.employee.EmployeeManagementController">
+<VBox alignment="TOP_CENTER" prefHeight="747.0" prefWidth="1146.0" spacing="10" stylesheets="@../product/product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.employee.EmployeeManagementController">
 
     <!-- Main Content Area -->
     <HBox prefHeight="947.0" prefWidth="1013.0" spacing="20" HBox.hgrow="ALWAYS">
@@ -35,6 +35,7 @@
                     <TableColumn fx:id="colPhone" maxWidth="207.0" prefWidth="127.0" text="Phone" />
                     <TableColumn fx:id="colRole" maxWidth="136.0" prefWidth="127.0" text="Role" />
                     <TableColumn fx:id="colStatus" maxWidth="135.0" prefWidth="93.0" text="Status" />
+                    <TableColumn fx:id="colOperation" maxWidth="135.0" prefWidth="133.0" text="Thao Tác" />
                 </columns>
             </TableView>
         </VBox>

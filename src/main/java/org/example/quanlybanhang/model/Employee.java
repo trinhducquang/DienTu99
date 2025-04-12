@@ -1,6 +1,7 @@
 package org.example.quanlybanhang.model;
 
 import org.example.quanlybanhang.enums.UserRole;
+import org.example.quanlybanhang.enums.UserStatus;
 
 public class Employee {
     private int id;
@@ -10,9 +11,10 @@ public class Employee {
     private String email;
     private String phone;
     private UserRole role;
+    private UserStatus status;
 
 
-    public Employee(int id, String fullName, String username, String password, String email, String phone, UserRole role ) {
+    public Employee(int id, String fullName, String username, String password, String email, String phone, UserRole role, UserStatus status ) {
         this.id = id;
         this.fullName = fullName;
         this.username = username;
@@ -20,6 +22,7 @@ public class Employee {
         this.email = email;
         this.phone = phone;
         this.role = role;
+        this.status = status;
     }
 
     // Getters
@@ -39,6 +42,14 @@ public class Employee {
     public void setEmail(String email) { this.email = email; }
     public void setPhone(String phone) { this.phone = phone; }
     public void setRole(UserRole role) { this.role = role; }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
 
     @Override
     public String toString() {

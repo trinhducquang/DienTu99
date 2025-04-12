@@ -1,6 +1,7 @@
 package org.example.quanlybanhang.model;
 
 import org.example.quanlybanhang.enums.UserRole;
+import org.example.quanlybanhang.enums.UserStatus;
 
 public class User {
     private int id;
@@ -10,11 +11,12 @@ public class User {
     private String email;
     private String phone;
     private UserRole role;
+    private UserStatus status;
 
     public User() {
     }
 
-    public User(int id, String username, String password, String fullName, String email, String phone, UserRole role) {
+    public User(int id, String username, String password, String fullName, String email, String phone, UserRole role, UserStatus status) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -22,6 +24,8 @@ public class User {
         this.email = email;
         this.phone = phone;
         this.role = role;
+        this.status = status;
+
     }
 
     // Getters và Setters
@@ -45,6 +49,14 @@ public class User {
 
     public UserRole getRole() { return role; }
     public void setRole(UserRole role) { this.role = role; }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
 
     @Override
     public String toString() {
