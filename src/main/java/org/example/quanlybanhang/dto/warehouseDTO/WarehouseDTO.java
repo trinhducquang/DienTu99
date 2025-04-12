@@ -25,6 +25,7 @@ public class WarehouseDTO {
     private LocalDateTime inventoryDate;
     private String inventoryNote;
     private InventoryStatus inventoryStatus;
+    private int createById;
     private int excessQuantity;
     private int deficientQuantity;
     private int missing;
@@ -36,7 +37,7 @@ public class WarehouseDTO {
     public WarehouseDTO(int id, int productId, String transactionCode, String productName, BigDecimal sellPrice, String categoryName,
                         int quantity, BigDecimal unitPrice, WarehouseType type,
                         String note, String createdByName, LocalDateTime createdAt, LocalDateTime updatedAt,
-                        LocalDateTime inventoryDate, String inventoryNote, InventoryStatus inventoryStatus) {
+                        LocalDateTime inventoryDate, int createById ,String inventoryNote, InventoryStatus inventoryStatus) {
         this.id = id;
         this.productId = productId;
         this.transactionCode = transactionCode;
@@ -52,6 +53,7 @@ public class WarehouseDTO {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.inventoryDate = inventoryDate;
+        this.createById = createById;
         this.inventoryNote = inventoryNote;
         this.inventoryStatus = inventoryStatus;
     }
@@ -91,7 +93,13 @@ public class WarehouseDTO {
         this.updatedAt = updatedAt;
     }
 
+    public int getCreateById() {
+        return createById;
+    }
 
+    public void setCreateById(int createById) {
+        this.createById = createById;
+    }
 
     public String getTransactionCode() {
         return transactionCode;
@@ -160,6 +168,8 @@ public class WarehouseDTO {
     public void setType(WarehouseType type) {
         this.type = type;
     }
+
+
 
     public String getNote() {
         return note;
@@ -232,5 +242,6 @@ public class WarehouseDTO {
     public void setMissing(int missing) {
         this.missing = missing;
     }
+
 
 }

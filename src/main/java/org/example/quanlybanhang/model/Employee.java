@@ -1,5 +1,7 @@
 package org.example.quanlybanhang.model;
 
+import org.example.quanlybanhang.enums.UserRole;
+
 public class Employee {
     private int id;
     private String fullName;
@@ -7,9 +9,10 @@ public class Employee {
     private String password;
     private String email;
     private String phone;
-    private String role;
+    private UserRole role;
 
-    public Employee(int id, String fullName, String username, String password, String email, String phone, String role) {
+
+    public Employee(int id, String fullName, String username, String password, String email, String phone, UserRole role ) {
         this.id = id;
         this.fullName = fullName;
         this.username = username;
@@ -26,7 +29,7 @@ public class Employee {
     public String getPassword() { return password; }
     public String getEmail() { return email; }
     public String getPhone() { return phone; }
-    public String getRole() { return role; }
+    public UserRole getRole() { return role; }
 
     // Setters
     public void setId(int id) { this.id = id; }
@@ -35,7 +38,7 @@ public class Employee {
     public void setPassword(String password) { this.password = password; }
     public void setEmail(String email) { this.email = email; }
     public void setPhone(String phone) { this.phone = phone; }
-    public void setRole(String role) { this.role = role; }
+    public void setRole(UserRole role) { this.role = role; }
 
     @Override
     public String toString() {

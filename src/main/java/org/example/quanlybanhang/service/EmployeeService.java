@@ -1,6 +1,7 @@
 package org.example.quanlybanhang.service;
 
 import org.example.quanlybanhang.dao.EmployeeDAO;
+import org.example.quanlybanhang.enums.UserRole;
 import org.example.quanlybanhang.model.Employee;
 
 import java.sql.Connection;
@@ -39,7 +40,8 @@ public class EmployeeService {
 
 
     public void updateRole(Employee employee, String newRole) {
-        employee.setRole(newRole);
+        employee.setRole(UserRole.fromString(newRole));
         employeeDAO.update(employee);
     }
+
 }

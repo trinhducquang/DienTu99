@@ -1,13 +1,17 @@
 package org.example.quanlybanhang.service;
 
+import org.example.quanlybanhang.dao.WarehouseDAO;
+import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
 import org.example.quanlybanhang.enums.WarehouseType;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
 
 public class WarehouseService {
 
+    private final WarehouseDAO warehouseDAO = new WarehouseDAO();
     public String generateTransactionCode(WarehouseType type) {
         String prefix = switch (type) {
             case NHAP_KHO -> "NK";
@@ -17,5 +21,13 @@ public class WarehouseService {
         String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String randomPart = UUID.randomUUID().toString().substring(0, 5).toUpperCase();
         return prefix + "-" + datePart + "-" + randomPart;
+    }
+
+    public boolean insertWarehouseImport(WarehouseDTO transaction, List<WarehouseDTO> productList) {
+        return warehouseDAO.insertWarehouseImport(transaction, productList); // gọi đúng cách
+    }
+
+    public boolean insertWarehouseCheck(WarehouseDTO transaction, List<WarehouseDTO> productList) {
+        return warehouseDAO.insertWarehouseCheck(transaction, productList);
     }
 }

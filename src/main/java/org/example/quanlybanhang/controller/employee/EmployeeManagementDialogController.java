@@ -5,6 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.EmployeeDAO;
+import org.example.quanlybanhang.enums.UserRole;
+import org.example.quanlybanhang.enums.UserStatus;
 import org.example.quanlybanhang.service.EmployeeService;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 import org.example.quanlybanhang.model.Employee;
@@ -46,7 +48,8 @@ public class EmployeeManagementDialogController {
                     passwordField.getText(),
                     emailField.getText(),
                     phoneField.getText(),
-                    "nhanvien"
+                    UserRole.NHAN_VIEN
+
             );
 
             boolean success = employeeService.addEmployee(employee, retypepasswordField.getText());

@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 public class EmployeeManagementController {
 
+
     @FXML private TextField searchField;
     @FXML private Button addEmployeeButton;
     @FXML private TableView<Employee> employeeTable;
@@ -32,6 +33,7 @@ public class EmployeeManagementController {
     @FXML private TableColumn<Employee, String> colEmail;
     @FXML private TableColumn<Employee, String> colPhone;
     @FXML private TableColumn<Employee, String> colRole;
+    @FXML private TableColumn colStatus;
 
     private final ObservableList<Employee> employeeList = FXCollections.observableArrayList();
     private final ObservableList<Employee> allEmployees = FXCollections.observableArrayList();
@@ -111,7 +113,7 @@ public class EmployeeManagementController {
                 Employee::getUsername,
                 Employee::getEmail,
                 Employee::getPhone,
-                Employee::getRole
+                e -> e.getRole().toString()
         );
         employeeList.setAll(filtered);
     }

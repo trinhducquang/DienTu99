@@ -1,6 +1,7 @@
 package org.example.quanlybanhang.dao;
 
 import org.example.quanlybanhang.dao.base.CrudDao;
+import org.example.quanlybanhang.enums.UserStatus;
 import org.example.quanlybanhang.model.Employee;
 import org.example.quanlybanhang.enums.UserRole;
 import de.mkammerer.argon2.Argon2;
@@ -37,7 +38,7 @@ public class EmployeeDAO implements CrudDao<Employee> {
                         resultSet.getString("password"),
                         resultSet.getString("email"),
                         resultSet.getString("phone"),
-                        resultSet.getString("role")
+                        UserRole.fromString(resultSet.getString("role"))
                 );
             }
         } catch (Exception e) {
@@ -63,7 +64,8 @@ public class EmployeeDAO implements CrudDao<Employee> {
                         resultSet.getString("password"),
                         resultSet.getString("email"),
                         resultSet.getString("phone"),
-                        resultSet.getString("role")
+                        UserRole.fromString(resultSet.getString("role"))
+
                 );
                 employees.add(employee);
             }
@@ -81,7 +83,7 @@ public class EmployeeDAO implements CrudDao<Employee> {
     }
 
     public boolean save(Employee employee, String rawPassword) {
-        String query = "INSERT INTO users (full_name, username, password, email, phone, role) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO users (full_name, username, password, email, phone, role, status) VALUES (?, ?, ?, ?, ?, ?)";
 
         String passwordToHash = rawPassword + PEPPER;
         Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
@@ -94,6 +96,7 @@ public class EmployeeDAO implements CrudDao<Employee> {
             statement.setString(4, employee.getEmail());
             statement.setString(5, employee.getPhone());
             statement.setString(6, UserRole.NHAN_VIEN.getValue());
+
 
             return statement.executeUpdate() > 0;
         } catch (Exception e) {
@@ -112,7 +115,7 @@ public class EmployeeDAO implements CrudDao<Employee> {
             statement.setString(2, employee.getUsername());
             statement.setString(3, employee.getEmail());
             statement.setString(4, employee.getPhone());
-            statement.setString(5, employee.getRole());
+            statement.setString(5, employee.getRole().getValue());
             statement.setInt(6, employee.getId());
 
             statement.executeUpdate();

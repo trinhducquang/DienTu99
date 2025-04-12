@@ -1,7 +1,7 @@
 package org.example.quanlybanhang.dao;
 
+import org.example.quanlybanhang.dto.warehouseDTO.ImportedWarehouseDTO;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
-import org.example.quanlybanhang.enums.InventoryStatus;
 import org.example.quanlybanhang.enums.WarehouseType;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 
@@ -94,7 +94,7 @@ public class WarehouseDAO {
 
     public List<WarehouseDTO> getAllWarehouseCheck() {
         List<WarehouseDTO> warehouseCheckList = new ArrayList<>();
-        String query = "SELECT * FROM warehouse_transaction_details";
+        String query = "SELECT * FROM warehouse_transaction_details WHERE type = 'Kiểm Kho'";
 
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn != null ? conn.createStatement() : null;
@@ -106,91 +106,155 @@ public class WarehouseDAO {
 
                     dto.setTransactionCode(rs.getString("transaction_code"));
                     dto.setProductName(rs.getString("product_name"));
-                    dto.setExcessQuantity(rs.getInt("excess_quantity"));
                     dto.setCreatedByName(rs.getString("created_by_name"));
                     dto.setInventoryDate(rs.getTimestamp("inventory_check_date").toLocalDateTime());
                     dto.setInventoryNote(rs.getString("inventory_note"));
-                    dto.setInventoryStatus(InventoryStatus.fromValue(rs.getString("inventory_status")));
                     dto.setExcessQuantity(rs.getInt("excess_quantity"));
                     dto.setDeficientQuantity(rs.getInt("deficient_quantity"));
                     dto.setMissing(rs.getInt("missing"));
-
 
                     warehouseCheckList.add(dto);
                 }
             }
 
         } catch (SQLException e) {
-            System.out.println("Lỗi khi truy vấn dữ liệu warehouse_transaction_check:");
+            System.out.println("Lỗi khi truy vấn dữ liệu kiểm kho:");
             e.printStackTrace();
         }
 
         return warehouseCheckList;
     }
 
-    public boolean insertWarehouseTransaction(WarehouseDTO transaction, List<WarehouseDTO> productList) {
-        String insertTransactionSQL =
-                "INSERT INTO warehouse_transaction (" +
-                        "transaction_code, created_by, transaction_type, created_at, " +
-                        "total_amount, excess_quantity, deficient_quantity, note" +
-                        ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    public boolean insertWarehouseImport(WarehouseDTO transaction, List<WarehouseDTO> productList) {
+        if (transaction == null || productList == null || productList.isEmpty()) {
+            System.err.println("Transaction or product list is null/empty.");
+            return false;
+        }
 
-        String insertDetailSQL =
-                "INSERT INTO warehouse_transaction_details (" +
-                        "transaction_code, product_id, quantity, unit_price" +
-                        ") VALUES (?, ?, ?, ?)";
+        final String insertSQL = """
+        INSERT INTO warehouse_transactions (
+            transaction_code, created_by, created_at,
+            product_id, quantity, unit_price, note
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    """;
 
         try (Connection conn = DatabaseConnection.getConnection()) {
             if (conn == null) return false;
 
-            conn.setAutoCommit(false);
+            conn.setAutoCommit(true); // Bạn có thể bật false nếu muốn rollback khi có lỗi
 
-            try (
-                    PreparedStatement transactionStmt = conn.prepareStatement(insertTransactionSQL);
-                    PreparedStatement detailStmt = conn.prepareStatement(insertDetailSQL)
-            ) {
-                // Insert main transaction
-                transactionStmt.setString(1, transaction.getTransactionCode());
-                transactionStmt.setString(2, transaction.getCreatedByName());
-                transactionStmt.setString(3, transaction.getType().getValue());
-                transactionStmt.setTimestamp(4, Timestamp.valueOf(transaction.getCreatedAt()));
-                transactionStmt.setBigDecimal(5, transaction.getTotalAmount());
-                transactionStmt.setInt(6, transaction.getExcessQuantity());
-                transactionStmt.setInt(7, transaction.getDeficientQuantity());
-                transactionStmt.setString(8, transaction.getNote());
-
-                transactionStmt.executeUpdate();
-
-                // Insert product details
+            try (PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
                 for (WarehouseDTO product : productList) {
-                    detailStmt.setString(1, transaction.getTransactionCode());
-                    detailStmt.setInt(2, product.getProductId());
-                    detailStmt.setInt(3, product.getQuantity());
-                    detailStmt.setBigDecimal(4, product.getUnitPrice());
+                    if (product.getQuantity() <= 0 || product.getProductId() <= 0 || product.getUnitPrice() == null) {
+                        continue; // Bỏ qua sản phẩm không hợp lệ
+                    }
 
-                    detailStmt.addBatch();
+                    stmt.setString(1, transaction.getTransactionCode());
+                    stmt.setInt(2, transaction.getCreateById());
+                    stmt.setTimestamp(3, Timestamp.valueOf(transaction.getCreatedAt()));
+                    stmt.setInt(4, product.getProductId());
+                    stmt.setInt(5, product.getQuantity());
+                    stmt.setBigDecimal(6, product.getUnitPrice());
+                    stmt.setString(7, transaction.getNote());
+
+                    stmt.addBatch();
                 }
 
-                detailStmt.executeBatch();
-                conn.commit();
-
+                stmt.executeBatch();
                 return true;
 
             } catch (SQLException e) {
-                conn.rollback();
-                System.out.println("Lỗi khi thêm phiếu nhập kho:");
+                System.err.println("❌ Lỗi khi thêm phiếu nhập kho: " + e.getMessage());
                 e.printStackTrace();
-            } finally {
-                conn.setAutoCommit(true);
             }
 
         } catch (SQLException e) {
+            System.err.println("❌ Lỗi kết nối cơ sở dữ liệu: " + e.getMessage());
             e.printStackTrace();
         }
 
         return false;
     }
 
+    public boolean insertWarehouseCheck(WarehouseDTO transaction, List<WarehouseDTO> productList) {
+        String insertSQL = """
+        INSERT INTO warehouse_transactions (
+            transaction_code,
+            product_id,
+            type,
+            note,
+            created_at,
+            created_by,
+            inventory_check_date,
+            inventory_note,
+            excess_quantity,
+            deficient_quantity,
+            missing,
+            inventory_status
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
+
+            conn.setAutoCommit(false);
+
+            for (WarehouseDTO product : productList) {
+                stmt.setString(1, transaction.getTransactionCode());
+                stmt.setInt(2, product.getProductId());
+                stmt.setString(3, transaction.getType().getValue());
+                stmt.setString(4, transaction.getNote());
+                stmt.setTimestamp(5, Timestamp.valueOf(transaction.getCreatedAt()));
+                stmt.setInt(6, transaction.getCreateById());
+                stmt.setTimestamp(7, Timestamp.valueOf(transaction.getInventoryDate()));
+                stmt.setString(8, transaction.getInventoryNote());
+                stmt.setInt(9, product.getExcessQuantity());
+                stmt.setInt(10, product.getDeficientQuantity());
+                stmt.setInt(11, product.getMissing());
+                stmt.setString(12, product.getInventoryStatus().getValue());
+
+                stmt.addBatch();
+            }
+
+            stmt.executeBatch();
+            conn.commit();
+            return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<ImportedWarehouseDTO> getProductsImportedFromWarehouse() {
+        List<ImportedWarehouseDTO> productList = new ArrayList<>();
+        String query = """
+        SELECT DISTINCT p.id, p.name, wt.transaction_code
+        FROM products p
+        JOIN warehouse_transactions wt ON wt.product_id = p.id
+        WHERE wt.type = 'Nhập kho'
+    """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String transactionCode = rs.getString("transaction_code");
+
+                ImportedWarehouseDTO importWarehouse = new ImportedWarehouseDTO(id, name, transactionCode);
+                productList.add(importWarehouse);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return productList;
+    }
 
 
 }
