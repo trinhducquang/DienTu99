@@ -35,6 +35,9 @@ module org.example.quanlybanhang {
     opens org.example.quanlybanhang.dto.orderDTO to com.google.gson, javafx.base;
     opens org.example.quanlybanhang.dto.productDTO to com.google.gson, javafx.base;
     opens org.example.quanlybanhang.dto.warehouseDTO to com.google.gson, javafx.base;
+    exports org.example.quanlybanhang.controller.sale;  // Thêm dòng này
+    opens org.example.quanlybanhang.controller.sale to javafx.fxml;
+
 
 
 }

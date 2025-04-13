@@ -15,6 +15,8 @@ import javafx.util.Duration;
 import org.example.quanlybanhang.dto.productDTO.ProductDetailSpecificationsDTO;
 import org.example.quanlybanhang.model.Product;
 import org.example.quanlybanhang.service.ProductService;
+import org.example.quanlybanhang.utils.ImagesUtils;
+import org.example.quanlybanhang.utils.MoneyUtils;
 import org.example.quanlybanhang.utils.ThreadManager;
 
 import javafx.scene.shape.Rectangle;
@@ -87,17 +89,8 @@ public class ProductDetailDialogController {
         productBox.getStyleClass().add("related-product");
         productBox.setPrefSize(130, 110);
 
-        // 🟩 Load ảnh với kích thước lớn hơn hiển thị
-        Image image = new Image(p.getImageUrl(), 260, 220, true, true); // gấp đôi
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(130);
-        imageView.setFitHeight(110);
-        imageView.setPreserveRatio(true);
-        imageView.setSmooth(true);
-
-        // 🟩 Cắt ảnh đúng kích thước hiển thị (nếu cần)
-        Rectangle clip = new Rectangle(130, 110);
-        imageView.setClip(clip);
+        // 🟩 Sử dụng ImagesUtils để cắt ảnh theo kích thước yêu cầu
+        ImageView imageView = ImagesUtils.createCroppedImageView(p.getImageUrl(), 260, 220, 130, 110);
 
         Label nameLabel = new Label(p.getName());
         nameLabel.getStyleClass().add("related-product-name");
@@ -105,7 +98,7 @@ public class ProductDetailDialogController {
         nameLabel.setPrefHeight(40);
         nameLabel.setAlignment(Pos.CENTER);
 
-        Label priceLabel = new Label(String.format("%,.0f VND", p.getPrice()));
+        Label priceLabel = new Label(MoneyUtils.formatVN(p.getPrice()));
         priceLabel.getStyleClass().add("related-product-price");
         priceLabel.setPrefHeight(25);
         priceLabel.setAlignment(Pos.CENTER);
@@ -117,14 +110,6 @@ public class ProductDetailDialogController {
     }
 
 
-    private Image loadProductImageSafe(String url) {
-        try {
-            String imageUrl = (url != null && !url.isEmpty()) ? url : "/images/default-product.png";
-            return new Image(imageUrl, 0, 0, true, false);
-        } catch (Exception e) {
-            return new Image("/images/default-product.png", 0, 0, true, false);
-        }
-    }
 
     private void playSlideAnimation(boolean slideFromLeft) {
         TranslateTransition transition = new TranslateTransition(Duration.millis(300), relatedProductsContainer);

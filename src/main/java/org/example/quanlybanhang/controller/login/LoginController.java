@@ -15,6 +15,8 @@ import org.example.quanlybanhang.utils.DatabaseConnection;
 
 import java.sql.Connection;
 
+import static org.example.quanlybanhang.enums.UserRole.*;
+
 public class LoginController {
 
     @FXML private TextField tenDangNhapField;
@@ -32,19 +34,39 @@ public class LoginController {
 
         if (user != null) {
             switch (user.getRole()) {
-                case ADMIN -> chuyenScene("Admin.fxml");
-                case NHAN_VIEN -> chuyenScene("Employee.fxml");
-                default -> hienThiThongBao("Lỗi", "Vai trò không hợp lệ!");
+                case ADMIN:
+                    chuyenScene("admin/Admin.fxml");
+                    break;
+                case NHAN_VIEN:
+                    chuyenScene("employee/Employee.fxml");
+                    break;
+                case BAN_HANG:
+                    chuyenScene("sales/sales.fxml");
+                    break;
+                case NHAN_VIEN_KHO:
+                    chuyenScene("warehouse/warehouse.fxml");
+                    break;
+                case THU_NGAN:
+                    chuyenScene("cashier.fxml");
+                    break;
+                default:
+                    hienThiThongBao("Lỗi", "Vai trò không hợp lệ!");
+                    break;
             }
         } else {
             hienThiThongBao("Lỗi Đăng Nhập", "Tên đăng nhập hoặc mật khẩu không đúng");
         }
+
+
     }
 
 
     private void chuyenScene(String fxmlFile) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/quanlybanhang/views/admin/Admin.fxml"));
+            // Chọn FXML phù hợp với vai trò người dùng
+            String fxmlPath = "/org/example/quanlybanhang/views/" + fxmlFile;
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
             Stage stage = (Stage) tenDangNhapField.getScene().getWindow();
 
@@ -63,6 +85,7 @@ public class LoginController {
             hienThiThongBao("Lỗi", "Không thể chuyển màn hình");
         }
     }
+
 
     private void hienThiThongBao(String tieuDe, String noiDung) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

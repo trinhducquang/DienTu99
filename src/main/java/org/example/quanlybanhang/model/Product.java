@@ -36,6 +36,13 @@ public class Product {
         this.specifications = specifications;
     }
 
+    // Constructor chỉ với những thuộc tính cần thiết cho trang bán hàng
+    public Product(String name, BigDecimal price, String imageUrl) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
     public Product() {
 
     }
@@ -85,6 +92,8 @@ public class Product {
 
     public String getSpecifications() { return specifications; }
     public void setSpecifications(String specifications) { this.specifications = specifications; }
+
+
 
     @Override
     public String toString() {

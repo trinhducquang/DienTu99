@@ -43,7 +43,7 @@
                 </padding>
 
                 <VBox alignment="CENTER" maxWidth="286.0" minWidth="274.0" prefHeight="300.0" prefWidth="274.0" spacing="10">
-                    <ImageView fx:id="productImage" fitHeight="250" fitWidth="457.0" preserveRatio="true">
+                    <ImageView fx:id="productImage"  fitHeight="250" fitWidth="457.0" preserveRatio="true" >
                         <image>
                             <Image url="https://hoangkhue.vn/wp-content/uploads/2023/10/lg_27gp850_gearvn_c200874aca254feba98022332254b1a5.webp" />
                         </image>

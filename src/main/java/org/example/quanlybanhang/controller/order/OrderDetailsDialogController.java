@@ -3,7 +3,6 @@ package org.example.quanlybanhang.controller.order;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -11,6 +10,7 @@ import javafx.stage.Stage;
 import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
 import org.example.quanlybanhang.dto.productDTO.ProductDisplayInfoDTO;
 import org.example.quanlybanhang.service.OrderService;
+import org.example.quanlybanhang.utils.ImagesUtils;
 import org.example.quanlybanhang.utils.MoneyUtils;
 
 import java.io.File;
@@ -90,8 +90,7 @@ public class OrderDetailsDialogController {
         subtotalAmount.setText(MoneyUtils.formatVN(totalOrderValue));
     }
 
-    private HBox createProductBox(int productId, String name, String imageUrl, BigDecimal quantity, BigDecimal price, BigDecimal total)
-    {
+    private HBox createProductBox(int productId, String name, String imageUrl, BigDecimal quantity, BigDecimal price, BigDecimal total) {
         HBox productBox = new HBox();
         productBox.setSpacing(15);
         productBox.setStyle("-fx-background-color: white; -fx-padding: 10; -fx-border-color: #dddddd; -fx-border-radius: 5;");
@@ -118,27 +117,14 @@ public class OrderDetailsDialogController {
         priceBox.setSpacing(10);
 
         if (imageUrl != null && !imageUrl.trim().isEmpty()) {
-            try {
-                ImageView imageView = new ImageView();
-                imageView.setFitHeight(80);
-                imageView.setFitWidth(80);
-                imageView.setPreserveRatio(true);
-
-                if (imageUrl.startsWith("http") || imageUrl.startsWith("file:/")) {
-                    imageView.setImage(new Image(imageUrl));
-                } else {
-                    imageView.setImage(new Image(new File(imageUrl).toURI().toString()));
-                }
-
-                productBox.getChildren().add(imageView);
-            } catch (Exception e) {
-                System.err.println("Không thể tải hình ảnh: " + imageUrl);
-            }
+            ImageView imageView = ImagesUtils.createImageView(imageUrl, 80, 80);
+            productBox.getChildren().add(imageView);
         }
 
         productBox.getChildren().addAll(detailsBox, priceBox);
         return productBox;
     }
+
 
     @FXML
     private void handlePrintOrder() {

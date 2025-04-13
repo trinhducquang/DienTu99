@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<!-- Panel giỏ hàng sẽ trượt ra từ bên phải -->
+
+<StackPane alignment="TOP_RIGHT" prefHeight="500.0" prefWidth="500.0" visible="false" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <Rectangle fill="#80000000" height="500.0" onMouseClicked="#closeCart" width="551.0">
+        <StackPane.margin>
+            <Insets bottom="-50" left="-50" right="-50" top="-50" />
+        </StackPane.margin>
+    </Rectangle>
+
+    <VBox prefHeight="500.0" prefWidth="0.0" style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);" StackPane.alignment="CENTER_RIGHT">
+        <padding>
+            <Insets bottom="15" left="15" right="15" top="15" />
+        </padding>
+
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="Giỏ hàng" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button onAction="#closeCart" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="X" />
+        </HBox>
+
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+            <VBox spacing="10">
+                <!-- Sản phẩm trong giỏ 1 -->
+                <VBox spacing="5" style="-fx-border-color: #e0e0e0; -fx-border-radius: 5; -fx-background-color: white;">
+                    <padding>
+                        <Insets bottom="10" left="10" right="10" top="10" />
+                    </padding>
+                    <HBox spacing="10">
+                        <ImageView fitHeight="60" fitWidth="60" preserveRatio="true">
+                            <!--                                <Image url=""/>-->
+                        </ImageView>
+                        <VBox HBox.hgrow="ALWAYS">
+                            <Label style="-fx-font-weight: bold;" text="iPhone 16 Pro 1TB" />
+                            <Label style="-fx-text-fill: #e74c3c;" text="38.790.000₫" />
+                        </VBox>
+                        <Button style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-min-width: 30;" text="X" />
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT" spacing="5">
+                        <Button style="-fx-min-width: 30;" text="-" />
+                        <TextField alignment="CENTER" prefWidth="40" text="1" />
+                        <Button style="-fx-min-width: 30;" text="+" />
+                    </HBox>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+
+        <Separator />
+
+        <VBox style="-fx-border-color: #e0e0e0; -fx-border-radius: 5; -fx-background-color: white;">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10" />
+            </padding>
+            <HBox>
+                <Label style="-fx-font-weight: bold;" text="Tổng tiền:" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" text="38.790.000₫" />
+            </HBox>
+        </VBox>
+
+        <HBox spacing="10">
+            <Button maxWidth="Infinity" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Làm mới giỏ hàng" HBox.hgrow="ALWAYS" />
+            <Button maxWidth="Infinity" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Tạo đơn hàng" HBox.hgrow="ALWAYS" />
+        </HBox>
+
+        <Separator />
+
+        <Label text="Thông tin khách hàng" />
+
+
+        <Button maxWidth="50.0" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Tạo khách hàng mới" />
+    </VBox>
+</StackPane>

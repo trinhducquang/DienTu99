@@ -66,19 +66,4 @@ public class UserDAO {
 
         return warehouseStaff;
     }
-
-    public boolean updatePassword(int userId, String hashedPassword) {
-        String sql = "UPDATE users SET password = ? WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, hashedPassword); // Sử dụng hashedPassword từ tham số đầu vào
-            stmt.setInt(2, userId); // Sử dụng userId từ tham số đầu vào
-            return stmt.executeUpdate() > 0; // Kiểm tra có cập nhật thành công không
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-
-
 }
