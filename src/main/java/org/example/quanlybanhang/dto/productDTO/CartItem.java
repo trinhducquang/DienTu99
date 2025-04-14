@@ -21,6 +21,10 @@ public class CartItem {
         return quantity;
     }
 
+    public void setQuantity(BigDecimal quantity) {
+        this.quantity = quantity;
+    }
+
     public void increaseQuantity() {
         this.quantity = this.quantity.add(BigDecimal.ONE);
     }
