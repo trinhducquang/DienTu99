@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -27,7 +28,7 @@
             </HBox>
 
             <!-- Products Table -->
-            <TableView fx:id="productsTable" prefHeight="597.0" prefWidth="1013.0" styleClass="products-table">
+            <TableView fx:id="productsTable" prefHeight="597.0" prefWidth="1013.0" styleClass="products-table" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="idColumn" prefWidth="80" text="Mã SP" />
                     <TableColumn fx:id="nameColumn" prefWidth="191.0" text="Tên Sản Phẩm" />
@@ -42,4 +43,5 @@
             </TableView>
         </VBox>
     </HBox>
+     <Pagination fx:id="pagination"  prefHeight="27.0" prefWidth="1013.0" />
 </VBox>

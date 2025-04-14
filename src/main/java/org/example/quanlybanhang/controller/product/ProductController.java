@@ -1,5 +1,7 @@
 package org.example.quanlybanhang.controller.product;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -29,6 +31,7 @@ public class ProductController {
     @FXML private TableColumn<Product, ProductStatus> statusColumn;
     @FXML private TableColumn<Product, String> imageColumn;
     @FXML private TableColumn<Product, Void> OperationColumn;
+    @FXML private Pagination pagination;
 
     @FXML private ComboBox<Category> categoryFilter;
     @FXML private TextField searchField;
@@ -39,6 +42,8 @@ public class ProductController {
     private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
     private final ProductService productService = new ProductService();
     private final CategoryService categoryService = new CategoryService();
+    private final IntegerProperty currentPage = new SimpleIntegerProperty(0);
+    private final int itemsPerPage = 18;
 
 
 
@@ -46,14 +51,15 @@ public class ProductController {
     public void initialize() {
         productsTable.setEditable(true);
         setupTableColumns();
-        loadCategoryData(); // setEditableColumns được gọi sau khi load xong
-        loadProductData();
-        productsTable.setItems(productList);
-
+        loadCategoryData();
         setupSearchAndFilter();
         setupAddProductButton();
         addButtonToActionColumn();
+
+        loadAllProducts(); // Load tất cả sản phẩm vào allProducts
+        setupPagination();
     }
+
 
     private void setupTableColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -218,4 +224,21 @@ public class ProductController {
             productList.setAll(filtered);
         }
     }
+
+    private void loadAllProducts() {
+        List<Product> products = productService.getAllProducts();
+        allProducts.setAll(products);
+    }
+
+    private void setupPagination() {
+        PaginationUtils.setup(
+                pagination,
+                allProducts,
+                productList,
+                currentPage,
+                itemsPerPage,
+                (pagedData, pageIndex) -> productsTable.setItems(productList)
+        );
+    }
+
 }

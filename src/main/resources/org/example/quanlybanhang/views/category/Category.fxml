@@ -32,7 +32,9 @@
                         <Label text="No content in table" />
                     </placeholder>
                 </TableView>
-
+                <HBox alignment="CENTER" spacing="10.0">
+                    <Pagination fx:id="pagination" maxPageIndicatorCount="15"/>
+                </HBox>
             </VBox>
         </AnchorPane>
     </center>

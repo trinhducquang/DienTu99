@@ -9,5 +9,6 @@ public record ProductDisplayInfoDTO(
         BigDecimal quantity,
         BigDecimal unitPrice,
         BigDecimal totalPrice
-) {
-}
+)
+{}
+

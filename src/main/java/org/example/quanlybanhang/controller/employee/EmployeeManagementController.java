@@ -1,5 +1,7 @@
 package org.example.quanlybanhang.controller.employee;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,6 +18,7 @@ import org.example.quanlybanhang.security.password.PasswordEncoder;
 import org.example.quanlybanhang.service.EmployeeService;
 import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.DatabaseConnection;
+import org.example.quanlybanhang.utils.PaginationUtils;
 
 import java.sql.Connection;
 import java.util.*;
@@ -35,10 +38,13 @@ public class EmployeeManagementController {
     @FXML private TableColumn<Employee, String> colRole;
     @FXML private TableColumn<Employee, UserStatus> colStatus;
     @FXML private TableColumn<Employee, Void> colOperation;
+    @FXML private Pagination pagination;
 
     private final ObservableList<Employee> employeeList = FXCollections.observableArrayList();
     private final ObservableList<Employee> allEmployees = FXCollections.observableArrayList();
     private final Set<Integer> resetEmployeeIds = new HashSet<>();
+    private final IntegerProperty currentPage = new SimpleIntegerProperty(0);
+    private final int itemsPerPage = 18;
 
     private EmployeeService employeeService;
 
@@ -49,6 +55,7 @@ public class EmployeeManagementController {
         setupEditing();
         setupSearch();
         setupButtons();
+        setupPagination();
         loadEmployees();
     }
 
@@ -186,4 +193,16 @@ public class EmployeeManagementController {
         int rowIndex = employeeTable.getItems().indexOf(employee);
         employeeTable.edit(rowIndex, colPassword);
     }
+
+    private void setupPagination() {
+        PaginationUtils.setup(
+                pagination,
+                allEmployees,
+                employeeList,
+                currentPage,
+                itemsPerPage,
+                (pagedData, pageIndex) -> employeeTable.setItems(employeeList)
+        );
+    }
+
 }

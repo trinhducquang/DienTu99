@@ -1,11 +1,20 @@
 package org.example.quanlybanhang.utils;
 
+import javafx.animation.FadeTransition;
+import javafx.concurrent.Task;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
+
 import java.io.File;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ImagesUtils {
+
+    // 🧠 Cache ảnh đã tải
+    private static final Map<String, Image> imageCache = new ConcurrentHashMap<>();
 
     // 🟩 Phương thức tạo ImageView
     public static ImageView createImageView(String imageUrl, double fitWidth, double fitHeight) {
@@ -30,23 +39,64 @@ public class ImagesUtils {
         return imageView;
     }
 
-    // 🟩 Phương thức cắt ảnh
+    // 🟩 Phương thức cắt ảnh và load background nhanh
     public static ImageView createCroppedImageView(String imageUrl, double sourceWidth, double sourceHeight, double fitWidth, double fitHeight) {
-        // Tải ảnh với kích thước lớn hơn để tránh ảnh bị mờ
-        Image image = new Image(imageUrl, sourceWidth, sourceHeight, true, true); // Kích thước lớn hơn để đảm bảo chất lượng
-        ImageView imageView = new ImageView(image);
+        // Đảm bảo ảnh được cache nếu đã tải trước đó
+        String cacheKey = imageUrl + "_" + (int)sourceWidth + "x" + (int)sourceHeight;
+        Image cachedImage = imageCache.get(cacheKey);
 
-        // Đặt kích thước hiển thị theo yêu cầu
+        // Nếu ảnh đã được cache
+        if (cachedImage != null) {
+            return createImageViewFromCache(cachedImage, fitWidth, fitHeight);
+        }
+
+        // Nếu chưa cache, tải ảnh mới trong background
+        ImageView imageView = new ImageView();
         imageView.setFitWidth(fitWidth);
         imageView.setFitHeight(fitHeight);
-        imageView.setPreserveRatio(true); // Giữ tỷ lệ hình ảnh
-        imageView.setSmooth(true); // Làm mịn ảnh
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
 
-        // Cắt ảnh theo kích thước yêu cầu
+        // Cắt ảnh theo khuôn hình chữ nhật
         Rectangle clip = new Rectangle(fitWidth, fitHeight);
-        imageView.setClip(clip); // Cắt ảnh theo khuôn hình chữ nhật
+        imageView.setClip(clip);
 
+        // Tải ảnh trong Task để tránh block UI
+        Task<Image> loadTask = new Task<>() {
+            @Override
+            protected Image call() {
+                return new Image(imageUrl, sourceWidth, sourceHeight, true, true);
+            }
+        };
+
+        loadTask.setOnSucceeded(e -> {
+            Image image = loadTask.getValue();
+            imageCache.put(cacheKey, image);  // Lưu ảnh vào cache
+            imageView.setImage(image);
+
+            // Tạo hiệu ứng mượt fade-in khi ảnh load xong
+            FadeTransition fade = new FadeTransition(Duration.millis(300), imageView);
+            fade.setFromValue(0);
+            fade.setToValue(1);
+            fade.play();
+        });
+
+        new Thread(loadTask).start();
         return imageView;
     }
 
+    // Tạo ImageView từ ảnh đã cache
+    private static ImageView createImageViewFromCache(Image image, double fitWidth, double fitHeight) {
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(fitWidth);
+        imageView.setFitHeight(fitHeight);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+
+        // Cắt ảnh theo khuôn hình chữ nhật
+        Rectangle clip = new Rectangle(fitWidth, fitHeight);
+        imageView.setClip(clip);
+
+        return imageView;
+    }
 }

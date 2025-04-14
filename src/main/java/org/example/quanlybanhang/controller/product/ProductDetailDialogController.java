@@ -60,6 +60,7 @@ public class ProductDetailDialogController {
         });
     }
 
+
     private void loadRelatedProducts(int categoryId, int excludedId) {
         currentPage = 0;
         totalRelatedCount = productService.countRelatedProducts(categoryId, excludedId);
@@ -154,7 +155,7 @@ public class ProductDetailDialogController {
     private void loadMainImage(String imageUrl) {
         try {
             String url = (imageUrl != null && !imageUrl.isEmpty()) ? imageUrl : "/images/default-product.png";
-            productImage.setImage(new Image(url, true));
+            productImage.setImage(new Image(url, true)); // Load nhanh ảnh chính
         } catch (Exception e) {
             productImage.setImage(new Image("/images/default-product.png"));
         }

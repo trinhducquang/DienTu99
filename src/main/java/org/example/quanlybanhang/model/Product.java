@@ -36,15 +36,17 @@ public class Product {
         this.specifications = specifications;
     }
 
-    // Constructor chỉ với những thuộc tính cần thiết cho trang bán hàng
-    public Product(String name, BigDecimal price, String imageUrl) {
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
-
     public Product() {
 
+    }
+
+    public Product(String name, BigDecimal price, String imageUrl) {
+         this.name = name;
+         this.price = price;
+         this.imageUrl = imageUrl;
+    }
+
+    public Product(int id, String name, String s, BigDecimal bigDecimal) {
     }
 
     public int getId() { return id; }

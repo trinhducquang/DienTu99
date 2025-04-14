@@ -150,3 +150,23 @@
 .cancel-button:hover, .save-button:hover {
     -fx-opacity: 0.8;
 }
+
+.pagination {
+    -fx-padding: 10px;
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+.pagination .page {
+    -fx-min-width: 35px;
+    -fx-min-height: 35px;
+    -fx-font-size: 16px;
+}
+
+.pagination .pagination-control .label {
+    -fx-opacity: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
+}

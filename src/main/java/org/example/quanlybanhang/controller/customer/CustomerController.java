@@ -1,7 +1,8 @@
 package org.example.quanlybanhang.controller.customer;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -11,10 +12,12 @@ import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Customer;
 import org.example.quanlybanhang.service.CustomerService;
 import org.example.quanlybanhang.service.SearchService;
+import org.example.quanlybanhang.utils.PaginationUtils;
 
 import java.util.List;
 
 public class CustomerController {
+
     @FXML private Button addCustomerButton;
     @FXML private TableView<Customer> customerTable;
     @FXML private TableColumn<Customer, Integer> idColumn;
@@ -23,19 +26,37 @@ public class CustomerController {
     @FXML private TableColumn<Customer, String> emailColumn;
     @FXML private TableColumn<Customer, String> addressColumn;
     @FXML private TextField searchField;
+    @FXML private Pagination pagination;
 
     private final ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+    private final ObservableList<Customer> customerList = FXCollections.observableArrayList();
     private final CustomerService customerService = new CustomerService();
+
+    private final IntegerProperty currentPage = new SimpleIntegerProperty(0);
+    private final int itemsPerPage = 18;
 
     @FXML
     public void initialize() {
+        setupTableColumns();
+        setEditableColumns();
+        setupAddCustomerButton();
+        setupSearchAndFilter();
+
+        loadAllCustomers();
+        setupPagination();
+    }
+
+    private void setupTableColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+    }
 
+    private void setEditableColumns() {
         customerTable.setEditable(true);
+
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         phoneColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         emailColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -45,25 +66,33 @@ public class CustomerController {
         phoneColumn.setOnEditCommit(event -> updateCustomer(event.getRowValue(), "phone", event.getNewValue()));
         emailColumn.setOnEditCommit(event -> updateCustomer(event.getRowValue(), "email", event.getNewValue()));
         addressColumn.setOnEditCommit(event -> updateCustomer(event.getRowValue(), "address", event.getNewValue()));
+    }
 
-        loadCustomerData();
-
+    private void setupAddCustomerButton() {
         addCustomerButton.setOnAction(event -> {
-            DialogHelper.showDialog("/org/example/quanlybanhang/views/customer/CustomerDialog.fxml", "Thêm Khách Hàng Mới",  (Stage) addCustomerButton.getScene().getWindow());
-            loadCustomerData();
+            DialogHelper.showDialog(
+                    "/org/example/quanlybanhang/views/customer/CustomerDialog.fxml",
+                    "Thêm Khách Hàng Mới",
+                    (Stage) addCustomerButton.getScene().getWindow()
+            );
+            loadAllCustomers(); // Reload sau khi thêm
         });
-
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> searchCustomers(newVal));
     }
 
-    private void loadCustomerData() {
-        allCustomers.setAll(customerService.getAllCustomers());
-        customerTable.setItems(allCustomers);
+    private void setupSearchAndFilter() {
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> filterBySearch(newVal));
     }
 
-    private void searchCustomers(String keyword) {
-        List<Customer> filteredList = SearchService.search(allCustomers, keyword, Customer::getName, Customer::getPhone);
-        customerTable.setItems(FXCollections.observableArrayList(filteredList));
+    private void filterBySearch(String keyword) {
+        List<Customer> filtered = SearchService.search(
+                allCustomers,
+                keyword,
+                Customer::getName,
+                Customer::getPhone,
+                Customer::getEmail,
+                Customer::getAddress
+        );
+        customerList.setAll(filtered);
     }
 
     private void updateCustomer(Customer customer, String field, String newValue) {
@@ -74,5 +103,23 @@ public class CustomerController {
             case "address" -> customer.setAddress(newValue);
         }
         customerService.updateCustomer(customer);
+        loadAllCustomers(); // Tải lại toàn bộ sau khi cập nhật
+    }
+
+    private void loadAllCustomers() {
+        List<Customer> customers = customerService.getAllCustomers();
+        allCustomers.setAll(customers);
+        customerList.setAll(customers);
+    }
+
+    private void setupPagination() {
+        PaginationUtils.setup(
+                pagination,
+                allCustomers,
+                customerList,
+                currentPage,
+                itemsPerPage,
+                (pagedData, pageIndex) -> customerTable.setItems(customerList)
+        );
     }
 }
