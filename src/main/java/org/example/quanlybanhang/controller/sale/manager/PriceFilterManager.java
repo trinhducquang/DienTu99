@@ -1,47 +1,58 @@
 package org.example.quanlybanhang.controller.sale.manager;
 
+import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import org.example.quanlybanhang.model.Product;
 import org.example.quanlybanhang.utils.MoneyUtils;
 
 import java.math.BigDecimal;
-import java.util.function.BiConsumer;
 
 public class PriceFilterManager {
+
     private final Slider minPriceSlider;
     private final Slider maxPriceSlider;
     private final Label minPriceLabel;
     private final Label maxPriceLabel;
+    private final ObservableList<Product> filteredProducts;
+    private final ObservableList<Product> allProducts;
+    private final Runnable onFilterApplied;
 
     private BigDecimal minPrice = BigDecimal.ZERO;
     private BigDecimal maxPrice = new BigDecimal("900000000");
 
-    private BiConsumer<BigDecimal, BigDecimal> onPriceFilterChanged;
-
-    public PriceFilterManager(Slider minPriceSlider, Slider maxPriceSlider,
-                              Label minPriceLabel, Label maxPriceLabel) {
+    public PriceFilterManager(Slider minPriceSlider,
+                              Slider maxPriceSlider,
+                              Label minPriceLabel,
+                              Label maxPriceLabel,
+                              ObservableList<Product> filteredProducts,
+                              ObservableList<Product> allProducts,
+                              Runnable onFilterApplied) {
         this.minPriceSlider = minPriceSlider;
         this.maxPriceSlider = maxPriceSlider;
         this.minPriceLabel = minPriceLabel;
         this.maxPriceLabel = maxPriceLabel;
-
-        initPriceSliders();
+        this.filteredProducts = filteredProducts;
+        this.allProducts = allProducts;
+        this.onFilterApplied = onFilterApplied;
     }
 
-    private void initPriceSliders() {
+    public void initPriceSliders() {
         minPriceSlider.setValue(minPrice.doubleValue());
         maxPriceSlider.setValue(maxPrice.doubleValue());
         updatePriceLabels();
 
-        minPriceSlider.valueProperty().addListener((obs, oldVal, newVal) -> onMinSliderChanged(newVal));
-        maxPriceSlider.valueProperty().addListener((obs, oldVal, newVal) -> onMaxSliderChanged(newVal));
+        minPriceSlider.valueProperty().addListener((obs, oldVal, newVal) ->
+                onMinSliderChanged(newVal));
+        maxPriceSlider.valueProperty().addListener((obs, oldVal, newVal) ->
+                onMaxSliderChanged(newVal));
 
         minPriceSlider.valueChangingProperty().addListener((obs, wasChanging, isChanging) -> {
-            if (!isChanging) triggerPriceFilterChanged();
+            if (!isChanging) filterProductsByPrice();
         });
 
         maxPriceSlider.valueChangingProperty().addListener((obs, wasChanging, isChanging) -> {
-            if (!isChanging) triggerPriceFilterChanged();
+            if (!isChanging) filterProductsByPrice();
         });
     }
 
@@ -57,7 +68,7 @@ public class PriceFilterManager {
         if (minPrice.compareTo(BigDecimal.valueOf(maxPriceSlider.getValue())) > 0) {
             maxPriceSlider.setValue(minPrice.doubleValue());
         } else if (!minPriceSlider.isValueChanging()) {
-            triggerPriceFilterChanged();
+            filterProductsByPrice();
         }
     }
 
@@ -68,18 +79,18 @@ public class PriceFilterManager {
         if (maxPrice.compareTo(BigDecimal.valueOf(minPriceSlider.getValue())) < 0) {
             minPriceSlider.setValue(maxPrice.doubleValue());
         } else if (!maxPriceSlider.isValueChanging()) {
-            triggerPriceFilterChanged();
+            filterProductsByPrice();
         }
     }
 
-    private void triggerPriceFilterChanged() {
-        if (onPriceFilterChanged != null) {
-            onPriceFilterChanged.accept(minPrice, maxPrice);
-        }
-    }
-
-    public void setOnPriceFilterChanged(BiConsumer<BigDecimal, BigDecimal> callback) {
-        this.onPriceFilterChanged = callback;
+    public void filterProductsByPrice() {
+        filteredProducts.setAll(
+                allProducts.filtered(product -> {
+                    BigDecimal price = product.getPrice();
+                    return price.compareTo(minPrice) >= 0 && price.compareTo(maxPrice) <= 0;
+                })
+        );
+        onFilterApplied.run();
     }
 
     public BigDecimal getMinPrice() {

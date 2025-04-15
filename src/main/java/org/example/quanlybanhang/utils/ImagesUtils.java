@@ -81,7 +81,7 @@ public class ImagesUtils {
             fade.play();
         });
 
-        new Thread(loadTask).start();
+        ThreadManager.runBackground(loadTask);
         return imageView;
     }
 

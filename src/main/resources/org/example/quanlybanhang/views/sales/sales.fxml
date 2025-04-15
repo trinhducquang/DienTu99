@@ -83,7 +83,7 @@
                              <Slider fx:id="maxPriceSlider" max="900000000" min="0" styleClass="price-slider" value="900000000" />
                          </VBox>
                      </HBox>
-                    <ComboBox prefHeight="30.0" prefWidth="201.0" promptText="Danh mục">
+                    <ComboBox fx:id="categoryFilter" prefHeight="30.0" prefWidth="201.0" promptText="Danh mục">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
                                 <String fx:value="Tất cả" />
@@ -96,7 +96,7 @@
                         </items>
                     </ComboBox>
                     <VBox alignment="CENTER" spacing="5" />
-                    <TextField prefHeight="30.0" prefWidth="216.0" promptText="Tìm kiếm sản phẩm" />
+                    <TextField fx:id="searchField" prefHeight="30.0" prefWidth="216.0" promptText="Tìm kiếm sản phẩm" />
                 </HBox>
 
                 <!-- Container for products -->
@@ -147,13 +147,13 @@
                 <HBox>
                     <Label style="-fx-font-weight: bold;" text="Tổng tiền:" />
                     <Region HBox.hgrow="ALWAYS" />
-                    <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" fx:id="totalLabel" text="38.790.000₫" />
+                    <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" fx:id="totalLabel"/>
                 </HBox>
             </VBox>
 
             <HBox spacing="10">
-                <Button maxWidth="Infinity" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Làm mới giỏ hàng" HBox.hgrow="ALWAYS" />
-                <Button maxWidth="Infinity" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Tạo đơn hàng" HBox.hgrow="ALWAYS" />
+                <Button fx:id="resetCartButton" onAction="#resetCart" maxWidth="Infinity" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Làm mới giỏ hàng" HBox.hgrow="ALWAYS" />
+                <Button fx:id="createOrderButton" onAction="#handleCreateOrder" maxWidth="Infinity" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Tạo đơn hàng" HBox.hgrow="ALWAYS" />
             </HBox>
 
             <Separator />

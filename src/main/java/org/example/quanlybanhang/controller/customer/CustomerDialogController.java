@@ -6,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.model.Customer;
 import org.example.quanlybanhang.service.CustomerService;
+import org.example.quanlybanhang.utils.AlertUtils;
 
 public class CustomerDialogController {
 
@@ -28,6 +29,13 @@ public class CustomerDialogController {
     public void initialize() {
         saveButton.setOnAction(event -> saveCustomer());
         cancelButton.setOnAction(event -> closeDialog());
+
+        // Thêm kiểm tra số điện thoại chỉ được nhập số
+        phoneField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                phoneField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
     }
 
     private void saveCustomer() {
@@ -36,8 +44,27 @@ public class CustomerDialogController {
         String email = emailField.getText().trim();
         String address = addressField.getText().trim();
 
-        if (name.isEmpty() || phone.isEmpty() || email.isEmpty() || address.isEmpty()) {
-            System.out.println("Vui lòng nhập đầy đủ thông tin!");
+        if (name.isEmpty()) {
+            AlertUtils.showWarning("Thông tin không hợp lệ", "Vui lòng nhập tên khách hàng!");
+            nameField.requestFocus();
+            return;
+        }
+
+        if (phone.isEmpty()) {
+            AlertUtils.showWarning("Thông tin không hợp lệ", "Vui lòng nhập số điện thoại khách hàng!");
+            phoneField.requestFocus();
+            return;
+        }
+
+        if (email.isEmpty()) {
+            AlertUtils.showWarning("Thông tin không hợp lệ", "Vui lòng nhập email khách hàng!");
+            emailField.requestFocus();
+            return;
+        }
+
+        if (address.isEmpty()) {
+            AlertUtils.showWarning("Thông tin không hợp lệ", "Vui lòng nhập địa chỉ khách hàng!");
+            addressField.requestFocus();
             return;
         }
 
@@ -45,10 +72,10 @@ public class CustomerDialogController {
         boolean success = customerService.addCustomer(newCustomer);
 
         if (success) {
-            System.out.println("Thêm khách hàng thành công!");
+            AlertUtils.showInfo("Thành công", "Thêm khách hàng thành công!");
             closeDialog();
         } else {
-            System.out.println("Lỗi khi thêm khách hàng!");
+            AlertUtils.showError("Lỗi", "Không thể thêm khách hàng. Vui lòng thử lại sau!");
         }
     }
 

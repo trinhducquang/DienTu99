@@ -15,6 +15,10 @@ public class Category {
         this.category = category;
     }
 
+    public Category() {
+
+    }
+
     public int getId() {
         return id;
     }

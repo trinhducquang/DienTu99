@@ -8,7 +8,8 @@ public record ProductDisplayInfoDTO(
         String imageUrl,
         BigDecimal quantity,
         BigDecimal unitPrice,
-        BigDecimal totalPrice
-)
-{}
+        BigDecimal totalPrice,
+        int stockQuantity
+) {
+}
 

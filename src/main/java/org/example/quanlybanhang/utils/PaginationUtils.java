@@ -11,39 +11,47 @@ public class PaginationUtils {
 
     public static <T> void setup(
             Pagination pagination,
-            List<T> source,
+            ObservableList<T> source,  // Change this to ObservableList
             ObservableList<T> target,
             IntegerProperty currentPage,
             int itemsPerPage,
             BiConsumer<List<T>, Integer> onPageChanged
     ) {
-        int pageCount = Math.max(1, (int) Math.ceil((double) source.size() / itemsPerPage)); // pageCount tối thiểu là 1
-        pagination.setPageCount(pageCount);
+        // Update page count whenever source changes
+        updatePageCount(pagination, source, itemsPerPage);
 
-        // Đảm bảo currentPageIndex không vượt quá pageCount - 1
-        int initialPageIndex = Math.min(currentPage.get(), pageCount - 1);
-        pagination.setCurrentPageIndex(initialPageIndex);
-        currentPage.set(initialPageIndex);
-
-        Runnable update = () -> {
-            int index = currentPage.get();
-            int from = index * itemsPerPage;
-            int to = Math.min(from + itemsPerPage, source.size());
-
-            List<T> page = from <= to ? source.subList(from, to) : List.of();
-            target.setAll(page);
-            if (onPageChanged != null) onPageChanged.accept(page, index);
-        };
-
-        pagination.setPageFactory(i -> {
-            int validIndex = Math.min(i, pagination.getPageCount() - 1);
-            currentPage.set(validIndex);
-            update.run();
-            return new javafx.scene.layout.VBox(); // hoặc có thể trả về node content nếu cần
+        // Listen for changes to the source list
+        source.addListener((javafx.collections.ListChangeListener<T>) c -> {
+            updatePageCount(pagination, source, itemsPerPage);
+            // When source changes, reset to first page
+            pagination.setCurrentPageIndex(0);
+            currentPage.set(0);
         });
 
-        currentPage.addListener((obs, oldVal, newVal) -> update.run());
+        // Set up the page factory
+        pagination.currentPageIndexProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                currentPage.set(newVal.intValue());
+            }
+        });
 
-        update.run(); // Khởi tạo trang đầu
+        pagination.setPageFactory(pageIndex -> {
+            int from = pageIndex * itemsPerPage;
+            int to = Math.min(from + itemsPerPage, source.size());
+
+            List<T> page = from < to ? source.subList(from, to) : List.of();
+            target.setAll(page);
+            if (onPageChanged != null) onPageChanged.accept(page, pageIndex);
+            return new javafx.scene.layout.VBox();
+        });
+
+        // Initialize the first page
+        int initialPage = Math.min(currentPage.get(), Math.max(0, pagination.getPageCount() - 1));
+        pagination.setCurrentPageIndex(initialPage);
+    }
+
+    private static <T> void updatePageCount(Pagination pagination, List<T> source, int itemsPerPage) {
+        int pageCount = Math.max(1, (int) Math.ceil((double) source.size() / itemsPerPage));
+        pagination.setPageCount(pageCount);
     }
 }

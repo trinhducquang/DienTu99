@@ -5,6 +5,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.model.Category;
 import org.example.quanlybanhang.service.CategoryService;
+import org.example.quanlybanhang.utils.AlertUtils;
 
 public class AddCategoryDialogController {
 
@@ -46,7 +47,8 @@ public class AddCategoryDialogController {
         String description = descriptionField.getText().trim();
 
         if (name.isEmpty()) {
-            showAlert("Lỗi", "Tên danh mục không được để trống.");
+            AlertUtils.showWarning("Lỗi", "Tên danh mục không được để trống.");
+            categoryNameField.requestFocus();
             return;
         }
 
@@ -58,10 +60,10 @@ public class AddCategoryDialogController {
         boolean success = categoryService.addCategory(newCategory);
 
         if (success) {
-            showAlert("Thành công", "Thêm danh mục thành công.");
+            AlertUtils.showInfo("Thành công", "Thêm danh mục thành công.");
             closeDialog();
         } else {
-            showAlert("Lỗi", "Không thể thêm danh mục.");
+            AlertUtils.showError("Lỗi", "Không thể thêm danh mục.");
         }
     }
 
@@ -73,13 +75,5 @@ public class AddCategoryDialogController {
     private void closeDialog() {
         Stage stage = (Stage) categoryNameField.getScene().getWindow();
         stage.close();
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

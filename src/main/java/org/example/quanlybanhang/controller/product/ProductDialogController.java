@@ -7,6 +7,8 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.example.quanlybanhang.model.*;
 import org.example.quanlybanhang.service.*;
+import org.example.quanlybanhang.utils.AlertUtils;
+import org.example.quanlybanhang.utils.TextFieldFormatterUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,8 +27,8 @@ public class ProductDialogController {
 
     @FXML
     public void initialize() {
+        TextFieldFormatterUtils.applyBlazingFastCurrencyFormat(priceField);
         loadCategories();
-
         saveButton.setOnAction(event -> saveProduct());
         cancelButton.setOnAction(event -> closeDialog());
     }
@@ -50,17 +52,15 @@ public class ProductDialogController {
 
     private void saveProduct() {
         try {
-            String name = productNameField.getText();
-            Category selectedCategory = categoryComboBox.getSelectionModel().getSelectedItem();
-
-            if (selectedCategory == null) {
-                System.out.println("Vui lòng chọn danh mục!");
+            if (!isValidInput()) {
                 return;
             }
 
+            String name = productNameField.getText();
+            Category selectedCategory = categoryComboBox.getSelectionModel().getSelectedItem();
             String description = descriptionField.getText();
-            BigDecimal price = new BigDecimal(priceField.getText().replace(",", "").trim());
-            int stockQuantity = Integer.parseInt(stockQuantityField.getText());
+            BigDecimal price = TextFieldFormatterUtils.parseCurrencyText(priceField.getText());
+            int stockQuantity = Integer.parseInt(stockQuantityField.getText().trim());
             String imageUrl = imageUrlField.getText();
 
             String specifications = getSpecifications();
@@ -82,8 +82,10 @@ public class ProductDialogController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            AlertUtils.showError("Lỗi", "Đã xảy ra lỗi khi lưu sản phẩm.");
         }
     }
+
 
     private String getSpecifications() {
         Map<String, String> specs = new LinkedHashMap<>();
@@ -102,4 +104,34 @@ public class ProductDialogController {
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
     }
+
+    private boolean isValidInput() {
+        if (productNameField.getText().isBlank()
+                || priceField.getText().isBlank()
+                || stockQuantityField.getText().isBlank()
+                || descriptionField.getText().isBlank()
+                || imageUrlField.getText().isBlank()
+                || configMemoryField.getText().isBlank()
+                || cameraField.getText().isBlank()
+                || batteryField.getText().isBlank()
+                || featuresField.getText().isBlank()
+                || connectivityField.getText().isBlank()
+                || designMaterialsField.getText().isBlank()
+                || categoryComboBox.getSelectionModel().getSelectedItem() == null) {
+
+            AlertUtils.showWarning("Thiếu thông tin", "Vui lòng điền đầy đủ tất cả các trường và chọn danh mục.");
+            return false;
+        }
+
+        try {
+            new BigDecimal(priceField.getText().replace(",", "").trim());
+            Integer.parseInt(stockQuantityField.getText().trim());
+        } catch (NumberFormatException e) {
+            AlertUtils.showWarning("Sai định dạng", "Giá hoặc số lượng không hợp lệ.");
+            return false;
+        }
+
+        return true;
+    }
+
 }

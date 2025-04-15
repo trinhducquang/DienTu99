@@ -144,4 +144,21 @@ public class EmployeeDAO implements CrudDao<Employee> {
             e.printStackTrace();
         }
     }
+
+    public boolean isFullNameOrUsernameExists(String fullName, String username) {
+        String query = "SELECT COUNT(*) FROM users WHERE full_name = ? OR username = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, fullName);
+            statement.setString(2, username);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
 }

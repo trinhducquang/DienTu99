@@ -135,17 +135,22 @@ public class EmployeeManagementController {
     }
 
     private void filterEmployees(String keyword) {
-        List<Employee> filtered = SearchService.search(
-                allEmployees,
-                keyword,
-                e -> String.valueOf(e.getId()),
-                Employee::getFullName,
-                Employee::getUsername,
-                Employee::getEmail,
-                Employee::getPhone,
-                e -> e.getRole().toString()
-        );
-        employeeList.setAll(filtered);
+        if (keyword == null || keyword.trim().isEmpty()) {
+            employeeList.setAll(allEmployees); // Show all when search is empty
+        } else {
+            List<Employee> filtered = SearchService.search(
+                    allEmployees,
+                    keyword,
+                    e -> String.valueOf(e.getId()),
+                    Employee::getFullName,
+                    Employee::getUsername,
+                    Employee::getEmail,
+                    Employee::getPhone,
+                    e -> e.getRole().toString()
+            );
+            employeeList.setAll(filtered);
+        }
+        pagination.setCurrentPageIndex(0);
     }
 
     private void updateEmployeeField(Employee employee, String field, String newValue) {

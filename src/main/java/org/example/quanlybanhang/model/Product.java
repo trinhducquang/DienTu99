@@ -40,14 +40,16 @@ public class Product {
 
     }
 
-    public Product(String name, BigDecimal price, String imageUrl) {
-         this.name = name;
-         this.price = price;
-         this.imageUrl = imageUrl;
+    public Product(int id, String name, String imageUrl, BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.price = price;
     }
 
-    public Product(int id, String name, String s, BigDecimal bigDecimal) {
+    public Product(String name, BigDecimal price, String imageUrl) {
     }
+
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

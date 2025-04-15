@@ -2,6 +2,8 @@ package org.example.quanlybanhang.utils;
 
 import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
 import org.example.quanlybanhang.dto.productDTO.ProductDisplayInfoDTO;
+import org.example.quanlybanhang.model.Product;
+import org.example.quanlybanhang.service.ProductService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,6 +14,9 @@ public class OrderConverter {
 
     public static List<ProductDisplayInfoDTO> toProductDisplayInfoList(OrderSummaryDTO summary) {
         if (summary == null) return Collections.emptyList();
+
+        // Khởi tạo ProductService ngay trong phương thức
+        ProductService productService = new ProductService();
 
         String[] ids = safeSplit(summary.productIds());
         String[] names = safeSplit(summary.productNames());
@@ -31,9 +36,17 @@ public class OrderConverter {
             BigDecimal unitPrice = parseSafeBigDecimal(getSafe(prices, i), BigDecimal.ZERO);
             BigDecimal total = quantity.multiply(unitPrice);
 
-            productList.add(new ProductDisplayInfoDTO(id, name, image, quantity, unitPrice, total));
-        }
+            // Lấy thông tin stockQuantity từ database
+            int stockQuantity = 0;
+            if (id != -1) {
+                Product product = productService.getProductById(id);
+                if (product != null) {
+                    stockQuantity = product.getStockQuantity();
+                }
+            }
 
+            productList.add(new ProductDisplayInfoDTO(id, name, image, quantity, unitPrice, total, stockQuantity));
+        }
 
         return productList;
     }

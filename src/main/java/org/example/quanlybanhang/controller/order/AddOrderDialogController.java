@@ -1,46 +1,80 @@
 package org.example.quanlybanhang.controller.order;
 
-import static org.example.quanlybanhang.utils.TableCellFactoryUtils.currencyCellFactory;
-import static org.example.quanlybanhang.utils.MoneyUtils.formatVN;
-import javafx.beans.property.*;
-import javafx.collections.*;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import org.example.quanlybanhang.dao.*;
-import org.example.quanlybanhang.enums.*;
+import org.example.quanlybanhang.dao.CustomerDAO;
+import org.example.quanlybanhang.dao.EmployeeDAO;
+import org.example.quanlybanhang.dao.OrderDAO;
+import org.example.quanlybanhang.dao.ProductDAO;
+import org.example.quanlybanhang.dto.productDTO.CartItem;
+import org.example.quanlybanhang.enums.OrderStatus;
+import org.example.quanlybanhang.enums.ProductStatus;
+import org.example.quanlybanhang.enums.UserRole;
 import org.example.quanlybanhang.helpers.DialogHelper;
-import org.example.quanlybanhang.model.*;
-import org.example.quanlybanhang.service.*;
-import org.example.quanlybanhang.utils.*;
+import org.example.quanlybanhang.model.Employee;
+import org.example.quanlybanhang.model.Order;
+import org.example.quanlybanhang.model.OrderDetail;
+import org.example.quanlybanhang.model.Product;
+import org.example.quanlybanhang.service.SearchService;
+import org.example.quanlybanhang.utils.AlertUtils;
+import org.example.quanlybanhang.utils.DatabaseConnection;
+import org.example.quanlybanhang.utils.TextFieldFormatterUtils;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.time.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.example.quanlybanhang.utils.MoneyUtils.formatVN;
+import static org.example.quanlybanhang.utils.TableCellFactoryUtils.currencyCellFactory;
 
 public class AddOrderDialogController {
 
 
     //region FXML Components
-    @FXML private Button btnAddCustomer;
-    @FXML private TextField findProducts, txtOrderId, txtShippingFee, txtTotalPrice, txtFinalTotal;
-    @FXML private DatePicker dateOrderDate;
-    @FXML private ComboBox<String> cbCustomer;
-    @FXML private ComboBox<OrderStatus> cbOrderStatus;
-    @FXML private ComboBox<Employee> cbEmployee;
-    @FXML private ComboBox<Product> cbProduct;
-    @FXML private Spinner<Integer> spQuantity;
-    @FXML private TextArea txtNote;
-    @FXML private Button btnAddProduct, btnCancel, btnSaveOrder, btnBack;
-    @FXML private TableView<OrderDetail> tableOrderDetails;
-    @FXML private TableColumn<OrderDetail, Integer> colSTT, colProductId, colQuantity;
-    @FXML private TableColumn<OrderDetail, String> colProductName;
-    @FXML private TableColumn<OrderDetail, BigDecimal> colPrice, colTotal;
-    @FXML private TableColumn<OrderDetail, Button> colAction;
+    @FXML
+    private Button btnAddCustomer;
+    @FXML
+    private TextField findProducts, txtOrderId, txtShippingFee, txtTotalPrice, txtFinalTotal;
+    @FXML
+    private DatePicker dateOrderDate;
+    @FXML
+    private ComboBox<String> cbCustomer;
+    @FXML
+    private ComboBox<OrderStatus> cbOrderStatus;
+    @FXML
+    private ComboBox<Employee> cbEmployee;
+    @FXML
+    private ComboBox<Product> cbProduct;
+    @FXML
+    private Spinner<Integer> spQuantity;
+    @FXML
+    private TextArea txtNote;
+    @FXML
+    private Button btnAddProduct, btnCancel, btnSaveOrder, btnBack;
+    @FXML
+    private TableView<OrderDetail> tableOrderDetails;
+    @FXML
+    private TableColumn<OrderDetail, Integer> colSTT, colProductId, colQuantity;
+    @FXML
+    private TableColumn<OrderDetail, String> colProductName;
+    @FXML
+    private TableColumn<OrderDetail, BigDecimal> colPrice, colTotal;
+    @FXML
+    private TableColumn<OrderDetail, Button> colAction;
     //endregion
 
     //region Services and Data
@@ -50,7 +84,6 @@ public class AddOrderDialogController {
     private ObservableList<OrderDetail> orderDetailsList = FXCollections.observableArrayList();
     private List<Product> allProducts = new ArrayList<>();
     private CustomerDAO customerDAO;
-
 
 
     //endregion
@@ -66,7 +99,6 @@ public class AddOrderDialogController {
         btnAddCustomer.setOnAction(event -> {
             DialogHelper.showDialog("/org/example/quanlybanhang/views/customer/CustomerDialog.fxml", "Thêm Khách Hàng Mới", (Stage) btnAddCustomer.getScene().getWindow());
         });
-
 
 
     }
@@ -136,6 +168,7 @@ public class AddOrderDialogController {
     private TableCell<OrderDetail, Button> getDeleteButtonCell() {
         return new TableCell<>() {
             private final Button btnDelete = new Button("Xóa");
+
             @Override
             protected void updateItem(Button item, boolean empty) {
                 super.updateItem(item, empty);
@@ -156,7 +189,7 @@ public class AddOrderDialogController {
         if (product == null) return;
 
         if (product.getStatus() != ProductStatus.CON_HANG) {
-            showAlert(Alert.AlertType.WARNING, "Sản phẩm không hợp lệ", "Sản phẩm đã hết hàng hoặc không thể đặt.");
+            AlertUtils.showWarning("Sản phẩm không hợp lệ", "Sản phẩm đã hết hàng hoặc không thể đặt.");
             cbProduct.setValue(null);
             spQuantity.setValueFactory(null);
             return;
@@ -171,7 +204,7 @@ public class AddOrderDialogController {
         Integer quantity = spQuantity.getValue();
 
         if (product == null || quantity == null || quantity <= 0) {
-            showAlert(Alert.AlertType.WARNING, "Lỗi", "Vui lòng chọn sản phẩm và số lượng hợp lệ!");
+            AlertUtils.showWarning("Lỗi", "Vui lòng chọn sản phẩm và số lượng hợp lệ!");
             return;
         }
 
@@ -184,7 +217,7 @@ public class AddOrderDialogController {
         int totalQty = currentQty + quantity;
 
         if (totalQty > availableStock) {
-            showAlert(Alert.AlertType.WARNING, "Lỗi", "Tồn kho chỉ còn " + availableStock + " sản phẩm.");
+            AlertUtils.showWarning("Lỗi", "Tồn kho chỉ còn " + availableStock + " sản phẩm.");
             return;
         }
 
@@ -205,18 +238,24 @@ public class AddOrderDialogController {
                 .map(d -> d.getPrice().multiply(BigDecimal.valueOf(d.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-
+        // Cập nhật trường Tổng Tiền Hàng
         txtTotalPrice.setText(formatVN(total));
 
+        // Điền giá trị vào trường Tổng Tiền Hàng trong phần Thanh Toán
         try {
-            BigDecimal shippingFee = TextFieldFormatterUtils.parseCurrencyText(txtShippingFee.getText());
+            BigDecimal shippingFee = BigDecimal.ZERO;
+            // Nếu đã có phí vận chuyển thì lấy giá trị đó
+            if (txtShippingFee.getText() != null && !txtShippingFee.getText().isEmpty()) {
+                shippingFee = TextFieldFormatterUtils.parseCurrencyText(txtShippingFee.getText());
+            }
+
+            // Cập nhật Tổng Thanh Toán
             BigDecimal finalTotal = total.add(shippingFee);
             txtFinalTotal.setText(formatVN(finalTotal));
         } catch (NumberFormatException e) {
             txtFinalTotal.setText(formatVN(total));
         }
     }
-
 
 
     private void loadProducts() {
@@ -253,7 +292,7 @@ public class AddOrderDialogController {
             Employee emp = cbEmployee.getValue();
             String cust = cbCustomer.getValue();
             if (emp == null || cust == null || !cust.contains("-")) {
-                showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng chọn khách hàng và nhân viên.");
+                AlertUtils.showError("Lỗi", "Vui lòng chọn khách hàng và nhân viên.");
                 return;
             }
 
@@ -282,19 +321,26 @@ public class AddOrderDialogController {
 
             int newId = orderDAO.addOrder(order, details);
             if (newId > 0) {
-                showAlert(Alert.AlertType.INFORMATION, "Thành công", "Đơn hàng đã được lưu.");
+                AlertUtils.showInfo("Thành công", "Đơn hàng đã được lưu.");
                 closeDialogFromEvent(null);
             } else {
-                showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể lưu đơn hàng.");
+                AlertUtils.showError("Lỗi", "Không thể lưu đơn hàng.");
             }
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Vui lòng kiểm tra lại thông tin.");
+            AlertUtils.showError("Lỗi", "Vui lòng kiểm tra lại thông tin.");
         }
     }
 
 
-    @FXML private void handleCancel(ActionEvent event) { closeDialogFromEvent(event); }
-    @FXML private void handleBack(ActionEvent event) { closeDialogFromEvent(event); }
+    @FXML
+    private void handleCancel(ActionEvent event) {
+        closeDialogFromEvent(event);
+    }
+
+    @FXML
+    private void handleBack(ActionEvent event) {
+        closeDialogFromEvent(event);
+    }
 
     private void closeDialogFromEvent(ActionEvent event) {
         Stage stage = event != null
@@ -303,11 +349,27 @@ public class AddOrderDialogController {
         stage.close();
     }
 
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    public void setCartItems(ObservableList<CartItem> cartItems) {
+        if (cartItems == null || cartItems.isEmpty()) return;
+
+        for (CartItem item : cartItems) {
+            Product product = item.getProduct();
+            if (product != null) {
+                OrderDetail detail = new OrderDetail(
+                        orderDetailsList.size() + 1,
+                        Integer.parseInt(txtOrderId.getText()),
+                        product.getId(),
+                        item.getQuantity().intValue(),
+                        product.getPrice()
+                );
+                orderDetailsList.add(detail);
+                productMap.put(product.getId(), product.getName());
+            }
+        }
+
+        // Cập nhật tổng tiền ngay sau khi thêm các sản phẩm từ giỏ hàng
+        updateTotalPrices();
     }
+
+
 }
