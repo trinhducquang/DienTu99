@@ -27,6 +27,10 @@ public class WarehouseService {
         return warehouseDAO.insertWarehouseImport(transaction, productList); // gọi đúng cách
     }
 
+    public boolean insertWarehouseExport(WarehouseDTO transaction, List<WarehouseDTO> productList) {
+        return warehouseDAO.insertWarehouseExport(transaction, productList);
+    }
+
     public boolean insertWarehouseCheck(WarehouseDTO transaction, List<WarehouseDTO> productList) {
         return warehouseDAO.insertWarehouseCheck(transaction, productList);
     }

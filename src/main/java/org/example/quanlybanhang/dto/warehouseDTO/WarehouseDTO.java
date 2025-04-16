@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 public class WarehouseDTO {
     private int id;
     private int productId;
-    private String sku;
     private String transactionCode;
     private String productName;
     private BigDecimal sellPrice;
@@ -140,13 +139,8 @@ public class WarehouseDTO {
         return unitPrice;
     }
 
-    public String getSku() {
-        return sku;
-    }
 
-    public void setSku(String sku) {
-        this.sku = sku;
-    }
+
 
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
@@ -252,7 +246,6 @@ public class WarehouseDTO {
     public void setStock(int stock) {
         this.stock = stock;
     }
-
 
 
 }

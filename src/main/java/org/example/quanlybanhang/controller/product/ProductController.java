@@ -109,13 +109,6 @@ public class ProductController {
             updateProductInDatabase(product);
         });
 
-        stockQuantityColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        stockQuantityColumn.setOnEditCommit(event -> {
-            Product product = event.getRowValue();
-            product.setStockQuantity(event.getNewValue());
-            updateProductInDatabase(product);
-        });
-
         descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         descriptionColumn.setOnEditCommit(event -> {
             Product product = event.getRowValue();

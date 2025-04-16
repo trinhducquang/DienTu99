@@ -20,7 +20,7 @@ public class ProductDialogController {
     private final CategoryService categoryService = new CategoryService();
 
     @FXML
-    private TextField productNameField, priceField, stockQuantityField, descriptionField, imageUrlField;
+    private TextField productNameField, priceField, descriptionField, imageUrlField;
     @FXML private TextField configMemoryField, cameraField, batteryField, featuresField, connectivityField, designMaterialsField;
     @FXML private ComboBox<Category> categoryComboBox;
     @FXML private Button saveButton, cancelButton;
@@ -60,7 +60,6 @@ public class ProductDialogController {
             Category selectedCategory = categoryComboBox.getSelectionModel().getSelectedItem();
             String description = descriptionField.getText();
             BigDecimal price = TextFieldFormatterUtils.parseCurrencyText(priceField.getText());
-            int stockQuantity = Integer.parseInt(stockQuantityField.getText().trim());
             String imageUrl = imageUrlField.getText();
 
             String specifications = getSpecifications();
@@ -71,7 +70,6 @@ public class ProductDialogController {
             newProduct.setCategoryName(selectedCategory.getName());
             newProduct.setDescription(description);
             newProduct.setPrice(price);
-            newProduct.setStockQuantity(stockQuantity);
             newProduct.setImageUrl(imageUrl);
             newProduct.setSpecifications(specifications);
             newProduct.setCreatedAt(LocalDateTime.now());
@@ -108,7 +106,6 @@ public class ProductDialogController {
     private boolean isValidInput() {
         if (productNameField.getText().isBlank()
                 || priceField.getText().isBlank()
-                || stockQuantityField.getText().isBlank()
                 || descriptionField.getText().isBlank()
                 || imageUrlField.getText().isBlank()
                 || configMemoryField.getText().isBlank()
@@ -125,7 +122,6 @@ public class ProductDialogController {
 
         try {
             new BigDecimal(priceField.getText().replace(",", "").trim());
-            Integer.parseInt(stockQuantityField.getText().trim());
         } catch (NumberFormatException e) {
             AlertUtils.showWarning("Sai định dạng", "Giá hoặc số lượng không hợp lệ.");
             return false;

@@ -229,48 +229,119 @@ public class WarehouseImportDialog {
     @FXML
     private void onAddProduct() {
         Product product = productComboBox.getValue();
-        if (product == null) return;
+        if (product == null) {
+            AlertUtils.showError("Lỗi", "Vui lòng chọn sản phẩm trước khi thêm!");
+            return;
+        }
 
         WarehouseType type = transactionTypeComboBox.getValue();
 
         switch (type) {
-            case NHAP_KHO -> handleAddProductForImport(product);
-            case KIEM_KHO -> handleAddProductForInventoryCheck(product);
-            case XUAT_KHO -> System.out.println("Xuất kho chưa được xử lý.");
+            case NHAP_KHO -> {
+                // Xử lý nhập kho
+                if (quantityField.getText().isEmpty()) {
+                    AlertUtils.showError("Lỗi", "Vui lòng nhập số lượng sản phẩm!");
+                    return;
+                }
+
+                int quantity;
+                try {
+                    quantity = Integer.parseInt(quantityField.getText().replace(",", ""));
+                    if (quantity <= 0) {
+                        AlertUtils.showError("Lỗi", "Số lượng phải lớn hơn 0!");
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    AlertUtils.showError("Lỗi", "Số lượng không hợp lệ!");
+                    return;
+                }
+
+                BigDecimal price = BigDecimal.ZERO;
+                if (unitPriceField.getText().isEmpty()) {
+                    AlertUtils.showError("Lỗi", "Vui lòng nhập đơn giá sản phẩm!");
+                    return;
+                } else {
+                    price = MoneyUtils.parseCurrencyText(unitPriceField.getText());
+                    if (price.compareTo(BigDecimal.ZERO) <= 0) {
+                        AlertUtils.showError("Lỗi", "Đơn giá phải lớn hơn 0!");
+                        return;
+                    }
+                }
+
+                // Kiểm tra sản phẩm đã tồn tại chưa
+                OrderDetail existing = productDetailsList.stream()
+                        .filter(d -> d.getProductId() == product.getId())
+                        .findFirst().orElse(null);
+
+                if (existing != null) {
+                    existing.setQuantity(existing.getQuantity() + quantity);
+                    existing.setPrice(price); // Cập nhật giá mới nếu có thay đổi
+                } else {
+                    // Thêm sản phẩm mới vào danh sách
+                    productDetailsList.add(new OrderDetail(0, 0, product.getId(), quantity, price));
+                }
+
+                // Xóa dữ liệu nhập
+                quantityField.clear();
+                unitPriceField.clear();
+            }
+            case XUAT_KHO -> {
+                // Xử lý xuất kho
+                if (quantityField.getText().isEmpty()) {
+                    AlertUtils.showError("Lỗi", "Vui lòng nhập số lượng sản phẩm!");
+                    return;
+                }
+
+                int quantity;
+                try {
+                    quantity = Integer.parseInt(quantityField.getText().replace(",", ""));
+                    if (quantity <= 0) {
+                        AlertUtils.showError("Lỗi", "Số lượng phải lớn hơn 0!");
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    AlertUtils.showError("Lỗi", "Số lượng không hợp lệ!");
+                    return;
+                }
+
+                // Kiểm tra sản phẩm đã tồn tại chưa
+                OrderDetail existing = productDetailsList.stream()
+                        .filter(d -> d.getProductId() == product.getId())
+                        .findFirst().orElse(null);
+
+                if (existing != null) {
+                    existing.setQuantity(existing.getQuantity() + quantity);
+                } else {
+                    // Thêm sản phẩm mới vào danh sách với giá 0 (vì xuất kho không quan tâm giá)
+                    productDetailsList.add(new OrderDetail(0, 0, product.getId(), quantity, BigDecimal.ZERO));
+                }
+
+                // Xóa dữ liệu nhập
+                quantityField.clear();
+            }
+            case KIEM_KHO -> {
+                // Xử lý kiểm kho
+                boolean exists = productDetailsList.stream()
+                        .anyMatch(d -> d.getProductId() == product.getId());
+
+                if (!exists) {
+                    productDetailsList.add(new OrderDetail(0, 0, product.getId(), 0, BigDecimal.ZERO));
+                } else {
+                    AlertUtils.showWarning("Cảnh báo", "Sản phẩm này đã có trong danh sách kiểm kê!");
+                    return;
+                }
+            }
         }
 
+        // Cập nhật lại bảng và tính tổng tiền
         productTableView.refresh();
         updateTotalAmount();
+
+        // Sau khi thêm xong, chuyển focus về combobox sản phẩm để chuẩn bị thêm sản phẩm tiếp theo
+        productComboBox.requestFocus();
     }
 
-    private void handleAddProductForImport(Product product) {
-        if (quantityField.getText().isEmpty()) return;
 
-        int quantity = Integer.parseInt(quantityField.getText().replace(",", ""));
-
-        OrderDetail existing = productDetailsList.stream()
-                .filter(d -> d.getProductId() == product.getId())
-                .findFirst().orElse(null);
-
-        if (existing != null) {
-            existing.setQuantity(existing.getQuantity() + quantity);
-        } else {
-            BigDecimal price = MoneyUtils.parseCurrencyText(unitPriceField.getText());
-            productDetailsList.add(new OrderDetail(0, 0, product.getId(), quantity, price));
-        }
-
-        quantityField.clear();
-        unitPriceField.clear();
-    }
-
-    private void handleAddProductForInventoryCheck(Product product) {
-        boolean exists = productDetailsList.stream()
-                .anyMatch(d -> d.getProductId() == product.getId());
-
-        if (!exists) {
-            productDetailsList.add(new OrderDetail(0, 0, product.getId(), 0, BigDecimal.ZERO));
-        }
-    }
 
     private void updateTotalAmount() {
         if (transactionTypeComboBox.getValue() != WarehouseType.NHAP_KHO) {
@@ -297,19 +368,20 @@ public class WarehouseImportDialog {
 
             boolean success = switch (type) {
                 case NHAP_KHO -> warehouseService.insertWarehouseImport(transaction, productList);
+                case XUAT_KHO -> warehouseService.insertWarehouseExport(transaction, productList);
                 case KIEM_KHO -> warehouseService.insertWarehouseCheck(transaction, productList);
-                default -> false;
             };
 
             if (success) {
+                AlertUtils.showInfo("Thành công", "Tạo phiếu " + type.getValue().toLowerCase() + " thành công!");
                 resetCommonFields();
             } else {
-                System.out.println("❌ Lỗi khi tạo phiếu " + type.getValue().toLowerCase());
+                AlertUtils.showError("Lỗi", "Lỗi khi tạo phiếu " + type.getValue().toLowerCase());
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("❌ Lỗi không xác định: " + e.getMessage());
+            AlertUtils.showError("Lỗi", "Lỗi không xác định: " + e.getMessage());
         }
     }
 

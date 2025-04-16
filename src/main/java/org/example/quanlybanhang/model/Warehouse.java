@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 public class Warehouse {
     private int id;
     private int productId;
-    private String sku;
     private int quantity;
     private BigDecimal unitPrice;
     private WarehouseType type;
@@ -22,18 +21,15 @@ public class Warehouse {
     private int deficientQuantity;
 
 
-    // Constructor không tham số
     public Warehouse() {
     }
 
-    // Constructor đầy đủ
-    public Warehouse(int id, int productId, int quantity, String sku, BigDecimal unitPrice, WarehouseType type,
+    public Warehouse(int id, int productId, int quantity, BigDecimal unitPrice, WarehouseType type,
                      String note, LocalDateTime createdAt, LocalDateTime updatedAt, String transactionCode,
                      int createdBy, int excessQuantity, int missing, int deficientQuantity) {
         this.id = id;
         this.productId = productId;
         this.quantity = quantity;
-        this.sku = sku;
         this.unitPrice = unitPrice;
         this.type = type;
         this.note = note;
@@ -85,14 +81,6 @@ public class Warehouse {
 
     public void setType(WarehouseType type) {
         this.type = type;
-    }
-
-    public String getSku() {
-        return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
     }
 
     public String getNote() {

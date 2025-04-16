@@ -52,15 +52,11 @@
             <Label styleClass="field-label" text="Giá" GridPane.columnIndex="0" GridPane.rowIndex="2" />
             <TextField fx:id="priceField" promptText="Nhập giá" styleClass="field-input" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-            <!-- Field 4 -->
-            <Label styleClass="field-label" text="Số Lượng" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-            <TextField fx:id="stockQuantityField" promptText="Nhập số lượng" styleClass="field-input" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-
             <!-- Field 5 -->
-            <Label prefHeight="19.0" prefWidth="100.0" styleClass="field-label" text="Mô Tả" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-            <TextField fx:id="descriptionField" promptText="Nhập mô tả sản phẩm" styleClass="field-input" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label styleClass="field-label" text="URL Hình Ảnh" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-            <TextField fx:id="imageUrlField" promptText="Nhập URL hình ảnh" styleClass="field-input" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label prefHeight="19.0" prefWidth="100.0" styleClass="field-label" text="Mô Tả" GridPane.rowIndex="3" />
+            <TextField fx:id="descriptionField" promptText="Nhập mô tả sản phẩm" styleClass="field-input" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label styleClass="field-label" text="URL Hình Ảnh" GridPane.rowIndex="4" />
+            <TextField fx:id="imageUrlField" promptText="Nhập URL hình ảnh" styleClass="field-input" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          <rowConstraints>
             <RowConstraints />
             <RowConstraints />
