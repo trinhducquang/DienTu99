@@ -3,6 +3,8 @@ package org.example.quanlybanhang.utils;
 import javafx.beans.property.IntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Pagination;
+import org.example.quanlybanhang.utils.PaginationUtils;
+
 
 import java.util.List;
 import java.util.function.BiConsumer;

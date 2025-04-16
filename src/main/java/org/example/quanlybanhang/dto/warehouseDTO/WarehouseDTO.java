@@ -29,6 +29,8 @@ public class WarehouseDTO {
     private int excessQuantity;
     private int deficientQuantity;
     private int missing;
+    private int stock;
+
 
 
     public WarehouseDTO() {
@@ -242,6 +244,15 @@ public class WarehouseDTO {
     public void setMissing(int missing) {
         this.missing = missing;
     }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
 
 
 }
