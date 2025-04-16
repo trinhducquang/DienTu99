@@ -2,6 +2,7 @@ package org.example.quanlybanhang.controller.warehouse;
 
 import javafx.beans.property.*;
 import javafx.collections.*;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
@@ -356,35 +357,6 @@ public class WarehouseImportDialog {
         totalAmountField.setText(MoneyUtils.formatVN(total));
     }
 
-    // === Save Logic ===
-
-    @FXML
-    private void onSave() {
-        WarehouseType type = transactionTypeComboBox.getValue();
-
-        try {
-            WarehouseDTO transaction = buildTransactionInfo();
-            List<WarehouseDTO> productList = buildProductList();
-
-            boolean success = switch (type) {
-                case NHAP_KHO -> warehouseService.insertWarehouseImport(transaction, productList);
-                case XUAT_KHO -> warehouseService.insertWarehouseExport(transaction, productList);
-                case KIEM_KHO -> warehouseService.insertWarehouseCheck(transaction, productList);
-            };
-
-            if (success) {
-                AlertUtils.showInfo("Thành công", "Tạo phiếu " + type.getValue().toLowerCase() + " thành công!");
-                resetCommonFields();
-            } else {
-                AlertUtils.showError("Lỗi", "Lỗi khi tạo phiếu " + type.getValue().toLowerCase());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            AlertUtils.showError("Lỗi", "Lỗi không xác định: " + e.getMessage());
-        }
-    }
-
     private WarehouseDTO buildTransactionInfo() {
         WarehouseDTO dto = new WarehouseDTO();
         dto.setTransactionCode(transactionCodeField.getText());
@@ -426,6 +398,33 @@ public class WarehouseImportDialog {
             return Integer.parseInt(text.replace(",", ""));
         } catch (NumberFormatException e) {
             return 0;
+        }
+    }
+
+    @FXML
+    private void onSave() {
+        WarehouseType type = transactionTypeComboBox.getValue();
+
+        try {
+            WarehouseDTO transaction = buildTransactionInfo();
+            List<WarehouseDTO> productList = buildProductList();
+
+            boolean success = switch (type) {
+                case NHAP_KHO -> warehouseService.insertWarehouseImport(transaction, productList);
+                case XUAT_KHO -> warehouseService.insertWarehouseExport(transaction, productList);
+                case KIEM_KHO -> warehouseService.insertWarehouseCheck(transaction, productList);
+            };
+
+            if (success) {
+                AlertUtils.showInfo("Thành công", "Tạo phiếu " + type.getValue().toLowerCase() + " thành công!");
+                resetCommonFields();
+            } else {
+                AlertUtils.showError("Lỗi", "Lỗi khi tạo phiếu " + type.getValue().toLowerCase());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtils.showError("Lỗi", "Lỗi không xác định: " + e.getMessage());
         }
     }
 }

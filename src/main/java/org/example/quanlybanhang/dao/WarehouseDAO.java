@@ -4,7 +4,6 @@ import org.example.quanlybanhang.dto.warehouseDTO.ImportedWarehouseDTO;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
 import org.example.quanlybanhang.enums.ProductStatus;
 import org.example.quanlybanhang.enums.WarehouseType;
-import org.example.quanlybanhang.model.Product;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 
 import java.sql.*;
@@ -133,19 +132,19 @@ public class WarehouseDAO {
         final String insertSQL = """
         INSERT INTO warehouse_transactions (
             transaction_code, created_by, created_at,
-            product_id, quantity, unit_price, note
-        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            product_id, quantity, unit_price, note, type
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     """;
 
         try (Connection conn = DatabaseConnection.getConnection()) {
             if (conn == null) return false;
 
-            conn.setAutoCommit(true); // Bạn có thể bật false nếu muốn rollback khi có lỗi
+            conn.setAutoCommit(false);
 
             try (PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
                 for (WarehouseDTO product : productList) {
                     if (product.getQuantity() <= 0 || product.getProductId() <= 0 || product.getUnitPrice() == null) {
-                        continue; // Bỏ qua sản phẩm không hợp lệ
+                        continue;
                     }
 
                     stmt.setString(1, transaction.getTransactionCode());
@@ -155,20 +154,23 @@ public class WarehouseDAO {
                     stmt.setInt(5, product.getQuantity());
                     stmt.setBigDecimal(6, product.getUnitPrice());
                     stmt.setString(7, transaction.getNote());
-
+                    stmt.setString(8, transaction.getType().getValue());
                     stmt.addBatch();
+                    updateProductStock(conn, product.getProductId(), product.getQuantity());
                 }
 
                 stmt.executeBatch();
+                conn.commit(); // Commit the transaction
                 return true;
 
             } catch (SQLException e) {
-                System.err.println("❌ Lỗi khi thêm phiếu nhập kho: " + e.getMessage());
+                conn.rollback(); // Rollback on error
+                System.err.println("❌ Error adding import transaction: " + e.getMessage());
                 e.printStackTrace();
             }
 
         } catch (SQLException e) {
-            System.err.println("❌ Lỗi kết nối cơ sở dữ liệu: " + e.getMessage());
+            System.err.println("❌ Database connection error: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -277,7 +279,7 @@ public class WarehouseDAO {
             try (PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
                 for (WarehouseDTO product : productList) {
                     if (product.getQuantity() <= 0 || product.getProductId() <= 0) {
-                        continue; // Bỏ qua sản phẩm không hợp lệ
+                        continue;
                     }
 
                     stmt.setString(1, transaction.getTransactionCode());
@@ -285,17 +287,12 @@ public class WarehouseDAO {
                     stmt.setTimestamp(3, Timestamp.valueOf(transaction.getCreatedAt()));
                     stmt.setInt(4, product.getProductId());
                     stmt.setInt(5, product.getQuantity());
-                    stmt.setBigDecimal(6, BigDecimal.ZERO); // Giá 0 cho xuất kho, hoặc lấy từ bảng products nếu cần
+                    stmt.setBigDecimal(6, BigDecimal.ZERO);
                     stmt.setString(7, transaction.getType().getValue());
                     stmt.setString(8, transaction.getNote());
-
                     stmt.addBatch();
-
-                    // Cập nhật số lượng tồn kho
                     updateProductStock(conn, product.getProductId(), -product.getQuantity());
                 }
-
-                // Thực thi batch
                 stmt.executeBatch();
                 return true;
 
@@ -314,28 +311,42 @@ public class WarehouseDAO {
 
 
     private void updateProductStock(Connection conn, int productId, int quantityChange) throws SQLException {
-        conn.setAutoCommit(false);
         try {
-            // Update stock quantity
             String updateStockSQL = "UPDATE products SET stock_quantity = stock_quantity + ?, updated_at = NOW() WHERE id = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(updateStockSQL)) {
                 pstmt.setInt(1, quantityChange);
                 pstmt.setInt(2, productId);
                 int rowsAffected = pstmt.executeUpdate();
                 if (rowsAffected == 0) {
-                    throw new SQLException("No rows affected when updating product stock, product ID might not exist: " + productId);
+                    throw new SQLException("Không cập nhật được tồn kho, ID sản phẩm có thể không tồn tại: " + productId);
                 }
             }
 
-            String updateStatusSQL = "UPDATE products SET status = CASE WHEN stock_quantity > 0 THEN 'Còn hàng' ELSE 'Hết hàng' END WHERE id = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(updateStatusSQL)) {
+            int newQuantity = 0;
+            String selectStockSQL = "SELECT stock_quantity FROM products WHERE id = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(selectStockSQL)) {
                 pstmt.setInt(1, productId);
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        newQuantity = rs.getInt("stock_quantity");
+                    } else {
+                        throw new SQLException("Không tìm thấy sản phẩm với ID: " + productId);
+                    }
+                }
+            }
+
+            ProductStatus status = (newQuantity > 0)
+                    ? ProductStatus.CON_HANG
+                    : ProductStatus.HET_HANG;
+
+            String updateStatusSQL = "UPDATE products SET status = ? WHERE id = ?";
+            try (PreparedStatement pstmt = conn.prepareStatement(updateStatusSQL)) {
+                pstmt.setString(1, status.getValue()); // Ví dụ: "Còn hàng"
+                pstmt.setInt(2, productId);
                 pstmt.executeUpdate();
             }
 
-            conn.commit();
         } catch (SQLException e) {
-            conn.rollback();
             throw e;
         }
     }
