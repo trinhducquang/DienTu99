@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.UserDAO;
 import org.example.quanlybanhang.model.User;
 import org.example.quanlybanhang.security.auth.AuthService;
+import org.example.quanlybanhang.security.auth.UserSession;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 
 import java.sql.Connection;
@@ -33,6 +34,9 @@ public class LoginController {
         User user = authService.login(tenDangNhap, matKhau);
 
         if (user != null) {
+            // Lưu thông tin người dùng đăng nhập
+            UserSession.setCurrentUser(user);
+
             switch (user.getRole()) {
                 case ADMIN:
                     chuyenScene("admin/Admin.fxml");
@@ -47,7 +51,7 @@ public class LoginController {
                     chuyenScene("warehouse/warehouse.fxml");
                     break;
                 case THU_NGAN:
-                    chuyenScene("cashier.fxml");
+                    chuyenScene("order/Order.fxml");
                     break;
                 default:
                     hienThiThongBao("Lỗi", "Vai trò không hợp lệ!");
@@ -56,9 +60,8 @@ public class LoginController {
         } else {
             hienThiThongBao("Lỗi Đăng Nhập", "Tên đăng nhập hoặc mật khẩu không đúng");
         }
-
-
     }
+
 
 
     private void chuyenScene(String fxmlFile) {

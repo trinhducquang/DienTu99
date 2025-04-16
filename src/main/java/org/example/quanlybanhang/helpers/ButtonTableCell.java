@@ -12,7 +12,7 @@ public class ButtonTableCell<T> extends TableCell<T, Void> {
         this.button = new Button(buttonText);
 
         button.setOnAction(event -> {
-            T item = getTableRow().getItem();
+            T item = getTableRow() != null ? getTableRow().getItem() : null;
             if (item != null) {
                 onClickAction.accept(item);
             }
@@ -22,7 +22,10 @@ public class ButtonTableCell<T> extends TableCell<T, Void> {
     @Override
     protected void updateItem(Void item, boolean empty) {
         super.updateItem(item, empty);
-        if (empty || getTableRow().getItem() == null) {
+
+        boolean noRowItem = getTableRow() == null || getTableRow().getItem() == null;
+
+        if (empty || noRowItem) {
             setGraphic(null);
         } else {
             setGraphic(button);

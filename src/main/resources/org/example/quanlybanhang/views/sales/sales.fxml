@@ -12,7 +12,6 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -32,12 +31,13 @@
                 </padding>
                 <Label text="Điện Tử 99" textFill="WHITE">
                     <font>
-                        <Font name="System Bold" size="24" />
+                        <Font name="System Bold" size="18.0" />
                     </font>
                 </Label>
                 <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="orderButton" style="-fx-background-color: white;" text="Quản lí đơn hàng" />
                 <Button fx:id="cartButton" onAction="#toggleCart" style="-fx-background-color: white;" text="Giỏ hàng (0)" />
-                <Button style="-fx-background-color: white;" text="Đăng Xuất" />
+                <Button fx:id="logoutButton" onAction="#handleLogout" style="-fx-background-color: white;" text="Đăng Xuất" />
             <BorderPane.margin>
                <Insets />
             </BorderPane.margin>
@@ -147,13 +147,13 @@
                 <HBox>
                     <Label style="-fx-font-weight: bold;" text="Tổng tiền:" />
                     <Region HBox.hgrow="ALWAYS" />
-                    <Label style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" fx:id="totalLabel"/>
+                    <Label fx:id="totalLabel" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" />
                 </HBox>
             </VBox>
 
             <HBox spacing="10">
-                <Button fx:id="resetCartButton" onAction="#resetCart" maxWidth="Infinity" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Làm mới giỏ hàng" HBox.hgrow="ALWAYS" />
-                <Button fx:id="createOrderButton" onAction="#handleCreateOrder" maxWidth="Infinity" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Tạo đơn hàng" HBox.hgrow="ALWAYS" />
+                <Button fx:id="resetCartButton" maxWidth="Infinity" onAction="#resetCart" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Làm mới giỏ hàng" HBox.hgrow="ALWAYS" />
+                <Button fx:id="createOrderButton" maxWidth="Infinity" onAction="#handleCreateOrder" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Tạo đơn hàng" HBox.hgrow="ALWAYS" />
             </HBox>
 
             <Separator />

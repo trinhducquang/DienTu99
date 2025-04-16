@@ -3,7 +3,7 @@
 /* Base styles */
 .root {
     -fx-font-family: 'System';
-    -fx-font-size: 14px;
+    -fx-font-size: 12px;
 }
 
 /* Responsive styles */

@@ -57,6 +57,8 @@ public class EmployeeManagementController {
         setupButtons();
         setupPagination();
         loadEmployees();
+
+
     }
 
     private void setupTable() {

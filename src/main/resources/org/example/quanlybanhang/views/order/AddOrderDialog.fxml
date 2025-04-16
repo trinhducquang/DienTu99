@@ -56,32 +56,33 @@
                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </padding>
                                     <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="150.0" prefWidth="150.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="93.0" prefWidth="95.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="341.0" minWidth="10.0" prefWidth="335.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="60.0" prefWidth="72.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="301.0" minWidth="10.0" prefWidth="293.0" />
                                     </columnConstraints>
                                     <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="22.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="22.0" minHeight="10.0" prefHeight="22.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
                                         <Label text="Mã Đơn Hàng:" />
-                                        <TextField fx:id="txtOrderId" editable="false" promptText="Tự động tạo" GridPane.columnIndex="1" />
+                                        <TextField fx:id="txtOrderId" editable="false" prefHeight="31.0" prefWidth="127.0" promptText="Tự động tạo" GridPane.columnIndex="1" />
 
                                         <Label text="Ngày Đặt:" GridPane.columnIndex="2" />
-                                        <DatePicker fx:id="dateOrderDate" prefWidth="200.0" promptText="Chọn ngày" GridPane.columnIndex="3" />
+                                        <DatePicker fx:id="dateOrderDate" prefHeight="31.0" prefWidth="338.0" promptText="Chọn ngày" GridPane.columnIndex="3" />
 
                                         <Label text="Khách Hàng:" GridPane.rowIndex="1" />
                                         <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                             <children>
-                                                <ComboBox fx:id="cbCustomer" prefWidth="150.0" promptText="Chọn khách hàng" />
-                                                <Button fx:id="btnAddCustomer" mnemonicParsing="false" text="+" />
+                                                <ComboBox fx:id="cbCustomer" prefHeight="31.0" prefWidth="206.0" promptText="Chọn khách hàng" />
+                                                <Button fx:id="btnAddCustomer" mnemonicParsing="false" prefHeight="31.0" prefWidth="78.0" text="+" />
+                                    <TextField fx:id="findProducts1" editable="true" prefHeight="491.0" prefWidth="175.0" promptText="Sô Điện Thoại" />
                                             </children>
                                         </HBox>
 
                                         <Label text="Trạng Thái:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                        <ComboBox fx:id="cbOrderStatus" prefWidth="200.0" promptText="Chọn trạng thái" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                        <ComboBox fx:id="cbOrderStatus" prefHeight="31.0" prefWidth="337.0" promptText="Chọn trạng thái" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                     </children>
                                 </GridPane>
                             </content>

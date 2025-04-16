@@ -3,6 +3,7 @@ package org.example.quanlybanhang.model;
 import org.example.quanlybanhang.enums.OrderStatus;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Order {
@@ -81,5 +82,19 @@ public class Order {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public LocalDate getOrderDateAsLocalDate() {
+        if (orderDate == null) {
+            return null;
+        }
+        return orderDate.toLocalDate();
+    }
+
+    public String getFormattedOrderDate() {
+        if (orderDate == null) {
+            return "";
+        }
+        return orderDate.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }
 }

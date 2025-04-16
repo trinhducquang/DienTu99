@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="747.0" prefWidth="1013.0" spacing="10" stylesheets="@product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.product.ProductController">
+<VBox alignment="TOP_CENTER" prefHeight="747.0" prefWidth="1122.0" spacing="10" stylesheets="@product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.product.ProductController">
 
     <!-- Main Content Area -->
     <HBox prefHeight="747.0" prefWidth="1013.0" spacing="20" HBox.hgrow="ALWAYS">
@@ -43,5 +43,5 @@
             </TableView>
         </VBox>
     </HBox>
-     <Pagination fx:id="pagination"  prefHeight="27.0" prefWidth="1013.0" />
+     <Pagination fx:id="pagination" prefHeight="27.0" prefWidth="1013.0" />
 </VBox>

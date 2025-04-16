@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="747.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.category.CategoryController">
     <center>
         <AnchorPane style="-fx-background-color: white;">
-            <VBox spacing="10.0" AnchorPane.topAnchor="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+            <VBox spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
 
                 <Label style="-fx-font-size: 24px; -fx-text-fill: #459CD3;" text="Quản Lý Danh Mục">
                     <font>
@@ -16,24 +27,24 @@
                 </Label>
 
                 <HBox spacing="10.0">
-                    <TextField fx:id="searchField" promptText="Tìm kiếm danh mục" HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="searchField" promptText="Tìm kiếm danh mục" HBox.hgrow="ALWAYS" />
                     <Button fx:id="addCategoryButton" style="-fx-background-color: #459CD3; -fx-text-fill: white;" text="Thêm Danh Mục" />
                 </HBox>
 
                 <TableView fx:id="categoryTable" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="idColumn" prefWidth="50" text="ID" />
-                        <TableColumn fx:id="categoryColum" maxWidth="179.0" prefWidth="115.0" text="Kiểu Danh Mục" />
-                        <TableColumn fx:id="nameColumn" prefWidth="133.0" text="Nhóm Sản Phẩm" />
-                        <TableColumn fx:id="descriptionColumn" prefWidth="319.0" text="Mô tả" />
-                        <TableColumn fx:id="actionsColumn" prefWidth="128.0" text="Thao tác" />
+                        <TableColumn fx:id="categoryColum" maxWidth="179.0" prefWidth="176.99996948242188" text="Kiểu Danh Mục" />
+                        <TableColumn fx:id="nameColumn" prefWidth="231.0" text="Nhóm Sản Phẩm" />
+                        <TableColumn fx:id="descriptionColumn" prefWidth="243.0" text="Mô tả" />
+                        <TableColumn fx:id="actionsColumn" minWidth="0.0" prefWidth="215.0" text="Thao tác" />
                     </columns>
                     <placeholder>
                         <Label text="No content in table" />
                     </placeholder>
                 </TableView>
                 <HBox alignment="CENTER" spacing="10.0">
-                    <Pagination fx:id="pagination" maxPageIndicatorCount="15"/>
+                    <Pagination fx:id="pagination" maxPageIndicatorCount="15" />
                 </HBox>
             </VBox>
         </AnchorPane>

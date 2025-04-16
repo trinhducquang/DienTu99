@@ -184,6 +184,24 @@ public class OrderDAO implements CrudDao<Order> {
                 rs.getString("note")
         );
     }
+
+    public List<Order> getOrdersByEmployeeId(int employeeId) {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM order_summary WHERE employee_id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, employeeId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                orders.add(extractOrderFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orders;
+    }
 }
 
 

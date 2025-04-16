@@ -11,6 +11,8 @@ module org.example.quanlybanhang {
     requires java.desktop;
 
 
+
+    exports org.example.quanlybanhang.enums;
     opens org.example.quanlybanhang.main to javafx.fxml;
     exports org.example.quanlybanhang.main to javafx.graphics;
     exports org.example.quanlybanhang.model;

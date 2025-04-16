@@ -12,7 +12,7 @@ import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Category;
 import org.example.quanlybanhang.service.CategoryService;
 import org.example.quanlybanhang.service.SearchService;
-import org.example.quanlybanhang.utils.PaginationUtils;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,6 +44,7 @@ public class CategoryController {
 
     @FXML
     public void initialize() {
+
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         categoryColum.setCellValueFactory(new PropertyValueFactory<>("category"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));

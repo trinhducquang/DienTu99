@@ -15,7 +15,6 @@ public class AuthService {
         this.passwordEncoder = new PasswordEncoder();
     }
 
-    // Đăng nhập
     public User login(String username, String rawPassword) {
         User user = userDAO.findByUsername(username);
         if (user == null) return null;

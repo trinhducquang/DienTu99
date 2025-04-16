@@ -20,10 +20,8 @@ import org.example.quanlybanhang.enums.OrderStatus;
 import org.example.quanlybanhang.enums.ProductStatus;
 import org.example.quanlybanhang.enums.UserRole;
 import org.example.quanlybanhang.helpers.DialogHelper;
-import org.example.quanlybanhang.model.Employee;
-import org.example.quanlybanhang.model.Order;
-import org.example.quanlybanhang.model.OrderDetail;
-import org.example.quanlybanhang.model.Product;
+import org.example.quanlybanhang.model.*;
+import org.example.quanlybanhang.security.auth.UserSession;
 import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.AlertUtils;
 import org.example.quanlybanhang.utils.DatabaseConnection;
@@ -108,7 +106,7 @@ public class AddOrderDialogController {
         Connection connection = DatabaseConnection.getConnection();
         orderDAO = new OrderDAO();
         productDAO = new ProductDAO(connection);
-        customerDAO = new CustomerDAO(); // <-- thêm dòng này
+        customerDAO = new CustomerDAO();
     }
 
     private void setupUIComponents() {
@@ -280,10 +278,29 @@ public class AddOrderDialogController {
 
 
     private void loadEmployees() {
-        List<Employee> employees = new EmployeeDAO(DatabaseConnection.getConnection()).getAll();
-        cbEmployee.getItems().addAll(employees.stream()
-                .filter(e -> UserRole.NHAN_VIEN_KHO.getValue().equalsIgnoreCase(e.getRole().getValue()))
-                .toList());
+        Connection connection = DatabaseConnection.getConnection();
+        User currentUser = UserSession.getCurrentUser();
+
+        List<Employee> employees = new EmployeeDAO(connection).getAll();
+
+        // Lọc và hiển thị chỉ những nhân viên có vai trò bán hàng
+        List<Employee> salesEmployees = employees.stream()
+                .filter(e -> e.getRole() == UserRole.BAN_HANG)
+                .toList();
+
+        cbEmployee.getItems().clear();
+        cbEmployee.getItems().addAll(salesEmployees);
+
+        // Nếu người dùng hiện tại là nhân viên bán hàng, chọn họ trong combobox
+        if (currentUser != null && currentUser.getRole() == UserRole.BAN_HANG) {
+            // Tìm nhân viên tương ứng với user hiện tại
+            for (Employee emp : salesEmployees) {
+                if (emp.getId() == currentUser.getId() || emp.getUsername().equals(currentUser.getUsername())) {
+                    cbEmployee.setValue(emp);
+                    break;
+                }
+            }
+        }
     }
 
     @FXML
@@ -370,6 +387,7 @@ public class AddOrderDialogController {
         // Cập nhật tổng tiền ngay sau khi thêm các sản phẩm từ giỏ hàng
         updateTotalPrices();
     }
+
 
 
 }

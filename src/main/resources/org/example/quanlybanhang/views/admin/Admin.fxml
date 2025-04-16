@@ -28,10 +28,10 @@
 
     <!-- Main Content Area -->
     <HBox spacing="20.0" HBox.hgrow="ALWAYS">
-      <AnchorPane prefHeight="702.0" prefWidth="209.0">
+      <AnchorPane prefHeight="758.0" prefWidth="188.0">
          <children>
               <!-- Side Navigation -->
-              <VBox prefHeight="748.0" prefWidth="209.0" spacing="10.0" styleClass="side-nav">
+              <VBox prefHeight="748.0" prefWidth="191.0" spacing="10.0" styleClass="side-nav">
                   <Button fx:id="btnDashboard" styleClass="nav-button" text="Tổng Quan" />
                   <Button fx:id="btnEmployee" styleClass="nav-button" text="Nhân viên" />
                   <Button fx:id="btnProduct" styleClass="nav-button" text="Sản Phẩm" />
@@ -42,7 +42,7 @@
               </VBox>
          </children>
          <HBox.margin>
-            <Insets top="10.0" />
+            <Insets />
          </HBox.margin>
          <padding>
             <Insets top="10.0" />

@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="747.0" prefWidth="1253.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.warehouse.WarehouseController">
+<BorderPane prefHeight="747.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.warehouse.WarehouseController">
     <center>
         <BorderPane>
             <top>
@@ -69,8 +69,8 @@
                                                 <TableColumn fx:id="colUnitPrice" prefWidth="108.0" text="Giá Nhập" />
                                                 <TableColumn fx:id="colTotalAmount" prefWidth="168.0" text="Tổng Tiền Hàng" />
                                                 <TableColumn fx:id="colCreatedDate" prefWidth="113.0" text="Ngày Tạo" />
-                                                <TableColumn fx:id="colCreatedBy" prefWidth="132.0" text="Người Tạo" />
-                                                <TableColumn fx:id="colNote" maxWidth="500.0" prefWidth="110.0" text="Ghi Chú" />
+                                                <TableColumn fx:id="colCreatedBy" prefWidth="161.0" text="Người Tạo" />
+                                                <TableColumn fx:id="colNote" maxWidth="500.0" prefWidth="152.0" text="Ghi Chú" />
                                             </columns>
                                         </TableView>
                                     </children>
