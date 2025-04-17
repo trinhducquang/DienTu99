@@ -121,7 +121,7 @@ public class ProductDialogController {
         }
 
         try {
-            new BigDecimal(priceField.getText().replace(",", "").trim());
+            TextFieldFormatterUtils.parseCurrencyText(priceField.getText());
         } catch (NumberFormatException e) {
             AlertUtils.showWarning("Sai định dạng", "Giá hoặc số lượng không hợp lệ.");
             return false;
