@@ -51,7 +51,7 @@
                         <TableColumn fx:id="colProductId" prefWidth="95.0" text="Mã SP" />
                         <TableColumn fx:id="colProductName" prefWidth="237.0" text="Tên Sản Phẩm" />
                         <TableColumn fx:id="colStock" maxWidth="151.0" prefWidth="118.0" text="Tồn kho" />
-                        <TableColumn fx:id="colStock1" maxWidth="151.0" prefWidth="118.0" text="Xuất Kho" />
+                        <TableColumn fx:id="colExport" maxWidth="151.0" prefWidth="118.0" text="Xuất Kho" />
                         <TableColumn fx:id="colImportPrice" maxWidth="300.0" prefWidth="184.0" text="Giá Nhập" />
                         <TableColumn fx:id="colSellPrice" maxWidth="300.0" prefWidth="135.0" text="Giá Bán" />
                         <TableColumn fx:id="colCategory" maxWidth="300.0" prefWidth="223.0" text="Danh Mục" />
