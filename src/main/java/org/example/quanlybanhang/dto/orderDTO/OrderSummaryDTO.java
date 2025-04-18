@@ -21,4 +21,5 @@ public record OrderSummaryDTO(
         String productPrices,
         String note
 ) {
+
 }

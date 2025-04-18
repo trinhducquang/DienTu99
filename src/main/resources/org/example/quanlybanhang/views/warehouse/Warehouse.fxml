@@ -182,7 +182,7 @@
                                                         </Label>
                                                     </children>
                                                 </VBox>
-                                                <VBox alignment="CENTER" prefHeight="85.0" prefWidth="206.0" style="-fx-background-color: #ffc0cb; -fx-background-radius: 5;">
+                                                <VBox onMouseClicked="#openPendingOrdersDialog"  alignment="CENTER" prefHeight="85.0" prefWidth="206.0" style="-fx-background-color: #ffc0cb; -fx-background-radius: 5;">
                                                     <padding>
                                                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                                     </padding>
@@ -192,7 +192,7 @@
                                                                 <Font size="14.0" />
                                                             </font>
                                                         </Label>
-                                                        <Label fx:id="lblLowStockProducts1" text="28" textFill="WHITE">
+                                                        <Label fx:id="lblPendingOrders" text="28" textFill="WHITE">
                                                             <font>
                                                                 <Font name="System Bold" size="24.0" />
                                                             </font>
