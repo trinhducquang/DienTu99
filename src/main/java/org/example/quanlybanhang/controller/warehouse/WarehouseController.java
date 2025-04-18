@@ -23,62 +23,114 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.example.quanlybanhang.utils.TableCellFactoryUtils.*;
+import static org.example.quanlybanhang.utils.TableCellFactoryUtils.currencyCellFactory;
 
 public class WarehouseController {
 
-    @FXML private Button btnCreateTransaction;
-    @FXML private TextField txtSearchTransaction;
-    @FXML private DatePicker dpStartDateTransaction;
-    @FXML private DatePicker dpEndDateTransaction;
-    @FXML private TableView<WarehouseDTO> tblTransactions;
-    @FXML private TableColumn<WarehouseDTO, Integer> colTransId;
-    @FXML private TableColumn<WarehouseDTO, Integer> colProductCode;
-    @FXML private TableColumn<WarehouseDTO, String> colTransCode;
-    @FXML private TableColumn<WarehouseDTO, String> colProductName;
-    @FXML private TableColumn<WarehouseDTO, String> colCategory;
-    @FXML private TableColumn<WarehouseDTO, Integer> colQuantity;
-    @FXML private TableColumn<WarehouseDTO, BigDecimal> colUnitPrice;
-    @FXML private TableColumn<WarehouseDTO, BigDecimal> colTotalAmount;
-    @FXML private TableColumn<WarehouseDTO, String> colNote;
-    @FXML private TableColumn<WarehouseDTO, String> colCreatedBy;
-    @FXML private TableColumn<WarehouseDTO, LocalDate> colCreatedDate;
+    @FXML
+    private Button btnCreateTransaction;
+    @FXML
+    private TextField txtSearchTransaction;
+    @FXML
+    private DatePicker dpStartDateTransaction;
+    @FXML
+    private DatePicker dpEndDateTransaction;
+    @FXML
+    private TableView<WarehouseDTO> tblTransactions;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colTransId;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colProductCode;
+    @FXML
+    private TableColumn<WarehouseDTO, String> colTransCode;
+    @FXML
+    private TableColumn<WarehouseDTO, String> colProductName;
+    @FXML
+    private TableColumn<WarehouseDTO, String> colCategory;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colQuantity;
+    @FXML
+    private TableColumn<WarehouseDTO, BigDecimal> colUnitPrice;
+    @FXML
+    private TableColumn<WarehouseDTO, BigDecimal> colTotalAmount;
+    @FXML
+    private TableColumn<WarehouseDTO, String> colNote;
+    @FXML
+    private TableColumn<WarehouseDTO, String> colCreatedBy;
+    @FXML
+    private TableColumn<WarehouseDTO, LocalDate> colCreatedDate;
+    @FXML
+    private TableView<WarehouseDTO> tblTopExportProducts;
 
-    @FXML private Button btnCreateCheck;
-    @FXML private TextField txtSearchCheck;
-    @FXML private DatePicker dpStartDateCheck;
-    @FXML private DatePicker dpEndDateCheck;
-    @FXML private ComboBox<String> cboStatus;
-    @FXML private TableView<WarehouseDTO> tableWarehouseCheck;
-    @FXML private TableColumn<WarehouseDTO, String> colIdCheck;
-    @FXML private TableColumn<WarehouseDTO, LocalDateTime> colCheckdate;
-    @FXML private TableColumn<WarehouseDTO, String> checker;
-    @FXML private TableColumn<WarehouseDTO, String> colcheckProduct;
-    @FXML private TableColumn<WarehouseDTO, Integer> colProductNumber;
-    @FXML private TableColumn<WarehouseDTO, Integer> colExcessProduct;
-    @FXML private TableColumn<WarehouseDTO, Integer> colmissingProduct;
-    @FXML private TableColumn<WarehouseDTO, Integer> colDefectiveProduct;
-    @FXML private TableColumn<WarehouseDTO, Enum<?>> colCheckStatus;
-    @FXML private TableColumn<WarehouseDTO, String> colcheckNote;
+    @FXML
+    private Button btnCreateCheck;
+    @FXML
+    private TextField txtSearchCheck;
+    @FXML
+    private DatePicker dpStartDateCheck;
+    @FXML
+    private DatePicker dpEndDateCheck;
+    @FXML
+    private ComboBox<String> cboStatus;
+    @FXML
+    private TableView<WarehouseDTO> tableWarehouseCheck;
+    @FXML
+    private TableColumn<WarehouseDTO, String> colIdCheck;
+    @FXML
+    private TableColumn<WarehouseDTO, LocalDateTime> colCheckdate;
+    @FXML
+    private TableColumn<WarehouseDTO, String> checker;
+    @FXML
+    private TableColumn<WarehouseDTO, String> colcheckProduct;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colProductNumber;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colExcessProduct;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colmissingProduct;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colDefectiveProduct;
+    @FXML
+    private TableColumn<WarehouseDTO, Enum<?>> colCheckStatus;
+    @FXML
+    private TableColumn<WarehouseDTO, String> colcheckNote;
 
-    @FXML private Label lblTotalProducts;
-    @FXML private Label lblTotalValue;
-    @FXML private Label lblMonthlyTransactions;
-    @FXML private Label lblLowStockProducts;
+    @FXML
+    private Label lblTotalProducts;
+    @FXML
+    private Label lblTotalValue;
+    @FXML
+    private Label lblMonthlyTransactions;
+    @FXML
+    private Label lblLowStockProducts;
 
-    @FXML private TableView<WarehouseDTO> tblLowStockProducts;
-    @FXML private TableColumn<WarehouseDTO, Integer> colLowStockSTT;
-    @FXML private TableColumn<WarehouseDTO, Integer> colLowStockProductId;
-    @FXML private TableColumn<WarehouseDTO, String> colLowStockProductName;
-    @FXML private TableColumn<WarehouseDTO, Integer> colLowStockQuantity;
+    @FXML
+    private TableView<WarehouseDTO> tblLowStockProducts;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colLowStockSTT;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colLowStockProductId;
+    @FXML
+    private TableColumn<WarehouseDTO, String> colLowStockProductName;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colLowStockQuantity;
 
-    @FXML private TabPane tabPane;
-    @FXML private Pagination pagination;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colTopExportSTT;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colTopExportProductId;
+    @FXML
+    private TableColumn<WarehouseDTO, String> colTopExportProductName;
+    @FXML
+    private TableColumn<WarehouseDTO, Integer> colTopExportQuantity;
+
+    @FXML
+    private TabPane tabPane;
+    @FXML
+    private Pagination pagination;
     private ObservableList<WarehouseDTO> allTransactions;
     private ObservableList<WarehouseDTO> allProducts;
     private ObservableList<WarehouseDTO> allChecks;
@@ -139,6 +191,14 @@ public class WarehouseController {
         colDefectiveProduct.setCellValueFactory(new PropertyValueFactory<>("deficientQuantity"));
         colCheckStatus.setCellValueFactory(new PropertyValueFactory<>("inventoryStatus"));
         colcheckNote.setCellValueFactory(new PropertyValueFactory<>("InventoryNote"));
+
+        colTopExportSTT.setCellValueFactory(cellData -> {
+            int index = tblTopExportProducts.getItems().indexOf(cellData.getValue()) + 1;
+            return new SimpleIntegerProperty(index).asObject();
+        });
+        colTopExportProductId.setCellValueFactory(new PropertyValueFactory<>("productId"));
+        colTopExportProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        colTopExportQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
         if (tblLowStockProducts != null) {
             setupLowStockTable();
@@ -201,12 +261,13 @@ public class WarehouseController {
 
     private void updateLowStockProducts() {
         lowStockProducts.clear();
+        Map<Integer, WarehouseDTO> uniqueProducts = new HashMap<>();
         for (WarehouseDTO product : allProducts) {
             if (product.getStock() <= LOW_STOCK_THRESHOLD) {
-                lowStockProducts.add(product);
+                uniqueProducts.putIfAbsent(product.getProductId(), product);
             }
         }
-
+        lowStockProducts.addAll(uniqueProducts.values());
         FXCollections.sort(lowStockProducts, (p1, p2) -> Integer.compare(p1.getStock(), p2.getStock()));
     }
 
@@ -360,6 +421,7 @@ public class WarehouseController {
                     break;
                 case 2:
                     switchPaginationToChecks();
+                    loadTopExportedProducts();
                     break;
             }
         } catch (Exception e) {
@@ -420,10 +482,13 @@ public class WarehouseController {
                 .filter(t -> t.getCreatedAt() != null &&
                         t.getCreatedAt().toLocalDate().isAfter(firstDayOfMonth.minusDays(1)))
                 .count();
-
-        long lowStockCount = allProducts.stream()
-                .filter(p -> p.getStock() <= LOW_STOCK_THRESHOLD)
-                .count();
+        Set<Integer> uniqueLowStockProductIds = new HashSet<>();
+        for (WarehouseDTO product : allProducts) {
+            if (product.getStock() <= LOW_STOCK_THRESHOLD) {
+                uniqueLowStockProductIds.add(product.getProductId());
+            }
+        }
+        long lowStockCount = uniqueLowStockProductIds.size();
 
         String formattedTotalStock = String.format("%,d", totalStockQuantity);
         String formattedWarehouseValue = String.format("%,.0fđ", totalWarehouseValue);
@@ -434,6 +499,8 @@ public class WarehouseController {
         if (lblTotalValue != null) lblTotalValue.setText(formattedWarehouseValue);
         if (lblMonthlyTransactions != null) lblMonthlyTransactions.setText(formattedMonthlyTransactions);
         if (lblLowStockProducts != null) lblLowStockProducts.setText(formattedLowStock);
+        loadTopExportedProducts();
+
     }
 
     @FXML
@@ -456,4 +523,39 @@ public class WarehouseController {
             e.printStackTrace();
         }
     }
+
+    private void loadTopExportedProducts() {
+        // Sử dụng Map để theo dõi tổng số lượng xuất theo productId
+        Map<Integer, WarehouseDTO> productExportMap = new HashMap<>();
+
+        // Thống kê số lượng xuất kho cho từng sản phẩm
+        for (WarehouseDTO transaction : allTransactions) {
+            if (transaction.getType() == WarehouseType.XUAT_KHO) {
+                int productId = transaction.getProductId();
+                String productName = transaction.getProductName();
+
+                // Tạo hoặc cập nhật bản ghi cho sản phẩm
+                WarehouseDTO exportSummary = productExportMap.computeIfAbsent(
+                        productId,
+                        k -> {
+                            WarehouseDTO dto = new WarehouseDTO();
+                            dto.setProductId(productId);
+                            dto.setProductName(productName);
+                            dto.setQuantity(0); // Khởi tạo số lượng là 0
+                            return dto;
+                        }
+                );
+
+                exportSummary.setQuantity(exportSummary.getQuantity() + transaction.getQuantity());
+            }
+        }
+        List<WarehouseDTO> topExportProducts = new ArrayList<>(productExportMap.values());
+        topExportProducts.sort((p1, p2) -> Integer.compare(p2.getQuantity(), p1.getQuantity()));
+        int limit = Math.min(20, topExportProducts.size());
+        List<WarehouseDTO> top20ExportProducts = topExportProducts.subList(0, limit);
+        ObservableList<WarehouseDTO> topExportList = FXCollections.observableArrayList(top20ExportProducts);
+        tblTopExportProducts.setItems(topExportList);
+    }
+
+
 }

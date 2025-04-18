@@ -182,23 +182,23 @@
                                                         </Label>
                                                     </children>
                                                 </VBox>
-                                    <VBox alignment="CENTER" prefHeight="85.0" prefWidth="206.0" style="-fx-background-color: #ffc0cb; -fx-background-radius: 5;">
-                                       <padding>
-                                          <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
-                                       </padding>
-                                       <children>
-                                          <Label text="Giao Dịch Đang Chờ Xử Lí" textFill="WHITE">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <Label fx:id="lblLowStockProducts1" text="28" textFill="WHITE">
-                                             <font>
-                                                <Font name="System Bold" size="24.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </VBox>
+                                                <VBox alignment="CENTER" prefHeight="85.0" prefWidth="206.0" style="-fx-background-color: #ffc0cb; -fx-background-radius: 5;">
+                                                    <padding>
+                                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                                    </padding>
+                                                    <children>
+                                                        <Label text="Giao Dịch Đang Chờ Xử Lí" textFill="WHITE">
+                                                            <font>
+                                                                <Font size="14.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label fx:id="lblLowStockProducts1" text="28" textFill="WHITE">
+                                                            <font>
+                                                                <Font name="System Bold" size="24.0" />
+                                                            </font>
+                                                        </Label>
+                                                    </children>
+                                                </VBox>
                                                 <VBox alignment="CENTER" prefHeight="85.0" prefWidth="78.0" style="-fx-background-color: #F44336; -fx-background-radius: 5;" HBox.hgrow="ALWAYS">
                                                     <padding>
                                                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
@@ -229,12 +229,12 @@
                                                 <VBox spacing="10.0" HBox.hgrow="ALWAYS">
                                                     <children>
                                                         <Label text="Top Sản Phẩm Xuất Kho" />
-                                                        <TableView prefHeight="200.0" VBox.vgrow="ALWAYS">
+                                                        <TableView fx:id="tblTopExportProducts" prefHeight="200.0" VBox.vgrow="ALWAYS">
                                                             <columns>
-                                                                <TableColumn prefWidth="50.0" text="STT" />
-                                                                <TableColumn prefWidth="150.0" text="Mã SP" />
-                                                                <TableColumn prefWidth="250.0" text="Tên Sản Phẩm" />
-                                                                <TableColumn prefWidth="100.0" text="Số Lượng" />
+                                                                <TableColumn fx:id="colTopExportSTT" prefWidth="50.0" text="STT" />
+                                                                <TableColumn fx:id="colTopExportProductId" prefWidth="150.0" text="Mã SP" />
+                                                                <TableColumn fx:id="colTopExportProductName" prefWidth="250.0" text="Tên Sản Phẩm" />
+                                                                <TableColumn fx:id="colTopExportQuantity" prefWidth="100.0" text="Số Lượng" />
                                                             </columns>
                                                         </TableView>
                                                     </children>

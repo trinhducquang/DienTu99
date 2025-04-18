@@ -15,20 +15,20 @@
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="TOP_CENTER" prefHeight="747.0" prefWidth="1300.0" spacing="10" stylesheets="@Order.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.order.OrderController">
-   <HBox fx:id="headerBox" alignment="CENTER_LEFT" prefWidth="1090.0" spacing="20" style="-fx-background-color: #3498db;">
-      <padding>
-         <Insets bottom="10" left="15" right="15" top="10" />
-      </padding>
-      <children>
-         <Label text="Điện Tử 99" textFill="WHITE">
-            <font>
-               <Font name="System Bold" size="18.0" />
-            </font>
-         </Label>
-         <Region HBox.hgrow="ALWAYS" />
-         <Button fx:id="logoutButton" onAction="#handleLogout" style="-fx-background-color: white;" text="Đăng Xuất" />
-      </children>
-   </HBox>
+    <HBox fx:id="headerBox" alignment="CENTER_LEFT" prefWidth="1090.0" spacing="20" style="-fx-background-color: #3498db;">
+        <padding>
+            <Insets bottom="10" left="15" right="15" top="10" />
+        </padding>
+        <children>
+            <Label text="Điện Tử 99" textFill="WHITE">
+                <font>
+                    <Font name="System Bold" size="18.0" />
+                </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="logoutButton" onAction="#handleLogout" style="-fx-background-color: white;" text="Đăng Xuất" />
+        </children>
+    </HBox>
     <!-- Main Content Area -->
     <HBox prefHeight="754.0" prefWidth="1013.0" spacing="20" HBox.hgrow="ALWAYS">
 
@@ -36,15 +36,15 @@
         <VBox prefHeight="747.0" prefWidth="1013.0" spacing="20" HBox.hgrow="ALWAYS">
             <!-- Page Title -->
             <Label alignment="CENTER" prefHeight="27.0" prefWidth="228.0" styleClass="dashboard-title" text="Quản Lý Đơn Hàng">
-            <VBox.margin>
-               <Insets left="3.0" top="10.0" />
-            </VBox.margin></Label>
+                <VBox.margin>
+                    <Insets left="3.0" top="10.0" />
+                </VBox.margin></Label>
 
             <!-- Search and Action Area -->
             <HBox alignment="CENTER_LEFT" spacing="10">
                 <TextField fx:id="searchField" prefHeight="37.0" prefWidth="429.0" promptText="Tìm kiếm đơn hàng" styleClass="search-field" HBox.hgrow="ALWAYS" />
-            <DatePicker fx:id="fromDatePicker" prefHeight="0.0" prefWidth="202.0" promptText="Từ ngày" />
-            <DatePicker fx:id="toDatePicker" prefHeight="0.0" prefWidth="197.0" promptText="Đến ngày" />
+                <DatePicker fx:id="fromDatePicker" prefHeight="0.0" prefWidth="202.0" promptText="Từ ngày" />
+                <DatePicker fx:id="toDatePicker" prefHeight="0.0" prefWidth="197.0" promptText="Đến ngày" />
                 <ComboBox fx:id="statusFilterComboBox" promptText="Trạng Thái" styleClass="status-filter" />
                 <Button fx:id="addOrderButton" styleClass="add-button" text="Thêm Đơn Hàng" />
             </HBox>

@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 import static org.example.quanlybanhang.utils.TableCellFactoryUtils.currencyCellFactory;
 
 public class WarehouseProductsDialogController {
@@ -26,7 +25,6 @@ public class WarehouseProductsDialogController {
     @FXML private TableColumn<WarehouseDTO, Integer> colStock;
     @FXML private TableColumn<WarehouseDTO, Integer> colStock1;
     @FXML private TableColumn<WarehouseDTO, BigDecimal> colImportPrice;
-    @FXML private TableColumn<WarehouseDTO, BigDecimal> colSellPrice;
     @FXML private TableColumn<WarehouseDTO, String> colCategory;
     @FXML private TableColumn<WarehouseDTO, LocalDateTime> colUpdatedAt;
     @FXML private TableColumn<WarehouseDTO, BigDecimal> colTotalAmount;
@@ -50,14 +48,10 @@ public class WarehouseProductsDialogController {
         colStock1.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         colImportPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
         colImportPrice.setCellFactory(currencyCellFactory());
-        colSellPrice.setCellValueFactory(new PropertyValueFactory<>("sellPrice"));
-        colSellPrice.setCellFactory(currencyCellFactory());
         colCategory.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
         colUpdatedAt.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
         colTotalAmount.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
         colTotalAmount.setCellFactory(currencyCellFactory());
-
-
     }
 
     private void setupCategoryComboBox() {
@@ -76,7 +70,6 @@ public class WarehouseProductsDialogController {
         });
 
         cboCategory.getSelectionModel().selectFirst();
-
     }
 
     public void setProductData(ObservableList<WarehouseDTO> productData, ObservableList<WarehouseDTO> transactionData) {
@@ -85,7 +78,6 @@ public class WarehouseProductsDialogController {
         updateProductQuantitiesFromTransactions();
         tableProducts.setItems(this.products);
     }
-
 
     private void updateColumnVisibility(String warehouseTypeValue) {
         boolean isImport = warehouseTypeValue.equals(WarehouseType.NHAP_KHO.getValue());
@@ -101,7 +93,6 @@ public class WarehouseProductsDialogController {
         // Conditional columns
         colStock1.setText(isImport ? "Số lượng nhập" : "Số lượng xuất");
         colStock.setVisible(!isImport);
-        colSellPrice.setVisible(!isImport);
         colImportPrice.setVisible(isImport);
         colTotalAmount.setVisible(isImport);
     }
@@ -124,23 +115,19 @@ public class WarehouseProductsDialogController {
         products.clear();
 
         if (warehouseType == WarehouseType.XUAT_KHO) {
-            // Group by product ID for export transactions
             Map<Integer, WarehouseDTO> productMap = new HashMap<>();
 
             for (WarehouseDTO transaction : filteredTransactions) {
                 int productId = transaction.getProductId();
 
                 if (productMap.containsKey(productId)) {
-                    // Update existing product entry
                     WarehouseDTO existingProduct = productMap.get(productId);
                     existingProduct.setQuantity(existingProduct.getQuantity() + transaction.getQuantity());
 
-                    // Keep most recent transaction date
                     if (transaction.getCreatedAt().isAfter(existingProduct.getCreatedAt())) {
                         existingProduct.setCreatedAt(transaction.getCreatedAt());
                     }
                 } else {
-                    // Create new product entry
                     WarehouseDTO productEntry = createProductEntry(transaction);
                     productEntry.setStock(stockMap.getOrDefault(productId, 0));
                     productMap.put(productId, productEntry);
@@ -149,7 +136,6 @@ public class WarehouseProductsDialogController {
 
             products.addAll(productMap.values());
         } else {
-            // For imports, show all transactions individually
             for (WarehouseDTO transaction : filteredTransactions) {
                 WarehouseDTO productEntry = createProductEntry(transaction);
                 productEntry.setStock(stockMap.getOrDefault(productEntry.getProductId(), 0));
@@ -165,7 +151,6 @@ public class WarehouseProductsDialogController {
         entry.setProductName(transaction.getProductName());
         entry.setQuantity(transaction.getQuantity());
         entry.setUnitPrice(transaction.getUnitPrice());
-        entry.setSellPrice(transaction.getSellPrice());
         entry.setCategoryName(transaction.getCategoryName());
         entry.setCreatedAt(transaction.getCreatedAt());
         return entry;

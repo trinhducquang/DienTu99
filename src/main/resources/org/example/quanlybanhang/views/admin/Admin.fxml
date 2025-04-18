@@ -75,7 +75,7 @@
 
                 <VBox styleClass="summary-card" HBox.hgrow="ALWAYS">
                     <Label styleClass="card-title" text="Sản phẩm bán chạy nhất" />
-                    <Label styleClass="card-value" text="Laptop Gaming" />
+                    <Label fx:id="topSellingProductLabel" styleClass="card-value" text="Laptop Gaming" />
                 </VBox>
             </HBox>
 

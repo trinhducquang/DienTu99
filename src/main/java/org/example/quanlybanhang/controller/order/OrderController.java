@@ -271,7 +271,6 @@ public class OrderController implements RefreshableView {
         int end = Math.min(start + itemsPerPage, orderList.size());
         ordersTable.setItems(FXCollections.observableArrayList(orderList.subList(start, end)));
 
-        // Thiết lập lại cột hành động sau khi cập nhật bảng
         setupActionColumn();
     }
 

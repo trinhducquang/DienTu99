@@ -2,7 +2,6 @@ package org.example.quanlybanhang.enums;
 
 public enum OrderStatus {
     DANG_XU_LY("Đang xử lý"),
-    DANG_GIAO_HANG("Đang Giao Hàng"),
     HOAN_THANH("Hoàn thành"),
     DA_HUY("Đã hủy");
 

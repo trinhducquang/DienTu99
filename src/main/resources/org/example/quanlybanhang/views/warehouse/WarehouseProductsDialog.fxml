@@ -54,7 +54,6 @@
                         <TableColumn fx:id="colStock" maxWidth="151.0" prefWidth="135.0" text="Tồn kho" />
                         <TableColumn fx:id="colImportPrice" maxWidth="300.0" prefWidth="123.0" text="Giá Nhập" />
                         <TableColumn fx:id="colTotalAmount" maxWidth="300.0" prefWidth="130.0" text="Tổng Tiền Hàng" />
-                        <TableColumn fx:id="colSellPrice" maxWidth="250.0" prefWidth="97.0" text="Giá Bán" />
                         <TableColumn fx:id="colCategory" maxWidth="366.0" prefWidth="144.0" text="Danh Mục" />
                         <TableColumn fx:id="colUpdatedAt" maxWidth="380.0" prefWidth="367.0" text="Ngày Cập Nhật" />
                     </columns>
