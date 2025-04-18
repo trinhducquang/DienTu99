@@ -15,6 +15,8 @@ import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
 import org.example.quanlybanhang.enums.OrderStatus;
+import org.example.quanlybanhang.helpers.ButtonTableCell;
+import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Order;
 import org.example.quanlybanhang.utils.PaginationUtils;
 
@@ -104,7 +106,16 @@ public class PendingOrdersDialogController {
     }
 
     private void setupActionsColumn() {
-        // You can implement this method to add buttons for processing orders
+        actionsColumn.setCellFactory(param ->
+                new ButtonTableCell<>("Chi tiết đơn hàng", order ->
+                        DialogHelper.showOrderDialog(
+                                "/org/example/quanlybanhang/views/order/orderDetailsDialog.fxml",
+                                "Chi tiết đơn hàng",
+                                order.id(),
+                                (Stage) ordersTable.getScene().getWindow()
+                        )
+                )
+        );
     }
 
     private void loadAllOrders() {

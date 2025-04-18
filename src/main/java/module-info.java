@@ -9,7 +9,7 @@ module org.example.quanlybanhang {
     requires com.google.gson;
     requires java.sql;
     requires java.desktop;
-
+    requires itextpdf;
 
 
     exports org.example.quanlybanhang.enums;

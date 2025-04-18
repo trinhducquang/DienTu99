@@ -10,49 +10,35 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.example.quanlybanhang.controller.order.PendingOrdersDialogController;
-import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.dao.WarehouseDAO;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
-import org.example.quanlybanhang.enums.OrderStatus;
 import org.example.quanlybanhang.enums.WarehouseType;
 import org.example.quanlybanhang.helpers.DialogHelper;
+import org.example.quanlybanhang.model.User;
+import org.example.quanlybanhang.security.auth.UserSession;
 import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.PaginationUtils;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static org.example.quanlybanhang.utils.TableCellFactoryUtils.currencyCellFactory;
+import static org.example.quanlybanhang.enums.UserRole.NHAN_VIEN_KHO;
+import static org.example.quanlybanhang.helpers.LogoutHandler.handleLogout;
 
 public class WarehouseController {
     // Constants
     private static final int ITEMS_PER_PAGE = 18;
     private static final int LOW_STOCK_THRESHOLD = 10;
 
-    // Transaction tab components
-    @FXML private Button btnCreateTransaction;
-    @FXML private TextField txtSearchTransaction;
-    @FXML private DatePicker dpStartDateTransaction;
-    @FXML private DatePicker dpEndDateTransaction;
-    @FXML private TableView<WarehouseDTO> tblTransactions;
-    @FXML private TableColumn<WarehouseDTO, Integer> colTransId;
-    @FXML private TableColumn<WarehouseDTO, Integer> colProductCode;
-    @FXML private TableColumn<WarehouseDTO, String> colTransCode;
-    @FXML private TableColumn<WarehouseDTO, String> colProductName;
-    @FXML private TableColumn<WarehouseDTO, String> colCategory;
-    @FXML private TableColumn<WarehouseDTO, Integer> colQuantity;
-    @FXML private TableColumn<WarehouseDTO, BigDecimal> colUnitPrice;
-    @FXML private TableColumn<WarehouseDTO, BigDecimal> colTotalAmount;
-    @FXML private TableColumn<WarehouseDTO, String> colNote;
-    @FXML private TableColumn<WarehouseDTO, String> colCreatedBy;
-    @FXML private TableColumn<WarehouseDTO, LocalDate> colCreatedDate;
+    // Tab controllers
+    private TransactionTabController transactionTabController;
+    private ProductTabController productTabController;
+    private DashboardTabController dashboardTabController;
 
     // Check tab components
     @FXML private Button btnCreateCheck;
@@ -71,6 +57,12 @@ public class WarehouseController {
     @FXML private TableColumn<WarehouseDTO, Integer> colDefectiveProduct;
     @FXML private TableColumn<WarehouseDTO, Enum<?>> colCheckStatus;
     @FXML private TableColumn<WarehouseDTO, String> colcheckNote;
+
+    // Products tab components
+    @FXML private TableView<WarehouseDTO> tblProducts;
+    @FXML private TextField txtSearchProduct;
+    @FXML private DatePicker dpStartDateProduct;
+    @FXML private DatePicker dpEndDateProduct;
 
     // Dashboard components
     @FXML private Label lblTotalProducts;
@@ -95,17 +87,24 @@ public class WarehouseController {
     @FXML private TabPane tabPane;
     @FXML private Pagination pagination;
 
+    // Transaction tab components - will be initialized in TransactionTabController
+    @FXML private TableView<WarehouseDTO> tblTransactions;
+    @FXML private Button btnCreateTransaction;
+    @FXML private TextField txtSearchTransaction;
+    @FXML private DatePicker dpStartDateTransaction;
+    @FXML private DatePicker dpEndDateTransaction;
+    @FXML private Button btnLogout;
+
+
+
     // Data collections
-    private ObservableList<WarehouseDTO> allTransactions;
     private ObservableList<WarehouseDTO> allProducts;
     private ObservableList<WarehouseDTO> allChecks;
     private ObservableList<WarehouseDTO> lowStockProducts;
-    private ObservableList<WarehouseDTO> displayedTransactions;
     private ObservableList<WarehouseDTO> displayedProducts;
     private ObservableList<WarehouseDTO> displayedChecks;
 
     // Pagination state
-    private final IntegerProperty currentTransactionPage = new SimpleIntegerProperty(0);
     private final IntegerProperty currentProductPage = new SimpleIntegerProperty(0);
     private final IntegerProperty currentCheckPage = new SimpleIntegerProperty(0);
 
@@ -115,62 +114,188 @@ public class WarehouseController {
     @FXML
     public void initialize() {
         initializeCollections();
+        initializeTabControllers();
         setupUI();
         loadData();
+
+        // Kiểm tra vai trò người dùng và hiển thị/ẩn nút đăng xuất
+        setupLogoutButton();
+    }
+
+    private void setupLogoutButton() {
+        User currentUser = UserSession.getCurrentUser();
+        if (currentUser != null && btnLogout != null) {
+            btnLogout.setVisible(currentUser.getRole() == NHAN_VIEN_KHO);
+            btnLogout.setOnAction(event -> handleLogout());
+        }
+    }
+
+    private void handleLogout() {
+        try {
+            UserSession.clearSession();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/quanlybanhang/views/login/Login.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) btnLogout.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.centerOnScreen();
+            stage.setMaximized(false);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Hiển thị thông báo lỗi
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText(null);
+            alert.setContentText("Không thể đăng xuất: " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    private void initializeTabControllers() {
+        // Khởi tạo ProductTabController
+        initializeProductTab();
+
+        // Khởi tạo TransactionTabController
+        initializeTransactionTab();
+
+        // Khởi tạo DashboardTabController
+        initializeDashboardTab(); // Thêm dòng này
+
+        // Thiết lập tham chiếu giữa các controller
+        setupControllerReferences();
+    }
+
+    private void initializeDashboardTab() {
+        try {
+            dashboardTabController = new DashboardTabController();
+            dashboardTabController.lblTotalProducts = this.lblTotalProducts;
+            dashboardTabController.lblTotalValue = this.lblTotalValue;
+            dashboardTabController.lblMonthlyTransactions = this.lblMonthlyTransactions;
+            dashboardTabController.lblLowStockProducts = this.lblLowStockProducts;
+            dashboardTabController.lblPendingOrders = this.lblPendingOrders;
+            dashboardTabController.tblLowStockProducts = this.tblLowStockProducts;
+            dashboardTabController.tblTopExportProducts = this.tblTopExportProducts;
+            dashboardTabController.colLowStockSTT = this.colLowStockSTT;
+            dashboardTabController.colLowStockProductId = this.colLowStockProductId;
+            dashboardTabController.colLowStockProductName = this.colLowStockProductName;
+            dashboardTabController.colLowStockQuantity = this.colLowStockQuantity;
+            dashboardTabController.colTopExportSTT = this.colTopExportSTT;
+            dashboardTabController.colTopExportProductId = this.colTopExportProductId;
+            dashboardTabController.colTopExportProductName = this.colTopExportProductName;
+            dashboardTabController.colTopExportQuantity = this.colTopExportQuantity;
+            dashboardTabController.setMainController(this);
+            dashboardTabController.initialize();
+            dashboardTabController.setProductData(allProducts);
+            if (transactionTabController != null) {
+                dashboardTabController.setTransactionData(transactionTabController.getAllTransactions());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Không thể khởi tạo DashboardTabController: " + e.getMessage());
+        }
+    }
+
+    private void initializeProductTab() {
+        try {
+            productTabController = new ProductTabController();
+
+            // Truyền các thành phần FXML từ main controller sang product controller
+            productTabController.setProductTable(this.tblProducts);
+            productTabController.setSearchFields(
+                    this.txtSearchProduct,
+                    this.dpStartDateProduct,
+                    this.dpEndDateProduct
+            );
+            productTabController.setPagination(this.pagination);
+
+            // Thiết lập tham chiếu đến main controller
+            productTabController.setMainController(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Không thể khởi tạo ProductTabController: " + e.getMessage());
+        }
+    }
+    private void initializeTransactionTab() {
+        try {
+            transactionTabController = new TransactionTabController();
+
+            // Inject các field giao diện
+            transactionTabController.btnCreateTransaction = this.btnCreateTransaction;
+            transactionTabController.txtSearchTransaction = this.txtSearchTransaction;
+            transactionTabController.dpStartDateTransaction = this.dpStartDateTransaction;
+            transactionTabController.dpEndDateTransaction = this.dpEndDateTransaction;
+            transactionTabController.tblTransactions = this.tblTransactions;
+            transactionTabController.pagination = this.pagination;
+
+            // Map ID cột → hành động gán
+            Map<String, Consumer<TableColumn<WarehouseDTO, ?>>> columnMapper = new HashMap<>();
+            columnMapper.put("colTransId", col -> transactionTabController.colTransId = (TableColumn<WarehouseDTO, Integer>) col);
+            columnMapper.put("colProductCode", col -> transactionTabController.colProductCode = (TableColumn<WarehouseDTO, Integer>) col);
+            columnMapper.put("colTransCode", col -> transactionTabController.colTransCode = (TableColumn<WarehouseDTO, String>) col);
+            columnMapper.put("colProductName", col -> transactionTabController.colProductName = (TableColumn<WarehouseDTO, String>) col);
+            columnMapper.put("colCategory", col -> transactionTabController.colCategory = (TableColumn<WarehouseDTO, String>) col);
+            columnMapper.put("colQuantity", col -> transactionTabController.colQuantity = (TableColumn<WarehouseDTO, Integer>) col);
+            columnMapper.put("colUnitPrice", col -> transactionTabController.colUnitPrice = (TableColumn<WarehouseDTO, BigDecimal>) col);
+            columnMapper.put("colTotalAmount", col -> transactionTabController.colTotalAmount = (TableColumn<WarehouseDTO, BigDecimal>) col);
+            columnMapper.put("colNote", col -> transactionTabController.colNote = (TableColumn<WarehouseDTO, String>) col);
+            columnMapper.put("colCreatedBy", col -> transactionTabController.colCreatedBy = (TableColumn<WarehouseDTO, String>) col);
+            columnMapper.put("colCreatedDate", col -> transactionTabController.colCreatedDate = (TableColumn<WarehouseDTO, LocalDate>) col);
+
+            for (TableColumn<WarehouseDTO, ?> column : tblTransactions.getColumns()) {
+                Consumer<TableColumn<WarehouseDTO, ?>> setter = columnMapper.get(column.getId());
+                if (setter != null) {
+                    setter.accept(column);
+                }
+            }
+
+            // Liên kết lại controller cha và khởi tạo
+            transactionTabController.setMainController(this);
+            transactionTabController.initialize();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Không thể khởi tạo TransactionTabController: " + e.getMessage());
+        }
+    }
+
+
+    private void setupControllerReferences() {
+        // Thiết lập tham chiếu giữa các controller
+        if (productTabController != null && transactionTabController != null) {
+            productTabController.setTransactionController(transactionTabController);
+        }
     }
 
     private void initializeCollections() {
-        displayedTransactions = FXCollections.observableArrayList();
         displayedProducts = FXCollections.observableArrayList();
         displayedChecks = FXCollections.observableArrayList();
         lowStockProducts = FXCollections.observableArrayList();
-        allTransactions = FXCollections.observableArrayList();
         allProducts = FXCollections.observableArrayList();
         allChecks = FXCollections.observableArrayList();
     }
 
     private void setupUI() {
         setupButtons();
-        setupTableColumns();
+        setupCheckColumns();
         setupTabChangeListener();
-        setupSearch();
+        setupCheckSearch();
+        setupTopExportColumns();
     }
 
     private void loadData() {
-        loadAllData();
-        switchPaginationToTransactions();
+        loadNonTransactionData();
+
+        // Khởi tạo ProductTabController nếu đã được thiết lập
+        if (productTabController != null) {
+            productTabController.initialize();
+        }
+
+        switchPaginationToCurrentTab();
     }
 
     private void setupButtons() {
-        btnCreateTransaction.setOnAction(event -> openCreateTransactionDialog());
         if (btnCreateCheck != null) {
             btnCreateCheck.setOnAction(event -> openCreateCheckDialog());
         }
-    }
-
-    private void setupTableColumns() {
-        setupTransactionColumns();
-        setupCheckColumns();
-        setupTopExportColumns();
-        if (tblLowStockProducts != null) {
-            setupLowStockColumns();
-        }
-    }
-
-    private void setupTransactionColumns() {
-        colTransId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colProductCode.setCellValueFactory(new PropertyValueFactory<>("productId"));
-        colTransCode.setCellValueFactory(new PropertyValueFactory<>("transactionCode"));
-        colProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
-        colCategory.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
-        colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-        colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
-        colUnitPrice.setCellFactory(currencyCellFactory());
-        colTotalAmount.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
-        colTotalAmount.setCellFactory(currencyCellFactory());
-        colNote.setCellValueFactory(new PropertyValueFactory<>("note"));
-        colCreatedBy.setCellValueFactory(new PropertyValueFactory<>("createdByName"));
-        colCreatedDate.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
     }
 
     private void setupCheckColumns() {
@@ -196,24 +321,25 @@ public class WarehouseController {
         colTopExportQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
     }
 
-    private void setupLowStockColumns() {
-        colLowStockSTT.setCellValueFactory(cellData -> {
-            int index = lowStockProducts.indexOf(cellData.getValue()) + 1;
-            return new SimpleIntegerProperty(index).asObject();
-        });
-        colLowStockProductId.setCellValueFactory(new PropertyValueFactory<>("productId"));
-        colLowStockProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
-        colLowStockQuantity.setCellValueFactory(new PropertyValueFactory<>("stock"));
-    }
 
-    private void loadAllData() {
+    private void loadNonTransactionData() {
         try {
-            allTransactions.setAll(warehouseDAO.getAllWarehouseDetails());
             allProducts.setAll(warehouseDAO.getAllWarehouseProducts());
             allChecks.setAll(warehouseDAO.getAllWarehouseCheck());
 
             updateProductStockLevels();
-            updateLowStockProducts();
+
+            // Cập nhật dữ liệu cho Dashboard nếu đã khởi tạo
+            if (dashboardTabController != null) {
+                dashboardTabController.setProductData(allProducts);
+                if (transactionTabController != null) {
+                    dashboardTabController.setTransactionData(transactionTabController.getAllTransactions());
+                }
+            } else {
+                // Fallback nếu chưa khởi tạo dashboard controller
+                updateLowStockProducts();
+            }
+
             updateTableData();
             updateStatistics();
         } catch (Exception e) {
@@ -222,7 +348,6 @@ public class WarehouseController {
     }
 
     private void updateTableData() {
-        tblTransactions.setItems(displayedTransactions);
         tableWarehouseCheck.setItems(displayedChecks);
         if (tblLowStockProducts != null) {
             tblLowStockProducts.setItems(lowStockProducts);
@@ -236,6 +361,11 @@ public class WarehouseController {
             int stock = productStockMap.getOrDefault(product.getProductId(), 0);
             product.setStock(stock);
         }
+
+        // Cập nhật tồn kho cho ProductTabController
+        if (productTabController != null) {
+            productTabController.updateProductStockLevels();
+        }
     }
 
     private Map<Integer, Integer> calculateProductStock() {
@@ -246,18 +376,23 @@ public class WarehouseController {
             productStockMap.put(product.getProductId(), 0);
         }
 
-        // Calculate stock based on transactions
-        for (WarehouseDTO transaction : allTransactions) {
-            int productId = transaction.getProductId();
-            int currentStock = productStockMap.getOrDefault(productId, 0);
+        // Calculate stock based on transactions from the transaction controller
+        if (transactionTabController != null) {
+            ObservableList<WarehouseDTO> allTransactions = transactionTabController.getAllTransactions();
 
-            if (transaction.getType() == WarehouseType.NHAP_KHO) {
-                currentStock += transaction.getQuantity();
-            } else if (transaction.getType() == WarehouseType.XUAT_KHO) {
-                currentStock -= transaction.getQuantity();
+            // Calculate stock based on transactions
+            for (WarehouseDTO transaction : allTransactions) {
+                int productId = transaction.getProductId();
+                int currentStock = productStockMap.getOrDefault(productId, 0);
+
+                if (transaction.getType() == WarehouseType.NHAP_KHO) {
+                    currentStock += transaction.getQuantity();
+                } else if (transaction.getType() == WarehouseType.XUAT_KHO) {
+                    currentStock -= transaction.getQuantity();
+                }
+
+                productStockMap.put(productId, currentStock);
             }
-
-            productStockMap.put(productId, currentStock);
         }
 
         return productStockMap;
@@ -303,26 +438,45 @@ public class WarehouseController {
         });
     }
 
+    private void switchPaginationToCurrentTab() {
+        int selectedTab = tabPane.getSelectionModel().getSelectedIndex();
+        switch (selectedTab) {
+            case 0:
+                switchPaginationToTransactions();
+                break;
+            case 1:
+                switchPaginationToProducts();
+                break;
+            case 2:
+                switchPaginationToChecks();
+                break;
+            case 3:
+                // No pagination needed for dashboard
+                break;
+        }
+    }
+
     private void switchPaginationToTransactions() {
-        PaginationUtils.setup(
-                pagination,
-                allTransactions,
-                displayedTransactions,
-                currentTransactionPage,
-                ITEMS_PER_PAGE,
-                null
-        );
+        if (transactionTabController != null) {
+            transactionTabController.setupPagination();
+        }
     }
 
     private void switchPaginationToProducts() {
-        PaginationUtils.setup(
-                pagination,
-                allProducts,
-                displayedProducts,
-                currentProductPage,
-                ITEMS_PER_PAGE,
-                null
-        );
+        // Sử dụng productTabController để thiết lập phân trang
+        if (productTabController != null) {
+            productTabController.setupPagination();
+        } else {
+            // Fallback nếu controller chưa được khởi tạo
+            PaginationUtils.setup(
+                    pagination,
+                    allProducts,
+                    displayedProducts,
+                    currentProductPage,
+                    ITEMS_PER_PAGE,
+                    null
+            );
+        }
     }
 
     private void switchPaginationToChecks() {
@@ -334,17 +488,6 @@ public class WarehouseController {
                 ITEMS_PER_PAGE,
                 null
         );
-    }
-
-    private void setupSearch() {
-        setupTransactionSearch();
-        setupCheckSearch();
-    }
-
-    private void setupTransactionSearch() {
-        txtSearchTransaction.textProperty().addListener((obs, oldVal, newVal) -> applyTransactionFilters());
-        dpStartDateTransaction.valueProperty().addListener((obs, oldVal, newVal) -> applyTransactionFilters());
-        dpEndDateTransaction.valueProperty().addListener((obs, oldVal, newVal) -> applyTransactionFilters());
     }
 
     private void setupCheckSearch() {
@@ -363,26 +506,6 @@ public class WarehouseController {
         if (cboStatus != null) {
             cboStatus.valueProperty().addListener((obs, oldVal, newVal) -> applyCheckFilters());
         }
-    }
-
-    private void applyTransactionFilters() {
-        String searchText = txtSearchTransaction.getText();
-        LocalDate startDate = dpStartDateTransaction.getValue();
-        LocalDate endDate = dpEndDateTransaction.getValue();
-
-        List<WarehouseDTO> filteredData = SearchService.search(
-                warehouseDAO.getAllWarehouseDetails(),
-                searchText,
-                startDate,
-                endDate,
-                dto -> dto.getCreatedAt() != null ? dto.getCreatedAt().toLocalDate() : null,
-                WarehouseDTO::getProductName,
-                WarehouseDTO::getTransactionCode,
-                WarehouseDTO::getCategoryName
-        );
-
-        allTransactions.setAll(filteredData);
-        pagination.setCurrentPageIndex(0);
     }
 
     private void applyCheckFilters() {
@@ -416,43 +539,6 @@ public class WarehouseController {
     }
 
     @FXML
-    private void openCreateTransactionDialog() {
-        try {
-            DialogHelper.showDialog(
-                    "/org/example/quanlybanhang/views/warehouse/WarehouseImport.fxml",
-                    "Tạo phiếu kho",
-                    (Stage) tblTransactions.getScene().getWindow()
-            );
-
-            refreshData();
-        } catch (Exception e) {
-            System.err.println("Lỗi khi mở dialog: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    private void refreshData() {
-        loadAllData();
-
-        int selectedTab = tabPane.getSelectionModel().getSelectedIndex();
-        switch (selectedTab) {
-            case 0:
-                switchPaginationToTransactions();
-                break;
-            case 1:
-                switchPaginationToProducts();
-                break;
-            case 2:
-                switchPaginationToChecks();
-                loadTopExportedProducts();
-                break;
-            case 3:
-                updateStatistics();
-                break;
-        }
-    }
-
-    @FXML
     private void openCreateCheckDialog() {
         try {
             DialogHelper.showDialog(
@@ -461,7 +547,7 @@ public class WarehouseController {
                     (Stage) tableWarehouseCheck.getScene().getWindow()
             );
 
-            loadAllData();
+            loadNonTransactionData();
             switchPaginationToChecks();
         } catch (Exception e) {
             System.err.println("Lỗi khi mở dialog kiểm kho: " + e.getMessage());
@@ -469,111 +555,36 @@ public class WarehouseController {
         }
     }
 
+    // Public method for child controllers to call
+    public void refreshData() {
+        loadNonTransactionData();
+        int selectedTab = tabPane.getSelectionModel().getSelectedIndex();
+
+        // Cập nhật dữ liệu cho tab hiện tại
+        switch (selectedTab) {
+            case 1:
+                // Cập nhật dữ liệu sản phẩm thông qua ProductTabController
+                if (productTabController != null) {
+                    productTabController.loadData();
+                }
+                switchPaginationToProducts();
+                break;
+            case 2:
+                switchPaginationToChecks();
+                break;
+            case 3:
+                updateStatistics();
+                updateLowStockProducts();
+                loadTopExportedProducts();
+                break;
+        }
+    }
+
     private void updateStatistics() {
         Map<Integer, Integer> productStockMap = calculateProductStock();
 
-        // Update pending orders count
-        updatePendingOrdersCount();
-
-        // Calculate total stock quantity and value
-        int totalStockQuantity = calculateTotalStockQuantity(productStockMap);
-        BigDecimal totalWarehouseValue = calculateTotalWarehouseValue(productStockMap);
-
-        // Calculate monthly transactions
-        long monthlyTransactionCount = calculateMonthlyTransactions();
-
-        // Calculate low stock products count
-        long lowStockCount = calculateLowStockCount();
-
-        // Format and update UI
-        updateStatisticsUI(totalStockQuantity, totalWarehouseValue, monthlyTransactionCount, lowStockCount);
-
-        // Load top exported products
-        loadTopExportedProducts();
-    }
-
-    private void updatePendingOrdersCount() {
-        OrderDAO orderDAO = new OrderDAO();
-        long pendingOrdersCount = orderDAO.getAll().stream()
-                .filter(order -> order.getStatus() == OrderStatus.DANG_XU_LY)
-                .count();
-
-        String formattedPendingOrders = String.format("%,d", pendingOrdersCount);
-        if (lblPendingOrders != null) lblPendingOrders.setText(formattedPendingOrders);
-    }
-
-    private int calculateTotalStockQuantity(Map<Integer, Integer> productStockMap) {
-        return productStockMap.values().stream()
-                .filter(stock -> stock > 0)
-                .mapToInt(Integer::intValue)
-                .sum();
-    }
-
-    private BigDecimal calculateTotalWarehouseValue(Map<Integer, Integer> productStockMap) {
-        BigDecimal totalValue = BigDecimal.ZERO;
-
-        for (WarehouseDTO product : allProducts) {
-            int stock = productStockMap.getOrDefault(product.getProductId(), 0);
-
-            if (stock > 0 && product.getUnitPrice() != null) {
-                BigDecimal productValue = product.getUnitPrice().multiply(new BigDecimal(stock));
-                totalValue = totalValue.add(productValue);
-            }
-        }
-
-        return totalValue;
-    }
-
-    private long calculateMonthlyTransactions() {
-        LocalDate now = LocalDate.now();
-        LocalDate firstDayOfMonth = LocalDate.of(now.getYear(), now.getMonth(), 1);
-
-        return allTransactions.stream()
-                .filter(t -> t.getCreatedAt() != null &&
-                        t.getCreatedAt().toLocalDate().isAfter(firstDayOfMonth.minusDays(1)))
-                .count();
-    }
-
-    private long calculateLowStockCount() {
-        return allProducts.stream()
-                .filter(product -> product.getStock() <= LOW_STOCK_THRESHOLD)
-                .map(WarehouseDTO::getProductId)
-                .distinct()
-                .count();
-    }
-
-    private void updateStatisticsUI(int totalStockQuantity, BigDecimal totalWarehouseValue,
-                                    long monthlyTransactionCount, long lowStockCount) {
-        String formattedTotalStock = String.format("%,d", totalStockQuantity);
-        String formattedWarehouseValue = String.format("%,.0fđ", totalWarehouseValue);
-        String formattedMonthlyTransactions = String.format("%,d", monthlyTransactionCount);
-        String formattedLowStock = String.format("%,d", lowStockCount);
-
-        if (lblTotalProducts != null) lblTotalProducts.setText(formattedTotalStock);
-        if (lblTotalValue != null) lblTotalValue.setText(formattedWarehouseValue);
-        if (lblMonthlyTransactions != null) lblMonthlyTransactions.setText(formattedMonthlyTransactions);
-        if (lblLowStockProducts != null) lblLowStockProducts.setText(formattedLowStock);
-    }
-
-    @FXML
-    public void openProductsDialog() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                    "/org/example/quanlybanhang/views/warehouse/WarehouseProductsDialog.fxml"));
-            Parent dialogPane = loader.load();
-            WarehouseProductsDialogController controller = loader.getController();
-
-            controller.setProductData(allProducts, allTransactions);
-
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Sản Phẩm Trong Kho");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(lblTotalProducts.getScene().getWindow());
-            dialogStage.setScene(new Scene(dialogPane));
-            dialogStage.showAndWait();
-        } catch (IOException e) {
-            System.err.println("Lỗi khi mở dialog sản phẩm: " + e.getMessage());
-            e.printStackTrace();
+        if (dashboardTabController != null) {
+            dashboardTabController.updateDashboard(productStockMap);
         }
     }
 
@@ -581,25 +592,30 @@ public class WarehouseController {
         // Create a map to track total export quantity by product
         Map<Integer, WarehouseDTO> productExportMap = new HashMap<>();
 
-        // Calculate export statistics for each product
-        for (WarehouseDTO transaction : allTransactions) {
-            if (transaction.getType() == WarehouseType.XUAT_KHO) {
-                int productId = transaction.getProductId();
-                String productName = transaction.getProductName();
+        // Calculate export statistics for each product if transaction controller is available
+        if (transactionTabController != null) {
+            ObservableList<WarehouseDTO> allTransactions = transactionTabController.getAllTransactions();
 
-                // Create or update the record for this product
-                WarehouseDTO exportSummary = productExportMap.computeIfAbsent(
-                        productId,
-                        k -> {
-                            WarehouseDTO dto = new WarehouseDTO();
-                            dto.setProductId(productId);
-                            dto.setProductName(productName);
-                            dto.setQuantity(0);
-                            return dto;
-                        }
-                );
+            // Calculate export statistics for each product
+            for (WarehouseDTO transaction : allTransactions) {
+                if (transaction.getType() == WarehouseType.XUAT_KHO) {
+                    int productId = transaction.getProductId();
+                    String productName = transaction.getProductName();
 
-                exportSummary.setQuantity(exportSummary.getQuantity() + transaction.getQuantity());
+                    // Create or update the record for this product
+                    WarehouseDTO exportSummary = productExportMap.computeIfAbsent(
+                            productId,
+                            k -> {
+                                WarehouseDTO dto = new WarehouseDTO();
+                                dto.setProductId(productId);
+                                dto.setProductName(productName);
+                                dto.setQuantity(0);
+                                return dto;
+                            }
+                    );
+
+                    exportSummary.setQuantity(exportSummary.getQuantity() + transaction.getQuantity());
+                }
             }
         }
 
@@ -615,23 +631,17 @@ public class WarehouseController {
     }
 
     @FXML
-    public void openPendingOrdersDialog() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                    "/org/example/quanlybanhang/views/order/OrderManagementDialog.fxml"));
-            Parent dialogPane = loader.load();
-            PendingOrdersDialogController controller = loader.getController();
-            controller.filterPendingOrders();
-
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Giao Dịch Đang Chờ Xử Lí");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(lblTotalProducts.getScene().getWindow());
-            dialogStage.setScene(new Scene(dialogPane));
-            dialogStage.showAndWait();
-        } catch (IOException e) {
-            System.err.println("Lỗi khi mở dialog đơn hàng đang chờ: " + e.getMessage());
-            e.printStackTrace();
+    public void openProductsDialog() {
+        if (dashboardTabController != null) {
+            dashboardTabController.openProductsDialog();
         }
     }
+
+    @FXML
+    public void openPendingOrdersDialog() {
+        if (dashboardTabController != null) {
+            dashboardTabController.openPendingOrdersDialog();
+        }
+    }
+
 }

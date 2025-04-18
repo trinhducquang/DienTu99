@@ -9,11 +9,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
 import org.example.quanlybanhang.dto.productDTO.ProductDisplayInfoDTO;
+import org.example.quanlybanhang.printing.OrderInvoiceGenerator;
 import org.example.quanlybanhang.service.OrderService;
 import org.example.quanlybanhang.utils.ImagesUtils;
 import org.example.quanlybanhang.utils.MoneyUtils;
-
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -128,7 +127,9 @@ public class OrderDetailsDialogController {
 
     @FXML
     private void handlePrintOrder() {
-        System.out.println("In đơn hàng: " + currentOrderId);
+        OrderSummaryDTO summary = orderService.getOrderSummaryById(currentOrderId);
+        List<ProductDisplayInfoDTO> productList = orderService.getProductDisplayInfoList(currentOrderId);
+        OrderInvoiceGenerator.exportToPdf(summary, productList);
     }
 
     @FXML

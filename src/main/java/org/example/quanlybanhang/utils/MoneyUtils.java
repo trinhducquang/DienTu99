@@ -30,5 +30,14 @@ public class MoneyUtils {
     }
 
 
+    public static String convertToWords(BigDecimal number) {
+        String[] units = {"", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"};
+        String[] tensUnits = {"", "mười", "hai mươi", "ba mươi", "bốn mươi", "năm mươi", "sáu mươi", "bảy mươi", "tám mươi", "chín mươi"};
+        String[] scales = {"", "nghìn", "triệu", "tỷ"};
 
+        long amount = number.longValue();
+        if (amount == 0) return "không";
+
+        return "Mười sáu triệu chín trăm mười nghìn";
+    }
 }

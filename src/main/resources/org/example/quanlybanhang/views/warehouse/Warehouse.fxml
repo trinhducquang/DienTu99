@@ -38,6 +38,12 @@
                                 <Insets left="10.0" />
                             </padding>
                         </Label>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <Button fx:id="btnLogout" mnemonicParsing="false" style="-fx-background-color: #f44336; -fx-text-fill: white;" text="Đăng Xuất">
+                     <padding>
+                        <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
+                     </padding>
+                  </Button>
                     </children>
                 </HBox>
             </top>
@@ -182,7 +188,7 @@
                                                         </Label>
                                                     </children>
                                                 </VBox>
-                                                <VBox onMouseClicked="#openPendingOrdersDialog"  alignment="CENTER" prefHeight="85.0" prefWidth="206.0" style="-fx-background-color: #ffc0cb; -fx-background-radius: 5;">
+                                                <VBox alignment="CENTER" onMouseClicked="#openPendingOrdersDialog" prefHeight="85.0" prefWidth="206.0" style="-fx-background-color: #ffc0cb; -fx-background-radius: 5;">
                                                     <padding>
                                                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                                                     </padding>

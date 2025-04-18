@@ -23,14 +23,11 @@
                         <Insets left="20.0" />
                     </HBox.margin>
                 </Label>
-            <Region prefHeight="60.0" prefWidth="669.0" />
+                <Region HBox.hgrow="ALWAYS" />
                 <Button fx:id="closeButton" mnemonicParsing="false" prefHeight="34.0" prefWidth="77.0" style="-fx-background-color: white; -fx-text-fill: black;" text="Đóng">
                     <HBox.margin>
-                        <Insets />
+                        <Insets right="20.0" />
                     </HBox.margin>
-                    <padding>
-                        <Insets left="20.0" right="20.0" />
-                    </padding>
                 </Button>
             </children>
         </HBox>
