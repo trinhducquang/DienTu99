@@ -8,16 +8,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.example.quanlybanhang.controller.interfaces.RefreshableView;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Category;
 import org.example.quanlybanhang.service.CategoryService;
 import org.example.quanlybanhang.service.SearchService;
 
-
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CategoryController {
+public class CategoryController implements RefreshableView {
 
     @FXML private TextField searchField;
     @FXML private Button addCategoryButton;
@@ -35,159 +35,163 @@ public class CategoryController {
     @FXML private Pagination pagination;
 
     private ToggleGroup categoryTypeGroup;
-    private ObservableList<Category> categoryList = FXCollections.observableArrayList();
+    private ObservableList<Category> fullCategoryList = FXCollections.observableArrayList();
     private final ObservableList<Category> pagedCategoryList = FXCollections.observableArrayList();
     private final CategoryService categoryService = new CategoryService();
 
     private final IntegerProperty currentPage = new SimpleIntegerProperty(0);
-    private final int itemsPerPage = 5;  // Số mục trên mỗi trang
+    private final int itemsPerPage = 18;
+
+    @Override
+    public void refresh() {
+        loadCategories();
+        setupPagination();
+    }
 
     @FXML
     public void initialize() {
+        setupTableColumns();
+        setupToggleGroup();
+        setupListeners();
+        refresh();
+    }
 
+    private void setupTableColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         categoryColum.setCellValueFactory(new PropertyValueFactory<>("category"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+    }
 
-        // Setup radio group
+    private void setupToggleGroup() {
         categoryTypeGroup = new ToggleGroup();
         radioParent.setToggleGroup(categoryTypeGroup);
         radioChild.setToggleGroup(categoryTypeGroup);
-        radioParent.setSelected(true); // mặc định
+        radioParent.setSelected(true);
+    }
 
-        loadCategories();
-        setupPagination();
-
+    private void setupListeners() {
         addCategoryButton.setOnAction(event ->
-                DialogHelper.showDialog("/org/example/quanlybanhang/views/category/AddCategoryDialog.fxml", "Thêm Danh Mục Mới", (Stage) addCategoryButton.getScene().getWindow())
+                DialogHelper.showDialog(
+                        "/org/example/quanlybanhang/views/category/AddCategoryDialog.fxml",
+                        "Thêm Danh Mục Mới",
+                        (Stage) addCategoryButton.getScene().getWindow(),
+                        this
+                )
         );
 
         saveButton.setOnAction(event -> handleSaveAction());
 
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> searchCategories(newValue));
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> searchCategories(newVal));
 
         radioChild.setOnAction(event -> loadParentCategories());
 
-        categoryTable.setOnMouseClicked(event -> {
-            Category selectedCategory = categoryTable.getSelectionModel().getSelectedItem();
-            if (selectedCategory != null) {
-                nameField.setText(selectedCategory.getName());
-                descriptionArea.setText(selectedCategory.getDescription());
-
-                if (selectedCategory.getParentId() == 0) {
-                    radioParent.setSelected(true);
-                } else {
-                    radioChild.setSelected(true);
-                }
-
-                loadChildCategories(selectedCategory.getId());
-            }
-        });
+        categoryTable.setOnMouseClicked(event -> populateFieldsFromSelected());
     }
 
     private void loadCategories() {
-        categoryList = FXCollections.observableArrayList(categoryService.getAllCategories());
-        filterAndPaginateCategories();
-    }
-
-    private void filterAndPaginateCategories() {
-        List<Category> filteredCategories = categoryList.stream()
-                .collect(Collectors.toList());  // Add filtering logic if needed
-        pagedCategoryList.setAll(filteredCategories);
+        fullCategoryList.setAll(categoryService.getAllCategories());
+        updatePageData();
     }
 
     private void setupPagination() {
-        pagination.setPageCount((int) Math.ceil((double) categoryList.size() / itemsPerPage));
+        int pageCount = (int) Math.ceil((double) fullCategoryList.size() / itemsPerPage);
+        pagination.setPageCount(Math.max(pageCount, 1));
         pagination.setCurrentPageIndex(currentPage.get());
 
-        pagination.currentPageIndexProperty().addListener((observable, oldValue, newValue) -> {
-            currentPage.set(newValue.intValue());
+        pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) -> {
+            currentPage.set(newIndex.intValue());
             updatePageData();
         });
-        updatePageData();
     }
 
     private void updatePageData() {
         int start = currentPage.get() * itemsPerPage;
-        int end = Math.min(start + itemsPerPage, categoryList.size());
-        pagedCategoryList.setAll(categoryList.subList(start, end));
+        int end = Math.min(start + itemsPerPage, fullCategoryList.size());
+        pagedCategoryList.setAll(fullCategoryList.subList(start, end));
         categoryTable.setItems(pagedCategoryList);
     }
 
     private void searchCategories(String keyword) {
-        if (keyword == null || keyword.trim().isEmpty()) {
-            loadCategories();
-        } else {
-            List<Category> filteredCategories = SearchService.search(categoryList, keyword,
-                    Category::getName, Category::getDescription);
-            pagedCategoryList.setAll(filteredCategories);
-            categoryTable.setItems(pagedCategoryList);
+        if (keyword == null || keyword.isBlank()) {
+            updatePageData();
+            return;
         }
+
+        List<Category> filtered = SearchService.search(fullCategoryList, keyword,
+                Category::getName, Category::getDescription);
+        pagedCategoryList.setAll(filtered);
+        categoryTable.setItems(pagedCategoryList);
+
+        // Optional: update pagination
+        pagination.setPageCount(1);
+        pagination.setCurrentPageIndex(0);
     }
 
     private void loadParentCategories() {
-        List<Category> parentCategories = categoryList.stream()
+        List<String> parentNames = fullCategoryList.stream()
                 .filter(cat -> cat.getParentId() == 0)
-                .collect(Collectors.toList());
-
-        List<String> parentNames = parentCategories.stream()
                 .map(Category::getName)
                 .collect(Collectors.toList());
 
         childCategoryCombo.setItems(FXCollections.observableArrayList(parentNames));
-
         if (!parentNames.isEmpty()) {
             childCategoryCombo.setValue(parentNames.get(0));
         }
     }
 
     private void loadChildCategories(int parentId) {
-        ObservableList<Category> childCategories = FXCollections.observableArrayList(
-                categoryService.getChildCategories(parentId)
-        );
-        List<String> childCategoryNames = childCategories.stream()
+        List<String> childNames = categoryService.getChildCategories(parentId).stream()
                 .map(Category::getName)
                 .collect(Collectors.toList());
-        childCategoryCombo.setItems(FXCollections.observableArrayList(childCategoryNames));
-        if (!childCategoryNames.isEmpty()) {
-            childCategoryCombo.setValue(childCategoryNames.get(0));
+
+        childCategoryCombo.setItems(FXCollections.observableArrayList(childNames));
+        if (!childNames.isEmpty()) {
+            childCategoryCombo.setValue(childNames.get(0));
         }
     }
 
-    @FXML
+    private void populateFieldsFromSelected() {
+        Category selected = categoryTable.getSelectionModel().getSelectedItem();
+        if (selected == null) return;
+
+        nameField.setText(selected.getName());
+        descriptionArea.setText(selected.getDescription());
+
+        if (selected.getParentId() == 0) {
+            radioParent.setSelected(true);
+        } else {
+            radioChild.setSelected(true);
+            loadChildCategories(selected.getId());
+        }
+    }
+
     private void handleSaveAction() {
-        Category selectedCategory = categoryTable.getSelectionModel().getSelectedItem();
-        if (selectedCategory != null) {
-            String name = nameField.getText().trim();
-            String description = descriptionArea.getText().trim();
+        Category selected = categoryTable.getSelectionModel().getSelectedItem();
+        if (selected == null) return;
 
-            selectedCategory.setName(name);
-            selectedCategory.setDescription(description);
+        selected.setName(nameField.getText().trim());
+        selected.setDescription(descriptionArea.getText().trim());
 
-            if (radioParent.isSelected()) {
-                selectedCategory.setParentId(0);
-            } else {
-                String parentName = childCategoryCombo.getValue();
-                if (parentName != null) {
-                    Category parentCategory = categoryList.stream()
-                            .filter(cat -> cat.getName().equals(parentName))
-                            .findFirst()
-                            .orElse(null);
-                    if (parentCategory != null) {
-                        selectedCategory.setParentId(parentCategory.getId());
-                    }
-                }
+        if (radioParent.isSelected()) {
+            selected.setParentId(0);
+        } else {
+            String parentName = childCategoryCombo.getValue();
+            Category parent = fullCategoryList.stream()
+                    .filter(cat -> cat.getName().equals(parentName))
+                    .findFirst()
+                    .orElse(null);
+            if (parent != null) {
+                selected.setParentId(parent.getId());
             }
+        }
 
-            boolean success = categoryService.updateCategory(selectedCategory);
-            if (success) {
-                loadCategories();
-                categoryTable.refresh();
-                System.out.println("Cập nhật thành công!");
-            } else {
-                System.out.println("Cập nhật thất bại!");
-            }
+        boolean updated = categoryService.updateCategory(selected);
+        if (updated) {
+            loadCategories();
+            categoryTable.refresh();
+        } else {
+            System.err.println("Cập nhật thất bại!");
         }
     }
 }

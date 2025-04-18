@@ -8,13 +8,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ImagesUtils {
 
-    // 🧠 Cache ảnh đã tải
-    private static final Map<String, Image> imageCache = new ConcurrentHashMap<>();
+    // 🧠 Cache ảnh đã tải, sử dụng WeakReference để tránh chiếm dụng bộ nhớ lâu dài
+    private static final Map<String, WeakReference<Image>> imageCache = new ConcurrentHashMap<>();
 
     // 🟩 Phương thức tạo ImageView
     public static ImageView createImageView(String imageUrl, double fitWidth, double fitHeight) {
@@ -26,10 +27,16 @@ public class ImagesUtils {
 
         try {
             if (imageUrl != null && !imageUrl.trim().isEmpty()) {
-                if (imageUrl.startsWith("http") || imageUrl.startsWith("file:/")) {
-                    imageView.setImage(new Image(imageUrl));
+                // Kiểm tra cache trước khi tải ảnh
+                Image cachedImage = getCachedImage(imageUrl);
+                if (cachedImage != null) {
+                    imageView.setImage(cachedImage);
                 } else {
-                    imageView.setImage(new Image(new File(imageUrl).toURI().toString()));
+                    if (imageUrl.startsWith("http") || imageUrl.startsWith("file:/")) {
+                        imageView.setImage(new Image(imageUrl));
+                    } else {
+                        imageView.setImage(new Image(new File(imageUrl).toURI().toString()));
+                    }
                 }
             }
         } catch (Exception e) {
@@ -43,7 +50,7 @@ public class ImagesUtils {
     public static ImageView createCroppedImageView(String imageUrl, double sourceWidth, double sourceHeight, double fitWidth, double fitHeight) {
         // Đảm bảo ảnh được cache nếu đã tải trước đó
         String cacheKey = imageUrl + "_" + (int)sourceWidth + "x" + (int)sourceHeight;
-        Image cachedImage = imageCache.get(cacheKey);
+        Image cachedImage = getCachedImage(cacheKey);
 
         // Nếu ảnh đã được cache
         if (cachedImage != null) {
@@ -71,7 +78,7 @@ public class ImagesUtils {
 
         loadTask.setOnSucceeded(e -> {
             Image image = loadTask.getValue();
-            imageCache.put(cacheKey, image);  // Lưu ảnh vào cache
+            cacheImage(cacheKey, image);  // Lưu ảnh vào cache
             imageView.setImage(image);
 
             // Tạo hiệu ứng mượt fade-in khi ảnh load xong
@@ -98,5 +105,19 @@ public class ImagesUtils {
         imageView.setClip(clip);
 
         return imageView;
+    }
+
+    // Lấy ảnh từ cache (nếu có)
+    private static Image getCachedImage(String key) {
+        WeakReference<Image> ref = imageCache.get(key);
+        if (ref != null) {
+            return ref.get();
+        }
+        return null;
+    }
+
+    // Lưu ảnh vào cache
+    private static void cacheImage(String key, Image image) {
+        imageCache.put(key, new WeakReference<>(image));
     }
 }

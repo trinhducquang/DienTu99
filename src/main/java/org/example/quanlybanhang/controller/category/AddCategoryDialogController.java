@@ -3,6 +3,7 @@ package org.example.quanlybanhang.controller.category;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.example.quanlybanhang.controller.interfaces.RefreshableView;
 import org.example.quanlybanhang.model.Category;
 import org.example.quanlybanhang.service.CategoryService;
 import org.example.quanlybanhang.utils.AlertUtils;
@@ -22,6 +23,15 @@ public class AddCategoryDialogController {
     private RadioButton rootCategoryRadio;
 
     private final CategoryService categoryService = new CategoryService();
+
+    // Thêm tham chiếu đến parent controller
+    private RefreshableView parentController;
+
+    // Phương thức để đặt parent controller
+    public void setParentController(RefreshableView parentController) {
+        this.parentController = parentController;
+        System.out.println("Đã nhận parentController trong AddCategoryDialogController");
+    }
 
     @FXML
     public void initialize() {

@@ -49,13 +49,14 @@
                     <columns>
                         <TableColumn fx:id="colId" prefWidth="50.0" text="ID" />
                         <TableColumn fx:id="colProductId" prefWidth="95.0" text="Mã SP" />
-                        <TableColumn fx:id="colProductName" prefWidth="237.0" text="Tên Sản Phẩm" />
-                        <TableColumn fx:id="colStock" maxWidth="151.0" prefWidth="118.0" text="Tồn kho" />
-                        <TableColumn fx:id="colExport" maxWidth="151.0" prefWidth="118.0" text="Xuất Kho" />
-                        <TableColumn fx:id="colImportPrice" maxWidth="300.0" prefWidth="184.0" text="Giá Nhập" />
-                        <TableColumn fx:id="colSellPrice" maxWidth="300.0" prefWidth="135.0" text="Giá Bán" />
-                        <TableColumn fx:id="colCategory" maxWidth="300.0" prefWidth="223.0" text="Danh Mục" />
-                        <TableColumn fx:id="colUpdatedAt" maxWidth="311.0" prefWidth="189.0" text="Ngày Cập Nhật" />
+                        <TableColumn fx:id="colProductName" prefWidth="200.0" text="Tên Sản Phẩm" />
+                        <TableColumn fx:id="colStock1" maxWidth="155.0" prefWidth="138.0" text="Tổng nhập" />
+                        <TableColumn fx:id="colStock" maxWidth="151.0" prefWidth="135.0" text="Tồn kho" />
+                        <TableColumn fx:id="colImportPrice" maxWidth="300.0" prefWidth="123.0" text="Giá Nhập" />
+                        <TableColumn fx:id="colTotalAmount" maxWidth="300.0" prefWidth="130.0" text="Tổng Tiền Hàng" />
+                        <TableColumn fx:id="colSellPrice" maxWidth="250.0" prefWidth="97.0" text="Giá Bán" />
+                        <TableColumn fx:id="colCategory" maxWidth="366.0" prefWidth="144.0" text="Danh Mục" />
+                        <TableColumn fx:id="colUpdatedAt" maxWidth="380.0" prefWidth="367.0" text="Ngày Cập Nhật" />
                     </columns>
                 </TableView>
             </children>

@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.EmployeeDAO;
 import org.example.quanlybanhang.enums.UserRole;
 import org.example.quanlybanhang.enums.UserStatus;
+import org.example.quanlybanhang.controller.interfaces.RefreshableView;
 import org.example.quanlybanhang.model.Employee;
 import org.example.quanlybanhang.service.EmployeeService;
 import org.example.quanlybanhang.utils.AlertUtils;
@@ -33,6 +34,12 @@ public class EmployeeManagementDialogController {
     private Button saveButton;
     @FXML
     private Button cancelButton;
+
+    private RefreshableView parentController;
+
+    public void setParentController(RefreshableView controller) {
+        this.parentController = controller;
+    }
 
     @FXML
     public void initialize() {
@@ -77,6 +84,12 @@ public class EmployeeManagementDialogController {
             boolean success = employeeService.addEmployee(employee, retypePassword);
             if (success) {
                 AlertUtils.showInfo("Thành công", "Thêm nhân viên thành công!");
+
+                // Call refresh on parent controller before closing
+                if (parentController != null) {
+                    parentController.refresh();
+                }
+
                 closeDialog();
             } else {
                 AlertUtils.showError("Thất bại", "Không thể thêm nhân viên. Vui lòng thử lại.");

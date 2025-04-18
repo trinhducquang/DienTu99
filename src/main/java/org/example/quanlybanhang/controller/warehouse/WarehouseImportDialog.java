@@ -357,7 +357,7 @@ public class WarehouseImportDialog {
         if (existing != null) {
             existing.setQuantity(existing.getQuantity() + quantity);
             if (price.compareTo(BigDecimal.ZERO) > 0) {
-                existing.setPrice(price); // Cập nhật giá mới nếu có
+                existing.setPrice(price);
             }
         } else {
             productDetailsList.add(new OrderDetail(0, 0, product.getId(), quantity, price));

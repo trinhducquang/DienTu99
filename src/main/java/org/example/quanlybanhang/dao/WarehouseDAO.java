@@ -67,6 +67,7 @@ public class WarehouseDAO {
                     String categoryName = rs.getString("category_name");
                     BigDecimal unitPrice = rs.getBigDecimal("unit_price");
                     BigDecimal sellPrice = rs.getBigDecimal("sell_price");
+
                     LocalDateTime updatedAt = rs.getTimestamp("updated_at").toLocalDateTime();
 
                     WarehouseDTO dto = new WarehouseDTO();
@@ -76,8 +77,8 @@ public class WarehouseDAO {
                     dto.setCategoryName(categoryName);
                     dto.setUnitPrice(unitPrice);
                     dto.setSellPrice(sellPrice);
+//                    System.out.println("✅ Product ID: " + productId + ", Set sell price: " + dto.getSellPrice());
                     dto.setUpdatedAt(updatedAt);
-
                     productList.add(dto);
                 }
             }

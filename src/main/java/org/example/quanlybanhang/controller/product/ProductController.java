@@ -7,20 +7,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.stage.Stage;
-import javafx.util.converter.IntegerStringConverter;
-import org.example.quanlybanhang.enums.*;
+import org.example.quanlybanhang.enums.ProductStatus;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.*;
-import org.example.quanlybanhang.service.CategoryService;
-import org.example.quanlybanhang.service.ProductService;
-import org.example.quanlybanhang.service.SearchService;
+import org.example.quanlybanhang.service.*;
 import org.example.quanlybanhang.utils.*;
+import org.example.quanlybanhang.controller.interfaces.RefreshableView;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class ProductController {
+public class ProductController implements RefreshableView {
+
     @FXML private TableView<Product> productsTable;
     @FXML private TableColumn<Product, Integer> idColumn;
     @FXML private TableColumn<Product, String> nameColumn;
@@ -32,36 +31,38 @@ public class ProductController {
     @FXML private TableColumn<Product, String> imageColumn;
     @FXML private TableColumn<Product, Void> OperationColumn;
     @FXML private Pagination pagination;
-
     @FXML private ComboBox<Category> categoryFilter;
     @FXML private TextField searchField;
     @FXML private Button addProductButton;
 
-    private final ObservableList<Product> productList = FXCollections.observableArrayList();
     private final ObservableList<Product> allProducts = FXCollections.observableArrayList();
+    private final ObservableList<Product> filteredProducts = FXCollections.observableArrayList();
+    private final ObservableList<Product> currentPageItems = FXCollections.observableArrayList();
     private final ObservableList<Category> categoryList = FXCollections.observableArrayList();
+
     private final ProductService productService = new ProductService();
     private final CategoryService categoryService = new CategoryService();
+
     private final IntegerProperty currentPage = new SimpleIntegerProperty(0);
     private final int itemsPerPage = 18;
 
-
-
     @FXML
     public void initialize() {
-        productsTable.setEditable(true);
-        setupTableColumns();
-        loadCategoryData();
-        setupSearchAndFilter();
-        setupAddProductButton();
-        addButtonToActionColumn();
+        System.out.println("🔄 Đang khởi tạo ProductController");
 
-        loadAllProducts(); // Load tất cả sản phẩm vào allProducts
+        setupTable();
+        loadInitialData();
+        setupBindings();
         setupPagination();
+        setupAddProductButton();
+        setupSearchAndFilter();
+
+        System.out.println("✅ Đã khởi tạo xong ProductController");
     }
 
+    private void setupTable() {
+        productsTable.setEditable(true);
 
-    private void setupTableColumns() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         categoryNameColumn.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
@@ -73,54 +74,52 @@ public class ProductController {
 
         priceColumn.setCellFactory(TableCellFactoryUtils.currencyCellFactory());
 
+        setupEditableColumns();
+        setupOperationColumn();
     }
 
-    private void setEditableColumns() {
+    private void setupEditableColumns() {
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         nameColumn.setOnEditCommit(event -> {
             Product product = event.getRowValue();
             product.setName(event.getNewValue());
-            updateProductInDatabase(product);
+            updateProduct(product);
         });
 
         priceColumn.setCellFactory(TableCellFactoryUtils.editableCurrencyCellFactory());
         priceColumn.setOnEditCommit(event -> {
             Product product = event.getRowValue();
             product.setPrice(event.getNewValue());
-            updateProductInDatabase(product);
+            updateProduct(product);
             productsTable.refresh();
         });
 
         categoryNameColumn.setCellFactory(ComboBoxTableCell.forTableColumn(
-                FXCollections.observableArrayList(
-                        categoryList.stream().map(Category::getName).toList()
-                )
+                FXCollections.observableArrayList(categoryList.stream().map(Category::getName).toList())
         ));
         categoryNameColumn.setOnEditCommit(event -> {
             Product product = event.getRowValue();
-            String newCategoryName = event.getNewValue();
-            product.setCategoryName(newCategoryName);
-
+            String newName = event.getNewValue();
+            product.setCategoryName(newName);
             categoryList.stream()
-                    .filter(c -> c.getName().equals(newCategoryName))
+                    .filter(c -> c.getName().equals(newName))
                     .findFirst()
                     .ifPresent(c -> product.setCategoryId(c.getId()));
-
-            updateProductInDatabase(product);
+            updateProduct(product);
         });
 
         descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         descriptionColumn.setOnEditCommit(event -> {
             Product product = event.getRowValue();
             product.setDescription(event.getNewValue());
-            updateProductInDatabase(product);
+            updateProduct(product);
         });
 
         imageColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         imageColumn.setOnEditCommit(event -> {
             Product product = event.getRowValue();
             product.setImageUrl(event.getNewValue());
-            updateProductInDatabase(product);
+            updateProduct(product);
         });
 
         ObservableList<ProductStatus> statusOptions = FXCollections.observableArrayList(ProductStatus.values());
@@ -128,13 +127,14 @@ public class ProductController {
         statusColumn.setOnEditCommit(event -> {
             Product product = event.getRowValue();
             product.setStatus(event.getNewValue());
-            updateProductInDatabase(product);
+            updateProduct(product);
         });
     }
 
-    private void addButtonToActionColumn() {
+    // === Cột nút thao tác "Chi tiết sản phẩm" ===
+    private void setupOperationColumn() {
         OperationColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button detailButton = new Button("Chi tiết sản phẩm");
+            private final Button detailButton = new Button("Chi tiết");
 
             {
                 detailButton.setOnAction(event -> {
@@ -143,7 +143,8 @@ public class ProductController {
                         DialogHelper.showProductDialog(
                                 "/org/example/quanlybanhang/views/product/Product_detailsDialog.fxml",
                                 "Chi tiết sản phẩm",
-                                product.getId(), (Stage) detailButton.getScene().getWindow()
+                                product.getId(),
+                                (Stage) detailButton.getScene().getWindow()
                         );
                     }
                 });
@@ -152,86 +153,98 @@ public class ProductController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || getIndex() >= getTableView().getItems().size() || getTableView().getItems().get(getIndex()) == null) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(detailButton);
-                }
+                setGraphic(empty ? null : detailButton);
             }
         });
     }
 
+    private void loadInitialData() {
+        allProducts.setAll(productService.getAllProducts());
+        categoryList.setAll(categoryService.getAllCategories());
+        categoryFilter.setItems(categoryList);
+        filteredProducts.setAll(allProducts);
+    }
 
     private void setupSearchAndFilter() {
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> filterBySearch(newVal));
-        categoryFilter.setOnAction(event -> filterProducts());
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> applyFilter());
+        categoryFilter.setOnAction(event -> applyFilter());
     }
 
     private void setupAddProductButton() {
         addProductButton.setOnAction(event ->
-                DialogHelper.showDialog("/org/example/quanlybanhang/views/product/ProductDialog.fxml", "Thêm Sản Phẩm Mới" , (Stage) addProductButton.getScene().getWindow())
+                DialogHelper.showDialog(
+                        "/org/example/quanlybanhang/views/product/ProductDialog.fxml",
+                        "Thêm Sản Phẩm",
+                        (Stage) addProductButton.getScene().getWindow(),
+                        this
+                )
         );
     }
 
-    private void updateProductInDatabase(Product product) {
-        productService.updateProduct(product);
-        loadProductData();
-    }
-
-    private void loadProductData() {
-        List<Product> products = productService.getAllProducts();
-        allProducts.setAll(products);
-        productList.setAll(products);
-    }
-
-
-    private void loadCategoryData() {
-        categoryList.setAll(categoryService.getAllCategories());
-        categoryFilter.setItems(categoryList);
-
-        setEditableColumns(); // Vẫn giữ lại dòng này để gọi sau khi load xong danh mục
-    }
-
-
-    private void filterBySearch(String keyword) {
-        List<Product> filtered = SearchService.search(allProducts, keyword,
-                e -> String.valueOf(e.getId()),
-                e -> String.valueOf(e.getPrice()),
-                e -> String.valueOf(e.getStockQuantity()),
-                Product::getName,
-                Product::getCategoryName,
-                Product::getDescription
-        );
-        productList.setAll(filtered);
-    }
-
-    private void filterProducts() {
-        Category selected = categoryFilter.getValue();
-        if (selected == null) {
-            productList.setAll(allProducts);
-        } else {
-            String name = selected.getName();
-            List<Product> filtered = allProducts.stream()
-                    .filter(p -> name.equals(p.getCategoryName()))
-                    .collect(Collectors.toList());
-            productList.setAll(filtered);
-        }
-    }
-
-    private void loadAllProducts() {
-        List<Product> products = productService.getAllProducts();
-        allProducts.setAll(products);
-    }
-
+    // === Thiết lập phân trang ===
     private void setupPagination() {
         PaginationUtils.setup(
                 pagination,
-                allProducts,
-                productList,
+                filteredProducts,
+                currentPageItems,
                 currentPage,
                 itemsPerPage,
-                (pagedData, pageIndex) -> productsTable.setItems(productList)
+                (page, pageIndex) -> {
+                    productsTable.setItems(currentPageItems);
+                    productsTable.refresh();
+                    System.out.println("🧾 Trang " + (pageIndex + 1) + ": " + page.size() + " sản phẩm");
+                }
         );
     }
 
+    private void updateProduct(Product product) {
+        productService.updateProduct(product);
+        int index = allProducts.indexOf(product);
+        if (index >= 0) {
+            allProducts.set(index, product);
+        }
+        applyFilter();
+    }
+
+
+    private void applyFilter() {
+        String keyword = searchField.getText();
+        Category selected = categoryFilter.getValue();
+
+        List<Product> result = allProducts.stream()
+                .filter(p -> selected == null || selected.getName().equals(p.getCategoryName()))
+                .filter(p -> keyword == null || keyword.isEmpty() || containsKeyword(p, keyword))
+                .toList();
+
+        filteredProducts.setAll(result);
+        setupPagination();
+    }
+
+    private boolean containsKeyword(Product product, String keyword) {
+        keyword = keyword.toLowerCase();
+        String finalKeyword = keyword;
+        return Stream.of(
+                String.valueOf(product.getId()),
+                product.getName(),
+                product.getCategoryName(),
+                product.getDescription(),
+                String.valueOf(product.getPrice()),
+                String.valueOf(product.getStockQuantity())
+        ).anyMatch(field -> field != null && field.toLowerCase().contains(finalKeyword));
+    }
+
+    @Override
+    public void refresh() {
+        System.out.println("🔁 Refresh Product View");
+
+        loadInitialData();
+        applyFilter();
+
+        System.out.println("✅ Refresh hoàn tất");
+    }
+
+
+    private void setupBindings() {
+
+    }
 }

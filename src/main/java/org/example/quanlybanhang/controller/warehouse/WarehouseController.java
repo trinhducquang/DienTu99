@@ -32,7 +32,6 @@ import static org.example.quanlybanhang.utils.TableCellFactoryUtils.*;
 
 public class WarehouseController {
 
-    // Tab Giao Dịch
     @FXML private Button btnCreateTransaction;
     @FXML private TextField txtSearchTransaction;
     @FXML private DatePicker dpStartDateTransaction;
@@ -50,7 +49,6 @@ public class WarehouseController {
     @FXML private TableColumn<WarehouseDTO, String> colCreatedBy;
     @FXML private TableColumn<WarehouseDTO, LocalDate> colCreatedDate;
 
-    // Tab Kiểm Kho
     @FXML private Button btnCreateCheck;
     @FXML private TextField txtSearchCheck;
     @FXML private DatePicker dpStartDateCheck;
@@ -68,13 +66,11 @@ public class WarehouseController {
     @FXML private TableColumn<WarehouseDTO, Enum<?>> colCheckStatus;
     @FXML private TableColumn<WarehouseDTO, String> colcheckNote;
 
-    // Tab Thống Kê
     @FXML private Label lblTotalProducts;
     @FXML private Label lblTotalValue;
     @FXML private Label lblMonthlyTransactions;
     @FXML private Label lblLowStockProducts;
 
-    // Bảng sản phẩm sắp hết hàng
     @FXML private TableView<WarehouseDTO> tblLowStockProducts;
     @FXML private TableColumn<WarehouseDTO, Integer> colLowStockSTT;
     @FXML private TableColumn<WarehouseDTO, Integer> colLowStockProductId;
@@ -119,7 +115,6 @@ public class WarehouseController {
     }
 
     private void setupTableColumns() {
-        // Các cột cho tab giao dịch
         colTransId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colProductCode.setCellValueFactory(new PropertyValueFactory<>("productId"));
         colTransCode.setCellValueFactory(new PropertyValueFactory<>("transactionCode"));
@@ -134,7 +129,6 @@ public class WarehouseController {
         colCreatedBy.setCellValueFactory(new PropertyValueFactory<>("createdByName"));
         colCreatedDate.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
 
-        // Cột cho tab kiểm kho
         colIdCheck.setCellValueFactory(new PropertyValueFactory<>("transactionCode"));
         colCheckdate.setCellValueFactory(new PropertyValueFactory<>("inventoryDate"));
         checker.setCellValueFactory(new PropertyValueFactory<>("createdByName"));
@@ -181,6 +175,11 @@ public class WarehouseController {
 
     private void calculateStock() {
         Map<Integer, Integer> productStockMap = new HashMap<>();
+
+        for (WarehouseDTO product : allProducts) {
+            productStockMap.put(product.getProductId(), 0);
+        }
+
         for (WarehouseDTO transaction : allTransactions) {
             int productId = transaction.getProductId();
             int currentStock = productStockMap.getOrDefault(productId, 0);
@@ -193,6 +192,7 @@ public class WarehouseController {
 
             productStockMap.put(productId, currentStock);
         }
+
         for (WarehouseDTO product : allProducts) {
             int stock = productStockMap.getOrDefault(product.getProductId(), 0);
             product.setStock(stock);
@@ -207,7 +207,6 @@ public class WarehouseController {
             }
         }
 
-        // Sắp xếp sản phẩm theo số lượng tồn kho tăng dần
         FXCollections.sort(lowStockProducts, (p1, p2) -> Integer.compare(p1.getStock(), p2.getStock()));
     }
 
@@ -336,7 +335,6 @@ public class WarehouseController {
                 WarehouseDTO::getCreatedByName
         );
 
-        // Apply status filter if needed
         if (status != null && !status.isEmpty()) {
             filteredData = filteredData.stream()
                     .filter(dto -> dto.getInventoryStatus() != null &&
@@ -383,14 +381,37 @@ public class WarehouseController {
     }
 
     private void updateStatistics() {
+        Map<Integer, Integer> productStockMap = new HashMap<>();
+        for (WarehouseDTO transaction : allTransactions) {
+            int productId = transaction.getProductId();
+            int currentStock = productStockMap.getOrDefault(productId, 0);
+
+            if (transaction.getType() == WarehouseType.NHAP_KHO) {
+                currentStock += transaction.getQuantity();
+            } else if (transaction.getType() == WarehouseType.XUAT_KHO) {
+                currentStock -= transaction.getQuantity();
+            }
+
+            productStockMap.put(productId, currentStock);
+        }
+
         int totalStockQuantity = 0;
+        for (Integer stock : productStockMap.values()) {
+            if (stock > 0) {
+                totalStockQuantity += stock;
+            }
+        }
+
         BigDecimal totalWarehouseValue = BigDecimal.ZERO;
 
         for (WarehouseDTO product : allProducts) {
-            totalStockQuantity += product.getStock();
+            int stock = productStockMap.getOrDefault(product.getProductId(), 0);
+            product.setStock(stock);
 
-            BigDecimal productValue = product.getUnitPrice().multiply(new BigDecimal(product.getStock()));
-            totalWarehouseValue = totalWarehouseValue.add(productValue);
+            if (stock > 0 && product.getUnitPrice() != null) {
+                BigDecimal productValue = product.getUnitPrice().multiply(new BigDecimal(stock));
+                totalWarehouseValue = totalWarehouseValue.add(productValue);
+            }
         }
 
         LocalDate now = LocalDate.now();
@@ -421,14 +442,15 @@ public class WarehouseController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/quanlybanhang/views/warehouse/WarehouseProductsDialog.fxml"));
             Parent dialogPane = loader.load();
             WarehouseProductsDialogController controller = loader.getController();
-            controller.setProductData(allProducts);
+
+            controller.setProductData(allProducts, allTransactions);
+
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Sản Phẩm Trong Kho");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(lblTotalProducts.getScene().getWindow());
             dialogStage.setScene(new Scene(dialogPane));
             dialogStage.showAndWait();
-
         } catch (IOException e) {
             System.err.println("Lỗi khi mở dialog sản phẩm: " + e.getMessage());
             e.printStackTrace();

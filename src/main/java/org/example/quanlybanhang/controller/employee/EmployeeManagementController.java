@@ -13,18 +13,17 @@ import org.example.quanlybanhang.enums.UserRole;
 import org.example.quanlybanhang.enums.UserStatus;
 import org.example.quanlybanhang.helpers.ButtonTableCell;
 import org.example.quanlybanhang.helpers.DialogHelper;
+import org.example.quanlybanhang.controller.interfaces.RefreshableView;
 import org.example.quanlybanhang.model.Employee;
 import org.example.quanlybanhang.security.password.PasswordEncoder;
 import org.example.quanlybanhang.service.EmployeeService;
 import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 import org.example.quanlybanhang.utils.PaginationUtils;
-
-import java.sql.Connection;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class EmployeeManagementController {
+public class EmployeeManagementController implements RefreshableView {
 
     @FXML private TextField searchField;
     @FXML private Button addEmployeeButton;
@@ -57,8 +56,12 @@ public class EmployeeManagementController {
         setupButtons();
         setupPagination();
         loadEmployees();
+    }
 
-
+    @Override
+    public void refresh() {
+        loadEmployees();
+        employeeTable.refresh();
     }
 
     private void setupTable() {
@@ -125,7 +128,8 @@ public class EmployeeManagementController {
                 DialogHelper.showDialog(
                         "/org/example/quanlybanhang/views/employee/employeeManagementDialog.fxml",
                         "Thêm Nhân Viên Mới",
-                        (Stage) addEmployeeButton.getScene().getWindow()
+                        (Stage) addEmployeeButton.getScene().getWindow(),
+                        this  // Pass the current controller as the refreshable view
                 )
         );
     }
@@ -211,5 +215,4 @@ public class EmployeeManagementController {
                 (pagedData, pageIndex) -> employeeTable.setItems(employeeList)
         );
     }
-
 }

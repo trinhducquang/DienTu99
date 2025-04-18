@@ -18,11 +18,7 @@ import org.example.quanlybanhang.service.ProductService;
 import org.example.quanlybanhang.utils.ImagesUtils;
 import org.example.quanlybanhang.utils.MoneyUtils;
 import org.example.quanlybanhang.utils.ThreadManager;
-
-import javafx.scene.shape.Rectangle;
-
 import java.util.List;
-
 
 public class ProductDetailDialogController {
 
@@ -46,6 +42,7 @@ public class ProductDetailDialogController {
     private final int itemsPerPage = 7;
 
     public void setProductById(int productId) {
+        // Run in background thread
         ThreadManager.runBackground(() -> {
             Product productData = productService.getProductById(productId);
             if (productData != null) {
@@ -60,7 +57,6 @@ public class ProductDetailDialogController {
         });
     }
 
-
     private void loadRelatedProducts(int categoryId, int excludedId) {
         currentPage = 0;
         totalRelatedCount = productService.countRelatedProducts(categoryId, excludedId);
@@ -70,10 +66,12 @@ public class ProductDetailDialogController {
 
     private void updateRelatedProductsView(boolean slideFromLeft) {
         relatedProductsContainer.setTranslateX(slideFromLeft ? -800 : 800);
-        relatedProductsContainer.getChildren().clear();
 
+        // Use the same list and update only visible products for faster rendering
         int offset = currentPage * itemsPerPage;
         List<Product> visibleProducts = productService.getRelatedProducts(product.getCategoryId(), product.getId(), offset, itemsPerPage);
+
+        relatedProductsContainer.getChildren().clear();  // Only clear content once
 
         for (Product p : visibleProducts) {
             VBox productBox = createProductBox(p);
@@ -83,14 +81,13 @@ public class ProductDetailDialogController {
         playSlideAnimation(slideFromLeft);
     }
 
-
     private VBox createProductBox(Product p) {
         VBox productBox = new VBox();
         productBox.setAlignment(Pos.TOP_CENTER);
         productBox.getStyleClass().add("related-product");
         productBox.setPrefSize(130, 110);
 
-        // 🟩 Sử dụng ImagesUtils để cắt ảnh theo kích thước yêu cầu
+        // Load images efficiently with ImagesUtils
         ImageView imageView = ImagesUtils.createCroppedImageView(p.getImageUrl(), 260, 220, 130, 110);
 
         Label nameLabel = new Label(p.getName());
@@ -110,15 +107,12 @@ public class ProductDetailDialogController {
         return productBox;
     }
 
-
-
     private void playSlideAnimation(boolean slideFromLeft) {
         TranslateTransition transition = new TranslateTransition(Duration.millis(300), relatedProductsContainer);
         transition.setFromX(slideFromLeft ? -800 : 800);
         transition.setToX(0);
         transition.play();
     }
-
 
     @FXML
     private void handlePrevious() {
@@ -133,7 +127,6 @@ public class ProductDetailDialogController {
         currentPage = (currentPage + 1) % totalPages;
         updateRelatedProductsView(false);
     }
-
 
     private void updateProductDetails() {
         if (product == null) {
@@ -176,7 +169,6 @@ public class ProductDetailDialogController {
         featuresField.setText(nullToNA(specsDTO.features()));
         connectivityField.setText(nullToNA(specsDTO.connectivity()));
         designMaterialsField.setText(nullToNA(specsDTO.designMaterials()));
-
     }
 
     private void setAllSpecsNA() {

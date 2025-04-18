@@ -1,6 +1,7 @@
 package org.example.quanlybanhang.controller.product;
 
 import com.google.gson.Gson;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -9,6 +10,7 @@ import org.example.quanlybanhang.model.*;
 import org.example.quanlybanhang.service.*;
 import org.example.quanlybanhang.utils.AlertUtils;
 import org.example.quanlybanhang.utils.TextFieldFormatterUtils;
+import org.example.quanlybanhang.controller.interfaces.RefreshableView;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,6 +20,9 @@ public class ProductDialogController {
 
     private final ProductService productService = new ProductService();
     private final CategoryService categoryService = new CategoryService();
+
+    // Store parentController
+    private RefreshableView parentController;
 
     @FXML
     private TextField productNameField, priceField, descriptionField, imageUrlField;
@@ -31,6 +36,15 @@ public class ProductDialogController {
         loadCategories();
         saveButton.setOnAction(event -> saveProduct());
         cancelButton.setOnAction(event -> closeDialog());
+
+        System.out.println("ProductDialogController đã khởi tạo");
+    }
+
+    // Setter để nhận parentController từ DialogHelper
+    public void setParentController(RefreshableView parentController) {
+        System.out.println("setParentController được gọi với controller: " +
+                (parentController != null ? parentController.getClass().getName() : "null"));
+        this.parentController = parentController;
     }
 
     private void loadCategories() {
@@ -48,7 +62,6 @@ public class ProductDialogController {
             }
         });
     }
-
 
     private void saveProduct() {
         try {
@@ -76,14 +89,16 @@ public class ProductDialogController {
             newProduct.setUpdatedAt(LocalDateTime.now());
 
             productService.saveProduct(newProduct);
+            System.out.println("Đã lưu sản phẩm thành công");
+
+            // Đóng dialog - refresh sẽ được xử lý bởi DialogHelper sau khi dialog đóng
             closeDialog();
 
         } catch (Exception e) {
             e.printStackTrace();
-            AlertUtils.showError("Lỗi", "Đã xảy ra lỗi khi lưu sản phẩm.");
+            AlertUtils.showError("Lỗi", "Đã xảy ra lỗi khi lưu sản phẩm: " + e.getMessage());
         }
     }
-
 
     private String getSpecifications() {
         Map<String, String> specs = new LinkedHashMap<>();
@@ -99,6 +114,7 @@ public class ProductDialogController {
     }
 
     private void closeDialog() {
+        System.out.println("Đóng dialog");
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
     }
@@ -108,26 +124,19 @@ public class ProductDialogController {
                 || priceField.getText().isBlank()
                 || descriptionField.getText().isBlank()
                 || imageUrlField.getText().isBlank()
-                || configMemoryField.getText().isBlank()
-                || cameraField.getText().isBlank()
-                || batteryField.getText().isBlank()
-                || featuresField.getText().isBlank()
-                || connectivityField.getText().isBlank()
-                || designMaterialsField.getText().isBlank()
                 || categoryComboBox.getSelectionModel().getSelectedItem() == null) {
 
-            AlertUtils.showWarning("Thiếu thông tin", "Vui lòng điền đầy đủ tất cả các trường và chọn danh mục.");
+            AlertUtils.showWarning("Thiếu thông tin", "Vui lòng điền đầy đủ các trường bắt buộc và chọn danh mục.");
             return false;
         }
 
         try {
             TextFieldFormatterUtils.parseCurrencyText(priceField.getText());
         } catch (NumberFormatException e) {
-            AlertUtils.showWarning("Sai định dạng", "Giá hoặc số lượng không hợp lệ.");
+            AlertUtils.showWarning("Sai định dạng", "Giá không hợp lệ.");
             return false;
         }
 
         return true;
     }
-
 }

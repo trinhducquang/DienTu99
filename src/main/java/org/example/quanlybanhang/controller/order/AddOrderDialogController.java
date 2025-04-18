@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.example.quanlybanhang.controller.interfaces.RefreshableView;
 import org.example.quanlybanhang.dao.CustomerDAO;
 import org.example.quanlybanhang.dao.EmployeeDAO;
 import org.example.quanlybanhang.dao.OrderDAO;
@@ -41,6 +42,14 @@ import static org.example.quanlybanhang.utils.TableCellFactoryUtils.currencyCell
 
 public class AddOrderDialogController {
 
+    // Thêm biến cho parent controller
+    private RefreshableView parentController;
+
+    // Thêm phương thức setter
+    public void setParentController(RefreshableView parentController) {
+        System.out.println("AddOrderDialogController: Đã nhận parent controller");
+        this.parentController = parentController;
+    }
 
     //region FXML Components
     @FXML
@@ -82,8 +91,6 @@ public class AddOrderDialogController {
     private ObservableList<OrderDetail> orderDetailsList = FXCollections.observableArrayList();
     private List<Product> allProducts = new ArrayList<>();
     private CustomerDAO customerDAO;
-
-
     //endregion
 
     @FXML
@@ -97,10 +104,7 @@ public class AddOrderDialogController {
         btnAddCustomer.setOnAction(event -> {
             DialogHelper.showDialog("/org/example/quanlybanhang/views/customer/CustomerDialog.fxml", "Thêm Khách Hàng Mới", (Stage) btnAddCustomer.getScene().getWindow());
         });
-
-
     }
-
 
     private void setupServices() {
         Connection connection = DatabaseConnection.getConnection();
@@ -157,11 +161,9 @@ public class AddOrderDialogController {
 
         colTotal.setCellFactory(currencyCellFactory());
 
-
         colAction.setCellFactory(col -> getDeleteButtonCell());
         tableOrderDetails.setItems(orderDetailsList);
     }
-
 
     private TableCell<OrderDetail, Button> getDeleteButtonCell() {
         return new TableCell<>() {
@@ -255,7 +257,6 @@ public class AddOrderDialogController {
         }
     }
 
-
     private void loadProducts() {
         allProducts = productDAO.getAll();
         cbProduct.getItems().clear();
@@ -275,7 +276,6 @@ public class AddOrderDialogController {
                 cbCustomer.getItems().add(c.getId() + " - " + c.getName())
         );
     }
-
 
     private void loadEmployees() {
         Connection connection = DatabaseConnection.getConnection();
@@ -322,7 +322,6 @@ public class AddOrderDialogController {
                     .map(d -> d.getPrice().multiply(BigDecimal.valueOf(d.getQuantity())))
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-
             Order order = new Order(
                     0,
                     emp.getId(),
@@ -339,6 +338,10 @@ public class AddOrderDialogController {
             int newId = orderDAO.addOrder(order, details);
             if (newId > 0) {
                 AlertUtils.showInfo("Thành công", "Đơn hàng đã được lưu.");
+
+                // Không cần gọi refresh ở đây vì DialogHelper đã xử lý
+                // mà sẽ thực hiện refresh khi dialog đóng
+
                 closeDialogFromEvent(null);
             } else {
                 AlertUtils.showError("Lỗi", "Không thể lưu đơn hàng.");
@@ -347,7 +350,6 @@ public class AddOrderDialogController {
             AlertUtils.showError("Lỗi", "Vui lòng kiểm tra lại thông tin.");
         }
     }
-
 
     @FXML
     private void handleCancel(ActionEvent event) {
@@ -387,7 +389,4 @@ public class AddOrderDialogController {
         // Cập nhật tổng tiền ngay sau khi thêm các sản phẩm từ giỏ hàng
         updateTotalPrices();
     }
-
-
-
 }
