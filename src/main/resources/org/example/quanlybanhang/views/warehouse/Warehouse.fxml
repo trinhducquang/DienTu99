@@ -18,6 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.layout.StackPane?>
 <BorderPane prefHeight="747.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.warehouse.WarehouseController">
     <center>
         <BorderPane>
@@ -38,12 +39,12 @@
                                 <Insets left="10.0" />
                             </padding>
                         </Label>
-                  <Region HBox.hgrow="ALWAYS"/>
-                  <Button fx:id="btnLogout" mnemonicParsing="false" style="-fx-background-color: #f44336; -fx-text-fill: white;" text="Đăng Xuất">
-                     <padding>
-                        <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
-                     </padding>
-                  </Button>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnLogout" mnemonicParsing="false" style="-fx-background-color: #f44336; -fx-text-fill: white;" text="Đăng Xuất">
+                            <padding>
+                                <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
+                            </padding>
+                        </Button>
                     </children>
                 </HBox>
             </top>
@@ -225,13 +226,10 @@
                                                 </VBox>
                                             </children>
                                         </HBox>
-                                        <Pane prefHeight="300.0" style="-fx-background-color: #f5f5f5; -fx-background-radius: 5;">
-                                            <children>
-                                                <Label layoutX="20.0" layoutY="15.0" text="Biểu Đồ Giao Dịch Kho" />
-                                                <!-- Đây là nơi để thêm biểu đồ từ JavaFX -->
-                                            </children>
-                                        </Pane>
-                                        <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                                        <StackPane fx:id="chartPane" prefHeight="359.0" prefWidth="1260.0" style="-fx-background-color: #f5f5f5; -fx-background-radius: 5;">
+                                           
+                                        </StackPane >
+                                        <HBox prefHeight="211.0" prefWidth="1260.0" spacing="20.0" VBox.vgrow="ALWAYS">
                                             <children>
                                                 <VBox spacing="10.0" HBox.hgrow="ALWAYS">
                                                     <children>

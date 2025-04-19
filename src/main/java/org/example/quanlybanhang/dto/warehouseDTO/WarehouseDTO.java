@@ -29,7 +29,6 @@ public class WarehouseDTO {
     private int deficientQuantity;
     private int missing;
     private int stock;
-    private String referenceTransaction;
 
     public WarehouseDTO() {
     }
@@ -219,15 +218,4 @@ public class WarehouseDTO {
         this.stock = stock;
     }
 
-    public String getReferenceTransaction() {
-        return referenceTransaction;
-    }
-
-    public void setReferenceTransaction(String referenceTransaction) {
-        this.referenceTransaction = referenceTransaction;
-    }
-
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
 }

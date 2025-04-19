@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.controller.order.PendingOrdersDialogController;
@@ -63,6 +64,8 @@ public class DashboardTabController {
     TableColumn<WarehouseDTO, String> colTopExportProductName;
     @FXML
     TableColumn<WarehouseDTO, Integer> colTopExportQuantity;
+    @FXML
+    Pane chartPane;
 
     // Data collections
     private ObservableList<WarehouseDTO> allProducts;
@@ -77,6 +80,54 @@ public class DashboardTabController {
     // Initialize method
     public void initialize() {
         setupTableColumns();
+        setupChartController();
+    }
+
+    private void setupChartController() {
+        WarehouseChartController chartController = new WarehouseChartController();
+        Pane chartContainer = chartController.getChartPane();
+
+        // Set the chart container size to match the parent pane
+        chartContainer.setPrefSize(chartPane.getPrefWidth(), chartPane.getPrefHeight());
+
+        // Important: Pass the transaction data to the chart controller
+        if (allTransactions != null) {
+            chartController.setTransactionData(allTransactions);
+        }
+
+        chartPane.getChildren().clear(); // Clear old content if any
+        chartPane.getChildren().add(chartContainer);
+    }
+
+    public void updateDashboard(Map<Integer, Integer> productStockMap) {
+        updatePendingOrdersCount();
+        int totalStockQuantity = calculateTotalStockQuantity(productStockMap);
+        BigDecimal totalWarehouseValue = calculateTotalWarehouseValue(productStockMap);
+        long monthlyTransactionCount = calculateMonthlyTransactions();
+        long lowStockCount = calculateLowStockCount();
+        updateStatisticsUI(totalStockQuantity, totalWarehouseValue, monthlyTransactionCount, lowStockCount);
+        updateLowStockProducts();
+        loadTopExportedProducts();
+
+        // Re-setup chart controller after data has been set
+        setupChartController();
+
+        // Debug output
+        if (allTransactions != null) {
+            System.out.println("Transaction count: " + allTransactions.size());
+            // Check a few sample data points
+            if (!allTransactions.isEmpty()) {
+                WarehouseDTO firstTrans = allTransactions.get(0);
+                System.out.println("Sample: ProductID=" + firstTrans.getProductId()
+                        + ", Type=" + firstTrans.getType()
+                        + ", Quantity=" + firstTrans.getQuantity()
+                        + ", CreatedAt=" + firstTrans.getCreatedAt());
+            }
+        }
+        else {
+            System.out.println("Chart controller or transactions is null");
+        }
+        System.out.println("Transaction data size: " + (allTransactions != null ? allTransactions.size() : "null"));
     }
 
     public void setMainController(WarehouseController controller) {
@@ -140,28 +191,6 @@ public class DashboardTabController {
         }
     }
 
-    public void updateDashboard(Map<Integer, Integer> productStockMap) {
-        updatePendingOrdersCount();
-
-        // Calculate total stock quantity and value
-        int totalStockQuantity = calculateTotalStockQuantity(productStockMap);
-        BigDecimal totalWarehouseValue = calculateTotalWarehouseValue(productStockMap);
-
-        // Calculate monthly transactions
-        long monthlyTransactionCount = calculateMonthlyTransactions();
-
-        // Calculate low stock products count
-        long lowStockCount = calculateLowStockCount();
-
-        // Format and update UI
-        updateStatisticsUI(totalStockQuantity, totalWarehouseValue, monthlyTransactionCount, lowStockCount);
-
-        // Update low stock products table
-        updateLowStockProducts();
-
-        // Load top exported products
-        loadTopExportedProducts();
-    }
 
     private void updatePendingOrdersCount() {
         OrderDAO orderDAO = new OrderDAO();
@@ -184,27 +213,62 @@ public class DashboardTabController {
     private BigDecimal calculateTotalWarehouseValue(Map<Integer, Integer> productStockMap) {
         BigDecimal totalValue = BigDecimal.ZERO;
 
-        // Sử dụng dữ liệu từ các giao dịch nhập kho để tính giá trị chính xác
-        if (allTransactions != null) {
-            Map<Integer, BigDecimal> productValueMap = new HashMap<>();
+        if (allTransactions == null) {
+            return totalValue;
+        }
 
-            // Tính tổng giá trị nhập theo sản phẩm
-            for (WarehouseDTO transaction : allTransactions) {
-                // Chỉ tính cho giao dịch NHAP_KHO
-                if (transaction.getType() == WarehouseType.NHAP_KHO) {
-                    int productId = transaction.getProductId();
-                    BigDecimal transactionValue = transaction.getUnitPrice()
-                            .multiply(new BigDecimal(transaction.getQuantity()));
+        // Get all products with current stock
+        Map<Integer, List<WarehouseDTO>> productImportBatches = new HashMap<>();
 
-                    // Cộng dồn giá trị
-                    BigDecimal currentValue = productValueMap.getOrDefault(productId, BigDecimal.ZERO);
-                    productValueMap.put(productId, currentValue.add(transactionValue));
+        // First, organize import transactions by product
+        for (WarehouseDTO transaction : allTransactions) {
+            if (transaction.getType() == WarehouseType.NHAP_KHO) {
+                int productId = transaction.getProductId();
+                productImportBatches.computeIfAbsent(productId, k -> new ArrayList<>()).add(transaction);
+            }
+        }
+
+        // Sort each product's import batches by date (oldest first)
+        for (List<WarehouseDTO> batches : productImportBatches.values()) {
+            batches.sort(Comparator.comparing(WarehouseDTO::getCreatedAt));
+        }
+
+        // Process export transactions using FIFO
+        for (WarehouseDTO transaction : allTransactions) {
+            if (transaction.getType() == WarehouseType.XUAT_KHO) {
+                int productId = transaction.getProductId();
+                int exportQuantity = transaction.getQuantity();
+                List<WarehouseDTO> importBatches = productImportBatches.get(productId);
+
+                if (importBatches != null) {
+                    // Track which batches to remove or reduce
+                    List<Integer> batchesToRemove = new ArrayList<>();
+                    for (int i = 0; i < importBatches.size() && exportQuantity > 0; i++) {
+                        WarehouseDTO batch = importBatches.get(i);
+                        if (batch.getQuantity() <= exportQuantity) {
+                            // Use all of this batch
+                            exportQuantity -= batch.getQuantity();
+                            batchesToRemove.add(i);
+                        } else {
+                            // Use part of this batch
+                            batch.setQuantity(batch.getQuantity() - exportQuantity);
+                            exportQuantity = 0;
+                        }
+                    }
+
+                    // Remove consumed batches (in reverse to maintain indices)
+                    for (int i = batchesToRemove.size() - 1; i >= 0; i--) {
+                        importBatches.remove((int) batchesToRemove.get(i));
+                    }
                 }
             }
+        }
 
-            // Tính tổng giá trị kho
-            for (Map.Entry<Integer, BigDecimal> entry : productValueMap.entrySet()) {
-                totalValue = totalValue.add(entry.getValue());
+        // Calculate remaining value based on remaining import batches
+        for (List<WarehouseDTO> batches : productImportBatches.values()) {
+            for (WarehouseDTO batch : batches) {
+                BigDecimal batchValue = batch.getUnitPrice().multiply(BigDecimal.valueOf(batch.getQuantity()));
+                totalValue = totalValue.add(batchValue);
             }
         }
 

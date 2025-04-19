@@ -255,8 +255,7 @@ public class WarehouseImportDialog {
         totalAmountField.setDisable(false);
     }
 
-    // === Product Adding & Calculation ===
-
+    
     @FXML
     private void onAddProduct() {
         Product product = productComboBox.getValue();

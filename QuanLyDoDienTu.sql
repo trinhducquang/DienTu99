@@ -31,27 +31,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table quanlybanhang.categories: ~19 rows (approximately)
-INSERT INTO `categories` (`id`, `name`, `description`, `parent_id`) VALUES
-	(1, 'Tivi', '8k', 3),
-	(2, 'Tivi samsung', 'siêu đẹp', NULL),
-	(3, 'điện thoại', 'màn hình đỉnh', NULL),
-	(4, 'Iphone', 'cc', 3),
-	(5, 'quang', 'saddasdasasd', NULL),
-	(6, '1', '1', 2),
-	(8, '2', '2', NULL),
-	(9, 'haiem', '1', 3),
-	(10, 'asss', '', NULL),
-	(11, 'ưqeewq', 'ưeqweqwqe', NULL),
-	(12, '231', '213', 2),
-	(13, '23', '123', 3),
-	(14, '312', '213', NULL),
-	(15, 'dâsd', 'adsdas', NULL),
-	(16, 'kk', '21321', NULL),
-	(17, '213321', '213231', NULL),
-	(18, 'toiyeuem', '231', NULL),
-	(19, 'yeutinhyeu don gian', '123', NULL),
-	(20, 'hahahahavichinh', '321321213', 2);
+-- Data exporting was unselected.
 
 -- Dumping structure for table quanlybanhang.customers
 CREATE TABLE IF NOT EXISTS `customers` (
@@ -66,12 +46,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table quanlybanhang.customers: ~4 rows (approximately)
-INSERT INTO `customers` (`id`, `name`, `phone`, `email`, `address`, `created_at`) VALUES
-	(30, 'abc', '0934431316', 'quang.td.2430@aptechlearning.edu.vn', 'hà trung, hà nội', '2025-04-16 20:22:01'),
-	(31, 'haianh', '21321', '213321', '231321213', '2025-04-18 03:22:46'),
-	(32, '123321', '213321', '231213', '231321', '2025-04-18 03:22:53'),
-	(33, 'áddas', '21323', 'đấ', 'áddasdas', '2025-04-18 03:24:32');
+-- Data exporting was unselected.
 
 -- Dumping structure for table quanlybanhang.orders
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -90,13 +65,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=306 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table quanlybanhang.orders: ~5 rows (approximately)
-INSERT INTO `orders` (`id`, `employee_id`, `total_price`, `order_date`, `status`, `customer_id`, `shipping_fee`, `note`) VALUES
-	(301, 44, 1212.00, '2025-04-17 17:00:00', 'Đang xử lý', 31, 22222.00, 'abc'),
-	(302, 44, 22.00, '2025-04-17 17:00:00', 'Đang xử lý', 31, 0.00, 'aaaa'),
-	(303, 44, 1212.00, '2025-04-17 17:00:00', 'Hoàn thành', 31, 0.00, 'ádasdasd'),
-	(304, 44, 65656.00, '2025-04-18 17:00:00', 'Đang xử lý', 31, 222222.00, 'ấdasad2'),
-	(305, 44, 23132.00, '2025-04-18 17:00:00', 'Hoàn thành', 30, 0.00, 'saddasdas');
+-- Data exporting was unselected.
 
 -- Dumping structure for table quanlybanhang.order_details
 CREATE TABLE IF NOT EXISTS `order_details` (
@@ -112,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `order_details` (
   CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=179 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table quanlybanhang.order_details: ~0 rows (approximately)
+-- Data exporting was unselected.
 
 -- Dumping structure for view quanlybanhang.order_summary
 -- Creating temporary table to overcome VIEW dependency errors
@@ -152,9 +121,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=1351 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table quanlybanhang.products: ~1 rows (approximately)
-INSERT INTO `products` (`id`, `name`, `category_id`, `description`, `price`, `stock_quantity`, `created_at`, `updated_at`, `status`, `image_url`, `specifications`) VALUES
-	(1350, 'a', 1, 'a', 2000000.00, 161, '2025-04-19 07:35:42', '2025-04-19 12:28:02', 'Còn hàng', 'a', '{"camera": "ád", "battery": "ád", "features": "ád", "configMemory": "a", "connectivity": "ád", "designMaterials": "sad"}');
+-- Data exporting was unselected.
 
 -- Dumping structure for table quanlybanhang.reports
 CREATE TABLE IF NOT EXISTS `reports` (
@@ -169,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `reports` (
   CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`best_selling_product_id`) REFERENCES `products` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table quanlybanhang.reports: ~0 rows (approximately)
+-- Data exporting was unselected.
 
 -- Dumping structure for table quanlybanhang.users
 CREATE TABLE IF NOT EXISTS `users` (
@@ -185,39 +152,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table quanlybanhang.users: ~31 rows (approximately)
-INSERT INTO `users` (`id`, `username`, `password`, `full_name`, `email`, `phone`, `role`, `status`) VALUES
-	(1, 'quang', '$argon2id$v=19$m=65536,t=2,p=1$wJSr5Kr/QtzznbQZtjlJfQ$/HvdHMAdftWIucNLEESbz0q4PxiBieVqLMBsVCS9zGM', 'quang', 'haianh@', '123456789', 'Admin', 'Unlock'),
-	(42, 'haianh', '$argon2id$v=19$m=65536,t=3,p=2$4ATl4ZKZsKiIyRXXnrTv8Q$0m/XoqZnTbvio7O9/5SSgTdLQ5SOTxEtXKbUdK+q2vY', 'haianh', 'abc@', '123456789', 'Nhân viên kho', 'Unlock'),
-	(43, 'quang1', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(44, 'lon1', '$argon2id$v=19$m=65536,t=3,p=2$MdXAS1sq74j9fHfkbB3pdw$fhzU/X2Ds8mbjnrRkdyDlb4l6/ZVnFBmmy4cGB4QWeM', 'huhu', '1@', '123123312', 'Nhân viên bán hàng', 'Unlock'),
-	(45, '213', '$argon2id$v=19$m=65536,t=3,p=2$OKty2fubAtFmgq4EtcfCsQ$Jd5neaMe5x3/dEilOhVqugF21GhTk59OdGQbi0aNMWY', '213', '231@', '231231231', 'Nhân Viên', 'Unlock'),
-	(46, '231', '$argon2id$v=19$m=65536,t=3,p=2$tUEruPsfQxTDVrslY//Qyw$Cj/0ouq1gHRx5ILreJIlvec1cqK31QdO/xMrKtXlwb8', '2312', '231@', '231231231', 'Nhân Viên', 'Unlock'),
-	(50, 'quang2', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1s', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(51, 'quang3', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1a', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(52, 'quang4', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1a', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(53, 'quang5', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1b', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(54, 'quang6', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1c', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(55, 'quang7', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1b', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(56, 'quang8', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1n', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(57, 'quang9', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1qư', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(58, 'quang11', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1ewq', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(59, 'quang1s', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1ưqe', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(62, 'quang56', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1s', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(64, 'quang565', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1s', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(65, 'quang53', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1a', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(66, 'quang45', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1a', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(67, 'quang5312', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1b', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(68, '2134', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1c', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(69, 'qu435ang7', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1b', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(70, '345', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1n', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(71, 'quaretng9', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1qư', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(72, 'ret', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1ewq', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(73, 'quẻtang1sg', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1ưqe', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(74, 'quareng1sf', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1ewsq', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(75, 'quaẻtng1sh', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1ưsqe', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(76, 'quaẻtng1sghj', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1ưecq', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock'),
-	(77, 'quaẻtng1shjg', '$argon2id$v=19$m=65536,t=3,p=2$uoG6Vfzjmp02oyMGki7D2w$80hikT928hOMYCQ7fxcth++oa+gIoPXHqPCcM+DbgKQ', 'quang1ewr', 'quang1@', '12345678', 'Nhân viên thu ngân', 'Unlock');
+-- Data exporting was unselected.
 
 -- Dumping structure for table quanlybanhang.warehouse_transactions
 CREATE TABLE IF NOT EXISTS `warehouse_transactions` (
@@ -237,35 +172,15 @@ CREATE TABLE IF NOT EXISTS `warehouse_transactions` (
   `deficient_quantity` int DEFAULT '0',
   `missing` int DEFAULT '0',
   `inventory_status` enum('Đã xác nhận','Có chênh lệch','Chờ xác nhận') DEFAULT NULL,
+  `source_transaction_code` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`),
   KEY `fk_created_by` (`created_by`),
   CONSTRAINT `fk_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `warehouse_transactions_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=284 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=290 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table quanlybanhang.warehouse_transactions: ~20 rows (approximately)
-INSERT INTO `warehouse_transactions` (`id`, `product_id`, `quantity`, `unit_price`, `type`, `note`, `created_at`, `updated_at`, `inventory_check_date`, `inventory_note`, `transaction_code`, `created_by`, `excess_quantity`, `deficient_quantity`, `missing`, `inventory_status`) VALUES
-	(263, 1350, 50, 500000.00, 'Nhập Kho', 'test1', '2025-04-19 07:35:59', '2025-04-19 07:35:59', NULL, NULL, 'NK-20250419-E093A', 42, 0, 0, 0, NULL),
-	(264, 1350, 50, 1000000.00, 'Nhập Kho', '', '2025-04-19 07:36:20', '2025-04-19 07:36:20', NULL, NULL, 'NK-20250419-6D8E2', 42, 0, 0, 0, NULL),
-	(265, 1350, 50, 0.00, 'Xuất Kho', '', '2025-04-19 07:39:04', '2025-04-19 07:39:04', NULL, NULL, 'XK-20250419-D607D', 42, 0, 0, 0, NULL),
-	(266, 1350, 20, 0.00, 'Xuất Kho', '', '2025-04-19 07:39:31', '2025-04-19 07:39:31', NULL, NULL, 'XK-20250419-BB8DE', 42, 0, 0, 0, NULL),
-	(267, 1350, 10, 2000000.00, 'Nhập Kho', 'abc', '2025-04-19 07:39:50', '2025-04-19 07:39:49', NULL, NULL, 'NK-20250419-4BBCA', 42, 0, 0, 0, NULL),
-	(268, 1350, 10, 0.00, 'Xuất Kho', '', '2025-04-19 07:40:13', '2025-04-19 07:40:12', NULL, NULL, 'XK-20250419-10611', 42, 0, 0, 0, NULL),
-	(269, 1350, 30, 0.00, 'Xuất Kho', '', '2025-04-19 07:40:13', '2025-04-19 07:40:12', NULL, NULL, 'XK-20250419-10611', 42, 0, 0, 0, NULL),
-	(270, 1350, 10, 5000000.00, 'Nhập Kho', '', '2025-04-19 07:40:37', '2025-04-19 07:40:37', NULL, NULL, 'NK-20250419-C9EA0', 42, 0, 0, 0, NULL),
-	(271, 1350, 10, 0.00, 'Xuất Kho', 'áddsadaad', '2025-04-19 07:41:05', '2025-04-19 07:41:04', NULL, NULL, 'XK-20250419-141FC', 42, 0, 0, 0, NULL),
-	(272, 1350, 50, 2000000.00, 'Nhập Kho', '', '2025-04-19 07:41:16', '2025-04-19 07:41:16', NULL, NULL, 'NK-20250419-AAE3C', 42, 0, 0, 0, NULL),
-	(273, 1350, 10, 0.00, 'Xuất Kho', '', '2025-04-19 07:41:32', '2025-04-19 07:41:32', NULL, NULL, 'XK-20250419-3F1F0', 42, 0, 0, 0, NULL),
-	(274, 1350, 5, 0.00, 'Xuất Kho', '', '2025-04-19 07:41:32', '2025-04-19 07:41:32', NULL, NULL, 'XK-20250419-3F1F0', 42, 0, 0, 0, NULL),
-	(275, 1350, 50, 21321321.00, 'Nhập Kho', '', '2025-04-19 08:32:16', '2025-04-19 08:32:16', NULL, NULL, 'NK-20250419-C211D', 42, 0, 0, 0, NULL),
-	(276, 1350, 1, 0.00, 'Xuất Kho', 'abc', '2025-04-19 10:58:13', '2025-04-19 10:58:12', NULL, NULL, 'XK-20250419-2F6F1', 42, 0, 0, 0, NULL),
-	(277, 1350, 1, 0.00, 'Xuất Kho', '1', '2025-04-19 10:58:34', '2025-04-19 10:58:34', NULL, NULL, 'XK-20250419-4455A', 42, 0, 0, 0, NULL),
-	(278, 1350, 1, 0.00, 'Xuất Kho', 'abc', '2025-04-19 11:19:29', '2025-04-19 11:19:29', NULL, NULL, 'XK-20250419-DF86D', 42, 0, 0, 0, NULL),
-	(280, 1350, 1, 0.00, 'Xuất Kho', 'â', '2025-04-19 11:51:19', '2025-04-19 11:51:18', NULL, NULL, 'XK-20250419-AD5E6', 42, 0, 0, 0, NULL),
-	(281, 1350, 10, 0.00, 'Xuất Kho', 'saddasdasdas', '2025-04-19 11:51:45', '2025-04-19 11:51:45', NULL, NULL, 'XK-20250419-594D0', 42, 0, 0, 0, NULL),
-	(282, 1350, 10, 0.00, 'Xuất Kho', 'saddasdasdas', '2025-04-19 11:51:45', '2025-04-19 11:51:45', NULL, NULL, 'XK-20250419-594D0', 42, 0, 0, 0, NULL),
-	(283, 1350, 100, 3000000.00, 'Nhập Kho', 'abc', '2025-04-19 12:28:02', '2025-04-19 12:28:02', NULL, NULL, 'NK-20250419-D0CFE', 42, 0, 0, 0, NULL);
+-- Data exporting was unselected.
 
 -- Dumping structure for view quanlybanhang.warehouse_transaction_details
 -- Creating temporary table to overcome VIEW dependency errors

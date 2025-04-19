@@ -9,8 +9,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ComboBox?>
 
-<VBox alignment="CENTER" prefHeight="494.0" prefWidth="500" stylesheets="@../product/product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.employee.EmployeeManagementDialogController">
+<VBox alignment="CENTER" prefHeight="530.0" prefWidth="500" stylesheets="@../product/product.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.employee.EmployeeManagementDialogController">
 
     <!-- Header -->
     <VBox prefHeight="92.0" prefWidth="500.0" styleClass="dialog-header">
@@ -18,7 +19,7 @@
     </VBox>
 
     <!-- Form nhập thông tin -->
-    <GridPane hgap="15.0" prefHeight="325.0" prefWidth="500.0" styleClass="input-grid" vgap="15">
+    <GridPane hgap="15.0" prefHeight="350.0" prefWidth="500.0" styleClass="input-grid" vgap="15">
 
         <Label styleClass="input-label" text="Tên nhân viên" GridPane.rowIndex="0" />
         <TextField fx:id="nameField" prefWidth="404.0" promptText="Nhập tên nhân viên" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
@@ -38,6 +39,9 @@
         <Label styleClass="input-label" text="Số điện thoại" GridPane.rowIndex="5" />
         <TextField fx:id="phoneField" promptText="Nhập số điện thoại" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
+        <Label styleClass="input-label" text="Vai trò" GridPane.rowIndex="6" />
+        <ComboBox fx:id="roleComboBox" prefWidth="300" promptText="Chọn vai trò" styleClass="input-field" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
         <columnConstraints>
             <ColumnConstraints minWidth="150" />
             <ColumnConstraints />
@@ -49,15 +53,16 @@
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />
-         <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
         </rowConstraints>
-      <VBox.margin>
-         <Insets top="20.0" />
-      </VBox.margin>
+        <VBox.margin>
+            <Insets top="20.0" />
+        </VBox.margin>
     </GridPane>
 
     <!-- Nút thao tác -->
-    <HBox alignment="CENTER" prefHeight="129.0" prefWidth="500.0" spacing="20" styleClass="button-container">
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="500.0" spacing="20" styleClass="button-container">
         <Button fx:id="cancelButton" prefWidth="126.0" styleClass="cancel-button" text="Hủy" />
         <Button fx:id="saveButton" prefWidth="121.0" styleClass="save-button" text="Lưu" />
     </HBox>

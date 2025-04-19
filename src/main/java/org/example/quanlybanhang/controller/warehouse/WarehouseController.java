@@ -10,6 +10,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.WarehouseDAO;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
@@ -34,7 +36,6 @@ public class WarehouseController {
     // Constants
     private static final int ITEMS_PER_PAGE = 18;
     private static final int LOW_STOCK_THRESHOLD = 10;
-
 
     // Tab controllers
     private TransactionTabController transactionTabController;
@@ -113,6 +114,8 @@ public class WarehouseController {
 
     // Data access
     private final WarehouseDAO warehouseDAO = new WarehouseDAO();
+    @FXML
+    private StackPane chartPane;
 
     @FXML
     public void initialize() {
@@ -186,6 +189,7 @@ public class WarehouseController {
             dashboardTabController.colTopExportProductId = this.colTopExportProductId;
             dashboardTabController.colTopExportProductName = this.colTopExportProductName;
             dashboardTabController.colTopExportQuantity = this.colTopExportQuantity;
+            dashboardTabController.chartPane = this.chartPane;
             dashboardTabController.setMainController(this);
             dashboardTabController.initialize();
             dashboardTabController.setProductData(allProducts);

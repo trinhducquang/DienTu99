@@ -98,7 +98,7 @@ public class EmployeeDAO implements CrudDao<Employee> {
             statement.setString(3, hashedPassword);
             statement.setString(4, employee.getEmail());
             statement.setString(5, employee.getPhone());
-            statement.setString(6, UserRole.NHAN_VIEN.getValue());
+            statement.setString(6, employee.getRole().getValue());
             statement.setString(7, UserStatus.UNLOCK.getValue());
 
 

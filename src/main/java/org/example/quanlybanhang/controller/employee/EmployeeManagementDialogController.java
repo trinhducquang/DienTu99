@@ -2,6 +2,7 @@ package org.example.quanlybanhang.controller.employee;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
@@ -18,6 +19,8 @@ import java.sql.Connection;
 
 public class EmployeeManagementDialogController {
 
+    @FXML
+    private ComboBox<UserRole> roleComboBox;
     @FXML
     private TextField nameField;
     @FXML
@@ -46,6 +49,8 @@ public class EmployeeManagementDialogController {
         setPhoneFieldFormatter();
         saveButton.setOnAction(event -> saveEmployee());
         cancelButton.setOnAction(event -> closeDialog());
+        roleComboBox.getItems().addAll(UserRole.values());
+        roleComboBox.setValue(UserRole.NHAN_VIEN);
     }
 
     private void setPhoneFieldFormatter() {
@@ -62,6 +67,7 @@ public class EmployeeManagementDialogController {
         String retypePassword = retypepasswordField.getText();
         String email = emailField.getText().trim();
         String phone = phoneField.getText().trim();
+        UserRole selectedRole = roleComboBox.getValue();
 
         if (!isInputValid(name, username, password, retypePassword, email, phone)) {
             return;
@@ -78,14 +84,13 @@ public class EmployeeManagementDialogController {
             EmployeeService employeeService = new EmployeeService(connection);
             Employee employee = new Employee(
                     0, name, username, password, email, phone,
-                    UserRole.NHAN_VIEN, UserStatus.UNLOCK
+                    selectedRole, UserStatus.UNLOCK
             );
 
             boolean success = employeeService.addEmployee(employee, retypePassword);
             if (success) {
                 AlertUtils.showInfo("Thành công", "Thêm nhân viên thành công!");
 
-                // Call refresh on parent controller before closing
                 if (parentController != null) {
                     parentController.refresh();
                 }
@@ -99,6 +104,7 @@ public class EmployeeManagementDialogController {
             AlertUtils.showError("Lỗi hệ thống", "Không thể kết nối cơ sở dữ liệu.");
         }
     }
+
 
     private boolean isInputValid(String name, String username, String password,
                                  String retypePassword, String email, String phone) {
