@@ -119,37 +119,49 @@ public class TransactionTabController {
             }
         });
 
-        // Add listener to filter data when selection changes
         cboTransactionType.valueProperty().addListener((obs, oldVal, newVal) -> {
             applyTransactionFilters();
             updateColumnVisibility(newVal);
         });
     }
 
-    // Add column visibility toggle method
     private void updateColumnVisibility(WarehouseType type) {
-        boolean showImportColumns = (type == null || type == WarehouseType.NHAP_KHO);
-        boolean showExportColumns = (type == null || type == WarehouseType.XUAT_KHO);
+        // Cập nhật tiêu đề và hiển thị cột dựa trên loại giao dịch
+        if (type == WarehouseType.NHAP_KHO) {
+            // Hiển thị cột liên quan đến nhập kho
+            colUnitPrice.setVisible(true);
+            colTotalAmount.setVisible(true);
+        } else if (type == WarehouseType.XUAT_KHO) {
+            colUnitPrice.setVisible(false);
+            colTotalAmount.setVisible(true);
+        } else {
+            colUnitPrice.setVisible(true);
+            colTotalAmount.setVisible(true);
+        }
 
-        // Toggle columns relevant to import transactions
-        colUnitPrice.setVisible(showImportColumns);
-
-        // If you have specific export-only columns, toggle them here:
-        // colExportSpecificColumn.setVisible(showExportColumns);
-
-        // Total amount may be relevant for both, so keep it visible always
-        colTotalAmount.setVisible(true);
+        // Cập nhật lại giao diện của bảng
+        tblTransactions.refresh();
     }
 
-    // Modify existing applyTransactionFilters method
     private void applyTransactionFilters() {
         String searchText = txtSearchTransaction.getText();
         LocalDate startDate = dpStartDateTransaction.getValue();
         LocalDate endDate = dpEndDateTransaction.getValue();
         WarehouseType selectedType = cboTransactionType.getValue();
 
+        // Lấy tất cả dữ liệu từ DAO
+        List<WarehouseDTO> allData = warehouseDAO.getAllWarehouseDetails();
+
+        // Lọc theo loại giao dịch nếu có chọn loại
+        if (selectedType != null) {
+            allData = allData.stream()
+                    .filter(dto -> dto.getType() == selectedType)
+                    .collect(Collectors.toList());
+        }
+
+        // Tiếp tục lọc theo các điều kiện tìm kiếm khác
         List<WarehouseDTO> filteredData = SearchService.search(
-                warehouseDAO.getAllWarehouseDetails(),
+                allData,
                 searchText,
                 startDate,
                 endDate,
@@ -159,15 +171,12 @@ public class TransactionTabController {
                 WarehouseDTO::getCategoryName
         );
 
-        // Additional filter for transaction type
-        if (selectedType != null) {
-            filteredData = filteredData.stream()
-                    .filter(dto -> dto.getType() == selectedType)
-                    .collect(Collectors.toList());
-        }
-
+        // Cập nhật danh sách hiển thị
         allTransactions.setAll(filteredData);
         pagination.setCurrentPageIndex(0);
+
+        // Cập nhật lại phân trang
+        setupPagination();
     }
 
     private void updateColumnsVisibility(String transactionType) {
