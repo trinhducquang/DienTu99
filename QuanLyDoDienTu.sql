@@ -48,6 +48,23 @@ CREATE TABLE IF NOT EXISTS `customers` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table quanlybanhang.fifo_batches
+CREATE TABLE IF NOT EXISTS `fifo_batches` (
+  `batch_id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int NOT NULL,
+  `quantity_remaining` int NOT NULL,
+  `unit_price` decimal(18,2) NOT NULL,
+  `imported_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `warehouse_transaction_id` int DEFAULT NULL,
+  PRIMARY KEY (`batch_id`),
+  KEY `fk_fifo_product` (`product_id`),
+  KEY `fk_fifo_transaction` (`warehouse_transaction_id`),
+  CONSTRAINT `fk_fifo_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_fifo_transaction` FOREIGN KEY (`warehouse_transaction_id`) REFERENCES `warehouse_transactions` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table quanlybanhang.orders
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -119,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   KEY `fk_category` (`category_id`),
   CONSTRAINT `fk_category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=1350 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1351 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -172,12 +189,13 @@ CREATE TABLE IF NOT EXISTS `warehouse_transactions` (
   `deficient_quantity` int DEFAULT '0',
   `missing` int DEFAULT '0',
   `inventory_status` enum('Đã xác nhận','Có chênh lệch','Chờ xác nhận') DEFAULT NULL,
+  `reference_transaction` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`),
   KEY `fk_created_by` (`created_by`),
   CONSTRAINT `fk_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `warehouse_transactions_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=239 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=276 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
