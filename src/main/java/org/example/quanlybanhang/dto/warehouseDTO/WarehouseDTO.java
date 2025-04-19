@@ -29,38 +29,10 @@ public class WarehouseDTO {
     private int deficientQuantity;
     private int missing;
     private int stock;
-
-
+    private String referenceTransaction;
 
     public WarehouseDTO() {
     }
-
-    public WarehouseDTO(int id, int productId, String transactionCode, String productName, BigDecimal sellPrice, String categoryName,
-                        int quantity, BigDecimal unitPrice, WarehouseType type,
-                        String note, String createdByName, LocalDateTime createdAt, LocalDateTime updatedAt,
-                        LocalDateTime inventoryDate, int createById ,String inventoryNote, InventoryStatus inventoryStatus) {
-        this.id = id;
-        this.productId = productId;
-        this.transactionCode = transactionCode;
-        this.productName = productName;
-        this.sellPrice = sellPrice;
-        this.categoryName = categoryName;
-        this.quantity = quantity;
-        this.unitPrice = unitPrice;
-        this.totalAmount = unitPrice.multiply(BigDecimal.valueOf(quantity));
-        this.type = type;
-        this.note = note;
-        this.createdByName = createdByName;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.inventoryDate = inventoryDate;
-        this.createById = createById;
-        this.inventoryNote = inventoryNote;
-        this.inventoryStatus = inventoryStatus;
-    }
-
-    // Getters & Setters
-
 
     public int getId() {
         return id;
@@ -247,6 +219,15 @@ public class WarehouseDTO {
         this.stock = stock;
     }
 
+    public String getReferenceTransaction() {
+        return referenceTransaction;
+    }
 
+    public void setReferenceTransaction(String referenceTransaction) {
+        this.referenceTransaction = referenceTransaction;
+    }
 
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 }

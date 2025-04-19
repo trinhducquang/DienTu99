@@ -6,11 +6,11 @@ import org.example.quanlybanhang.enums.ProductStatus;
 import org.example.quanlybanhang.enums.WarehouseType;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 
+import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public class WarehouseDAO {
 
@@ -131,11 +131,11 @@ public class WarehouseDAO {
         }
 
         final String insertSQL = """
-        INSERT INTO warehouse_transactions (
-            transaction_code, created_by, created_at,
-            product_id, quantity, unit_price, note, type
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    """;
+                    INSERT INTO warehouse_transactions (
+                        transaction_code, created_by, created_at,
+                        product_id, quantity, unit_price, note, type
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """;
 
         try (Connection conn = DatabaseConnection.getConnection()) {
             if (conn == null) return false;
@@ -180,22 +180,22 @@ public class WarehouseDAO {
 
     public boolean insertWarehouseCheck(WarehouseDTO transaction, List<WarehouseDTO> productList) {
         String insertSQL = """
-        INSERT INTO warehouse_transactions (
-            transaction_code,
-            product_id,
-            type,
-            note,
-            created_at,
-            created_by,
-            inventory_check_date,
-            inventory_note,
-            excess_quantity,
-            deficient_quantity,
-            missing,
-            inventory_status
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """;
+                    INSERT INTO warehouse_transactions (
+                        transaction_code,
+                        product_id,
+                        type,
+                        note,
+                        created_at,
+                        created_by,
+                        inventory_check_date,
+                        inventory_note,
+                        excess_quantity,
+                        deficient_quantity,
+                        missing,
+                        inventory_status
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
@@ -232,11 +232,11 @@ public class WarehouseDAO {
     public List<ImportedWarehouseDTO> getProductsImportedFromWarehouse() {
         List<ImportedWarehouseDTO> productList = new ArrayList<>();
         String query = """
-        SELECT DISTINCT p.id, p.name, wt.transaction_code
-        FROM products p
-        JOIN warehouse_transactions wt ON wt.product_id = p.id
-        WHERE wt.type = 'Nhập kho'
-    """;
+                    SELECT DISTINCT p.id, p.name, wt.transaction_code
+                    FROM products p
+                    JOIN warehouse_transactions wt ON wt.product_id = p.id
+                    WHERE wt.type = 'Nhập kho'
+                """;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
@@ -265,11 +265,11 @@ public class WarehouseDAO {
         }
 
         final String insertSQL = """
-    INSERT INTO warehouse_transactions (
-        transaction_code, created_by, created_at,
-        product_id, quantity, unit_price, type, note
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    """;
+                INSERT INTO warehouse_transactions (
+                    transaction_code, created_by, created_at,
+                    product_id, quantity, unit_price, type, note, reference_transaction
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """;
 
         try (Connection conn = DatabaseConnection.getConnection()) {
             if (conn == null) {
@@ -291,6 +291,7 @@ public class WarehouseDAO {
                     stmt.setBigDecimal(6, BigDecimal.ZERO);
                     stmt.setString(7, transaction.getType().getValue());
                     stmt.setString(8, transaction.getNote());
+                    stmt.setString(9, product.getReferenceTransaction());
                     stmt.addBatch();
                     updateProductStock(conn, product.getProductId(), -product.getQuantity());
                 }
@@ -351,4 +352,93 @@ public class WarehouseDAO {
             throw e;
         }
     }
+
+    public List<WarehouseDTO> getImportDetailsByTransactionCode(String transactionCode) {
+        List<WarehouseDTO> importDetails = new ArrayList<>();
+        String query = """
+            SELECT wt.id, wt.product_id, wt.quantity, wt.unit_price, wt.type, wt.note, 
+                   wt.created_at, wt.updated_at, wt.transaction_code, wt.created_by,
+                   p.name as product_name, p.price as sell_price, c.name as category_name,
+                   u.full_name as created_by_name
+            FROM warehouse_transactions wt
+            JOIN products p ON wt.product_id = p.id
+            JOIN categories c ON p.category_id = c.id
+            JOIN users u ON wt.created_by = u.id
+            WHERE wt.transaction_code = ? AND wt.type = 'Nhập Kho'
+            """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, transactionCode);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    WarehouseDTO dto = new WarehouseDTO();
+                    dto.setId(rs.getInt("id"));
+                    dto.setProductId(rs.getInt("product_id"));
+                    dto.setTransactionCode(rs.getString("transaction_code"));
+                    dto.setProductName(rs.getString("product_name"));
+                    dto.setCategoryName(rs.getString("category_name"));
+                    dto.setQuantity(rs.getInt("quantity"));
+                    dto.setUnitPrice(rs.getBigDecimal("unit_price"));
+                    dto.setSellPrice(rs.getBigDecimal("sell_price"));
+                    dto.setType(WarehouseType.fromValue(rs.getString("type")));
+                    dto.setNote(rs.getString("note"));
+                    dto.setCreatedByName(rs.getString("created_by_name"));
+                    dto.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                    dto.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+                    dto.setCreateById(rs.getInt("created_by"));
+                    importDetails.add(dto);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi truy vấn chi tiết nhập kho theo mã giao dịch:");
+            e.printStackTrace();
+        }
+        return importDetails;
+    }
+
+    public int getRemainingQuantity(String transactionCode, int productId) {
+        int importedQuantity = 0;
+        int exportedQuantity = 0;
+
+        String importQuery = """
+            SELECT SUM(quantity) as total_imported
+            FROM warehouse_transactions
+            WHERE transaction_code = ? AND product_id = ? AND type = 'Nhập Kho'
+            """;
+
+        String exportQuery = """
+            SELECT SUM(quantity) as total_exported
+            FROM warehouse_transactions
+            WHERE reference_transaction = ? AND product_id = ? AND type = 'Xuất Kho'
+            """;
+
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            try (PreparedStatement stmt = conn.prepareStatement(importQuery)) {
+                stmt.setString(1, transactionCode);
+                stmt.setInt(2, productId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        importedQuantity = rs.getInt("total_imported");
+                    }
+                }
+            }
+
+            try (PreparedStatement stmt = conn.prepareStatement(exportQuery)) {
+                stmt.setString(1, transactionCode);
+                stmt.setInt(2, productId);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        exportedQuantity = rs.getInt("total_exported");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi truy vấn số lượng tồn kho:");
+            e.printStackTrace();
+        }
+
+        return importedQuantity - exportedQuantity;
+    }
+
 }

@@ -10,6 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.WarehouseDAO;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
+import org.example.quanlybanhang.enums.WarehouseType;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.PaginationUtils;
@@ -17,6 +18,7 @@ import org.example.quanlybanhang.utils.PaginationUtils;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.example.quanlybanhang.utils.TableCellFactoryUtils.currencyCellFactory;
 
@@ -57,6 +59,8 @@ public class TransactionTabController {
     TableColumn<WarehouseDTO, String> colCreatedBy;
     @FXML
     TableColumn<WarehouseDTO, LocalDate> colCreatedDate;
+    @FXML
+    ComboBox<WarehouseType> cboTransactionType;
 
     // Pagination
     @FXML
@@ -80,7 +84,98 @@ public class TransactionTabController {
         setupTransactionColumns();
         setupTransactionSearch();
         setupButtons();
+        setupTransactionTypeComboBox();
         loadTransactionData();
+    }
+
+    private void setupTransactionTypeComboBox() {
+        // Add "All" option first
+        cboTransactionType.getItems().add(null); // null represents "All"
+        cboTransactionType.getItems().addAll(WarehouseType.NHAP_KHO, WarehouseType.XUAT_KHO);
+
+        // Set cell factory to display proper text
+        cboTransactionType.setCellFactory(cell -> new ListCell<WarehouseType>() {
+            @Override
+            protected void updateItem(WarehouseType item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Tất cả");
+                } else {
+                    setText(item.getValue());
+                }
+            }
+        });
+
+        // Same for button cell
+        cboTransactionType.setButtonCell(new ListCell<WarehouseType>() {
+            @Override
+            protected void updateItem(WarehouseType item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Tất cả");
+                } else {
+                    setText(item.getValue());
+                }
+            }
+        });
+
+        // Add listener to filter data when selection changes
+        cboTransactionType.valueProperty().addListener((obs, oldVal, newVal) -> {
+            applyTransactionFilters();
+            updateColumnVisibility(newVal);
+        });
+    }
+
+    // Add column visibility toggle method
+    private void updateColumnVisibility(WarehouseType type) {
+        boolean showImportColumns = (type == null || type == WarehouseType.NHAP_KHO);
+        boolean showExportColumns = (type == null || type == WarehouseType.XUAT_KHO);
+
+        // Toggle columns relevant to import transactions
+        colUnitPrice.setVisible(showImportColumns);
+
+        // If you have specific export-only columns, toggle them here:
+        // colExportSpecificColumn.setVisible(showExportColumns);
+
+        // Total amount may be relevant for both, so keep it visible always
+        colTotalAmount.setVisible(true);
+    }
+
+    // Modify existing applyTransactionFilters method
+    private void applyTransactionFilters() {
+        String searchText = txtSearchTransaction.getText();
+        LocalDate startDate = dpStartDateTransaction.getValue();
+        LocalDate endDate = dpEndDateTransaction.getValue();
+        WarehouseType selectedType = cboTransactionType.getValue();
+
+        List<WarehouseDTO> filteredData = SearchService.search(
+                warehouseDAO.getAllWarehouseDetails(),
+                searchText,
+                startDate,
+                endDate,
+                dto -> dto.getCreatedAt() != null ? dto.getCreatedAt().toLocalDate() : null,
+                WarehouseDTO::getProductName,
+                WarehouseDTO::getTransactionCode,
+                WarehouseDTO::getCategoryName
+        );
+
+        // Additional filter for transaction type
+        if (selectedType != null) {
+            filteredData = filteredData.stream()
+                    .filter(dto -> dto.getType() == selectedType)
+                    .collect(Collectors.toList());
+        }
+
+        allTransactions.setAll(filteredData);
+        pagination.setCurrentPageIndex(0);
+    }
+
+    private void updateColumnsVisibility(String transactionType) {
+        boolean isExport = "Xuất Kho".equals(transactionType);
+
+        // Ẩn/hiện cột tùy theo loại giao dịch
+        colUnitPrice.setVisible(!isExport);
+        colTotalAmount.setVisible(!isExport);
     }
 
     public void setMainController(WarehouseController controller) {
@@ -138,26 +233,6 @@ public class TransactionTabController {
                 ITEMS_PER_PAGE,
                 null
         );
-    }
-
-    private void applyTransactionFilters() {
-        String searchText = txtSearchTransaction.getText();
-        LocalDate startDate = dpStartDateTransaction.getValue();
-        LocalDate endDate = dpEndDateTransaction.getValue();
-
-        List<WarehouseDTO> filteredData = SearchService.search(
-                warehouseDAO.getAllWarehouseDetails(),
-                searchText,
-                startDate,
-                endDate,
-                dto -> dto.getCreatedAt() != null ? dto.getCreatedAt().toLocalDate() : null,
-                WarehouseDTO::getProductName,
-                WarehouseDTO::getTransactionCode,
-                WarehouseDTO::getCategoryName
-        );
-
-        allTransactions.setAll(filteredData);
-        pagination.setCurrentPageIndex(0);
     }
 
     @FXML

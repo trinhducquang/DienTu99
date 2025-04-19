@@ -383,7 +383,7 @@ public class WarehouseImportDialog {
         dto.setTransactionCode(transactionCodeField.getText());
         dto.setCreateById(createdByComboBox.getValue().getId());
         dto.setType(transactionTypeComboBox.getValue());
-        dto.setCreatedAt(createdAtDatePicker.getValue().atStartOfDay());
+        dto.setCreatedAt(java.time.LocalDateTime.now());
         dto.setNote(noteTextArea.getText());
 
         if (dto.getType() == WarehouseType.KIEM_KHO) {

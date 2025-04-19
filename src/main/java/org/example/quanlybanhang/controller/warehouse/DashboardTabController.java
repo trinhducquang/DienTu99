@@ -180,15 +180,31 @@ public class DashboardTabController {
                 .sum();
     }
 
+    // Trong lớp DashboardTabController
     private BigDecimal calculateTotalWarehouseValue(Map<Integer, Integer> productStockMap) {
         BigDecimal totalValue = BigDecimal.ZERO;
 
-        for (WarehouseDTO product : allProducts) {
-            int stock = productStockMap.getOrDefault(product.getProductId(), 0);
+        // Sử dụng dữ liệu từ các giao dịch nhập kho để tính giá trị chính xác
+        if (allTransactions != null) {
+            Map<Integer, BigDecimal> productValueMap = new HashMap<>();
 
-            if (stock > 0 && product.getUnitPrice() != null) {
-                BigDecimal productValue = product.getUnitPrice().multiply(new BigDecimal(stock));
-                totalValue = totalValue.add(productValue);
+            // Tính tổng giá trị nhập theo sản phẩm
+            for (WarehouseDTO transaction : allTransactions) {
+                // Chỉ tính cho giao dịch NHAP_KHO
+                if (transaction.getType() == WarehouseType.NHAP_KHO) {
+                    int productId = transaction.getProductId();
+                    BigDecimal transactionValue = transaction.getUnitPrice()
+                            .multiply(new BigDecimal(transaction.getQuantity()));
+
+                    // Cộng dồn giá trị
+                    BigDecimal currentValue = productValueMap.getOrDefault(productId, BigDecimal.ZERO);
+                    productValueMap.put(productId, currentValue.add(transactionValue));
+                }
+            }
+
+            // Tính tổng giá trị kho
+            for (Map.Entry<Integer, BigDecimal> entry : productValueMap.entrySet()) {
+                totalValue = totalValue.add(entry.getValue());
             }
         }
 
@@ -295,28 +311,6 @@ public class DashboardTabController {
         // Update table
         if (tblTopExportProducts != null) {
             tblTopExportProducts.setItems(FXCollections.observableArrayList(top20ExportProducts));
-        }
-    }
-
-    @FXML
-    public void openProductsDialog() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                    "/org/example/quanlybanhang/views/warehouse/WarehouseProductsDialog.fxml"));
-            Parent dialogPane = loader.load();
-            WarehouseProductsDialogController controller = loader.getController();
-
-            controller.setProductData(allProducts, allTransactions);
-
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Sản Phẩm Trong Kho");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(lblTotalProducts.getScene().getWindow());
-            dialogStage.setScene(new Scene(dialogPane));
-            dialogStage.showAndWait();
-        } catch (IOException e) {
-            System.err.println("Lỗi khi mở dialog sản phẩm: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 

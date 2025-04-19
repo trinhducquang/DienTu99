@@ -28,12 +28,13 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static org.example.quanlybanhang.enums.UserRole.NHAN_VIEN_KHO;
-import static org.example.quanlybanhang.helpers.LogoutHandler.handleLogout;
+
 
 public class WarehouseController {
     // Constants
     private static final int ITEMS_PER_PAGE = 18;
     private static final int LOW_STOCK_THRESHOLD = 10;
+
 
     // Tab controllers
     private TransactionTabController transactionTabController;
@@ -57,6 +58,8 @@ public class WarehouseController {
     @FXML private TableColumn<WarehouseDTO, Integer> colDefectiveProduct;
     @FXML private TableColumn<WarehouseDTO, Enum<?>> colCheckStatus;
     @FXML private TableColumn<WarehouseDTO, String> colcheckNote;
+    @FXML private ComboBox<WarehouseType> cboTransactionType; // Thêm dòng này
+
 
     // Products tab components
     @FXML private TableView<WarehouseDTO> tblProducts;
@@ -215,40 +218,38 @@ public class WarehouseController {
             System.err.println("Không thể khởi tạo ProductTabController: " + e.getMessage());
         }
     }
+
     private void initializeTransactionTab() {
         try {
             transactionTabController = new TransactionTabController();
 
-            // Inject các field giao diện
+            // Inject basic UI controls first
             transactionTabController.btnCreateTransaction = this.btnCreateTransaction;
             transactionTabController.txtSearchTransaction = this.txtSearchTransaction;
             transactionTabController.dpStartDateTransaction = this.dpStartDateTransaction;
             transactionTabController.dpEndDateTransaction = this.dpEndDateTransaction;
             transactionTabController.tblTransactions = this.tblTransactions;
             transactionTabController.pagination = this.pagination;
+            transactionTabController.cboTransactionType = this.cboTransactionType;
 
-            // Map ID cột → hành động gán
-            Map<String, Consumer<TableColumn<WarehouseDTO, ?>>> columnMapper = new HashMap<>();
-            columnMapper.put("colTransId", col -> transactionTabController.colTransId = (TableColumn<WarehouseDTO, Integer>) col);
-            columnMapper.put("colProductCode", col -> transactionTabController.colProductCode = (TableColumn<WarehouseDTO, Integer>) col);
-            columnMapper.put("colTransCode", col -> transactionTabController.colTransCode = (TableColumn<WarehouseDTO, String>) col);
-            columnMapper.put("colProductName", col -> transactionTabController.colProductName = (TableColumn<WarehouseDTO, String>) col);
-            columnMapper.put("colCategory", col -> transactionTabController.colCategory = (TableColumn<WarehouseDTO, String>) col);
-            columnMapper.put("colQuantity", col -> transactionTabController.colQuantity = (TableColumn<WarehouseDTO, Integer>) col);
-            columnMapper.put("colUnitPrice", col -> transactionTabController.colUnitPrice = (TableColumn<WarehouseDTO, BigDecimal>) col);
-            columnMapper.put("colTotalAmount", col -> transactionTabController.colTotalAmount = (TableColumn<WarehouseDTO, BigDecimal>) col);
-            columnMapper.put("colNote", col -> transactionTabController.colNote = (TableColumn<WarehouseDTO, String>) col);
-            columnMapper.put("colCreatedBy", col -> transactionTabController.colCreatedBy = (TableColumn<WarehouseDTO, String>) col);
-            columnMapper.put("colCreatedDate", col -> transactionTabController.colCreatedDate = (TableColumn<WarehouseDTO, LocalDate>) col);
-
-            for (TableColumn<WarehouseDTO, ?> column : tblTransactions.getColumns()) {
-                Consumer<TableColumn<WarehouseDTO, ?>> setter = columnMapper.get(column.getId());
-                if (setter != null) {
-                    setter.accept(column);
+            // Directly inject all table columns from the parent table to the controller
+            if (tblTransactions != null) {
+                for (TableColumn<WarehouseDTO, ?> column : tblTransactions.getColumns()) {
+                    String colId = column.getId();
+                    if (colId != null) {
+                        try {
+                            // Use reflection to set the field by name
+                            java.lang.reflect.Field field = TransactionTabController.class.getDeclaredField(colId);
+                            field.setAccessible(true);
+                            field.set(transactionTabController, column);
+                        } catch (NoSuchFieldException | IllegalAccessException e) {
+                            System.err.println("Failed to set column field: " + colId + " - " + e.getMessage());
+                        }
+                    }
                 }
             }
 
-            // Liên kết lại controller cha và khởi tạo
+            // Set reference to main controller and initialize
             transactionTabController.setMainController(this);
             transactionTabController.initialize();
         } catch (Exception e) {
@@ -376,19 +377,27 @@ public class WarehouseController {
             productStockMap.put(product.getProductId(), 0);
         }
 
-        // Calculate stock based on transactions from the transaction controller
+        // Calculate stock based on transactions from transaction controller
         if (transactionTabController != null) {
             ObservableList<WarehouseDTO> allTransactions = transactionTabController.getAllTransactions();
+
+            // Sort transactions by creation time
+            allTransactions.sort(Comparator.comparing(
+                    dto -> dto.getCreatedAt() != null ? dto.getCreatedAt() : LocalDateTime.MIN
+            ));
 
             // Calculate stock based on transactions
             for (WarehouseDTO transaction : allTransactions) {
                 int productId = transaction.getProductId();
                 int currentStock = productStockMap.getOrDefault(productId, 0);
 
+                // Clear distinction between import and export
                 if (transaction.getType() == WarehouseType.NHAP_KHO) {
                     currentStock += transaction.getQuantity();
+                    System.out.println("Nhập kho: " + productId + ", SL: " + transaction.getQuantity() + ", Tồn mới: " + currentStock);
                 } else if (transaction.getType() == WarehouseType.XUAT_KHO) {
                     currentStock -= transaction.getQuantity();
+                    System.out.println("Xuất kho: " + productId + ", SL: " + transaction.getQuantity() + ", Tồn mới: " + currentStock);
                 }
 
                 productStockMap.put(productId, currentStock);
@@ -630,12 +639,7 @@ public class WarehouseController {
         tblTopExportProducts.setItems(FXCollections.observableArrayList(top20ExportProducts));
     }
 
-    @FXML
-    public void openProductsDialog() {
-        if (dashboardTabController != null) {
-            dashboardTabController.openProductsDialog();
-        }
-    }
+
 
     @FXML
     public void openPendingOrdersDialog() {
