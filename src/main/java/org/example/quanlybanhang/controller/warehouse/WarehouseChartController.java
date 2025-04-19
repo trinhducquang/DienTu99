@@ -18,9 +18,15 @@ import org.example.quanlybanhang.enums.WarehouseType;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class WarehouseChartController {
+    private static final DateTimeFormatter MONTH_FORMATTER = DateTimeFormatter.ofPattern("MM/yyyy");
+    private static final String IMPORT_COLOR = "-fx-bar-fill: #4CAF50; -fx-stroke: #4CAF50; -fx-pie-color: #4CAF50;";
+    private static final String EXPORT_COLOR = "-fx-bar-fill: #FF9800; -fx-stroke: #FF9800; -fx-pie-color: #FF9800;";
+    private static final String IMPORT_POINT_STYLE = "-fx-background-color: #4CAF50, white;";
+    private static final String EXPORT_POINT_STYLE = "-fx-background-color: #FF9800, white;";
+    private static final String IMPORT_LINE_STYLE = "-fx-stroke: #4CAF50; -fx-stroke-width: 3px;";
+    private static final String EXPORT_LINE_STYLE = "-fx-stroke: #FF9800; -fx-stroke-width: 3px;";
 
     @FXML
     private Pane chartPane;
@@ -29,9 +35,9 @@ public class WarehouseChartController {
     private ComboBox<String> cboChartType;
 
     private ObservableList<WarehouseDTO> transactions;
-    private static final DateTimeFormatter MONTH_FORMATTER = DateTimeFormatter.ofPattern("MM/yyyy");
     private Label lblChartTitle;
 
+    @FXML
     public void initialize() {
         setupChartTypeComboBox();
     }
@@ -40,16 +46,12 @@ public class WarehouseChartController {
         ObservableList<String> chartTypes = FXCollections.observableArrayList(
                 "Biểu Đồ Cột - Nhập/Xuất Theo Tháng",
                 "Biểu Đồ Đường - Xu Hướng Nhập/Xuất",
-                "Biểu Đồ Kết Hợp - Nhập/Xuất & Tồn Kho",
                 "Biểu Đồ Tròn - Tỷ Lệ Nhập/Xuất Kho"
         );
 
         cboChartType.setItems(chartTypes);
         cboChartType.getSelectionModel().selectFirst();
-
-        cboChartType.setOnAction(event -> {
-            updateChart();
-        });
+        cboChartType.setOnAction(event -> updateChart());
     }
 
     public void setTransactionData(ObservableList<WarehouseDTO> transactions) {
@@ -66,16 +68,12 @@ public class WarehouseChartController {
         chartPane.getChildren().clear();
 
         String selectedChartType = cboChartType.getValue();
-
         switch (selectedChartType) {
             case "Biểu Đồ Cột - Nhập/Xuất Theo Tháng":
                 createBarChart();
                 break;
             case "Biểu Đồ Đường - Xu Hướng Nhập/Xuất":
                 createLineChart();
-                break;
-            case "Biểu Đồ Kết Hợp - Nhập/Xuất & Tồn Kho":
-                createCombinedChart();
                 break;
             case "Biểu Đồ Tròn - Tỷ Lệ Nhập/Xuất Kho":
                 createPieChart();
@@ -94,33 +92,14 @@ public class WarehouseChartController {
         chartPane.getChildren().add(noDataLabel);
     }
 
-
-    private void createBarChart() {
-        // Tạo trục X
-        CategoryAxis xAxis = new CategoryAxis();
-        xAxis.setLabel("Tháng");
-
-        // Tạo trục Y
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Số lượng sản phẩm");
-
-        // Tạo biểu đồ cột
-        StackedBarChart<String, Number> barChart = new StackedBarChart<>(xAxis, yAxis);
-        barChart.setTitle("Biểu Đồ Nhập/Xuất Kho Theo Tháng");
-
-        // Tạo series cho nhập kho
-        XYChart.Series<String, Number> importSeries = new XYChart.Series<>();
-        importSeries.setName("Nhập Kho");
-
-        // Tạo series cho xuất kho
-        XYChart.Series<String, Number> exportSeries = new XYChart.Series<>();
-        exportSeries.setName("Xuất Kho");
-
-        // Dữ liệu theo tháng
+    /**
+     * Aggregates monthly data for imports and exports from transactions
+     * @return A map containing total imports and exports by month
+     */
+    private Map<String, Map<YearMonth, Integer>> aggregateMonthlyData() {
         Map<YearMonth, Integer> importByMonth = new TreeMap<>();
         Map<YearMonth, Integer> exportByMonth = new TreeMap<>();
 
-        // Phân loại giao dịch theo tháng và loại
         for (WarehouseDTO transaction : transactions) {
             if (transaction.getCreatedAt() == null) continue;
 
@@ -134,12 +113,36 @@ public class WarehouseChartController {
             }
         }
 
-        // Lấy danh sách các tháng duy nhất
+        Map<String, Map<YearMonth, Integer>> result = new HashMap<>();
+        result.put("import", importByMonth);
+        result.put("export", exportByMonth);
+        return result;
+    }
+
+    private void createBarChart() {
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Tháng");
+
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Số lượng sản phẩm");
+
+        StackedBarChart<String, Number> barChart = new StackedBarChart<>(xAxis, yAxis);
+        barChart.setTitle("Biểu Đồ Nhập/Xuất Kho Theo Tháng");
+
+        XYChart.Series<String, Number> importSeries = new XYChart.Series<>();
+        importSeries.setName("Nhập Kho");
+
+        XYChart.Series<String, Number> exportSeries = new XYChart.Series<>();
+        exportSeries.setName("Xuất Kho");
+
+        Map<String, Map<YearMonth, Integer>> monthlyData = aggregateMonthlyData();
+        Map<YearMonth, Integer> importByMonth = monthlyData.get("import");
+        Map<YearMonth, Integer> exportByMonth = monthlyData.get("export");
+
         Set<YearMonth> allMonths = new TreeSet<>();
         allMonths.addAll(importByMonth.keySet());
         allMonths.addAll(exportByMonth.keySet());
 
-        // Thêm dữ liệu vào series
         for (YearMonth month : allMonths) {
             String monthStr = month.format(MONTH_FORMATTER);
             importSeries.getData().add(new XYChart.Data<>(monthStr, importByMonth.getOrDefault(month, 0)));
@@ -150,70 +153,39 @@ public class WarehouseChartController {
         barChart.setPrefSize(chartPane.getPrefWidth(), chartPane.getPrefHeight());
         barChart.setLegendVisible(true);
 
-        // Thêm biểu đồ vào container
         chartPane.getChildren().add(barChart);
 
-        // Style cho từng loại cột
-        for (XYChart.Series<String, Number> series : barChart.getData()) {
-            if (series.getName().equals("Nhập Kho")) {
-                for (XYChart.Data<String, Number> data : series.getData()) {
-                    data.getNode().setStyle("-fx-bar-fill: #4CAF50;");
-                }
-            } else if (series.getName().equals("Xuất Kho")) {
-                for (XYChart.Data<String, Number> data : series.getData()) {
-                    data.getNode().setStyle("-fx-bar-fill: #FF9800;");
-                }
-            }
-        }
+        // Apply styles to bars
+        applySeriesStyle(importSeries, "Nhập Kho", IMPORT_COLOR);
+        applySeriesStyle(exportSeries, "Xuất Kho", EXPORT_COLOR);
     }
 
     private void createLineChart() {
-        // Tạo trục X
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setLabel("Thời gian");
 
-        // Tạo trục Y
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Số lượng sản phẩm");
 
-        // Tạo biểu đồ đường
         LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
         lineChart.setTitle("Xu Hướng Nhập/Xuất Kho Theo Thời Gian");
         lineChart.setCreateSymbols(true);
         lineChart.setAnimated(true);
 
-        // Tạo series cho nhập kho
         XYChart.Series<String, Number> importSeries = new XYChart.Series<>();
         importSeries.setName("Nhập Kho");
 
-        // Tạo series cho xuất kho
         XYChart.Series<String, Number> exportSeries = new XYChart.Series<>();
         exportSeries.setName("Xuất Kho");
 
-        // Dữ liệu theo tháng
-        Map<YearMonth, Integer> importByMonth = new TreeMap<>();
-        Map<YearMonth, Integer> exportByMonth = new TreeMap<>();
+        Map<String, Map<YearMonth, Integer>> monthlyData = aggregateMonthlyData();
+        Map<YearMonth, Integer> importByMonth = monthlyData.get("import");
+        Map<YearMonth, Integer> exportByMonth = monthlyData.get("export");
 
-        // Phân loại giao dịch theo tháng và loại
-        for (WarehouseDTO transaction : transactions) {
-            if (transaction.getCreatedAt() == null) continue;
-
-            YearMonth month = YearMonth.from(transaction.getCreatedAt().toLocalDate());
-            int quantity = transaction.getQuantity();
-
-            if (transaction.getType() == WarehouseType.NHAP_KHO) {
-                importByMonth.put(month, importByMonth.getOrDefault(month, 0) + quantity);
-            } else if (transaction.getType() == WarehouseType.XUAT_KHO) {
-                exportByMonth.put(month, exportByMonth.getOrDefault(month, 0) + quantity);
-            }
-        }
-
-        // Lấy danh sách các tháng duy nhất và sắp xếp
         Set<YearMonth> allMonths = new TreeSet<>();
         allMonths.addAll(importByMonth.keySet());
         allMonths.addAll(exportByMonth.keySet());
 
-        // Thêm dữ liệu vào series
         for (YearMonth month : allMonths) {
             String monthStr = month.format(MONTH_FORMATTER);
             importSeries.getData().add(new XYChart.Data<>(monthStr, importByMonth.getOrDefault(month, 0)));
@@ -224,197 +196,89 @@ public class WarehouseChartController {
         lineChart.setPrefSize(chartPane.getPrefWidth(), chartPane.getPrefHeight());
         lineChart.setLegendVisible(true);
 
-        // Thêm biểu đồ vào container
         chartPane.getChildren().add(lineChart);
 
-        // Style cho từng đường
-        importSeries.getNode().setStyle("-fx-stroke: #4CAF50; -fx-stroke-width: 3px;");
-        exportSeries.getNode().setStyle("-fx-stroke: #FF9800; -fx-stroke-width: 3px;");
+        // Style for lines
+        importSeries.getNode().setStyle(IMPORT_LINE_STYLE);
+        exportSeries.getNode().setStyle(EXPORT_LINE_STYLE);
 
-        // Style cho các điểm dữ liệu
+        // Style for data points
         for (XYChart.Data<String, Number> data : importSeries.getData()) {
-            data.getNode().setStyle("-fx-background-color: #4CAF50, white;");
+            data.getNode().setStyle(IMPORT_POINT_STYLE);
         }
 
         for (XYChart.Data<String, Number> data : exportSeries.getData()) {
-            data.getNode().setStyle("-fx-background-color: #FF9800, white;");
-        }
-    }
-
-    private void createCombinedChart() {
-        // Tạo các trục
-        final CategoryAxis xAxis = new CategoryAxis();
-        final NumberAxis yAxis1 = new NumberAxis();
-        final NumberAxis yAxis2 = new NumberAxis();
-
-        xAxis.setLabel("Tháng");
-        yAxis1.setLabel("Số lượng nhập/xuất");
-        yAxis2.setLabel("Tồn kho");
-
-        // Tạo biểu đồ cột cho nhập/xuất
-        StackedBarChart<String, Number> barChart = new StackedBarChart<>(xAxis, yAxis1);
-        barChart.setTitle("Biểu Đồ Nhập/Xuất & Tồn Kho");
-
-        // Tạo biểu đồ đường cho tồn kho
-        LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis2);
-        lineChart.setCreateSymbols(true);
-
-        // Series cho biểu đồ cột
-        XYChart.Series<String, Number> importSeries = new XYChart.Series<>();
-        importSeries.setName("Nhập Kho");
-        XYChart.Series<String, Number> exportSeries = new XYChart.Series<>();
-        exportSeries.setName("Xuất Kho");
-
-        // Series cho biểu đồ đường
-        XYChart.Series<String, Number> stockSeries = new XYChart.Series<>();
-        stockSeries.setName("Tồn Kho");
-
-        // Dữ liệu theo tháng
-        Map<YearMonth, Integer> importByMonth = new TreeMap<>();
-        Map<YearMonth, Integer> exportByMonth = new TreeMap<>();
-        Map<YearMonth, Integer> stockByMonth = new TreeMap<>();
-
-        // Phân loại giao dịch theo tháng và loại
-        int currentStock = 0;
-        List<WarehouseDTO> sortedTransactions = transactions.stream()
-                .filter(t -> t.getCreatedAt() != null)
-                .sorted(Comparator.comparing(WarehouseDTO::getCreatedAt))
-                .collect(Collectors.toList());
-
-        for (WarehouseDTO transaction : sortedTransactions) {
-            YearMonth month = YearMonth.from(transaction.getCreatedAt().toLocalDate());
-            int quantity = transaction.getQuantity();
-
-            if (transaction.getType() == WarehouseType.NHAP_KHO) {
-                importByMonth.put(month, importByMonth.getOrDefault(month, 0) + quantity);
-                currentStock += quantity;
-            } else if (transaction.getType() == WarehouseType.XUAT_KHO) {
-                exportByMonth.put(month, exportByMonth.getOrDefault(month, 0) + quantity);
-                currentStock -= quantity;
-            }
-
-            stockByMonth.put(month, currentStock);
-        }
-
-        // Lấy danh sách các tháng duy nhất
-        Set<YearMonth> allMonths = new TreeSet<>();
-        allMonths.addAll(importByMonth.keySet());
-        allMonths.addAll(exportByMonth.keySet());
-
-        // Thêm dữ liệu vào series
-        for (YearMonth month : allMonths) {
-            String monthStr = month.format(MONTH_FORMATTER);
-
-            importSeries.getData().add(new XYChart.Data<>(monthStr, importByMonth.getOrDefault(month, 0)));
-            exportSeries.getData().add(new XYChart.Data<>(monthStr, exportByMonth.getOrDefault(month, 0)));
-            stockSeries.getData().add(new XYChart.Data<>(monthStr, stockByMonth.getOrDefault(month, 0)));
-        }
-
-        barChart.getData().addAll(importSeries, exportSeries);
-        lineChart.getData().add(stockSeries);
-
-        barChart.setPrefSize(chartPane.getPrefWidth(), chartPane.getPrefHeight());
-        lineChart.setPrefSize(chartPane.getPrefWidth(), chartPane.getPrefHeight());
-
-        // Thêm cả hai biểu đồ vào cùng container
-        barChart.setOpacity(0.8);
-        lineChart.setOpacity(0.8);
-        lineChart.setLegendVisible(false);
-
-        chartPane.getChildren().addAll(barChart, lineChart);
-
-        // Style cho biểu đồ cột
-        for (XYChart.Series<String, Number> series : barChart.getData()) {
-            if (series.getName().equals("Nhập Kho")) {
-                for (XYChart.Data<String, Number> data : series.getData()) {
-                    data.getNode().setStyle("-fx-bar-fill: #4CAF50;");
-                }
-            } else if (series.getName().equals("Xuất Kho")) {
-                for (XYChart.Data<String, Number> data : series.getData()) {
-                    data.getNode().setStyle("-fx-bar-fill: #FF9800;");
-                }
-            }
-        }
-
-        // Style cho biểu đồ đường
-        stockSeries.getNode().setStyle("-fx-stroke: #2196F3; -fx-stroke-width: 3px;");
-        for (XYChart.Data<String, Number> data : stockSeries.getData()) {
-            data.getNode().setStyle("-fx-background-color: #2196F3, white;");
+            data.getNode().setStyle(EXPORT_POINT_STYLE);
         }
     }
 
     private void createPieChart() {
-        // Tính tổng số lượng nhập/xuất
-        int totalImport = 0;
-        int totalExport = 0;
+        int totalImport = calculateTotal(WarehouseType.NHAP_KHO);
+        int totalExport = calculateTotal(WarehouseType.XUAT_KHO);
 
-        for (WarehouseDTO transaction : transactions) {
-            if (transaction.getType() == WarehouseType.NHAP_KHO) {
-                totalImport += transaction.getQuantity();
-            } else if (transaction.getType() == WarehouseType.XUAT_KHO) {
-                totalExport += transaction.getQuantity();
-            }
-        }
-
-        // Tạo dữ liệu cho biểu đồ tròn
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
                 new PieChart.Data("Nhập Kho (" + totalImport + ")", totalImport),
                 new PieChart.Data("Xuất Kho (" + totalExport + ")", totalExport)
         );
 
-        // Tạo biểu đồ tròn
         PieChart pieChart = new PieChart(pieChartData);
         pieChart.setTitle("Tỷ Lệ Nhập/Xuất Kho");
         pieChart.setLabelsVisible(true);
         pieChart.setLegendVisible(true);
         pieChart.setStartAngle(90);
-
         pieChart.setPrefSize(chartPane.getPrefWidth(), chartPane.getPrefHeight());
 
         chartPane.getChildren().add(pieChart);
 
-        // Style màu cho từng phần
-        pieChartData.get(0).getNode().setStyle("-fx-pie-color: #4CAF50;");
-        pieChartData.get(1).getNode().setStyle("-fx-pie-color: #FF9800;");
+        // Apply styles to pie slices
+        pieChartData.get(0).getNode().setStyle(IMPORT_COLOR);
+        pieChartData.get(1).getNode().setStyle(EXPORT_COLOR);
     }
 
-    // Hàm để thêm vào DashboardTabController
+    private int calculateTotal(WarehouseType type) {
+        return transactions.stream()
+                .filter(transaction -> transaction.getType() == type)
+                .mapToInt(WarehouseDTO::getQuantity)
+                .sum();
+    }
+
+    private void applySeriesStyle(XYChart.Series<String, Number> series, String seriesName, String style) {
+        if (series.getName().equals(seriesName)) {
+            for (XYChart.Data<String, Number> data : series.getData()) {
+                data.getNode().setStyle(style);
+            }
+        }
+    }
+
+    // Method for use in DashboardTabController
     public Pane getChartPane() {
-        // VBox chính chứa toàn bộ
         VBox chartContainer = new VBox(10);
         chartContainer.setPrefWidth(1280);
         chartContainer.setPrefHeight(300);
         chartContainer.setPadding(new Insets(5));
 
-        // HBox chứa ComboBox và tiêu đề
         HBox headerBox = new HBox(20);
         headerBox.setAlignment(Pos.CENTER_LEFT);
 
-        // ComboBox chọn loại biểu đồ
         ComboBox<String> chartTypeComboBox = new ComboBox<>();
         chartTypeComboBox.setPromptText("Chọn Loại Biểu Đồ");
         chartTypeComboBox.setPrefWidth(250);
         this.cboChartType = chartTypeComboBox;
 
-        // Label tiêu đề
         Label chartTitle = new Label();
         chartTitle.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         this.lblChartTitle = chartTitle;
 
         headerBox.getChildren().addAll(chartTypeComboBox, chartTitle);
 
-        // StackPane chứa biểu đồ (giúp tự động căn giữa)
         StackPane chartContentPane = new StackPane();
         chartContentPane.setPrefHeight(500);
         this.chartPane = chartContentPane;
 
-        // Thêm tất cả vào VBox
         chartContainer.getChildren().addAll(headerBox, chartContentPane);
 
-        // Gọi initialize để thiết lập ComboBox
         initialize();
 
         return chartContainer;
     }
-
 }
