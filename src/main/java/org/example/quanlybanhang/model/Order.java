@@ -1,5 +1,6 @@
 package org.example.quanlybanhang.model;
 
+import org.example.quanlybanhang.enums.ExportStatus;
 import org.example.quanlybanhang.enums.OrderStatus;
 
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ public class Order {
     private OrderStatus status;
     private String productNames;
     private String note;
+    private ExportStatus exportStatus;
 
     // Constructor
     public Order(int id, int employeeId, int customerId, String customerName, BigDecimal totalPrice, BigDecimal shippingFee,
@@ -35,6 +37,21 @@ public class Order {
 
     public Order() {
 
+    }
+
+    public Order(int id, int employeeId, int customerId, String customerName, BigDecimal totalPrice, BigDecimal shippingFee,
+                 LocalDateTime orderDate, OrderStatus status, String productNames, String note, ExportStatus exportStatus) {
+        this.id = id;
+        this.employeeId = employeeId;
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.totalPrice = totalPrice;
+        this.shippingFee = shippingFee;
+        this.orderDate = orderDate;
+        this.status = status;
+        this.productNames = productNames;
+        this.note = note;
+        this.exportStatus = exportStatus;
     }
 
     // Getters và Setters
@@ -116,6 +133,10 @@ public class Order {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public ExportStatus getExportStatus() {
+        return exportStatus;
     }
 
     public LocalDate getOrderDateAsLocalDate() {

@@ -15,12 +15,18 @@ public enum ExportStatus {
     }
 
     public static ExportStatus fromValue(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return CHUA_XUAT_KHO;
+        }
+
+        value = value.trim();
         for (ExportStatus status : values()) {
             if (status.getValue().equalsIgnoreCase(value)) {
                 return status;
             }
         }
-        throw new IllegalArgumentException("Giá trị trạng thái xuất kho không hợp lệ: " + value);
+
+        return CHUA_XUAT_KHO;
     }
 
     @Override

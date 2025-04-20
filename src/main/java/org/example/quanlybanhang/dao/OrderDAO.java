@@ -164,7 +164,8 @@ public class OrderDAO implements CrudDao<Order> {
                 rs.getTimestamp("order_date").toLocalDateTime(),
                 OrderStatus.fromString(rs.getString("status")),
                 rs.getString("product_names"),
-                rs.getString("note")
+                rs.getString("note"),
+                ExportStatus.fromValue(rs.getString("export_status"))
         );
     }
 

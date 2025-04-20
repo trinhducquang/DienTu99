@@ -32,7 +32,7 @@
 
     <HBox prefHeight="645.0" prefWidth="1300.0" spacing="20" HBox.hgrow="ALWAYS">
         <VBox spacing="20" HBox.hgrow="ALWAYS">
-            <Label alignment="CENTER" text="Quản Lý Đơn Hàng" styleClass="dashboard-title">
+            <Label alignment="CENTER" styleClass="dashboard-title" text="Quản Lý Đơn Hàng">
                 <VBox.margin>
                     <Insets left="3.0" top="10.0" />
                 </VBox.margin>
@@ -48,16 +48,17 @@
 
             <TableView fx:id="ordersTable" prefHeight="558.0" prefWidth="1300.0">
                 <columns>
-                    <TableColumn fx:id="orderIdColumn" prefWidth="112.0" text="Mã Đơn Hàng" />
-                    <TableColumn fx:id="customerIdColumn" prefWidth="121.0" text="Id Khách Hàng" />
-                    <TableColumn fx:id="customerNameColumn" prefWidth="102.0" text="Khách Hàng" />
-                    <TableColumn fx:id="orderNameColumn" prefWidth="177.0" text="Tên Đơn Hàng" />
-                    <TableColumn fx:id="shippingFeeColumn" prefWidth="119.0" text="Phí Vận Chuyển" />
-                    <TableColumn fx:id="orderDateColumn" prefWidth="123.0" text="Ngày Đặt" />
-                    <TableColumn fx:id="totalPriceColumn" prefWidth="136.0" text="Tổng Tiền" />
-                    <TableColumn fx:id="statusColumn" prefWidth="146.0" text="Trạng Thái" />
-                    <TableColumn fx:id="noteColumn" prefWidth="108.0" text="Ghi chú" />
-                    <TableColumn fx:id="actionsColumn" prefWidth="157.0" text="Thao Tác" />
+                    <TableColumn fx:id="orderIdColumn" prefWidth="62.0" text="Mã Đơn Hàng" />
+                    <TableColumn fx:id="customerIdColumn" prefWidth="91.00003051757812" text="Id Khách Hàng" />
+                    <TableColumn fx:id="customerNameColumn" prefWidth="110.0" text="Khách Hàng" />
+                    <TableColumn fx:id="orderNameColumn" prefWidth="209.0" text="Tên Đơn Hàng" />
+                    <TableColumn fx:id="shippingFeeColumn" prefWidth="112.0" text="Phí Vận Chuyển" />
+                    <TableColumn fx:id="orderDateColumn" prefWidth="145.0" text="Ngày Đặt" />
+                    <TableColumn fx:id="totalPriceColumn" prefWidth="110.0" text="Tổng Tiền" />
+                    <TableColumn fx:id="statusColumn" prefWidth="115.0" text="Trạng Thái Đơn" />
+                    <TableColumn fx:id="exportStatusColum" prefWidth="115.0" text="Trạng Thái Kho" />
+                    <TableColumn fx:id="noteColumn" maxWidth="200.0" prefWidth="107.0" text="Ghi chú" />
+                    <TableColumn fx:id="actionsColumn" maxWidth="122.0" prefWidth="122.0" text="Thao Tác" />
                 </columns>
             </TableView>
         </VBox>

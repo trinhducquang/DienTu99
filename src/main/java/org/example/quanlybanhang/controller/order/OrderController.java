@@ -10,6 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.controller.interfaces.RefreshableView;
+import org.example.quanlybanhang.enums.ExportStatus;
 import org.example.quanlybanhang.enums.OrderStatus;
 import org.example.quanlybanhang.enums.UserRole;
 import org.example.quanlybanhang.helpers.ButtonTableCell;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 import static org.example.quanlybanhang.utils.TableCellFactoryUtils.currencyCellFactory;
 
 public class OrderController implements RefreshableView {
+
     @FXML private Button logoutButton;
     @FXML private HBox headerBox;
     @FXML private Button addOrderButton;
@@ -46,6 +48,7 @@ public class OrderController implements RefreshableView {
     @FXML private TableColumn<Order, String> statusColumn;
     @FXML private TableColumn<Order, String> noteColumn;
     @FXML private TableColumn<Order, Void> actionsColumn;
+    @FXML private TableColumn <Order, ExportStatus> exportStatusColum;
     @FXML private Pagination pagination;
 
     private final IntegerProperty currentPage = new SimpleIntegerProperty(0);
@@ -183,6 +186,7 @@ public class OrderController implements RefreshableView {
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         orderNameColumn.setCellValueFactory(new PropertyValueFactory<>("productNames"));
         noteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
+        exportStatusColum.setCellValueFactory(new PropertyValueFactory<>("exportStatus"));
 
         orderDateColumn.setCellValueFactory(cell ->
                 javafx.beans.binding.Bindings.createStringBinding(() ->
