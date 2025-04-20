@@ -33,6 +33,10 @@ public class Order {
         this.note = note;
     }
 
+    public Order() {
+
+    }
+
     // Getters và Setters
     public int getId() {
         return id;

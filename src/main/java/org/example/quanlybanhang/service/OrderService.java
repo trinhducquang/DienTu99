@@ -31,4 +31,8 @@ public class OrderService {
         OrderSummaryDTO summary = orderDAO.getOrderSummaryById(orderId);
         return OrderConverter.toProductDisplayInfoList(summary);
     }
+
+    public boolean updateOrderStatus(Order order) {
+        return orderDAO.update(order);
+    }
 }
