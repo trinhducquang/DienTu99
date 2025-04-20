@@ -7,6 +7,7 @@ import org.example.quanlybanhang.model.Order;
 import org.example.quanlybanhang.model.OrderDetail;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -202,6 +203,66 @@ public class OrderDAO implements CrudDao<Order> {
 
         return orders;
     }
+
+    public int countCompletedOrders() {
+        String sql = "SELECT COUNT(*) FROM orders WHERE status = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, OrderStatus.HOAN_THANH.getText());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public BigDecimal calculateAnnualProfit(int year) {
+        String sql = "SELECT " +
+                "    SUM(od.price * od.quantity) AS total_revenue, " +
+                "    SUM(od.quantity * p.price) AS total_cost, " +  // Sử dụng p.price thay vì p.import_price
+                "    SUM(o.shipping_fee) AS total_shipping " +
+                "FROM order_details od " +
+                "JOIN orders o ON od.order_id = o.id " +
+                "JOIN products p ON od.product_id = p.id " +
+                "WHERE YEAR(o.order_date) = ? " +
+                "AND o.status = ?";
+
+        BigDecimal profit = BigDecimal.ZERO;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Thiết lập các tham số của câu truy vấn
+            stmt.setInt(1, year);  // Năm cần tính toán
+            stmt.setString(2, OrderStatus.HOAN_THANH.getText());  // Trạng thái "Hoàn thành"
+
+            // Thực thi câu truy vấn
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                // Lấy kết quả từ ResultSet, đảm bảo không null
+                BigDecimal totalRevenue = rs.getBigDecimal("total_revenue");
+                BigDecimal totalCost = rs.getBigDecimal("total_cost");
+                BigDecimal totalShipping = rs.getBigDecimal("total_shipping");
+
+                // Nếu giá trị null, gán bằng BigDecimal.ZERO
+                totalRevenue = totalRevenue != null ? totalRevenue : BigDecimal.ZERO;
+                totalCost = totalCost != null ? totalCost : BigDecimal.ZERO;
+                totalShipping = totalShipping != null ? totalShipping : BigDecimal.ZERO;
+
+                // Tính lợi nhuận
+                profit = totalRevenue.subtract(totalCost).subtract(totalShipping);
+            }
+        } catch (SQLException e) {
+            // In lỗi nếu có ngoại lệ
+            System.err.println("SQL error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return profit;
+    }
+
+
+
 
 }
 

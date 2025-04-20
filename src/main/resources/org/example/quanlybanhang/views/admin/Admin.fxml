@@ -5,10 +5,9 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
 <VBox fx:id="adminContentPane" alignment="TOP_CENTER" stylesheets="@../../dashboard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.admin.AdminController">
 
@@ -31,7 +30,7 @@
         <VBox prefWidth="240.0" styleClass="side-nav">
             <VBox spacing="8.0" VBox.vgrow="ALWAYS">
                 <padding>
-                    <Insets top="20.0" right="15.0" bottom="20.0" left="15.0" />
+                    <Insets bottom="20.0" left="15.0" right="15.0" top="20.0" />
                 </padding>
 
                 <Button fx:id="btnDashboard" styleClass="nav-button, nav-button-active" text="Tổng Quan" />
@@ -54,7 +53,7 @@
         <!-- Main Content -->
         <VBox fx:id="mainContentPane" spacing="20" HBox.hgrow="ALWAYS">
             <padding>
-                <Insets top="20.0" right="20.0" bottom="20.0" left="20.0" />
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
             </padding>
 
             <!-- Dashboard Title -->
@@ -64,7 +63,7 @@
             <HBox spacing="20">
                 <VBox styleClass="summary-card, card-revenue" HBox.hgrow="ALWAYS">
                     <padding>
-                        <Insets top="15.0" right="15.0" bottom="15.0" left="15.0" />
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                     </padding>
                     <Label styleClass="card-title" text="Tổng Doanh Thu" />
                     <Region VBox.vgrow="ALWAYS" />
@@ -73,25 +72,25 @@
 
                 <VBox styleClass="summary-card, card-profit" HBox.hgrow="ALWAYS">
                     <padding>
-                        <Insets top="15.0" right="15.0" bottom="15.0" left="15.0" />
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                     </padding>
                     <Label styleClass="card-title" text="Lợi Nhuận" />
                     <Region VBox.vgrow="ALWAYS" />
-                    <Label styleClass="card-value" text="42" />
+                    <Label fx:id="profitLabel" styleClass="card-value" text="42" />
                 </VBox>
 
                 <VBox styleClass="summary-card, card-orders" HBox.hgrow="ALWAYS">
                     <padding>
-                        <Insets top="15.0" right="15.0" bottom="15.0" left="15.0" />
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                     </padding>
-                    <Label styleClass="card-title" text="Số lượng đơn hàng" />
+                    <Label styleClass="card-title" text="Số lượng đơn hàng hoàn thành" />
                     <Region VBox.vgrow="ALWAYS" />
-                    <Label styleClass="card-value" text="1,256" />
+                    <Label fx:id="completedOrdersLabel" styleClass="card-value" text="1,256" />
                 </VBox>
 
                 <VBox styleClass="summary-card, card-product" HBox.hgrow="ALWAYS">
                     <padding>
-                        <Insets top="15.0" right="15.0" bottom="15.0" left="15.0" />
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                     </padding>
                     <Label styleClass="card-title" text="Sản phẩm bán chạy nhất" />
                     <Region VBox.vgrow="ALWAYS" />

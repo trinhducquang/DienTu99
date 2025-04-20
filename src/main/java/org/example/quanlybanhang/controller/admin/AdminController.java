@@ -1,32 +1,40 @@
 package org.example.quanlybanhang.controller.admin;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import org.example.quanlybanhang.controller.ui.animation.UIEffects;
+import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.dao.WarehouseDAO;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
 import org.example.quanlybanhang.enums.WarehouseType;
-import org.example.quanlybanhang.helpers.NavigatorAdmin;
 import org.example.quanlybanhang.helpers.LogoutHandler;
-import org.example.quanlybanhang.controller.ui.animation.UIEffects;
+import org.example.quanlybanhang.helpers.NavigatorAdmin;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class AdminController {
-    @FXML private VBox mainContentPane;
-    @FXML private VBox adminContentPane;
-    @FXML private Button btnEmployee, btnDashboard, btnProduct, btnOrders, btnCustomers, btnCategory, btnWarehouse, logoutButton;
-    @FXML private Label topSellingProductLabel;
-    @FXML private TableView<?> ordersTable;
+    @FXML
+    private Label profitLabel;
+    @FXML
+    private Label completedOrdersLabel;
+    @FXML
+    private VBox mainContentPane;
+    @FXML
+    private VBox adminContentPane;
+    @FXML
+    private Button btnEmployee, btnDashboard, btnProduct, btnOrders, btnCustomers, btnCategory, btnWarehouse, logoutButton;
+    @FXML
+    private Label topSellingProductLabel;
+    @FXML
+    private TableView<?> ordersTable;
+
 
     // Version information
     private static final String APP_VERSION = "1.0.0";
-
+    private final OrderDAO orderDAO = new OrderDAO();
     private final WarehouseDAO warehouseDAO = new WarehouseDAO();
     private Button currentActiveButton;
 
@@ -35,15 +43,38 @@ public class AdminController {
         setupNavigation();
         setupUIEffects();
         logoutButton.setOnAction(event -> LogoutHandler.handleLogout(logoutButton));
-
-        // Set dashboard as active by default
         currentActiveButton = btnDashboard;
-
-        // Update top selling product
         updateTopSellingProduct();
-
-        // Setup status cell factory for orders table if needed
+        updateCompletedOrdersCount();
+        updateAnnualProfit();
         setupOrdersTableStatusColumn();
+    }
+
+    private void updateAnnualProfit() {
+        try {
+            int currentYear = LocalDateTime.now().getYear();
+            BigDecimal annualProfit = orderDAO.calculateAnnualProfit(currentYear);
+            if (profitLabel != null) {
+                // Định dạng số để dễ đọc
+                java.text.NumberFormat format = java.text.NumberFormat.getInstance(new Locale("vi", "VN"));
+                profitLabel.setText(format.format(annualProfit));
+            }
+        } catch (Exception e) {
+            System.err.println("Lỗi khi cập nhật lợi nhuận: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void updateCompletedOrdersCount() {
+        try {
+            int completedOrders = orderDAO.countCompletedOrders();
+            if (completedOrdersLabel != null) {
+                completedOrdersLabel.setText(String.valueOf(completedOrders));
+            }
+        } catch (Exception e) {
+            System.err.println("Lỗi khi cập nhật số lượng đơn hàng hoàn thành: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void setupNavigation() {
@@ -51,6 +82,8 @@ public class AdminController {
             setActiveButton(btnDashboard);
             NavigatorAdmin.navigate(adminContentPane, "admin/Admin.fxml");
             updateTopSellingProduct();
+            updateCompletedOrdersCount();
+            updateAnnualProfit();
         });
 
         btnEmployee.setOnAction(event -> {
@@ -194,7 +227,6 @@ public class AdminController {
         }
     }
 
-    // Method to get application version
     public static String getAppVersion() {
         return APP_VERSION;
     }

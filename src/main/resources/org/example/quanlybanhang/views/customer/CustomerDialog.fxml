@@ -1,43 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="500" prefWidth="500" spacing="15" stylesheets="@CustomerDialog.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.customer.CustomerDialogController">
+<VBox alignment="TOP_CENTER" prefHeight="500.0" prefWidth="550.0" spacing="15" stylesheets="@../css/customer-dialog.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.customer.CustomerDialogController">
 
-    <VBox styleClass="dialog-header">
-        <Label styleClass="dialog-title" text="Thêm Khách Hàng" />
+    <!-- Header -->
+    <VBox alignment="CENTER" prefHeight="80.0" prefWidth="550.0" styleClass="dialog-header">
+        <Label styleClass="dialog-title" text="Thêm Khách Hàng Mới" />
     </VBox>
 
-    <VBox spacing="10" styleClass="form-container">
-        <VBox spacing="5" />
+    <!-- Form nhập thông tin -->
+    <VBox spacing="20" styleClass="form-container">
+        <padding>
+            <Insets left="30.0" right="30.0" top="10.0" />
+        </padding>
 
         <VBox spacing="5">
-            <Label styleClass="form-label" text="Tên Khách Hàng" />
+            <HBox spacing="2">
+                <Label styleClass="input-label" text="Tên Khách Hàng" />
+                <Label styleClass="required-mark" text="*" />
+            </HBox>
             <TextField fx:id="nameField" promptText="Nhập tên khách hàng" styleClass="form-input" />
         </VBox>
 
         <VBox spacing="5">
-            <Label styleClass="form-label" text="Số Điện Thoại" />
+            <HBox spacing="2">
+                <Label styleClass="input-label" text="Số Điện Thoại" />
+                <Label styleClass="required-mark" text="*" />
+            </HBox>
             <TextField fx:id="phoneField" promptText="Nhập số điện thoại" styleClass="form-input" />
         </VBox>
 
         <VBox spacing="5">
-            <Label styleClass="form-label" text="Email" />
+            <HBox spacing="2">
+                <Label styleClass="input-label" text="Email" />
+                <Label styleClass="required-mark" text="*" />
+            </HBox>
             <TextField fx:id="emailField" promptText="Nhập email" styleClass="form-input" />
         </VBox>
 
         <VBox spacing="5">
-            <Label styleClass="form-label" text="Địa Chỉ" />
+            <HBox spacing="2">
+                <Label styleClass="input-label" text="Địa Chỉ" />
+                <Label styleClass="required-mark" text="*" />
+            </HBox>
             <TextField fx:id="addressField" promptText="Nhập địa chỉ" styleClass="form-input" />
         </VBox>
+
+        <Label styleClass="note-text" text="(*) Thông tin bắt buộc" />
     </VBox>
 
-    <HBox alignment="CENTER" spacing="10" styleClass="button-container">
-        <Button fx:id="cancelButton" styleClass="cancel-button" text="Hủy" />
-        <Button fx:id="saveButton" styleClass="save-button" text="Lưu" />
+    <VBox alignment="CENTER" VBox.vgrow="ALWAYS" />
+
+    <!-- Nút thao tác -->
+    <HBox alignment="CENTER" prefHeight="70.0" prefWidth="550.0" spacing="20" styleClass="button-container">
+        <Button fx:id="cancelButton" prefHeight="40.0" prefWidth="130.0" styleClass="cancel-button" text="Hủy" />
+        <Button fx:id="saveButton" prefHeight="40.0" prefWidth="130.0" styleClass="save-button" text="Lưu" />
+        <padding>
+            <Insets bottom="20.0" />
+        </padding>
     </HBox>
 </VBox>

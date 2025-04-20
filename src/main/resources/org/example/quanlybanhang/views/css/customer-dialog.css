@@ -1,0 +1,124 @@
+/* Biến màu sắc */
+* {
+    -fx-primary: #2196F3;
+    -fx-primary-light: #64B5F6;
+    -fx-primary-dark: #1976D2;
+    -fx-secondary: #FFFFFF;
+    -fx-grey-light: #F5F5F5;
+    -fx-grey: #E0E0E0;
+    -fx-text-dark: #212121;
+    -fx-text-light: #FFFFFF;
+    -fx-error: #F44336;
+}
+
+/* Thiết lập chung */
+.root {
+    -fx-background-color: white;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+/* Header */
+.dialog-header {
+    -fx-background-color: -fx-primary;
+    -fx-padding: 20 0 20 0;
+    -fx-alignment: center;
+    -fx-min-height: 80px;
+    -fx-pref-height: 80px;
+}
+
+.dialog-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Form container */
+.form-container {
+    -fx-background-color: white;
+    -fx-padding: 10 30 20 30;
+    -fx-spacing: 20;
+}
+
+/* Label */
+.form-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+}
+
+.form-label:after {
+    -fx-text-fill: -fx-error;
+    -fx-content: " *";
+}
+
+/* Input fields */
+.form-input {
+    -fx-background-color: -fx-grey-light;
+    -fx-background-radius: 5;
+    -fx-border-color: -fx-grey;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+    -fx-prompt-text-fill: derive(-fx-text-dark, 50%);
+}
+
+.form-input:focused {
+    -fx-background-color: white;
+    -fx-border-color: -fx-primary;
+    -fx-border-width: 2;
+}
+
+/* Button container */
+.button-container {
+    -fx-background-color: -fx-grey-light;
+    -fx-border-color: -fx-grey;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 20;
+    -fx-spacing: 20;
+    -fx-pref-height: 70px;
+}
+
+/* Buttons */
+.cancel-button {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-primary;
+    -fx-border-color: -fx-primary;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-pref-height: 40px;
+    -fx-pref-width: 130px;
+}
+
+.cancel-button:hover {
+    -fx-background-color: derive(-fx-grey-light, -5%);
+}
+
+.save-button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-pref-height: 40px;
+    -fx-pref-width: 130px;
+}
+
+.save-button:hover {
+    -fx-background-color: -fx-primary-dark;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+/* Required field indicator */
+.form-label .required-mark {
+    -fx-text-fill: -fx-error;
+    -fx-font-weight: bold;
+}
+
+/* Note for required fields */
+.note-text {
+    -fx-text-fill: -fx-error;
+    -fx-font-size: 12px;
+    -fx-font-style: italic;
+    -fx-padding: 5 0 0 0;
+}
