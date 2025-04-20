@@ -8,9 +8,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
 import org.example.quanlybanhang.enums.WarehouseType;
+import org.example.quanlybanhang.model.Order;
 import org.example.quanlybanhang.model.OrderDetail;
 import org.example.quanlybanhang.model.Product;
 import org.example.quanlybanhang.model.User;
+import org.example.quanlybanhang.service.OrderService;
 import org.example.quanlybanhang.service.ProductService;
 import org.example.quanlybanhang.service.UserService;
 import org.example.quanlybanhang.service.WarehouseService;
@@ -70,6 +72,7 @@ public class WarehouseImportDialog {
     private TableColumn<OrderDetail, BigDecimal> totalColumn;
     @FXML
     private TableColumn<OrderDetail, Void> actionColumn;
+    private Integer orderId;
 
     @FXML
     private TextField totalAmountField;
@@ -371,13 +374,37 @@ public class WarehouseImportDialog {
         }).collect(Collectors.toList());
     }
 
-    private int parseIntOrZero(String text) {
-        try {
-            return Integer.parseInt(text.replace(",", ""));
-        } catch (NumberFormatException e) {
-            return 0;
+    public void setOrderForExport(Integer orderId) {
+        this.orderId = orderId;
+
+        // Tự động chọn loại giao dịch là xuất kho
+        if (transactionTypeComboBox != null) {
+            transactionTypeComboBox.setValue(WarehouseType.XUAT_KHO);
+
+            // Tải chi tiết đơn hàng
+            loadOrderDetails(orderId);
         }
     }
+
+    private void loadOrderDetails(Integer orderId) {
+        // Cần tạo một OrderService để lấy thông tin đơn hàng
+        OrderService orderService = new OrderService();
+        List<OrderDetail> orderDetails = orderService.getOrderDetailsById(orderId); // Fixed method name
+
+        // Thêm sản phẩm vào bảng
+        if (orderDetails != null && !orderDetails.isEmpty()) {
+            productDetailsList.addAll(orderDetails);
+            productTableView.refresh();
+            updateTotalAmount();
+
+            // Thêm thông tin đơn hàng vào ghi chú
+            Order order = orderService.getOrderById(orderId); // Using instance method, not static
+            if (order != null) {
+                noteTextArea.setText("Xuất kho cho đơn hàng #" + orderId);
+            }
+        }
+    }
+
 
     @FXML
     private void onSave() {

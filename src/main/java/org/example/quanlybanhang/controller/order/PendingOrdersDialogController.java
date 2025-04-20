@@ -7,13 +7,12 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Pagination;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
+import org.example.quanlybanhang.enums.ExportStatus;
 import org.example.quanlybanhang.enums.OrderStatus;
 import org.example.quanlybanhang.helpers.ButtonTableCell;
 import org.example.quanlybanhang.helpers.DialogHelper;
@@ -97,8 +96,8 @@ public class PendingOrdersDialogController {
         orderDateColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().orderDate()));
         totalPriceColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().totalPrice()));
         statusColumn.setCellValueFactory(cellData -> {
-            OrderStatus status = cellData.getValue().status();
-            return new SimpleStringProperty(status != null ? status.toString() : "");
+            ExportStatus exportStatus = cellData.getValue().exportStatus();
+            return new SimpleStringProperty(exportStatus != null ? exportStatus.getValue() : "");
         });
         noteColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().note()));
 
@@ -106,16 +105,39 @@ public class PendingOrdersDialogController {
     }
 
     private void setupActionsColumn() {
-        actionsColumn.setCellFactory(param ->
-                new ButtonTableCell<>("Chi tiết đơn hàng", order ->
-                        DialogHelper.showOrderDialog(
-                                "/org/example/quanlybanhang/views/order/orderDetailsDialog.fxml",
-                                "Chi tiết đơn hàng",
-                                order.id(),
-                                (Stage) ordersTable.getScene().getWindow()
-                        )
-                )
-        );
+        actionsColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button detailsButton = new Button("Chi tiết đơn hàng");
+            private final Button exportButton = new Button("Xuất kho");
+            private final HBox buttonsBox = new HBox(5, detailsButton, exportButton); // HBox với khoảng cách 5px
+
+            {
+                detailsButton.setOnAction(event -> {
+                    OrderSummaryDTO order = getTableView().getItems().get(getIndex());
+                    DialogHelper.showOrderDialog(
+                            "/org/example/quanlybanhang/views/order/orderDetailsDialog.fxml",
+                            "Chi tiết đơn hàng",
+                            order.id(),
+                            (Stage) ordersTable.getScene().getWindow()
+                    );
+                });
+
+                exportButton.setOnAction(event -> {
+                    OrderSummaryDTO order = getTableView().getItems().get(getIndex());
+                    DialogHelper.showOrderDialog(
+                            "/org/example/quanlybanhang/views/warehouse/warehouseImport.fxml",
+                            "Xuất kho đơn hàng",
+                            order.id(),
+                            (Stage) ordersTable.getScene().getWindow()
+                    );
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty || getTableRow() == null || getTableRow().getItem() == null ? null : buttonsBox);
+            }
+        });
     }
 
     private void loadAllOrders() {

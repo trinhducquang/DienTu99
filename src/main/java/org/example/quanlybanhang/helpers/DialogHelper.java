@@ -13,6 +13,7 @@ import org.example.quanlybanhang.controller.order.AddOrderDialogController;
 import org.example.quanlybanhang.controller.product.ProductDetailDialogController;
 import org.example.quanlybanhang.controller.product.ProductDialogController;
 import org.example.quanlybanhang.controller.order.OrderDetailsDialogController;
+import org.example.quanlybanhang.controller.warehouse.WarehouseImportDialog;
 import org.example.quanlybanhang.dto.productDTO.CartItem;
 import org.example.quanlybanhang.utils.AlertUtils;
 
@@ -104,6 +105,8 @@ public class DialogHelper {
         showDialog(fxmlPath, title, ownerStage, controller -> {
             if (controller instanceof OrderDetailsDialogController) {
                 ((OrderDetailsDialogController) controller).setOrderById(orderId);
+            } else if (controller instanceof WarehouseImportDialog) {
+                ((WarehouseImportDialog) controller).setOrderForExport(orderId);
             }
         });
     }

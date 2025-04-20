@@ -1,8 +1,12 @@
 package org.example.quanlybanhang.service;
 
+import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.dao.WarehouseDAO;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
 import org.example.quanlybanhang.enums.WarehouseType;
+import org.example.quanlybanhang.model.Order;
+import org.example.quanlybanhang.model.OrderDetail;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -28,4 +32,5 @@ public class WarehouseService {
     public boolean insertWarehouseExport(WarehouseDTO transaction, List<WarehouseDTO> productList) {
         return warehouseDAO.insertWarehouseExportWithFIFO(transaction, productList);
     }
+
 }

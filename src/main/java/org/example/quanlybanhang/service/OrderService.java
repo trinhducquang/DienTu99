@@ -4,6 +4,7 @@ import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
 import org.example.quanlybanhang.dto.productDTO.ProductDisplayInfoDTO;
 import org.example.quanlybanhang.model.Order;
+import org.example.quanlybanhang.model.OrderDetail;
 import org.example.quanlybanhang.utils.OrderConverter;
 
 import java.util.List;
@@ -34,5 +35,13 @@ public class OrderService {
 
     public boolean updateOrderStatus(Order order) {
         return orderDAO.update(order);
+    }
+
+    public List<OrderDetail> getOrderDetailsById(int orderId) {
+        return orderDAO.getOrderDetailsById(orderId);
+    }
+
+    public Order getOrderById(int orderId) {
+        return orderDAO.findById(orderId);
     }
 }

@@ -2,6 +2,7 @@ package org.example.quanlybanhang.dao;
 
 import org.example.quanlybanhang.dao.base.CrudDao;
 import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
+import org.example.quanlybanhang.enums.ExportStatus;
 import org.example.quanlybanhang.enums.OrderStatus;
 import org.example.quanlybanhang.model.Order;
 import org.example.quanlybanhang.model.OrderDetail;
@@ -182,7 +183,8 @@ public class OrderDAO implements CrudDao<Order> {
                 rs.getString("product_images"),
                 rs.getString("product_quantities"),
                 rs.getString("product_prices"),
-                rs.getString("note")
+                rs.getString("note"),
+                ExportStatus.fromValue(rs.getString("export_status"))
         );
     }
 
@@ -261,9 +263,30 @@ public class OrderDAO implements CrudDao<Order> {
         return profit;
     }
 
+    public List<OrderDetail> getOrderDetailsById(int orderId) {
+        List<OrderDetail> details = new ArrayList<>();
+        String sql = "SELECT * FROM order_details WHERE order_id = ?";
 
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, orderId);
+            ResultSet rs = stmt.executeQuery();
 
+            while (rs.next()) {
+                OrderDetail detail = new OrderDetail(
+                        rs.getInt("id"),
+                        rs.getInt("order_id"),
+                        rs.getInt("product_id"),
+                        rs.getInt("quantity"),
+                        rs.getBigDecimal("price")
+                );
+                details.add(detail);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
+        return details;
+    }
 }
 
 

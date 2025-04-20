@@ -1,5 +1,6 @@
 package org.example.quanlybanhang.dto.orderDTO;
 
+import org.example.quanlybanhang.enums.ExportStatus;
 import org.example.quanlybanhang.enums.OrderStatus;
 
 import java.math.BigDecimal;
@@ -19,7 +20,8 @@ public record OrderSummaryDTO(
         String productImages,
         String productQuantities,
         String productPrices,
-        String note
+        String note,
+        ExportStatus exportStatus
 ) {
 
 }
