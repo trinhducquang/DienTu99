@@ -90,7 +90,7 @@
                             <TextField fx:id="quantityField" prefWidth="100" />
                             <Label fx:id="unitPriceLabel" text="Đơn Giá:" />
                             <TextField fx:id="unitPriceField" prefWidth="120" />
-                            <Button styleClass="add-button" onAction="#onAddProduct" text="Thêm Sản Phẩm" />
+                            <Button styleClass="add-button" fx:id="addProductButton" onAction="#onAddProduct" text="Thêm Sản Phẩm" />
                         </HBox>
 
                         <TableView fx:id="productTableView" prefHeight="194.0" prefWidth="842.0" VBox.vgrow="ALWAYS">

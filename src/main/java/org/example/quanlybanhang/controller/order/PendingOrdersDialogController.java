@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.example.quanlybanhang.controller.interfaces.RefreshableView;
+import org.example.quanlybanhang.controller.warehouse.WarehouseImportDialog;
 import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
 import org.example.quanlybanhang.enums.ExportStatus;
@@ -25,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PendingOrdersDialogController {
+public class PendingOrdersDialogController implements RefreshableView {
 
     @FXML
     private TableView<OrderSummaryDTO> ordersTable;
@@ -108,7 +110,7 @@ public class PendingOrdersDialogController {
         actionsColumn.setCellFactory(param -> new TableCell<>() {
             private final Button detailsButton = new Button("Chi tiết đơn hàng");
             private final Button exportButton = new Button("Xuất kho");
-            private final HBox buttonsBox = new HBox(5, detailsButton, exportButton); // HBox với khoảng cách 5px
+            private final HBox buttonsBox = new HBox(5, detailsButton, exportButton);
 
             {
                 detailsButton.setOnAction(event -> {
@@ -123,19 +125,35 @@ public class PendingOrdersDialogController {
 
                 exportButton.setOnAction(event -> {
                     OrderSummaryDTO order = getTableView().getItems().get(getIndex());
-                    DialogHelper.showOrderDialog(
+                    DialogHelper.showWarehouseExportDialog(
                             "/org/example/quanlybanhang/views/warehouse/warehouseImport.fxml",
                             "Xuất kho đơn hàng",
                             order.id(),
-                            (Stage) ordersTable.getScene().getWindow()
+                            (Stage) ordersTable.getScene().getWindow(),
+                            PendingOrdersDialogController.this
                     );
                 });
+            }
+
+            private RefreshableView getRefreshHandler() {
+                return PendingOrdersDialogController.this;
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty || getTableRow() == null || getTableRow().getItem() == null ? null : buttonsBox);
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                    return;
+                }
+
+                OrderSummaryDTO order = getTableRow().getItem();
+                // Kiểm tra trạng thái xuất kho để quyết định hiển thị nút xuất kho
+                if (order.exportStatus() == ExportStatus.DA_XUAT_KHO) {
+                    setGraphic(new HBox(5, detailsButton));
+                } else {
+                    setGraphic(buttonsBox);
+                }
             }
         });
     }
@@ -190,5 +208,10 @@ public class PendingOrdersDialogController {
         } else {
             displayedOrders.setAll(pendingOrders);
         }
+    }
+
+    @Override
+    public void refresh() {
+        loadAllOrders();
     }
 }

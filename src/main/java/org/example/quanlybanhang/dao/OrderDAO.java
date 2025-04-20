@@ -223,7 +223,7 @@ public class OrderDAO implements CrudDao<Order> {
     public BigDecimal calculateAnnualProfit(int year) {
         String sql = "SELECT " +
                 "    SUM(od.price * od.quantity) AS total_revenue, " +
-                "    SUM(od.quantity * p.price) AS total_cost, " +  // Sử dụng p.price thay vì p.import_price
+                "    SUM(od.quantity * p.price) AS total_cost, " +
                 "    SUM(o.shipping_fee) AS total_shipping " +
                 "FROM order_details od " +
                 "JOIN orders o ON od.order_id = o.id " +
@@ -234,28 +234,19 @@ public class OrderDAO implements CrudDao<Order> {
         BigDecimal profit = BigDecimal.ZERO;
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            // Thiết lập các tham số của câu truy vấn
-            stmt.setInt(1, year);  // Năm cần tính toán
-            stmt.setString(2, OrderStatus.HOAN_THANH.getText());  // Trạng thái "Hoàn thành"
-
-            // Thực thi câu truy vấn
+            stmt.setInt(1, year);
+            stmt.setString(2, OrderStatus.HOAN_THANH.getText());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                // Lấy kết quả từ ResultSet, đảm bảo không null
                 BigDecimal totalRevenue = rs.getBigDecimal("total_revenue");
                 BigDecimal totalCost = rs.getBigDecimal("total_cost");
                 BigDecimal totalShipping = rs.getBigDecimal("total_shipping");
-
-                // Nếu giá trị null, gán bằng BigDecimal.ZERO
                 totalRevenue = totalRevenue != null ? totalRevenue : BigDecimal.ZERO;
                 totalCost = totalCost != null ? totalCost : BigDecimal.ZERO;
                 totalShipping = totalShipping != null ? totalShipping : BigDecimal.ZERO;
-
-                // Tính lợi nhuận
                 profit = totalRevenue.subtract(totalCost).subtract(totalShipping);
             }
         } catch (SQLException e) {
-            // In lỗi nếu có ngoại lệ
             System.err.println("SQL error: " + e.getMessage());
             e.printStackTrace();
         }
@@ -266,11 +257,9 @@ public class OrderDAO implements CrudDao<Order> {
     public List<OrderDetail> getOrderDetailsById(int orderId) {
         List<OrderDetail> details = new ArrayList<>();
         String sql = "SELECT * FROM order_details WHERE order_id = ?";
-
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, orderId);
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
                 OrderDetail detail = new OrderDetail(
                         rs.getInt("id"),
@@ -287,6 +276,20 @@ public class OrderDAO implements CrudDao<Order> {
 
         return details;
     }
+
+    public boolean updateOrderExportStatus(Integer orderId, ExportStatus status) {
+        String sql = "UPDATE orders SET export_status = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status.toString());
+            stmt.setInt(2, orderId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Failed to update export status for order ID " + orderId + ": " + e.getMessage());
+            return false;
+        }
+    }
+
 }
 
 

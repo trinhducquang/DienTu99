@@ -3,6 +3,7 @@ package org.example.quanlybanhang.service;
 import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
 import org.example.quanlybanhang.dto.productDTO.ProductDisplayInfoDTO;
+import org.example.quanlybanhang.enums.ExportStatus;
 import org.example.quanlybanhang.model.Order;
 import org.example.quanlybanhang.model.OrderDetail;
 import org.example.quanlybanhang.utils.OrderConverter;
@@ -43,5 +44,9 @@ public class OrderService {
 
     public Order getOrderById(int orderId) {
         return orderDAO.findById(orderId);
+    }
+
+    public boolean updateOrderExportStatus(Integer orderId, ExportStatus status) {
+        return orderDAO.updateOrderExportStatus(orderId, status);
     }
 }

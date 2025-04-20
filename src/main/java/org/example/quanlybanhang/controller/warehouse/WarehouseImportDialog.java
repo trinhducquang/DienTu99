@@ -6,7 +6,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
+import org.example.quanlybanhang.enums.ExportStatus;
 import org.example.quanlybanhang.enums.WarehouseType;
 import org.example.quanlybanhang.model.Order;
 import org.example.quanlybanhang.model.OrderDetail;
@@ -39,7 +41,8 @@ public class WarehouseImportDialog {
     public Label unitPriceLabel;
     public Label totalAmountLabel;
     public Label quantityLabel;
-
+    @FXML
+    private Button addProductButton;
     @FXML
     private TextField transactionCodeField;
     @FXML
@@ -376,35 +379,44 @@ public class WarehouseImportDialog {
 
     public void setOrderForExport(Integer orderId) {
         this.orderId = orderId;
-
-        // Tự động chọn loại giao dịch là xuất kho
         if (transactionTypeComboBox != null) {
             transactionTypeComboBox.setValue(WarehouseType.XUAT_KHO);
+            transactionTypeComboBox.setDisable(true);
+            productComboBox.setVisible(false);
+            productComboBox.setManaged(false);
+            quantityField.setVisible(false);
+            quantityField.setManaged(false);
+            quantityLabel.setVisible(false);
+            quantityLabel.setManaged(false);
+            unitPriceField.setVisible(false);
+            unitPriceField.setManaged(false);
+            unitPriceLabel.setVisible(false);
+            unitPriceLabel.setManaged(false);
 
-            // Tải chi tiết đơn hàng
+            if (transactionTypeComboBox != null) {
+                if (addProductButton != null) {
+                    addProductButton.setVisible(false);
+                    addProductButton.setManaged(false);
+                }
+            }
             loadOrderDetails(orderId);
+            noteTextArea.setText("Xuất kho cho đơn hàng #" + orderId);
         }
     }
 
     private void loadOrderDetails(Integer orderId) {
-        // Cần tạo một OrderService để lấy thông tin đơn hàng
         OrderService orderService = new OrderService();
-        List<OrderDetail> orderDetails = orderService.getOrderDetailsById(orderId); // Fixed method name
-
-        // Thêm sản phẩm vào bảng
+        List<OrderDetail> orderDetails = orderService.getOrderDetailsById(orderId);
         if (orderDetails != null && !orderDetails.isEmpty()) {
             productDetailsList.addAll(orderDetails);
             productTableView.refresh();
             updateTotalAmount();
-
-            // Thêm thông tin đơn hàng vào ghi chú
-            Order order = orderService.getOrderById(orderId); // Using instance method, not static
+            Order order = orderService.getOrderById(orderId);
             if (order != null) {
                 noteTextArea.setText("Xuất kho cho đơn hàng #" + orderId);
             }
         }
     }
-
 
     @FXML
     private void onSave() {
@@ -420,8 +432,23 @@ public class WarehouseImportDialog {
             };
 
             if (success) {
-                AlertUtils.showInfo("Thành công", "Tạo phiếu " + type.getValue().toLowerCase() + " thành công!");
+                // Thêm đoạn cập nhật trạng thái đơn hàng nếu đây là xuất kho cho đơn hàng
+                if (type == WarehouseType.XUAT_KHO && orderId != null) {
+                    OrderService orderService = new OrderService();
+                    // Cập nhật trạng thái ExportStatus thành ĐÃ_XUẤT_KHO
+                    boolean updated = orderService.updateOrderExportStatus(orderId, ExportStatus.DA_XUAT_KHO);
+                    if (updated) {
+                        AlertUtils.showInfo("Thành công", "Xuất kho đơn hàng #" + orderId + " thành công!");
+                    } else {
+                        AlertUtils.showError("Lỗi", "Đã tạo phiếu xuất kho nhưng không thể cập nhật trạng thái đơn hàng!");
+                    }
+                } else {
+                    AlertUtils.showInfo("Thành công", "Tạo phiếu " + type.getValue().toLowerCase() + " thành công!");
+                }
                 resetCommonFields();
+
+                // Đóng cửa sổ sau khi lưu thành công
+                ((Stage) transactionCodeField.getScene().getWindow()).close();
             } else {
                 AlertUtils.showError("Lỗi", "Lỗi khi tạo phiếu " + type.getValue().toLowerCase());
             }

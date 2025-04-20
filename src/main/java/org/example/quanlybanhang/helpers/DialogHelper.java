@@ -159,4 +159,44 @@ public class DialogHelper {
             AlertUtils.showError("Lỗi", "Không thể mở dialog: " + e.getMessage());
         }
     }
+
+    public static void showWarehouseExportDialog(String fxmlPath, String title, Integer orderId, Stage ownerStage, RefreshableView parentController) {
+        try {
+            FXMLLoader loader = new FXMLLoader(DialogHelper.class.getResource(fxmlPath));
+            Parent root = loader.load();
+
+            WarehouseImportDialog controller = loader.getController();
+            controller.setOrderForExport(orderId);
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle(title);
+            dialogStage.initStyle(StageStyle.UTILITY);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+
+            if (ownerStage != null) {
+                dialogStage.initOwner(ownerStage);
+            }
+
+            Scene scene = new Scene(root);
+            dialogStage.setScene(scene);
+            dialogStage.setResizable(false);
+
+            if (parentController != null) {
+                dialogStage.setOnHidden(event -> {
+                    Platform.runLater(() -> {
+                        try {
+                            parentController.refresh();
+                        } catch (Exception e) {
+                            System.err.println("Lỗi khi refresh: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    });
+                });
+            }
+            dialogStage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtils.showError("Lỗi", "Không thể mở dialog: " + e.getMessage());
+        }
+    }
 }
