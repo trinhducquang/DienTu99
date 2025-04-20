@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="747.0" prefWidth="1300.0" spacing="10" stylesheets="@Order.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.order.OrderController">
+<VBox alignment="TOP_CENTER" prefHeight="747.0" prefWidth="1300.0" spacing="10"  xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.order.OrderController">
     <HBox fx:id="headerBox" alignment="CENTER_LEFT" prefWidth="1090.0" spacing="20" style="-fx-background-color: #3498db;">
         <padding>
             <Insets bottom="10" left="15" right="15" top="10" />

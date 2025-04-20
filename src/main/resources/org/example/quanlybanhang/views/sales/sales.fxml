@@ -159,8 +159,4 @@
             <Separator />
         </VBox>
     </StackPane>
-    <stylesheets>
-        <URL value="@../sales/sales.css" />
-    </stylesheets>
-
 </StackPane>

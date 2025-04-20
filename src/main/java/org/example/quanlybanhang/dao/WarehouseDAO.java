@@ -91,38 +91,6 @@ public class WarehouseDAO {
         return productList;
     }
 
-    public List<WarehouseDTO> getAllWarehouseCheck() {
-        List<WarehouseDTO> warehouseCheckList = new ArrayList<>();
-        String query = "SELECT * FROM warehouse_transaction_details WHERE type = 'Kiểm Kho'";
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn != null ? conn.createStatement() : null;
-             ResultSet rs = stmt != null ? stmt.executeQuery(query) : null) {
-
-            if (rs != null) {
-                while (rs.next()) {
-                    WarehouseDTO dto = new WarehouseDTO();
-
-                    dto.setTransactionCode(rs.getString("transaction_code"));
-                    dto.setProductName(rs.getString("product_name"));
-                    dto.setCreatedByName(rs.getString("created_by_name"));
-                    dto.setInventoryDate(rs.getTimestamp("inventory_check_date").toLocalDateTime());
-                    dto.setInventoryNote(rs.getString("inventory_note"));
-                    dto.setExcessQuantity(rs.getInt("excess_quantity"));
-                    dto.setDeficientQuantity(rs.getInt("deficient_quantity"));
-                    dto.setMissing(rs.getInt("missing"));
-
-                    warehouseCheckList.add(dto);
-                }
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Lỗi khi truy vấn dữ liệu kiểm kho:");
-            e.printStackTrace();
-        }
-
-        return warehouseCheckList;
-    }
 
     public boolean insertWarehouseImport(WarehouseDTO transaction, List<WarehouseDTO> productList) {
         if (transaction == null || productList == null || productList.isEmpty()) {
@@ -176,57 +144,6 @@ public class WarehouseDAO {
         }
 
         return false;
-    }
-
-    public boolean insertWarehouseCheck(WarehouseDTO transaction, List<WarehouseDTO> productList) {
-        String insertSQL = """
-                    INSERT INTO warehouse_transactions (
-                        transaction_code,
-                        product_id,
-                        type,
-                        note,
-                        created_at,
-                        created_by,
-                        inventory_check_date,
-                        inventory_note,
-                        excess_quantity,
-                        deficient_quantity,
-                        missing,
-                        inventory_status
-                    )
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """;
-
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(insertSQL)) {
-
-            conn.setAutoCommit(false);
-
-            for (WarehouseDTO product : productList) {
-                stmt.setString(1, transaction.getTransactionCode());
-                stmt.setInt(2, product.getProductId());
-                stmt.setString(3, transaction.getType().getValue());
-                stmt.setString(4, transaction.getNote());
-                stmt.setTimestamp(5, Timestamp.valueOf(transaction.getCreatedAt()));
-                stmt.setInt(6, transaction.getCreateById());
-                stmt.setTimestamp(7, Timestamp.valueOf(transaction.getInventoryDate()));
-                stmt.setString(8, transaction.getInventoryNote());
-                stmt.setInt(9, product.getExcessQuantity());
-                stmt.setInt(10, product.getDeficientQuantity());
-                stmt.setInt(11, product.getMissing());
-                stmt.setString(12, product.getInventoryStatus().getValue());
-
-                stmt.addBatch();
-            }
-
-            stmt.executeBatch();
-            conn.commit();
-            return true;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 
     public List<ImportedWarehouseDTO> getProductsImportedFromWarehouse() {

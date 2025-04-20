@@ -3,46 +3,112 @@ package org.example.quanlybanhang.controller.admin;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import org.example.quanlybanhang.dao.WarehouseDAO;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
 import org.example.quanlybanhang.enums.WarehouseType;
 import org.example.quanlybanhang.helpers.NavigatorAdmin;
 import org.example.quanlybanhang.helpers.LogoutHandler;
+import org.example.quanlybanhang.controller.ui.animation.UIEffects;
 
 import java.util.*;
 
 public class AdminController {
-    @FXML private Pane mainContentPane;
-    @FXML private Pane adminContentPane;
+    @FXML private VBox mainContentPane;
+    @FXML private VBox adminContentPane;
     @FXML private Button btnEmployee, btnDashboard, btnProduct, btnOrders, btnCustomers, btnCategory, btnWarehouse, logoutButton;
-
-    // Thêm Label để có thể cập nhật tên sản phẩm bán chạy nhất
     @FXML private Label topSellingProductLabel;
+    @FXML private TableView<?> ordersTable;
+
+    // Version information
+    private static final String APP_VERSION = "1.0.0";
 
     private final WarehouseDAO warehouseDAO = new WarehouseDAO();
+    private Button currentActiveButton;
 
     @FXML
     private void initialize() {
         setupNavigation();
+        setupUIEffects();
         logoutButton.setOnAction(event -> LogoutHandler.handleLogout(logoutButton));
 
-        // Cập nhật thông tin sản phẩm bán chạy nhất
+        // Set dashboard as active by default
+        currentActiveButton = btnDashboard;
+
+        // Update top selling product
         updateTopSellingProduct();
+
+        // Setup status cell factory for orders table if needed
+        setupOrdersTableStatusColumn();
     }
 
     private void setupNavigation() {
         btnDashboard.setOnAction(event -> {
+            setActiveButton(btnDashboard);
             NavigatorAdmin.navigate(adminContentPane, "admin/Admin.fxml");
-            // Cập nhật thông tin sản phẩm bán chạy nhất mỗi khi quay lại màn hình tổng quan
             updateTopSellingProduct();
         });
-        btnEmployee.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "employee/employeeManagement.fxml"));
-        btnCategory.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "category/Category.fxml"));
-        btnProduct.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "product/product.fxml"));
-        btnOrders.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "order/order.fxml"));
-        btnCustomers.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "customer/customer.fxml"));
-        btnWarehouse.setOnAction(event -> NavigatorAdmin.navigate(mainContentPane, "warehouse/Warehouse.fxml"));
+
+        btnEmployee.setOnAction(event -> {
+            setActiveButton(btnEmployee);
+            NavigatorAdmin.navigate(mainContentPane, "employee/employeeManagement.fxml");
+        });
+
+        btnCategory.setOnAction(event -> {
+            setActiveButton(btnCategory);
+            NavigatorAdmin.navigate(mainContentPane, "category/Category.fxml");
+        });
+
+        btnProduct.setOnAction(event -> {
+            setActiveButton(btnProduct);
+            NavigatorAdmin.navigate(mainContentPane, "product/product.fxml");
+        });
+
+        btnOrders.setOnAction(event -> {
+            setActiveButton(btnOrders);
+            NavigatorAdmin.navigate(mainContentPane, "order/order.fxml");
+        });
+
+        btnCustomers.setOnAction(event -> {
+            setActiveButton(btnCustomers);
+            NavigatorAdmin.navigate(mainContentPane, "customer/customer.fxml");
+        });
+
+        btnWarehouse.setOnAction(event -> {
+            setActiveButton(btnWarehouse);
+            NavigatorAdmin.navigate(mainContentPane, "warehouse/Warehouse.fxml");
+        });
+    }
+
+    private void setActiveButton(Button button) {
+        // Remove active class from current button
+        if (currentActiveButton != null) {
+            currentActiveButton.getStyleClass().remove("nav-button-active");
+        }
+
+        // Add active class to new button
+        button.getStyleClass().add("nav-button-active");
+        currentActiveButton = button;
+    }
+
+    private void setupUIEffects() {
+        // Apply hover effects to logout button
+        String normalLogoutStyle = "-fx-background-color: white; -fx-text-fill: #2196F3; -fx-background-radius: 20; -fx-font-weight: bold;";
+        String hoverLogoutStyle = "-fx-background-color: white; -fx-text-fill: #1976D2; -fx-background-radius: 20; -fx-font-weight: bold;";
+        UIEffects.applyHoverEffect(logoutButton, normalLogoutStyle, hoverLogoutStyle);
+
+        // Apply hover effects to nav buttons (except the active one)
+        for (Button button : Arrays.asList(btnEmployee, btnProduct, btnOrders, btnCustomers, btnCategory, btnWarehouse)) {
+            if (button != currentActiveButton) {
+                String normalNavStyle = "-fx-background-color: transparent; -fx-text-fill: #212121; -fx-padding: 15 15; -fx-background-radius: 8;";
+                String hoverNavStyle = "-fx-background-color: #E0E0E0; -fx-text-fill: #212121; -fx-padding: 15 15; -fx-background-radius: 8;";
+                UIEffects.applyHoverEffect(button, normalNavStyle, hoverNavStyle);
+            }
+        }
     }
 
     private void updateTopSellingProduct() {
@@ -94,5 +160,42 @@ public class AdminController {
             System.err.println("Lỗi khi cập nhật sản phẩm bán chạy nhất: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void setupOrdersTableStatusColumn() {
+        // This is a placeholder - you'll need to adapt this to your actual table structure
+        if (ordersTable != null && ordersTable.getColumns().size() >= 5) {
+            TableColumn<Object, String> statusColumn = (TableColumn<Object, String>) ordersTable.getColumns().get(4);
+
+            statusColumn.setCellFactory(column -> new TableCell<Object, String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    getStyleClass().removeAll("status-pending", "status-completed", "status-cancelled");
+
+                    if (item == null || empty) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        setText(item);
+
+                        if (item.equalsIgnoreCase("Đang xử lý") || item.equalsIgnoreCase("Pending")) {
+                            getStyleClass().add("status-pending");
+                        } else if (item.equalsIgnoreCase("Hoàn thành") || item.equalsIgnoreCase("Completed")) {
+                            getStyleClass().add("status-completed");
+                        } else if (item.equalsIgnoreCase("Đã hủy") || item.equalsIgnoreCase("Cancelled")) {
+                            getStyleClass().add("status-cancelled");
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    // Method to get application version
+    public static String getAppVersion() {
+        return APP_VERSION;
     }
 }

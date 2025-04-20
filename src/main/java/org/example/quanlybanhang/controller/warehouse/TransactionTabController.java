@@ -89,16 +89,21 @@ public class TransactionTabController {
     }
 
     private void setupTransactionTypeComboBox() {
-        // Add "All" option first
-        cboTransactionType.getItems().add(null); // null represents "All"
+        // Clear existing items
+        cboTransactionType.getItems().clear();
+
+        // Add "TẤT CẢ" option first, then the two transaction types
+        cboTransactionType.getItems().add(null); // Null will represent "TẤT CẢ"
         cboTransactionType.getItems().addAll(WarehouseType.NHAP_KHO, WarehouseType.XUAT_KHO);
 
-        // Set cell factory to display proper text
+        // Set cell factory to display text properly
         cboTransactionType.setCellFactory(cell -> new ListCell<WarehouseType>() {
             @Override
             protected void updateItem(WarehouseType item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) {
+                if (empty) {
+                    setText("");
+                } else if (item == null) {
                     setText("Tất cả");
                 } else {
                     setText(item.getValue());
@@ -111,7 +116,9 @@ public class TransactionTabController {
             @Override
             protected void updateItem(WarehouseType item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || item == null) {
+                if (empty) {
+                    setText("");
+                } else if (item == null) {
                     setText("Tất cả");
                 } else {
                     setText(item.getValue());
@@ -119,9 +126,17 @@ public class TransactionTabController {
             }
         });
 
+        // Default value - set to null which represents "TẤT CẢ"
+        cboTransactionType.setValue(null);
+
         cboTransactionType.valueProperty().addListener((obs, oldVal, newVal) -> {
             applyTransactionFilters();
             updateColumnVisibility(newVal);
+
+            // Notify main controller to refresh dashboard data when filter changes
+            if (mainController != null) {
+                mainController.refreshData();
+            }
         });
     }
 
@@ -143,23 +158,25 @@ public class TransactionTabController {
         tblTransactions.refresh();
     }
 
-    private void applyTransactionFilters() {
+    void applyTransactionFilters() {
         String searchText = txtSearchTransaction.getText();
         LocalDate startDate = dpStartDateTransaction.getValue();
         LocalDate endDate = dpEndDateTransaction.getValue();
         WarehouseType selectedType = cboTransactionType.getValue();
 
-        // Lấy tất cả dữ liệu từ DAO
+        // Get all data from DAO
         List<WarehouseDTO> allData = warehouseDAO.getAllWarehouseDetails();
 
-        // Lọc theo loại giao dịch nếu có chọn loại
+        // Filter by selected transaction type
         if (selectedType != null) {
+            // If a specific type is selected (not "TẤT CẢ")
             allData = allData.stream()
                     .filter(dto -> dto.getType() == selectedType)
                     .collect(Collectors.toList());
         }
+        // If selectedType is null, no filtering by type is needed (show all)
 
-        // Tiếp tục lọc theo các điều kiện tìm kiếm khác
+        // Continue filtering by other search conditions
         List<WarehouseDTO> filteredData = SearchService.search(
                 allData,
                 searchText,
@@ -171,20 +188,12 @@ public class TransactionTabController {
                 WarehouseDTO::getCategoryName
         );
 
-        // Cập nhật danh sách hiển thị
+        // Update displayed list
         allTransactions.setAll(filteredData);
         pagination.setCurrentPageIndex(0);
 
-        // Cập nhật lại phân trang
+        // Update pagination
         setupPagination();
-    }
-
-    private void updateColumnsVisibility(String transactionType) {
-        boolean isExport = "Xuất Kho".equals(transactionType);
-
-        // Ẩn/hiện cột tùy theo loại giao dịch
-        colUnitPrice.setVisible(!isExport);
-        colTotalAmount.setVisible(!isExport);
     }
 
     public void setMainController(WarehouseController controller) {
@@ -228,6 +237,11 @@ public class TransactionTabController {
         try {
             allTransactions.setAll(warehouseDAO.getAllWarehouseDetails());
             setupPagination();
+
+            // Notify main controller when transaction data is loaded
+            if (mainController != null) {
+                mainController.refreshData();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

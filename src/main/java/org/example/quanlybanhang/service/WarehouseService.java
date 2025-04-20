@@ -15,7 +15,6 @@ public class WarehouseService {
         String prefix = switch (type) {
             case NHAP_KHO -> "NK";
             case XUAT_KHO -> "XK";
-            case KIEM_KHO -> "KH";
         };
         String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String randomPart = UUID.randomUUID().toString().substring(0, 5).toUpperCase();
@@ -28,9 +27,5 @@ public class WarehouseService {
 
     public boolean insertWarehouseExport(WarehouseDTO transaction, List<WarehouseDTO> productList) {
         return warehouseDAO.insertWarehouseExportWithFIFO(transaction, productList);
-    }
-
-    public boolean insertWarehouseCheck(WarehouseDTO transaction, List<WarehouseDTO> productList) {
-        return warehouseDAO.insertWarehouseCheck(transaction, productList);
     }
 }

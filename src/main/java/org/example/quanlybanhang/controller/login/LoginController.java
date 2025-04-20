@@ -85,7 +85,7 @@ public class LoginController {
     private void chuyenSceneTheoVaiTro(User user) {
         switch (user.getRole()) {
             case ADMIN -> chuyenScene("admin/Admin.fxml");
-            case NHAN_VIEN -> chuyenScene("employee/Employee.fxml");
+            case NHAN_VIEN -> chuyenScene("employee/EmployeeManagement.fxml");
             case BAN_HANG -> chuyenScene("sales/sales.fxml");
             case NHAN_VIEN_KHO -> chuyenScene("warehouse/warehouse.fxml");
             case THU_NGAN -> chuyenScene("order/Order.fxml");
@@ -107,8 +107,8 @@ public class LoginController {
 
             stage.maximizedProperty().addListener((obs, wasMaximized, isNowMaximized) -> {
                 if (!isNowMaximized) {
-                    stage.setWidth(1280);
-                    stage.setHeight(720);
+                    stage.setWidth(1024);
+                    stage.setHeight(768);
                     stage.centerOnScreen();
                 }
             });

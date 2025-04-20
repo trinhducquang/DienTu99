@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
-import org.example.quanlybanhang.enums.InventoryStatus;
 import org.example.quanlybanhang.enums.WarehouseType;
 import org.example.quanlybanhang.model.OrderDetail;
 import org.example.quanlybanhang.model.Product;
@@ -75,10 +74,6 @@ public class WarehouseImportDialog {
     @FXML
     private TextField totalAmountField;
     @FXML
-    private TextField excessQuantityField;
-    @FXML
-    private TextField deficientQuantityField;
-    @FXML
     private TextArea noteTextArea;
 
     @FXML
@@ -113,7 +108,6 @@ public class WarehouseImportDialog {
         switch (transactionTypeComboBox.getValue()) {
             case NHAP_KHO -> setupImportTransactionUI();
             case XUAT_KHO -> setupExportTransactionUI();
-            case KIEM_KHO -> setupInventoryCheckUI();
         }
     }
 
@@ -199,8 +193,6 @@ public class WarehouseImportDialog {
         setUnitPriceColumnVisible(true);
         totalAmountLabel.setText("Tổng Tiền");
         setTotalAmountFieldReadonly(true);
-        excessQuantityField.setDisable(true);
-        deficientQuantityField.setDisable(true);
         setQuantityFieldVisible(true);
         setQuantityColumnVisible(true);
     }
@@ -210,21 +202,8 @@ public class WarehouseImportDialog {
         setUnitPriceColumnVisible(false);
         totalAmountLabel.setText("Tổng Tiền");
         setTotalAmountFieldReadonly(true);
-        excessQuantityField.setDisable(true);
-        deficientQuantityField.setDisable(true);
         setQuantityFieldVisible(true);
         setQuantityColumnVisible(true);
-    }
-
-    private void setupInventoryCheckUI() {
-        resetCommonFields();
-        setUnitPriceColumnVisible(false);
-        totalAmountLabel.setText("Số Lượng Lỗi");
-        setTotalAmountFieldReadonly(false);
-        excessQuantityField.setDisable(false);
-        deficientQuantityField.setDisable(false);
-        setQuantityFieldVisible(false);
-        setQuantityColumnVisible(false);
     }
 
     private void setQuantityFieldVisible(boolean visible) {
@@ -255,7 +234,7 @@ public class WarehouseImportDialog {
         totalAmountField.setDisable(false);
     }
 
-    
+
     @FXML
     private void onAddProduct() {
         Product product = productComboBox.getValue();
@@ -291,18 +270,6 @@ public class WarehouseImportDialog {
                 }
 
                 addOrUpdateProduct(product, quantity, BigDecimal.ZERO);
-            }
-
-            case KIEM_KHO -> {
-                boolean exists = productDetailsList.stream()
-                        .anyMatch(d -> d.getProductId() == product.getId());
-
-                if (exists) {
-                    AlertUtils.showWarning("Cảnh báo", "Sản phẩm này đã có trong danh sách kiểm kê!");
-                    return;
-                }
-
-                productDetailsList.add(new OrderDetail(0, 0, product.getId(), 0, BigDecimal.ZERO));
             }
         }
 
@@ -385,10 +352,6 @@ public class WarehouseImportDialog {
         dto.setCreatedAt(java.time.LocalDateTime.now());
         dto.setNote(noteTextArea.getText());
 
-        if (dto.getType() == WarehouseType.KIEM_KHO) {
-            dto.setInventoryDate(dto.getCreatedAt());
-        }
-
         return dto;
     }
 
@@ -402,11 +365,6 @@ public class WarehouseImportDialog {
 
             if (type == WarehouseType.NHAP_KHO) {
                 dto.setUnitPrice(detail.getPrice());
-            } else if (type == WarehouseType.KIEM_KHO) {
-                dto.setExcessQuantity(parseIntOrZero(excessQuantityField.getText()));
-                dto.setDeficientQuantity(parseIntOrZero(deficientQuantityField.getText()));
-                dto.setMissing(parseIntOrZero(totalAmountField.getText()));
-                dto.setInventoryStatus(InventoryStatus.DA_XAC_NHAN);
             }
 
             return dto;
@@ -432,7 +390,6 @@ public class WarehouseImportDialog {
             boolean success = switch (type) {
                 case NHAP_KHO -> warehouseService.insertWarehouseImport(transaction, productList);
                 case XUAT_KHO -> warehouseService.insertWarehouseExport(transaction, productList);
-                case KIEM_KHO -> warehouseService.insertWarehouseCheck(transaction, productList);
             };
 
             if (success) {

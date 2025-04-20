@@ -1,76 +1,184 @@
 /* Dashboard Stylesheet */
+* {
+    -fx-primary: #2196F3;
+    -fx-primary-light: #64B5F6;
+    -fx-primary-dark: #1976D2;
+    -fx-secondary: #FFFFFF;
+    -fx-grey-light: #F5F5F5;
+    -fx-grey: #E0E0E0;
+    -fx-text-dark: #212121;
+    -fx-text-light: #FFFFFF;
+}
+
 .root {
     -fx-background-color: white;
-    -fx-font-family: 'Arial';
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
 }
 
 /* Top Navigation Bar */
 .top-nav {
-    -fx-background-color: #4B9DEA;
+    -fx-background-color: -fx-primary;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
 }
 
 .title-label {
-    -fx-font-size: 18px;
+    -fx-font-size: 20px;
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
 
 .logout-button {
     -fx-background-color: white;
-    -fx-text-fill: #4B9DEA;
+    -fx-text-fill: -fx-primary;
     -fx-background-radius: 20;
     -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.logout-button:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
 }
 
 /* Side Navigation */
 .side-nav {
-    -fx-background-color: #F0F0F0;
-    -fx-padding: 20;
+    -fx-background-color: -fx-grey-light;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 2, 0);
 }
 
 .nav-button {
     -fx-background-color: transparent;
-    -fx-text-fill: #4B9DEA;
-    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+    -fx-font-size: 14px;
+    -fx-padding: 15 15;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
     -fx-alignment: CENTER_LEFT;
+    -fx-min-width: 210;
+    -fx-pref-width: 210;
+    -fx-max-width: 210;
+    -fx-min-height: 45;
 }
 
 .nav-button:hover {
-    -fx-background-color: #E0E0E0;
+    -fx-background-color: derive(-fx-grey-light, -5%);
+}
+
+.nav-button-active {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Version Label */
+.version-label {
+    -fx-text-fill: #757575;
+    -fx-font-size: 12px;
+    -fx-opacity: 0.8;
 }
 
 /* Dashboard Title */
 .dashboard-title {
     -fx-font-size: 24px;
-    -fx-text-fill: #4B9DEA;
+    -fx-text-fill: -fx-primary-dark;
     -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-text-fill: -fx-primary-dark;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 5 0;
 }
 
 /* Summary Cards */
 .summary-card {
-    -fx-background-color: #2196F3;
     -fx-background-radius: 10;
-    -fx-padding: 15;
-    -fx-alignment: CENTER;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);
+    -fx-min-height: 120;
+}
+
+.card-revenue {
+    -fx-background-color: linear-gradient(to bottom right, #2196F3, #1976D2);
+}
+
+.card-profit {
+    -fx-background-color: linear-gradient(to bottom right, #4CAF50, #388E3C);
+}
+
+.card-orders {
+    -fx-background-color: linear-gradient(to bottom right, #FF9800, #F57C00);
+}
+
+.card-product {
+    -fx-background-color: linear-gradient(to bottom right, #9C27B0, #7B1FA2);
 }
 
 .card-title {
     -fx-text-fill: white;
-    -fx-opacity: 0.7;
+    -fx-opacity: 0.9;
+    -fx-font-size: 14px;
 }
 
 .card-value {
     -fx-text-fill: white;
-    -fx-font-size: 18px;
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
 }
 
 /* Orders Table */
 .orders-table {
     -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: -fx-grey;
 }
 
 .orders-table .column-header {
-    -fx-background-color: #F0F0F0;
-    -fx-text-fill: #4B9DEA;
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 15 10 15;
+}
+
+.orders-table .column-header .label {
+    -fx-text-fill: white;
+    -fx-alignment: CENTER-LEFT;
+}
+
+.orders-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent -fx-grey transparent;
+    -fx-padding: 5 0 5 0;
+}
+
+.orders-table .table-row-cell:odd {
+    -fx-background-color: -fx-grey-light;
+}
+
+.orders-table .table-row-cell:selected {
+    -fx-background-color: derive(-fx-primary, 90%);
+    -fx-text-fill: -fx-text-dark;
+}
+
+/* Status Indicators for Orders */
+.status-pending {
+    -fx-background-color: #FFC107;
+    -fx-background-radius: 4;
+    -fx-text-fill: white;
+    -fx-padding: 3 8 3 8;
+}
+
+.status-completed {
+    -fx-background-color: #4CAF50;
+    -fx-background-radius: 4;
+    -fx-text-fill: white;
+    -fx-padding: 3 8 3 8;
+}
+
+.status-cancelled {
+    -fx-background-color: #F44336;
+    -fx-background-radius: 4;
+    -fx-text-fill: white;
+    -fx-padding: 3 8 3 8;
 }

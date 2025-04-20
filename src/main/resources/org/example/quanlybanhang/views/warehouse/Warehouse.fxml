@@ -60,7 +60,7 @@
                                     <children>
                                         <HBox alignment="CENTER_LEFT" spacing="10.0">
                                             <children>
-                                                <Button fx:id="btnCreateTransaction" mnemonicParsing="false" prefHeight="37.0" prefWidth="256.0" style="-fx-background-color: #2196F3; -fx-text-fill: white;" text="Nhập Kho / Xuất Kho / Kiểm Kho">
+                                                <Button fx:id="btnCreateTransaction" mnemonicParsing="false" prefHeight="37.0" prefWidth="256.0" style="-fx-background-color: #2196F3; -fx-text-fill: white;" text="Nhập Kho / Xuất Kho">
                                                     <padding>
                                                         <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
                                                     </padding>
@@ -85,45 +85,6 @@
                                                 <TableColumn fx:id="colCreatedDate" prefWidth="113.0" text="Ngày Tạo" />
                                                 <TableColumn fx:id="colCreatedBy" prefWidth="161.0" text="Người Tạo" />
                                                 <TableColumn fx:id="colNote" maxWidth="500.0" prefWidth="133.0" text="Ghi Chú" />
-                                            </columns>
-                                        </TableView>
-                                    </children>
-                                </VBox>
-                            </content>
-                        </Tab>
-                        <Tab text="Kiểm Kho">
-                            <content>
-                                <VBox spacing="10.0">
-                                    <padding>
-                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                    </padding>
-                                    <children>
-                                        <HBox alignment="CENTER_LEFT" spacing="10.0">
-                                            <children>
-                                                <Button mnemonicParsing="false" style="-fx-background-color: #9C27B0; -fx-text-fill: white;" text="Tạo Phiếu Kiểm Kho">
-                                                    <padding>
-                                                        <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
-                                                    </padding>
-                                                </Button>
-                                                <Region HBox.hgrow="ALWAYS" />
-                                                <ComboBox promptText="Trạng thái" />
-                                                <TextField prefWidth="250.0" promptText="Tìm kiếm sản phẩm..." />
-                                                <DatePicker promptText="Từ ngày" />
-                                                <DatePicker promptText="Đến ngày" />
-                                            </children>
-                                        </HBox>
-                                        <TableView fx:id="tableWarehouseCheck" prefHeight="600.0" prefWidth="1280.0" VBox.vgrow="ALWAYS">
-                                            <columns>
-                                                <TableColumn fx:id="colIdCheck" prefWidth="110.0" text="Mã Giao Dịch" />
-                                                <TableColumn fx:id="colCheckdate" prefWidth="110.0" text="Ngày Kiểm" />
-                                                <TableColumn fx:id="checker" prefWidth="110.0" text="Người Kiểm" />
-                                                <TableColumn fx:id="colcheckProduct" prefWidth="140.0" text="Sản Phẩm Kiểm" />
-                                                <TableColumn fx:id="colProductNumber" prefWidth="90.0" text="Số SP" />
-                                                <TableColumn fx:id="colExcessProduct" prefWidth="90.0" text="SP Thừa" />
-                                                <TableColumn fx:id="colmissingProduct" prefWidth="90.0" text="SP Thiếu" />
-                                                <TableColumn fx:id="colDefectiveProduct" prefWidth="90.0" text="SP Lỗi" />
-                                                <TableColumn fx:id="colCheckStatus" prefWidth="110.0" text="Trạng Thái" />
-                                                <TableColumn fx:id="colcheckNote" maxWidth="300.0" prefWidth="120.0" text="Ghi Chú" />
                                             </columns>
                                         </TableView>
                                     </children>
@@ -227,7 +188,7 @@
                                             </children>
                                         </HBox>
                                         <StackPane fx:id="chartPane" prefHeight="359.0" prefWidth="1260.0" style="-fx-background-color: #f5f5f5; -fx-background-radius: 5;">
-                                           
+
                                         </StackPane >
                                         <HBox prefHeight="211.0" prefWidth="1260.0" spacing="20.0" VBox.vgrow="ALWAYS">
                                             <children>

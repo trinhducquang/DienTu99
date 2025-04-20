@@ -8,12 +8,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
 
 <VBox fx:id="adminContentPane" alignment="TOP_CENTER" stylesheets="@../../dashboard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.admin.AdminController">
 
-          <!-- Top Navigation Bar -->
+    <!-- Top Navigation Bar -->
     <HBox alignment="CENTER_LEFT" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" styleClass="top-nav" VBox.vgrow="NEVER">
-
         <padding>
             <Insets left="20" right="20" />
         </padding>
@@ -22,73 +22,100 @@
 
         <HBox HBox.hgrow="ALWAYS" />
 
-        <Button fx:id="logoutButton" prefHeight="27.0" prefWidth="101.0" styleClass="logout-button" text="Đăng Xuất" />
+        <Button fx:id="logoutButton" prefHeight="36.0" prefWidth="120.0" styleClass="logout-button" text="Đăng Xuất" />
     </HBox>
 
-
     <!-- Main Content Area -->
-    <HBox spacing="20.0" HBox.hgrow="ALWAYS">
-      <AnchorPane prefHeight="758.0" prefWidth="188.0">
-         <children>
-              <!-- Side Navigation -->
-              <VBox prefHeight="748.0" prefWidth="191.0" spacing="10.0" styleClass="side-nav">
-                  <Button fx:id="btnDashboard" styleClass="nav-button" text="Tổng Quan" />
-                  <Button fx:id="btnEmployee" styleClass="nav-button" text="Nhân viên" />
-                  <Button fx:id="btnProduct" styleClass="nav-button" text="Sản Phẩm" />
-                  <Button fx:id="btnOrders" styleClass="nav-button" text="Đơn Hàng" />
-                  <Button fx:id="btnCustomers" styleClass="nav-button" text="Khách Hàng" />
-                  <Button fx:id="btnCategory" styleClass="nav-button" text="Danh Mục" />
-                  <Button fx:id="btnWarehouse" styleClass="nav-button" text="Quản lí kho" />
-              </VBox>
-         </children>
-         <HBox.margin>
-            <Insets />
-         </HBox.margin>
-         <padding>
-            <Insets top="10.0" />
-         </padding>
-      </AnchorPane>
+    <HBox spacing="0" VBox.vgrow="ALWAYS">
+        <!-- Side Navigation -->
+        <VBox prefWidth="240.0" styleClass="side-nav">
+            <VBox spacing="8.0" VBox.vgrow="ALWAYS">
+                <padding>
+                    <Insets top="20.0" right="15.0" bottom="20.0" left="15.0" />
+                </padding>
+
+                <Button fx:id="btnDashboard" styleClass="nav-button, nav-button-active" text="Tổng Quan" />
+                <Button fx:id="btnEmployee" styleClass="nav-button" text="Nhân viên" />
+                <Button fx:id="btnProduct" styleClass="nav-button" text="Sản Phẩm" />
+                <Button fx:id="btnOrders" styleClass="nav-button" text="Đơn Hàng" />
+                <Button fx:id="btnCustomers" styleClass="nav-button" text="Khách Hàng" />
+                <Button fx:id="btnCategory" styleClass="nav-button" text="Danh Mục" />
+                <Button fx:id="btnWarehouse" styleClass="nav-button" text="Quản lí kho" />
+            </VBox>
+
+            <!-- Version info at bottom -->
+            <Label styleClass="version-label" text="Phiên bản: 1.0.0" VBox.vgrow="NEVER">
+                <VBox.margin>
+                    <Insets bottom="15.0" left="15.0" />
+                </VBox.margin>
+            </Label>
+        </VBox>
+
         <!-- Main Content -->
         <VBox fx:id="mainContentPane" spacing="20" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="20.0" right="20.0" bottom="20.0" left="20.0" />
+            </padding>
+
             <!-- Dashboard Title -->
-            <Label styleClass="dashboard-title" text="Tổng Quan">
-            <VBox.margin>
-               <Insets top="5.0" />
-            </VBox.margin></Label>
+            <Label styleClass="dashboard-title" text="Tổng Quan" />
 
             <!-- Summary Cards -->
             <HBox spacing="20">
-                <VBox styleClass="summary-card" HBox.hgrow="ALWAYS">
+                <VBox styleClass="summary-card, card-revenue" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets top="15.0" right="15.0" bottom="15.0" left="15.0" />
+                    </padding>
                     <Label styleClass="card-title" text="Tổng Doanh Thu" />
+                    <Region VBox.vgrow="ALWAYS" />
                     <Label styleClass="card-value" text="1,234,567 VND" />
                 </VBox>
 
-                <VBox styleClass="summary-card" HBox.hgrow="ALWAYS">
-                    <Label prefHeight="17.0" prefWidth="147.0" styleClass="card-title" text="         Lợi Nhuận" />
+                <VBox styleClass="summary-card, card-profit" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets top="15.0" right="15.0" bottom="15.0" left="15.0" />
+                    </padding>
+                    <Label styleClass="card-title" text="Lợi Nhuận" />
+                    <Region VBox.vgrow="ALWAYS" />
                     <Label styleClass="card-value" text="42" />
                 </VBox>
 
-                <VBox prefHeight="68.0" prefWidth="176.0" styleClass="summary-card" HBox.hgrow="ALWAYS">
-                    <Label prefHeight="17.0" prefWidth="180.0" styleClass="card-title" text="      Số lượng đơn hàng " />
+                <VBox styleClass="summary-card, card-orders" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets top="15.0" right="15.0" bottom="15.0" left="15.0" />
+                    </padding>
+                    <Label styleClass="card-title" text="Số lượng đơn hàng" />
+                    <Region VBox.vgrow="ALWAYS" />
                     <Label styleClass="card-value" text="1,256" />
                 </VBox>
 
-                <VBox styleClass="summary-card" HBox.hgrow="ALWAYS">
+                <VBox styleClass="summary-card, card-product" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets top="15.0" right="15.0" bottom="15.0" left="15.0" />
+                    </padding>
                     <Label styleClass="card-title" text="Sản phẩm bán chạy nhất" />
+                    <Region VBox.vgrow="ALWAYS" />
                     <Label fx:id="topSellingProductLabel" styleClass="card-value" text="Laptop Gaming" />
                 </VBox>
             </HBox>
 
-            <!-- Recent Orders Table -->
-            <TableView prefHeight="608.0" prefWidth="1100.0" styleClass="orders-table">
-                <columns>
-                    <TableColumn prefWidth="169.0" text="Mã Đơn Hàng" />
-                    <TableColumn prefWidth="116.0" text="Khách Hàng" />
-                    <TableColumn prefWidth="144.0" text="Ngày Đặt" />
-                    <TableColumn prefWidth="158.0" text="Tổng Tiền" />
-                    <TableColumn prefWidth="198.0" text="Trạng Thái" />
-                </columns>
-            </TableView>
+            <!-- Recent Orders Section -->
+            <VBox spacing="10" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT">
+                    <Label styleClass="section-title" text="Đơn Hàng Gần Đây" />
+                </HBox>
+
+                <!-- Recent Orders Table -->
+                <TableView styleClass="orders-table" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn prefWidth="150.0" text="Mã Đơn Hàng" />
+                        <TableColumn prefWidth="200.0" text="Khách Hàng" />
+                        <TableColumn prefWidth="150.0" text="Ngày Đặt" />
+                        <TableColumn prefWidth="150.0" text="Tổng Tiền" />
+                        <TableColumn prefWidth="150.0" text="Trạng Thái" />
+                    </columns>
+                </TableView>
+            </VBox>
         </VBox>
     </HBox>
 </VBox>

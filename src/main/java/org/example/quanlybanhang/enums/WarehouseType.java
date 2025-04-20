@@ -2,8 +2,7 @@ package org.example.quanlybanhang.enums;
 
 public enum WarehouseType {
     NHAP_KHO("Nhập Kho"),
-    XUAT_KHO("Xuất Kho"),
-    KIEM_KHO("Kiểm Kho");
+    XUAT_KHO("Xuất Kho");
 
     private final String value;
 
