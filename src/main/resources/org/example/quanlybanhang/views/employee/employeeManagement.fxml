@@ -22,7 +22,7 @@
         <HBox alignment="CENTER_LEFT" spacing="10">
             <Label fx:id="titleLabel" styleClass="dashboard-title" text="Quản Lý Nhân Viên" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="addEmployeeButton" styleClass="add-button" text="Thêm Nhân Viên" />
+            <Button fx:id="addEmployeeButton" styleClass="save-button" text="Thêm Nhân Viên" />
         </HBox>
 
         <!-- Search Area -->

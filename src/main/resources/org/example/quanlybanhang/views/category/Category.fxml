@@ -28,7 +28,7 @@
 
                 <HBox spacing="10.0">
                     <TextField fx:id="searchField" styleClass="search-field" promptText="Tìm kiếm danh mục" HBox.hgrow="ALWAYS" />
-                    <Button fx:id="addCategoryButton" style="-fx-background-color: #459CD3; -fx-text-fill: white;" text="Thêm Danh Mục" />
+                    <Button fx:id="addCategoryButton" styleClass="save-button" text="Thêm Danh Mục" />
                 </HBox>
 
                 <TableView fx:id="categoryTable"  VBox.vgrow="ALWAYS">

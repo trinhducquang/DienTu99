@@ -19,10 +19,11 @@ import org.example.quanlybanhang.security.auth.AuthService;
 import org.example.quanlybanhang.security.auth.UserSession;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 import org.example.quanlybanhang.utils.ThemeManager;
-import javafx.application.Platform;
+
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.Objects;
 
 public class LoginController {
 
@@ -62,14 +63,9 @@ public class LoginController {
     }
 
     private void toggleTheme() {
-        // Chuyển đổi theme
         Scene scene = themeButton.getScene();
         ThemeManager.toggleTheme(scene);
-
-        // Cập nhật lại icon
         updateThemeIcon();
-
-        // Thêm hiệu ứng khi chuyển đổi
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), themeIcon);
         scaleTransition.setFromX(0.8);
         scaleTransition.setFromY(0.8);
@@ -87,7 +83,7 @@ public class LoginController {
         }
 
         try {
-            Image image = new Image(getClass().getResourceAsStream(iconPath));
+            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath)));
             themeIcon.setImage(image);
         } catch (Exception e) {
             System.err.println("Không thể tải icon theme: " + e.getMessage());
@@ -99,16 +95,12 @@ public class LoginController {
         // Existing code remains the same
         String tenDangNhap = tenDangNhapField.getText();
         String matKhau = matKhauField.getText();
-
-        // Hiệu ứng khi nhấn nút
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), dangNhapButton);
         scaleTransition.setToX(0.95);
         scaleTransition.setToY(0.95);
         scaleTransition.setAutoReverse(true);
         scaleTransition.setCycleCount(2);
         scaleTransition.play();
-
-        // Xác thực người dùng
         Connection conn = DatabaseConnection.getConnection();
         UserDAO userDAO = new UserDAO(conn);
         AuthService authService = new AuthService(userDAO);
@@ -116,8 +108,6 @@ public class LoginController {
 
         if (user != null) {
             UserSession.setCurrentUser(user);
-
-            // Hiệu ứng mờ dần trước khi chuyển màn hình
             FadeTransition fadeOut = new FadeTransition(Duration.millis(500), dangNhapButton.getScene().getRoot());
             fadeOut.setFromValue(1.0);
             fadeOut.setToValue(0.0);
@@ -180,8 +170,8 @@ public class LoginController {
 
         try {
             DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.getStylesheets().add(getClass()
-                    .getResource("/org/example/quanlybanhang/views/css/dialog.css").toExternalForm());
+            dialogPane.getStylesheets().add(Objects.requireNonNull(getClass()
+                    .getResource("/org/example/quanlybanhang/views/css/dialog.css")).toExternalForm());
             dialogPane.getStyleClass().add("dialog-pane");
         } catch (Exception e) {
             System.err.println("Không thể tải file CSS: " + e.getMessage());

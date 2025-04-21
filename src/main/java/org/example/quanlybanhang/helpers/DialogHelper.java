@@ -16,6 +16,7 @@ import org.example.quanlybanhang.controller.order.OrderDetailsDialogController;
 import org.example.quanlybanhang.controller.warehouse.WarehouseImportDialog;
 import org.example.quanlybanhang.dto.productDTO.CartItem;
 import org.example.quanlybanhang.utils.AlertUtils;
+import org.example.quanlybanhang.utils.ThemeManager;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -27,7 +28,6 @@ public class DialogHelper {
         showDialog(fxmlPath, title, ownerStage, (RefreshableView) null);
     }
 
-    // Simplified showDialog method to avoid reflection issues
     public static void showDialog(String fxmlPath, String title, Stage ownerStage, RefreshableView parentController) {
         try {
             System.out.println("Bắt đầu mở dialog: " + fxmlPath);
@@ -37,12 +37,10 @@ public class DialogHelper {
             Object controller = loader.getController();
             System.out.println("Đã load controller: " + controller.getClass().getName());
 
-            // Kiểm tra controller cụ thể và trực tiếp gán parentController
             if (controller instanceof ProductDialogController) {
                 System.out.println("Đặt parentController cho ProductDialogController");
                 ((ProductDialogController) controller).setParentController(parentController);
             } else {
-                // Thử sử dụng phương thức setParentController nếu có
                 try {
                     Method setParentControllerMethod = controller.getClass().getMethod("setParentController", RefreshableView.class);
                     setParentControllerMethod.invoke(controller, parentController);
@@ -62,14 +60,13 @@ public class DialogHelper {
             }
 
             Scene scene = new Scene(root);
+            ThemeManager.applyTheme(scene); // <<<< THÊM DÒNG NÀY
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
 
-            // Đặt sự kiện close để refresh sau khi dialog đóng
             if (parentController != null) {
                 dialogStage.setOnHidden(event -> {
                     System.out.println("Dialog đóng, thực hiện refresh view");
-                    // Đảm bảo refresh chạy trên UI thread và sau khi dialog đã đóng hoàn toàn
                     Platform.runLater(() -> {
                         try {
                             System.out.println("Đang thực hiện refresh...");
@@ -83,7 +80,6 @@ public class DialogHelper {
                 });
             }
 
-            // Hiển thị dialog và đợi
             System.out.println("Hiển thị dialog và đợi");
             dialogStage.showAndWait();
             System.out.println("Dialog đã đóng");
@@ -147,6 +143,7 @@ public class DialogHelper {
             }
 
             Scene scene = new Scene(root);
+            ThemeManager.applyTheme(scene); // <<<< THÊM DÒNG NÀY
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
 
@@ -160,17 +157,23 @@ public class DialogHelper {
             AlertUtils.showError("Lỗi", "Không thể mở dialog: " + e.getMessage());
         }
     }
+
     public static void showWarehouseExportDialog(String fxmlPath, String title, Integer orderId, Stage ownerStage, RefreshableView refreshHandler) {
         try {
             FXMLLoader loader = new FXMLLoader(DialogHelper.class.getResource(fxmlPath));
             Parent root = loader.load();
             WarehouseImportDialog controller = loader.getController();
             controller.setOrderForExport(orderId);
+
             Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(ownerStage);
             dialogStage.setTitle(title);
-            dialogStage.setScene(new Scene(root));
+
+            Scene scene = new Scene(root);
+            ThemeManager.applyTheme(scene); // <<<< THÊM DÒNG NÀY
+            dialogStage.setScene(scene);
+
             dialogStage.setOnHidden(e -> {
                 if (refreshHandler != null) {
                     refreshHandler.refresh();

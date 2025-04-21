@@ -43,7 +43,7 @@
                 <DatePicker fx:id="fromDatePicker" promptText="Từ ngày" />
                 <DatePicker fx:id="toDatePicker" promptText="Đến ngày" />
                 <ComboBox fx:id="statusFilterComboBox" promptText="Trạng Thái" />
-                <Button fx:id="addOrderButton" text="Thêm Đơn Hàng" />
+                <Button fx:id="addOrderButton" styleClass="save-button" text="Thêm Đơn Hàng" />
             </HBox>
 
             <TableView fx:id="ordersTable" prefHeight="558.0" prefWidth="1300.0">

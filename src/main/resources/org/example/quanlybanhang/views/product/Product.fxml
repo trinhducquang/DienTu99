@@ -23,8 +23,8 @@
             <!-- Search and Action Area -->
             <HBox alignment="CENTER_LEFT" spacing="10">
                 <TextField fx:id="searchField" promptText="Tìm kiếm sản phẩm" styleClass="search-field" HBox.hgrow="ALWAYS" />
-                <ComboBox fx:id="categoryFilter" promptText="Danh Mục" styleClass="category-filter" />
-                <Button fx:id="addProductButton" styleClass="add-button" text="Thêm Sản Phẩm" />
+                <ComboBox fx:id="categoryFilter" promptText="Danh Mục"  />
+                <Button fx:id="addProductButton" styleClass="save-button" text="Thêm Sản Phẩm" />
             </HBox>
 
             <!-- Products Table -->

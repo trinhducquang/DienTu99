@@ -12,7 +12,7 @@
 
 <VBox prefHeight="747.0" prefWidth="1174.0" spacing="15" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.customer.CustomerController">
 
-    <VBox prefHeight="27.0" prefWidth="0.0" styleClass="page-header">
+    <VBox prefHeight="27.0" prefWidth="0.0" styleClass="save-button">
         <Label styleClass="dashboard-title" text="Quản Lý Khách Hàng" >
          <VBox.margin>
             <Insets left="13.0" top="9.0" />
@@ -21,7 +21,7 @@
 
     <HBox prefHeight="55.0" prefWidth="758.0" spacing="10.0" styleClass="search-container">
         <TextField fx:id="searchField" prefHeight="35.0" prefWidth="472.0" promptText="Tìm kiếm khách hàng" styleClass="search-field" HBox.hgrow="ALWAYS" />
-        <Button fx:id="addCustomerButton" styleClass="add-button" text="Thêm Khách Hàng" />
+        <Button fx:id="addCustomerButton" styleClass="save-button" text="Thêm Khách Hàng" />
       <VBox.margin>
          <Insets />
       </VBox.margin>

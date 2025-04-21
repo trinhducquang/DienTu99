@@ -59,7 +59,7 @@
                                     <children>
                                         <HBox alignment="CENTER_LEFT" spacing="10.0">
                                             <children>
-                                                <Button fx:id="btnCreateTransaction" mnemonicParsing="false" prefHeight="37.0" prefWidth="256.0" style="-fx-background-color: #2196F3; -fx-text-fill: white;" text="Nhập Kho / Xuất Kho">
+                                                <Button fx:id="btnCreateTransaction" mnemonicParsing="false" prefHeight="37.0" prefWidth="256.0" styleClass="save-button" text="Nhập Kho / Xuất Kho">
                                                     <padding>
                                                         <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
                                                     </padding>
