@@ -33,7 +33,6 @@ public class AdminController {
 
 
     // Version information
-    private static final String APP_VERSION = "1.0.0";
     private final OrderDAO orderDAO = new OrderDAO();
     private final WarehouseDAO warehouseDAO = new WarehouseDAO();
     private Button currentActiveButton;
@@ -41,13 +40,11 @@ public class AdminController {
     @FXML
     private void initialize() {
         setupNavigation();
-        setupUIEffects();
         logoutButton.setOnAction(event -> LogoutHandler.handleLogout(logoutButton));
         currentActiveButton = btnDashboard;
         updateTopSellingProduct();
         updateCompletedOrdersCount();
         updateAnnualProfit();
-        setupOrdersTableStatusColumn();
     }
 
     private void updateAnnualProfit() {
@@ -124,20 +121,6 @@ public class AdminController {
         currentActiveButton = button;
     }
 
-    private void setupUIEffects() {
-        String normalLogoutStyle = "-fx-background-color: white; -fx-text-fill: #2196F3; -fx-background-radius: 20; -fx-font-weight: bold;";
-        String hoverLogoutStyle = "-fx-background-color: white; -fx-text-fill: #1976D2; -fx-background-radius: 20; -fx-font-weight: bold;";
-        UIEffects.applyHoverEffect(logoutButton, normalLogoutStyle, hoverLogoutStyle);
-        for (Button button : Arrays.asList(btnEmployee, btnProduct, btnOrders, btnCustomers, btnCategory, btnWarehouse)) {
-            if (button != currentActiveButton) {
-                String normalNavStyle = "-fx-background-color: transparent; -fx-text-fill: #212121; -fx-padding: 15 15; -fx-background-radius: 8;";
-                String hoverNavStyle = "-fx-background-color: #E0E0E0; -fx-text-fill: #212121; -fx-padding: 15 15; -fx-background-radius: 8;";
-                UIEffects.applyHoverEffect(button, normalNavStyle, hoverNavStyle);
-            }
-        }
-    }
-
-
     private void updateTopSellingProduct() {
         try {
             List<WarehouseDTO> allTransactions = warehouseDAO.getAllWarehouseDetails();
@@ -162,7 +145,7 @@ public class AdminController {
             List<WarehouseDTO> topExportProducts = new ArrayList<>(productExportMap.values());
             topExportProducts.sort((p1, p2) -> Integer.compare(p2.getQuantity(), p1.getQuantity()));
             if (!topExportProducts.isEmpty()) {
-                WarehouseDTO topProduct = topExportProducts.get(0);
+                WarehouseDTO topProduct = topExportProducts.getFirst();
                 if (topSellingProductLabel != null) {
                     topSellingProductLabel.setText(topProduct.getProductName());
                 }
@@ -171,40 +154,5 @@ public class AdminController {
             System.err.println("Lỗi khi cập nhật sản phẩm bán chạy nhất: " + e.getMessage());
             e.printStackTrace();
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private void setupOrdersTableStatusColumn() {
-        if (ordersTable != null && ordersTable.getColumns().size() >= 5) {
-            TableColumn<Object, String> statusColumn = (TableColumn<Object, String>) ordersTable.getColumns().get(4);
-
-            statusColumn.setCellFactory(column -> new TableCell<Object, String>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty);
-
-                    getStyleClass().removeAll("status-pending", "status-completed", "status-cancelled");
-
-                    if (item == null || empty) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        setText(item);
-
-                        if (item.equalsIgnoreCase("Đang xử lý") || item.equalsIgnoreCase("Pending")) {
-                            getStyleClass().add("status-pending");
-                        } else if (item.equalsIgnoreCase("Hoàn thành") || item.equalsIgnoreCase("Completed")) {
-                            getStyleClass().add("status-completed");
-                        } else if (item.equalsIgnoreCase("Đã hủy") || item.equalsIgnoreCase("Cancelled")) {
-                            getStyleClass().add("status-cancelled");
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    public static String getAppVersion() {
-        return APP_VERSION;
     }
 }

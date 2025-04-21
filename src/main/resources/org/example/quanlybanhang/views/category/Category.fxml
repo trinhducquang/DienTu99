@@ -15,9 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="747.0" prefWidth="1275.0" stylesheets="@../css/dashboard.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.category.CategoryController">
+<BorderPane prefHeight="747.0" prefWidth="1275.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.category.CategoryController">
     <center>
-        <AnchorPane style="-fx-background-color: white;">
+        <AnchorPane>
             <VBox spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
 
                 <Label styleClass="dashboard-title" text="Quản Lý Danh Mục">
@@ -27,11 +27,11 @@
                 </Label>
 
                 <HBox spacing="10.0">
-                    <TextField fx:id="searchField" promptText="Tìm kiếm danh mục" HBox.hgrow="ALWAYS" />
+                    <TextField fx:id="searchField" styleClass="search-field" promptText="Tìm kiếm danh mục" HBox.hgrow="ALWAYS" />
                     <Button fx:id="addCategoryButton" style="-fx-background-color: #459CD3; -fx-text-fill: white;" text="Thêm Danh Mục" />
                 </HBox>
 
-                <TableView fx:id="categoryTable" VBox.vgrow="ALWAYS">
+                <TableView fx:id="categoryTable"  VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="idColumn" prefWidth="50" text="ID" />
                         <TableColumn fx:id="categoryColum" maxWidth="179.0" prefWidth="176.99996948242188" text="Kiểu Danh Mục" />
@@ -51,25 +51,21 @@
     </center>
 
     <right>
-        <AnchorPane prefWidth="320" style="-fx-background-color: white; -fx-border-color: #EEEEEE; -fx-border-width: 0 0 0 1;">
+        <AnchorPane prefWidth="320" styleClass="specs-box">
             <children>
-                <Label layoutX="20" layoutY="32" style="-fx-font-size: 18px;" text="Chi Tiết Danh Mục">
-                    <font>
-                        <Font name="System Bold" size="18.0" />
-                    </font>
-                </Label>
+                <Label layoutX="20" layoutY="32" styleClass="section-title" text="Chi Tiết Danh Mục" />
 
-                <Label layoutX="20.0" layoutY="88.0" text="Nhóm Sản Phẩm" />
-                <TextField fx:id="nameField" layoutX="20.0" layoutY="128.0" prefHeight="59.0" prefWidth="280" />
+                <Label layoutX="20.0" layoutY="88.0" styleClass="form-label" text="Nhóm Sản Phẩm" />
+                <TextField fx:id="nameField" layoutX="20.0" layoutY="128.0" prefHeight="59.0" prefWidth="280" styleClass="form-input" />
 
-                <Label layoutX="23.0" layoutY="205.0" text="Mô tả:" />
-                <TextArea fx:id="descriptionArea" layoutX="21.0" layoutY="231.0" prefHeight="163.0" prefWidth="280.0" wrapText="true" />
+                <Label layoutX="23.0" layoutY="205.0" styleClass="form-label" text="Mô tả:" />
+                <TextArea fx:id="descriptionArea" layoutX="21.0" layoutY="231.0" prefHeight="163.0" prefWidth="280.0" styleClass="form-input" wrapText="true" />
 
-                <Label layoutX="23.0" layoutY="415.0" text="Dòng sản phẩm" />
-                <ComboBox fx:id="childCategoryCombo" layoutX="21.0" layoutY="458.0" prefHeight="35.0" prefWidth="280" />
-                <RadioButton fx:id="radioParent" layoutX="23.0" layoutY="518.0" mnemonicParsing="false" text="Danh mục cha" />
+                <Label layoutX="23.0" layoutY="415.0" styleClass="form-label" text="Dòng sản phẩm" />
+                <ComboBox fx:id="childCategoryCombo" layoutX="21.0" layoutY="458.0" prefHeight="35.0" prefWidth="280" styleClass="form-input" />
+                <RadioButton fx:id="radioParent" layoutX="23.0" layoutY="518.0" mnemonicParsing="false"  text="Danh mục cha" />
                 <RadioButton fx:id="radioChild" layoutX="177.0" layoutY="518.0" mnemonicParsing="false" text="Danh mục con" />
-                <Button fx:id="saveButton" layoutX="21.0" layoutY="557.0" prefHeight="40.0" prefWidth="281.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Lưu" />
+                <Button fx:id="saveButton" layoutX="21.0" layoutY="557.0" prefHeight="40.0" prefWidth="281.0" styleClass="save-button" text="Lưu" />
             </children>
         </AnchorPane>
     </right>

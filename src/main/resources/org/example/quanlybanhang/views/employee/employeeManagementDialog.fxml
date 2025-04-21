@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox alignment="TOP_CENTER" prefHeight="580.0" prefWidth="550.0" spacing="15" stylesheets="@../css/dashboard.css"
+<VBox alignment="TOP_CENTER" prefHeight="580.0" prefWidth="550.0" spacing="15" stylesheets="@../css/light_Mode.css"
       xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.example.quanlybanhang.controller.employee.EmployeeManagementDialogController">
 

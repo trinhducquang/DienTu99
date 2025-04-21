@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -102,5 +101,14 @@
                 </children>
             </StackPane>
         </HBox>
+        <Button fx:id="themeButton" maxHeight="66.0" maxWidth="67.0" mnemonicParsing="false" prefHeight="66.0" prefWidth="67.0" style="-fx-max-width: 40; -fx-max-height: 40; -fx-background-color: white; -fx-padding: 0;" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="7.0">
+         <graphic>
+                <ImageView fx:id="themeIcon" fitHeight="65.0" fitWidth="64.0" preserveRatio="true">
+                    <image>
+                        <Image url="@../../images/dark.png" />
+                    </image>
+                </ImageView>
+         </graphic>
+        </Button>
     </children>
 </AnchorPane>

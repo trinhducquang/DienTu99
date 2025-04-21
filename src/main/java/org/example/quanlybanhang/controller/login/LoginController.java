@@ -2,20 +2,24 @@ package org.example.quanlybanhang.controller.login;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import org.example.quanlybanhang.controller.ui.animation.UIEffects;
 import org.example.quanlybanhang.dao.UserDAO;
 import org.example.quanlybanhang.model.User;
 import org.example.quanlybanhang.security.auth.AuthService;
 import org.example.quanlybanhang.security.auth.UserSession;
 import org.example.quanlybanhang.utils.DatabaseConnection;
+import org.example.quanlybanhang.utils.ThemeManager;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -31,26 +35,68 @@ public class LoginController {
     @FXML
     private Button dangNhapButton;
 
+    @FXML
+    private Button themeButton;
+
+    @FXML
+    private ImageView themeIcon;
+
     private final String VERSION = "1.0.0";
 
     @FXML
     private void initialize() {
-        // Áp dụng hiệu ứng hover cho nút đăng nhập
         UIEffects.applyHoverEffect(
                 dangNhapButton,
                 "-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 12px;",
                 "-fx-background-color: #1976D2; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 12px;"
         );
-
-        // Áp dụng hiệu ứng focus cho các trường nhập liệu
         UIEffects.applyFocusEffect(tenDangNhapField);
         UIEffects.applyFocusEffect(matKhauField);
+        updateThemeIcon();
+        themeButton.setOnAction(event -> toggleTheme());
+        Platform.runLater(() -> {
+            if (themeButton.getScene() != null) {
+                ThemeManager.applyTheme(themeButton.getScene());
+            }
+        });
+    }
 
-        System.out.println("Ứng dụng Điện Tử 99 - Phiên bản " + VERSION + " đã khởi động");
+    private void toggleTheme() {
+        // Chuyển đổi theme
+        Scene scene = themeButton.getScene();
+        ThemeManager.toggleTheme(scene);
+
+        // Cập nhật lại icon
+        updateThemeIcon();
+
+        // Thêm hiệu ứng khi chuyển đổi
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), themeIcon);
+        scaleTransition.setFromX(0.8);
+        scaleTransition.setFromY(0.8);
+        scaleTransition.setToX(1.0);
+        scaleTransition.setToY(1.0);
+        scaleTransition.play();
+    }
+
+    private void updateThemeIcon() {
+        String iconPath;
+        if (ThemeManager.isDarkMode()) {
+            iconPath = "/org/example/quanlybanhang/images/light.png";
+        } else {
+            iconPath = "/org/example/quanlybanhang/images/dark.png";
+        }
+
+        try {
+            Image image = new Image(getClass().getResourceAsStream(iconPath));
+            themeIcon.setImage(image);
+        } catch (Exception e) {
+            System.err.println("Không thể tải icon theme: " + e.getMessage());
+        }
     }
 
     @FXML
     private void xuLyDangNhap() {
+        // Existing code remains the same
         String tenDangNhap = tenDangNhapField.getText();
         String matKhau = matKhauField.getText();
 
@@ -102,6 +148,7 @@ public class LoginController {
 
             root.setOpacity(0);
             Scene scene = new Scene(root);
+            ThemeManager.applyTheme(scene);
             stage.setScene(scene);
             stage.setMaximized(true);
 

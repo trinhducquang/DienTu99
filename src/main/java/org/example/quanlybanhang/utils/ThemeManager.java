@@ -5,8 +5,8 @@ import java.util.prefs.Preferences;
 
 public class ThemeManager {
     private static final String DARK_MODE_KEY = "darkMode";
-    private static final String LIGHT_THEME = "/org/example/quanlybanhang/views/css/light-theme.css";
-    private static final String DARK_THEME = "/org/example/quanlybanhang/views/css/dark-theme.css";
+    private static final String LIGHT_THEME = "/org/example/quanlybanhang/views/css/light_Mode.css";
+    private static final String DARK_THEME = "/org/example/quanlybanhang/views/css/dark_Mode.css";
 
     private static Preferences prefs = Preferences.userNodeForPackage(ThemeManager.class);
 
