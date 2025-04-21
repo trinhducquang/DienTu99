@@ -60,7 +60,7 @@ public class DialogHelper {
             }
 
             Scene scene = new Scene(root);
-            ThemeManager.applyTheme(scene); // <<<< THÊM DÒNG NÀY
+            ThemeManager.applyTheme(scene);
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
 
@@ -171,7 +171,7 @@ public class DialogHelper {
             dialogStage.setTitle(title);
 
             Scene scene = new Scene(root);
-            ThemeManager.applyTheme(scene); // <<<< THÊM DÒNG NÀY
+            ThemeManager.applyTheme(scene);
             dialogStage.setScene(scene);
 
             dialogStage.setOnHidden(e -> {

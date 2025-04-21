@@ -10,7 +10,6 @@ public class ProductDisplayManager {
 
     private final GridPane gridPane;
     private final ObservableList<Product> productList;
-    private final CartManager cartManager;
     private final ProductCardFactory productCardFactory;
 
     public ProductDisplayManager(GridPane gridPane,
@@ -18,7 +17,6 @@ public class ProductDisplayManager {
                                  CartManager cartManager) {
         this.gridPane = gridPane;
         this.productList = productList;
-        this.cartManager = cartManager;
         this.productCardFactory = new ProductCardFactory(cartManager);
     }
 

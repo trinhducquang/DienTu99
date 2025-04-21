@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
-<?import java.net.URL?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -21,11 +20,11 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="800.0" prefWidth="1090.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../css/light_Mode.css" fx:controller="org.example.quanlybanhang.controller.sale.SaleController">
+<StackPane  prefHeight="800.0" prefWidth="1090.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.sale.SaleController">
 
     <BorderPane prefHeight="479.0" prefWidth="1090.0">
         <top>
-            <HBox alignment="CENTER_LEFT" prefWidth="1090.0" spacing="20" style="-fx-background-color: #3498db;">
+            <HBox alignment="CENTER_LEFT" prefWidth="1090.0" spacing="20" styleClass="header-box">
                 <padding>
                     <Insets bottom="10" left="15" right="15" top="10" />
                 </padding>
@@ -51,14 +50,14 @@
                 </padding>
 
                 <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label prefHeight="27.0" prefWidth="268.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Danh Sách Sản Phẩm" />
+                    <Label prefHeight="27.0" prefWidth="268.0" style="-fx-font-size: 18; -fx-font-weight: bold;" styleClass="product-list-title" text="Danh Sách Sản Phẩm" />
                     <Region prefHeight="64.0" prefWidth="126.0" HBox.hgrow="ALWAYS" />
                      <HBox alignment="CENTER" prefHeight="64.0" prefWidth="416.0" spacing="15" styleClass="price-range-container">
                          <padding>
                              <Insets bottom="10" left="15" right="15" top="10" />
                          </padding>
    
-                         <Label prefHeight="19.0" prefWidth="102.0" styleClass="label-title" text="Khoảng giá:">
+                         <Label prefHeight="19.0" prefWidth="102.0" styleClass="price-range-text" text="Khoảng giá:">
                              <font>
                                  <Font name="System Bold" size="13" />
                              </font>
@@ -66,7 +65,7 @@
    
                          <VBox spacing="5" HBox.hgrow="ALWAYS">
                              <HBox alignment="CENTER_LEFT" spacing="5">
-                                 <Label fx:id="minPriceLabel" minWidth="90" prefHeight="20.0" prefWidth="126.0" styleClass="price-label" text="0đ" />
+                                 <Label fx:id="minPriceLabel" minWidth="90" prefHeight="20.0" prefWidth="126.0" styleClass="price-range-text" text="0đ" />
                              </HBox>
    
                              <Slider fx:id="minPriceSlider" max="50000000" min="0" styleClass="price-slider" value="0" />
@@ -74,13 +73,12 @@
    
                          <VBox spacing="5" HBox.hgrow="ALWAYS">
                              <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="0.0" spacing="5">
-                                 <Label fx:id="maxPriceLabel" minWidth="90" prefHeight="20.0" prefWidth="124.0" styleClass="price-label" text="900.000.000">
+                                 <Label fx:id="maxPriceLabel" minWidth="90" prefHeight="20.0" prefWidth="124.0" styleClass="price-range-text" text="900.000.000">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin></Label>
                              </HBox>
-   
-                             <Slider fx:id="maxPriceSlider" max="900000000" min="0" styleClass="price-slider" value="900000000" />
+                             <Slider fx:id="maxPriceSlider" max="900000000"  value="900000000"  />
                          </VBox>
                      </HBox>
                     <ComboBox fx:id="categoryFilter" prefHeight="30.0" prefWidth="201.0" promptText="Danh mục">

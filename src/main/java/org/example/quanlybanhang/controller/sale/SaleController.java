@@ -5,15 +5,12 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.example.quanlybanhang.controller.sale.manager.CartAnimationManager;
+import org.example.quanlybanhang.controller.ui.animation.CartAnimationUI;
 import org.example.quanlybanhang.controller.sale.manager.CartManager;
 import org.example.quanlybanhang.controller.sale.manager.PriceFilterManager;
 import org.example.quanlybanhang.controller.sale.manager.ProductDisplayManager;
@@ -28,7 +25,6 @@ import org.example.quanlybanhang.service.ProductService;
 import org.example.quanlybanhang.service.SearchService;
 import org.example.quanlybanhang.utils.PaginationUtils;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,7 +73,7 @@ public class SaleController {
     private CartManager cartManager;
     private ProductDisplayManager displayManager;
     private PriceFilterManager priceFilterManager;
-    private CartAnimationManager animationManager;
+    private CartAnimationUI animationManager;
     private ProductService productService;
     private CartService cartService;
     private CategoryService categoryService;
@@ -107,7 +103,7 @@ public class SaleController {
                 filteredProducts, allProducts,
                 this::resetPagination
         );
-        animationManager = new CartAnimationManager(cartPane, cartBox);
+        animationManager = new CartAnimationUI(cartPane, cartBox);
     }
 
     private void initComponents() {

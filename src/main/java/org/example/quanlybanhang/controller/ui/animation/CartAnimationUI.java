@@ -1,11 +1,11 @@
-package org.example.quanlybanhang.controller.sale.manager;
+package org.example.quanlybanhang.controller.ui.animation;
 
 import javafx.animation.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
-public class CartAnimationManager {
+public class CartAnimationUI {
 
     private static final int CART_WIDTH = 300;
     private static final Duration ANIMATION_DURATION = Duration.millis(150);
@@ -16,7 +16,7 @@ public class CartAnimationManager {
     private Timeline slideInTimeline;
     private Timeline slideOutTimeline;
 
-    public CartAnimationManager(StackPane cartPane, VBox cartBox) {
+    public CartAnimationUI(StackPane cartPane, VBox cartBox) {
         this.cartPane = cartPane;
         this.cartBox = cartBox;
     }

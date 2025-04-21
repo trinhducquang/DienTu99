@@ -8,11 +8,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.example.quanlybanhang.dto.productDTO.ProductDisplayInfoDTO;
-import org.example.quanlybanhang.controller.factory.CartItemFactory;
+import org.example.quanlybanhang.factory.CartItemFactory;
 import org.example.quanlybanhang.model.Product;
 import org.example.quanlybanhang.dto.productDTO.CartItem;
 import org.example.quanlybanhang.service.CartService;
-import org.example.quanlybanhang.utils.MoneyUtils;
 
 import java.math.BigDecimal;
 

@@ -1,4 +1,4 @@
-package org.example.quanlybanhang.controller.factory;
+package org.example.quanlybanhang.factory;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

@@ -135,7 +135,6 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
             Stage stage = (Stage) tenDangNhapField.getScene().getWindow();
-
             root.setOpacity(0);
             Scene scene = new Scene(root);
             ThemeManager.applyTheme(scene);

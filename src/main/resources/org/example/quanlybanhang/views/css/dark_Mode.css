@@ -1029,3 +1029,56 @@
     -fx-pref-height: 35px;
 }
 
+/* Tab Pane Styling */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: -fx-secondary;
+    -fx-effect: null;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #181825;
+    -fx-background-radius: 5 5 0 0;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: -fx-primary;
+}
+
+.tab-pane .tab .tab-label {
+    -fx-text-fill: -fx-text-dark;
+    -fx-font-size: 14px;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: -fx-text-light;
+    -fx-font-weight: bold;
+}
+
+.tab-pane .tab-content-area {
+    -fx-background-color: -fx-secondary;
+}
+
+/* Tab-pane border */
+.tab-pane {
+    -fx-tab-max-height: 30px;
+    -fx-tab-max-width: 160px;
+    -fx-tab-min-height: 30px;
+    -fx-border-color: -fx-grey;
+    -fx-border-width: 0;
+}
+
+.dark-mode-text {
+    -fx-text-fill: -fx-text-light;
+}
+
+.product-list-title {
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+}
+
+.price-range-text {
+    -fx-text-fill: -fx-text-light;
+}
+
+
