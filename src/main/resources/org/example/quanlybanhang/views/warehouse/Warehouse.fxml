@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.scene.layout.StackPane?>
-<BorderPane prefHeight="747.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.warehouse.WarehouseController">
+<BorderPane stylesheets="@../css/dashboard.css" prefHeight="747.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.warehouse.WarehouseController">
     <center>
         <BorderPane>
             <top>
@@ -28,7 +28,7 @@
                         <Insets bottom="10.0" right="20.0" top="20.0" />
                     </padding>
                     <children>
-                        <Label prefHeight="35.0" prefWidth="157.0" text="Quản Lý Kho" textFill="#00c3ff">
+                        <Label styleClass="dashboard-title" prefHeight="35.0" prefWidth="157.0" text="Quản Lý Kho" >
                             <font>
                                 <Font name="System Bold" size="24.0" />
                             </font>

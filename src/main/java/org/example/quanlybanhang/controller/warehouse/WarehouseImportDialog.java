@@ -399,6 +399,7 @@ public class WarehouseImportDialog {
                     addProductButton.setManaged(false);
                 }
             }
+            updateTransactionInfo();
             loadOrderDetails(orderId);
             noteTextArea.setText("Xuất kho cho đơn hàng #" + orderId);
         }

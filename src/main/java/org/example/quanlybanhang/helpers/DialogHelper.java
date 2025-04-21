@@ -17,6 +17,7 @@ import org.example.quanlybanhang.controller.warehouse.WarehouseImportDialog;
 import org.example.quanlybanhang.dto.productDTO.CartItem;
 import org.example.quanlybanhang.utils.AlertUtils;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.function.Consumer;
 
@@ -159,44 +160,27 @@ public class DialogHelper {
             AlertUtils.showError("Lỗi", "Không thể mở dialog: " + e.getMessage());
         }
     }
-
-    public static void showWarehouseExportDialog(String fxmlPath, String title, Integer orderId, Stage ownerStage, RefreshableView parentController) {
+    public static void showWarehouseExportDialog(String fxmlPath, String title, Integer orderId, Stage ownerStage, RefreshableView refreshHandler) {
         try {
             FXMLLoader loader = new FXMLLoader(DialogHelper.class.getResource(fxmlPath));
             Parent root = loader.load();
-
             WarehouseImportDialog controller = loader.getController();
             controller.setOrderForExport(orderId);
-
             Stage dialogStage = new Stage();
-            dialogStage.setTitle(title);
-            dialogStage.initStyle(StageStyle.UTILITY);
             dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(ownerStage);
+            dialogStage.setTitle(title);
+            dialogStage.setScene(new Scene(root));
+            dialogStage.setOnHidden(e -> {
+                if (refreshHandler != null) {
+                    refreshHandler.refresh();
+                }
+            });
 
-            if (ownerStage != null) {
-                dialogStage.initOwner(ownerStage);
-            }
-
-            Scene scene = new Scene(root);
-            dialogStage.setScene(scene);
-            dialogStage.setResizable(false);
-
-            if (parentController != null) {
-                dialogStage.setOnHidden(event -> {
-                    Platform.runLater(() -> {
-                        try {
-                            parentController.refresh();
-                        } catch (Exception e) {
-                            System.err.println("Lỗi khi refresh: " + e.getMessage());
-                            e.printStackTrace();
-                        }
-                    });
-                });
-            }
             dialogStage.showAndWait();
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            AlertUtils.showError("Lỗi", "Không thể mở dialog: " + e.getMessage());
+            AlertUtils.showError("Lỗi", "Không thể mở cửa sổ xuất kho: " + e.getMessage());
         }
     }
 }

@@ -1,0 +1,496 @@
+/* Dashboard Stylesheet - Merged File */
+
+/* Color Variables */
+* {
+    -fx-primary: #2196F3;
+    -fx-primary-light: #64B5F6;
+    -fx-primary-dark: #1976D2;
+    -fx-secondary: #FFFFFF;
+    -fx-grey-light: #F5F5F5;
+    -fx-grey: #E0E0E0;
+    -fx-text-dark: #212121;
+    -fx-text-light: #FFFFFF;
+    -fx-error: #F44336;
+}
+
+/* General Setup */
+.root {
+    -fx-background-color: white;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+/* Top Navigation Bar */
+.top-nav {
+    -fx-background-color: -fx-primary;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
+}
+
+.title-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.logout-button {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-primary;
+    -fx-background-radius: 20;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.logout-button:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
+}
+
+/* Side Navigation */
+.side-nav {
+    -fx-background-color: -fx-grey-light;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 5, 0, 2, 0);
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-dark;
+    -fx-font-size: 14px;
+    -fx-padding: 15 15;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER_LEFT;
+    -fx-min-width: 210;
+    -fx-pref-width: 210;
+    -fx-max-width: 210;
+    -fx-min-height: 45;
+}
+
+.nav-button:hover {
+    -fx-background-color: derive(-fx-grey-light, -5%);
+}
+
+.nav-button-active {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Version Label */
+.version-label {
+    -fx-text-fill: #757575;
+    -fx-font-size: 12px;
+    -fx-opacity: 0.8;
+}
+
+/* Dashboard Title */
+.dashboard-title {
+    -fx-font-size: 24px;
+    -fx-text-fill: -fx-primary-dark;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-text-fill: -fx-primary-dark;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 5 0;
+    -fx-border-color: -fx-grey;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Summary Cards */
+.summary-card {
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 4);
+    -fx-min-height: 120;
+}
+
+.card-revenue {
+    -fx-background-color: linear-gradient(to bottom right, #2196F3, #1976D2);
+}
+
+.card-profit {
+    -fx-background-color: linear-gradient(to bottom right, #4CAF50, #388E3C);
+}
+
+.card-orders {
+    -fx-background-color: linear-gradient(to bottom right, #FF9800, #F57C00);
+}
+
+.card-product {
+    -fx-background-color: linear-gradient(to bottom right, #9C27B0, #7B1FA2);
+}
+
+.card-title {
+    -fx-text-fill: white;
+    -fx-opacity: 0.9;
+    -fx-font-size: 14px;
+}
+
+.card-value {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+
+/* Status Indicators for Orders */
+.status-pending {
+    -fx-background-color: #FFC107;
+    -fx-background-radius: 4;
+    -fx-text-fill: white;
+    -fx-padding: 3 8 3 8;
+}
+
+.status-completed {
+    -fx-background-color: #4CAF50;
+    -fx-background-radius: 4;
+    -fx-text-fill: white;
+    -fx-padding: 3 8 3 8;
+}
+
+.status-cancelled {
+    -fx-background-color: #F44336;
+    -fx-background-radius: 4;
+    -fx-text-fill: white;
+    -fx-padding: 3 8 3 8;
+}
+
+/* Dialog Styles */
+.dialog-pane {
+    -fx-background-color: white;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 5px;
+}
+
+.dialog-pane > .content.label {
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+}
+
+.dialog-pane .button-bar .button {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: white;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 15px;
+}
+
+.dialog-pane .button-bar .button:hover {
+    -fx-background-color: #1976D2;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #2196F3;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Dialog Header */
+.dialog-header {
+    -fx-background-color: -fx-primary;
+    -fx-padding: 20 0 20 0;
+    -fx-alignment: center;
+    -fx-min-height: 80px;
+    -fx-pref-height: 80px;
+}
+
+.dialog-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.header-line {
+    -fx-stroke: white;
+    -fx-opacity: 0.5;
+    -fx-stroke-width: 1;
+}
+
+/* Form Container */
+.form-container {
+    -fx-background-color: white;
+    -fx-padding: 30 50;
+    -fx-spacing: 20;
+}
+
+/* Labels */
+.form-label, .input-label, .field-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+}
+
+.form-label:after {
+    -fx-text-fill: -fx-error;
+    -fx-content: " *";
+}
+
+.required-mark {
+    -fx-text-fill: -fx-error;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+}
+
+.note-text {
+    -fx-text-fill: -fx-error;
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
+    -fx-padding: 15 0 0 0;
+}
+
+/* Input Fields */
+.form-input, .input-field, .field-input {
+    -fx-background-color: -fx-grey-light;
+    -fx-background-radius: 5;
+    -fx-border-color: -fx-grey;
+    -fx-border-radius: 5;
+    -fx-padding: 12;
+    -fx-font-size: 14px;
+    -fx-prompt-text-fill: derive(-fx-text-dark, 50%);
+}
+
+.form-input:focused, .input-field:focused, .field-input:focused {
+    -fx-background-color: white;
+    -fx-border-color: -fx-primary;
+    -fx-border-width: 2;
+}
+
+/* Button Container */
+.button-container {
+    -fx-background-color: -fx-grey-light;
+    -fx-border-color: -fx-grey;
+    -fx-border-width: 1 0 0 0;
+    -fx-padding: 20;
+    -fx-spacing: 20;
+    -fx-pref-height: 70px;
+}
+
+/* Buttons */
+.cancel-button {
+    -fx-background-color: white;
+    -fx-text-fill: -fx-primary;
+    -fx-border-color: -fx-primary;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-pref-height: 40px;
+    -fx-pref-width: 130px;
+}
+
+.cancel-button:hover {
+    -fx-background-color: derive(-fx-grey-light, -5%);
+}
+
+.save-button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 3, 0, 0, 1);
+    -fx-pref-height: 40px;
+    -fx-pref-width: 130px;
+}
+
+.save-button:hover {
+    -fx-background-color: -fx-primary-dark;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
+}
+
+/* Content Scroll */
+.content-scroll {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+}
+
+.content-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.content-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 5;
+}
+
+.content-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: derive(-fx-primary, 50%);
+    -fx-background-radius: 5;
+}
+
+/* Chi tiết sản phẩm - Các style bổ sung */
+
+/* Header Styles */
+.header-box {
+    -fx-background-color: -fx-primary;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
+}
+
+.header-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-light;
+}
+
+.subheader-box {
+    -fx-background-color: -fx-primary-light;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 3, 0, 0, 1);
+}
+
+.page-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-light;
+}
+
+/* Content Styles */
+.content-box {
+    -fx-background-color: white;
+}
+
+/* Product Info Box */
+.product-main-info-box {
+    -fx-background-color: white;
+    -fx-border-color: -fx-grey;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Product Information Styles */
+.product-name {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+}
+
+.product-id {
+    -fx-font-size: 14px;
+    -fx-text-fill: #757575;
+    -fx-padding: 5 0 0 0;
+}
+
+.product-category {
+    -fx-font-size: 14px;
+    -fx-text-fill: #757575;
+    -fx-padding: 5 0 0 0;
+}
+
+.info-section {
+    -fx-padding: 10 0;
+}
+
+.label-text {
+    -fx-font-size: 16px;
+    -fx-text-fill: #757575;
+}
+
+.product-price {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-error;
+}
+
+.product-status {
+    -fx-font-size: 16px;
+    -fx-text-fill: #4CAF50;
+    -fx-font-weight: bold;
+}
+
+.product-quantity {
+    -fx-font-size: 16px;
+    -fx-text-fill: -fx-text-dark;
+}
+
+/* Technical Specs Box */
+.specs-box {
+    -fx-background-color: -fx-grey-light;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 3, 0, 0, 1);
+}
+
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary-dark;
+    -fx-padding: 0 0 10 0;
+}
+
+.specs-grid {
+    -fx-background-color: transparent;
+}
+
+.spec-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #757575;
+}
+
+.spec-value {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-text-dark;
+}
+
+/* Related Products Section */
+.related-products-box {
+    -fx-background-color: white;
+    -fx-padding: 20;
+}
+
+/* Footer */
+.footer {
+    -fx-background-color: -fx-grey-light;
+    -fx-border-color: -fx-grey;
+    -fx-border-width: 1 0 0 0;
+}
+
+.footer-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #757575;
+}
+
+/* Navigation buttons for related products */
+#btnPrevious, #btnNext {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-background-radius: 50%;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-max-width: 30px;
+    -fx-max-height: 30px;
+    -fx-padding: 5;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+#btnPrevious:hover, #btnNext:hover {
+    -fx-background-color: -fx-primary-dark;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 3, 0, 0, 1);
+}
+
+/* Related product items */
+.related-product-item {
+    -fx-background-color: white;
+    -fx-border-color: #CCCCCC; /* Thêm viền màu xám */
+    -fx-border-width: 1;       /* Độ dày viền 1px */
+    -fx-border-radius: 0;      /* Góc vuông không bo tròn */
+    -fx-background-radius: 0;  /* Góc vuông không bo tròn */
+    -fx-effect: none;          /* Bỏ hiệu ứng đổ bóng */
+    -fx-padding: 10;
+}
+
+.related-product-name {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+}
+
+.related-product-price {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-error;
+    -fx-font-weight: bold;
+}
+

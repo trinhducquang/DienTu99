@@ -10,6 +10,7 @@ module org.example.quanlybanhang {
     requires java.sql;
     requires java.desktop;
     requires itextpdf;
+    requires java.prefs;
 
 
     exports org.example.quanlybanhang.enums;

@@ -224,11 +224,16 @@ public class OrderDAO implements CrudDao<Order> {
     public BigDecimal calculateAnnualProfit(int year) {
         String sql = "SELECT " +
                 "    SUM(od.price * od.quantity) AS total_revenue, " +
-                "    SUM(od.quantity * p.price) AS total_cost, " +
+                "    SUM(COALESCE(wt.unit_price, 0) * od.quantity) AS total_cost, " +
                 "    SUM(o.shipping_fee) AS total_shipping " +
-                "FROM order_details od " +
-                "JOIN orders o ON od.order_id = o.id " +
-                "JOIN products p ON od.product_id = p.id " +
+                "FROM orders o " +
+                "JOIN order_details od ON o.id = od.order_id " +
+                "LEFT JOIN (" +
+                "    SELECT product_id, AVG(unit_price) as unit_price " +
+                "    FROM warehouse_transactions " +
+                "    WHERE type = 'Nhập Kho' " +
+                "    GROUP BY product_id" +
+                ") wt ON od.product_id = wt.product_id " +
                 "WHERE YEAR(o.order_date) = ? " +
                 "AND o.status = ?";
 
@@ -242,10 +247,14 @@ public class OrderDAO implements CrudDao<Order> {
                 BigDecimal totalRevenue = rs.getBigDecimal("total_revenue");
                 BigDecimal totalCost = rs.getBigDecimal("total_cost");
                 BigDecimal totalShipping = rs.getBigDecimal("total_shipping");
+
                 totalRevenue = totalRevenue != null ? totalRevenue : BigDecimal.ZERO;
                 totalCost = totalCost != null ? totalCost : BigDecimal.ZERO;
                 totalShipping = totalShipping != null ? totalShipping : BigDecimal.ZERO;
-                profit = totalRevenue.subtract(totalCost).subtract(totalShipping);
+
+                // Profit = Revenue - Cost
+                // Note: Shipping fee is already included in total_price (revenue)
+                profit = totalRevenue.subtract(totalCost);
             }
         } catch (SQLException e) {
             System.err.println("SQL error: " + e.getMessage());
@@ -254,6 +263,7 @@ public class OrderDAO implements CrudDao<Order> {
 
         return profit;
     }
+
 
     public List<OrderDetail> getOrderDetailsById(int orderId) {
         List<OrderDetail> details = new ArrayList<>();

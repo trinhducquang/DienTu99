@@ -55,7 +55,6 @@ public class AdminController {
             int currentYear = LocalDateTime.now().getYear();
             BigDecimal annualProfit = orderDAO.calculateAnnualProfit(currentYear);
             if (profitLabel != null) {
-                // Định dạng số để dễ đọc
                 java.text.NumberFormat format = java.text.NumberFormat.getInstance(new Locale("vi", "VN"));
                 profitLabel.setText(format.format(annualProfit));
             }
@@ -118,23 +117,17 @@ public class AdminController {
     }
 
     private void setActiveButton(Button button) {
-        // Remove active class from current button
         if (currentActiveButton != null) {
             currentActiveButton.getStyleClass().remove("nav-button-active");
         }
-
-        // Add active class to new button
         button.getStyleClass().add("nav-button-active");
         currentActiveButton = button;
     }
 
     private void setupUIEffects() {
-        // Apply hover effects to logout button
         String normalLogoutStyle = "-fx-background-color: white; -fx-text-fill: #2196F3; -fx-background-radius: 20; -fx-font-weight: bold;";
         String hoverLogoutStyle = "-fx-background-color: white; -fx-text-fill: #1976D2; -fx-background-radius: 20; -fx-font-weight: bold;";
         UIEffects.applyHoverEffect(logoutButton, normalLogoutStyle, hoverLogoutStyle);
-
-        // Apply hover effects to nav buttons (except the active one)
         for (Button button : Arrays.asList(btnEmployee, btnProduct, btnOrders, btnCustomers, btnCategory, btnWarehouse)) {
             if (button != currentActiveButton) {
                 String normalNavStyle = "-fx-background-color: transparent; -fx-text-fill: #212121; -fx-padding: 15 15; -fx-background-radius: 8;";
@@ -144,21 +137,15 @@ public class AdminController {
         }
     }
 
+
     private void updateTopSellingProduct() {
         try {
-            // Lấy tất cả các giao dịch kho
             List<WarehouseDTO> allTransactions = warehouseDAO.getAllWarehouseDetails();
-
-            // Tạo map để theo dõi số lượng xuất kho cho từng sản phẩm
             Map<Integer, WarehouseDTO> productExportMap = new HashMap<>();
-
-            // Thống kê số lượng xuất kho cho từng sản phẩm
             for (WarehouseDTO transaction : allTransactions) {
                 if (transaction.getType() == WarehouseType.XUAT_KHO) {
                     int productId = transaction.getProductId();
                     String productName = transaction.getProductName();
-
-                    // Tạo hoặc cập nhật bản ghi cho sản phẩm
                     WarehouseDTO exportSummary = productExportMap.computeIfAbsent(
                             productId,
                             k -> {
@@ -169,22 +156,13 @@ public class AdminController {
                                 return dto;
                             }
                     );
-
-                    // Cộng dồn số lượng xuất kho
                     exportSummary.setQuantity(exportSummary.getQuantity() + transaction.getQuantity());
                 }
             }
-
-            // Chuyển Map thành List để sắp xếp
             List<WarehouseDTO> topExportProducts = new ArrayList<>(productExportMap.values());
-
-            // Sắp xếp theo số lượng xuất kho giảm dần
             topExportProducts.sort((p1, p2) -> Integer.compare(p2.getQuantity(), p1.getQuantity()));
-
-            // Lấy sản phẩm bán chạy nhất (sản phẩm đầu tiên trong danh sách đã sắp xếp)
             if (!topExportProducts.isEmpty()) {
                 WarehouseDTO topProduct = topExportProducts.get(0);
-                // Cập nhật tên sản phẩm bán chạy nhất vào Label
                 if (topSellingProductLabel != null) {
                     topSellingProductLabel.setText(topProduct.getProductName());
                 }
@@ -197,7 +175,6 @@ public class AdminController {
 
     @SuppressWarnings("unchecked")
     private void setupOrdersTableStatusColumn() {
-        // This is a placeholder - you'll need to adapt this to your actual table structure
         if (ordersTable != null && ordersTable.getColumns().size() >= 5) {
             TableColumn<Object, String> statusColumn = (TableColumn<Object, String>) ordersTable.getColumns().get(4);
 

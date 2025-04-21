@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   UNIQUE KEY `name` (`name`),
   KEY `parent_id` (`parent_id`),
   CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `phone` (`phone`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `employee_id` int NOT NULL,
   `total_price` decimal(18,2) NOT NULL,
   `order_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `export_status` varchar(255) DEFAULT NULL,
   `status` enum('Đang xử lý','Đang Giao Hàng','Hoàn thành','Đã hủy') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `customer_id` int DEFAULT NULL,
   `shipping_fee` decimal(18,2) NOT NULL DEFAULT '0.00',
@@ -63,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   KEY `fk_orders_customers` (`customer_id`),
   CONSTRAINT `fk_orders_customers` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE,
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=306 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=327 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -79,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `order_details` (
   KEY `product_id` (`product_id`),
   CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
   CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=179 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=201 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -99,7 +100,8 @@ CREATE TABLE `order_summary` (
 	`product_names` TEXT NULL COLLATE 'utf8mb4_0900_ai_ci',
 	`product_images` TEXT NULL COLLATE 'utf8mb4_0900_ai_ci',
 	`product_quantities` TEXT NULL COLLATE 'utf8mb4_0900_ai_ci',
-	`product_prices` TEXT NULL COLLATE 'utf8mb4_0900_ai_ci'
+	`product_prices` TEXT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`export_status` VARCHAR(255) NULL COLLATE 'utf8mb4_0900_ai_ci'
 ) ENGINE=MyISAM;
 
 -- Dumping structure for table quanlybanhang.products
@@ -119,22 +121,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   KEY `fk_category` (`category_id`),
   CONSTRAINT `fk_category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=1351 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Data exporting was unselected.
-
--- Dumping structure for table quanlybanhang.reports
-CREATE TABLE IF NOT EXISTS `reports` (
-  `report_id` int NOT NULL AUTO_INCREMENT,
-  `report_type` varchar(50) DEFAULT NULL,
-  `generated_date` datetime DEFAULT NULL,
-  `total_revenue` decimal(18,2) DEFAULT NULL,
-  `total_orders` int DEFAULT NULL,
-  `best_selling_product_id` int DEFAULT NULL,
-  PRIMARY KEY (`report_id`),
-  KEY `best_selling_product_id` (`best_selling_product_id`),
-  CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`best_selling_product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1358 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -150,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `status` enum('Lock','Unlock') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -160,15 +147,15 @@ CREATE TABLE IF NOT EXISTS `warehouse_transactions` (
   `product_id` int NOT NULL,
   `quantity` int NOT NULL,
   `unit_price` decimal(18,2) NOT NULL,
-  `type` enum('Nhập Kho','Xuất Kho','Kiểm Kho') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `type` enum('Nhập Kho','Xuất Kho') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `inventory_check_date` timestamp NULL DEFAULT NULL,
   `note` text,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `inventory_check_date` timestamp NULL DEFAULT NULL,
   `inventory_note` text,
-  `transaction_code` varchar(20) DEFAULT NULL,
   `created_by` int DEFAULT NULL,
   `excess_quantity` int DEFAULT '0',
+  `transaction_code` varchar(20) DEFAULT NULL,
   `deficient_quantity` int DEFAULT '0',
   `missing` int DEFAULT '0',
   `inventory_status` enum('Đã xác nhận','Có chênh lệch','Chờ xác nhận') DEFAULT NULL,
@@ -178,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `warehouse_transactions` (
   KEY `fk_created_by` (`created_by`),
   CONSTRAINT `fk_created_by` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `warehouse_transactions_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=290 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=382 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -189,7 +176,7 @@ CREATE TABLE `warehouse_transaction_details` (
 	`product_id` INT(10) NOT NULL,
 	`quantity` INT(10) NOT NULL,
 	`unit_price` DECIMAL(18,2) NOT NULL,
-	`type` ENUM('Nhập Kho','Xuất Kho','Kiểm Kho') NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`type` ENUM('Nhập Kho','Xuất Kho') NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
 	`note` TEXT NULL COLLATE 'utf8mb4_0900_ai_ci',
 	`created_at` TIMESTAMP NULL,
 	`updated_at` TIMESTAMP NULL,
@@ -210,7 +197,7 @@ CREATE TABLE `warehouse_transaction_details` (
 -- Dumping structure for view quanlybanhang.order_summary
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `order_summary`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `order_summary` AS select `o`.`id` AS `order_id`,`o`.`order_date` AS `order_date`,`o`.`status` AS `status`,`o`.`total_price` AS `total_price`,`o`.`shipping_fee` AS `shipping_fee`,`o`.`employee_id` AS `employee_id`,`o`.`note` AS `note`,`c`.`id` AS `customer_id`,`c`.`name` AS `customer_name`,group_concat(`p`.`id` order by `od`.`id` ASC separator ',') AS `product_ids`,group_concat(replace(`p`.`name`,',',' ') order by `od`.`id` ASC separator ', ') AS `product_names`,group_concat(`p`.`image_url` order by `od`.`id` ASC separator ', ') AS `product_images`,group_concat(`od`.`quantity` order by `od`.`id` ASC separator ',') AS `product_quantities`,group_concat(`od`.`price` order by `od`.`id` ASC separator ',') AS `product_prices` from (((`orders` `o` join `customers` `c` on((`o`.`customer_id` = `c`.`id`))) join `order_details` `od` on((`o`.`id` = `od`.`order_id`))) join `products` `p` on((`od`.`product_id` = `p`.`id`))) group by `o`.`id`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `order_summary` AS select `o`.`id` AS `order_id`,`o`.`order_date` AS `order_date`,`o`.`status` AS `status`,`o`.`total_price` AS `total_price`,`o`.`shipping_fee` AS `shipping_fee`,`o`.`employee_id` AS `employee_id`,`o`.`note` AS `note`,`c`.`id` AS `customer_id`,`c`.`name` AS `customer_name`,group_concat(`p`.`id` order by `od`.`id` ASC separator ',') AS `product_ids`,group_concat(replace(`p`.`name`,',',' ') order by `od`.`id` ASC separator ', ') AS `product_names`,group_concat(`p`.`image_url` order by `od`.`id` ASC separator ', ') AS `product_images`,group_concat(`od`.`quantity` order by `od`.`id` ASC separator ',') AS `product_quantities`,group_concat(`od`.`price` order by `od`.`id` ASC separator ',') AS `product_prices`,`o`.`export_status` AS `export_status` from (((`orders` `o` join `customers` `c` on((`o`.`customer_id` = `c`.`id`))) join `order_details` `od` on((`o`.`id` = `od`.`order_id`))) join `products` `p` on((`od`.`product_id` = `p`.`id`))) group by `o`.`id`;
 
 -- Dumping structure for view quanlybanhang.warehouse_transaction_details
 -- Removing temporary table and create final VIEW structure

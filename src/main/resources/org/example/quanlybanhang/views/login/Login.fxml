@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -14,12 +15,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="599.0" prefWidth="989.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.login.LoginController">
+<AnchorPane fx:id="rootPane" prefHeight="599.0" prefWidth="989.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.login.LoginController">
     <children>
         <HBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-   
             <!-- Phần hình ảnh bên trái -->
-            <StackPane prefHeight="599.0" prefWidth="0.0" style="-fx-background-color: #2196F3;" HBox.hgrow="ALWAYS">
+            <StackPane fx:id="leftPane" prefHeight="599.0" prefWidth="0.0" style="-fx-background-color: #2196F3;" HBox.hgrow="ALWAYS">
                 <children>
                     <VBox alignment="CENTER" prefHeight="599.0" prefWidth="496.0" spacing="20.0">
                         <children>
@@ -47,7 +47,7 @@
             </StackPane>
 
             <!-- Phần đăng nhập bên phải -->
-            <StackPane style="-fx-background-color: white;" HBox.hgrow="ALWAYS">
+            <StackPane fx:id="rightPane" style="-fx-background-color: white;" HBox.hgrow="ALWAYS">
                 <children>
                     <VBox alignment="CENTER" maxWidth="479.0" prefHeight="599.0" prefWidth="209.0" spacing="20.0">
                         <padding>

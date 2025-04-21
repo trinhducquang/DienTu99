@@ -43,13 +43,6 @@ public class ProductService {
         return productDAO.getRelatedProducts(categoryId, excludedId, offset, limit);
     }
 
-    public List<ImportedWarehouseDTO> getImportedProductsOnly() {
-        return warehouseDAO.getProductsImportedFromWarehouse().stream()
-                .map(dto -> new ImportedWarehouseDTO(dto.getId(), dto.getName(), dto.getTransactionCode()))
-                .distinct()
-                .collect(Collectors.toList());
-    } // ddang buggg
-
     public void saveProduct(Product product) {
         productDAO.save(product);
     }

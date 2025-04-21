@@ -83,9 +83,10 @@ public class ProductDetailDialogController {
 
     private VBox createProductBox(Product p) {
         VBox productBox = new VBox();
+        productBox.getStyleClass().add("related-product-item"); // Thêm class CSS
         productBox.setAlignment(Pos.TOP_CENTER);
-        productBox.getStyleClass().add("related-product");
         productBox.setPrefSize(130, 110);
+        productBox.setSpacing(5); // Thêm khoảng cách giữa các phần tử
 
         // Load images efficiently with ImagesUtils
         ImageView imageView = ImagesUtils.createCroppedImageView(p.getImageUrl(), 260, 220, 130, 110);

@@ -206,7 +206,7 @@ public class OrderController implements RefreshableView {
                 )
         );
 
-        setupActionColumn(); // Gọi phương thức riêng biệt để thiết lập cột hành động
+        setupActionColumn();
     }
 
     // Tạo phương thức riêng để thiết lập cột hành động
@@ -244,7 +244,7 @@ public class OrderController implements RefreshableView {
                 .filter(order -> status == null || order.getStatus() == status)
                 .filter(order -> {
                     LocalDate date = order.getOrderDateAsLocalDate();
-                    if (date == null) return true; // Thay đổi từ false thành true để không loại trừ đơn hàng không có ngày
+                    if (date == null) return true;
                     boolean afterFrom = (from == null || !date.isBefore(from));
                     boolean beforeTo = (to == null || !date.isAfter(to));
                     return afterFrom && beforeTo;

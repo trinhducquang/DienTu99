@@ -21,7 +21,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane prefHeight="800.0" prefWidth="1090.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.sale.SaleController">
+<StackPane prefHeight="800.0" prefWidth="1090.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@../css/dashboard.css" fx:controller="org.example.quanlybanhang.controller.sale.SaleController">
 
     <BorderPane prefHeight="479.0" prefWidth="1090.0">
         <top>
