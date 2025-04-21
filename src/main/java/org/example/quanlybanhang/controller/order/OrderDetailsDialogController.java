@@ -5,9 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.controller.interfaces.RefreshableView;
 import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
@@ -119,38 +117,44 @@ public class OrderDetailsDialogController implements RefreshableView {
     private HBox createProductBox(int productId, String name, String imageUrl, BigDecimal quantity, BigDecimal price, BigDecimal total) {
         HBox productBox = new HBox();
         productBox.setSpacing(15);
-        productBox.setStyle("-fx-background-color: white; -fx-padding: 10; -fx-border-color: #dddddd; -fx-border-radius: 5;");
+        productBox.getStyleClass().add("related-product-item");
 
-        // Thêm hình ảnh (nếu có)
+        // Phần hình ảnh sản phẩm
         if (imageUrl != null && !imageUrl.trim().isEmpty()) {
             ImageView imageView = ImagesUtils.createImageView(imageUrl, 80, 80);
             productBox.getChildren().add(imageView);
         }
 
-        // Thông tin chi tiết sản phẩm
+        // Phần thông tin sản phẩm
         VBox detailsBox = new VBox();
         detailsBox.setSpacing(5);
 
         Label lblName = new Label(name);
-        lblName.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+        lblName.getStyleClass().add("related-product-name");
 
         Label lblProductId = new Label("Mã sản phẩm: " + productId);
-        lblProductId.setStyle("-fx-text-fill: #7f8c8d;");
+        lblProductId.getStyleClass().add("product-id");
 
         Label lblQuantity = new Label("Số lượng: " + quantity);
+        lblQuantity.getStyleClass().add("product-quantity");
+
         Label lblTotal = new Label("Thành tiền: " + MoneyUtils.formatVN(total));
-        lblTotal.setStyle("-fx-font-weight: bold;");
+        lblTotal.getStyleClass().add("spec-value");
 
         detailsBox.getChildren().addAll(lblName, lblProductId, lblQuantity, lblTotal);
-        productBox.getChildren().add(detailsBox);
 
-        // Hiển thị giá đơn vị
-        HBox priceBox = new HBox();
-        priceBox.setSpacing(10);
+        // Phần giá tiền - góc phải dưới cùng
+        StackPane priceContainer = new StackPane();
+        HBox.setHgrow(priceContainer, Priority.ALWAYS);
+
         Label lblPrice = new Label(MoneyUtils.formatVN(price));
-        lblPrice.setStyle("-fx-font-weight: bold; -fx-text-fill: #e74c3c;");
-        priceBox.getChildren().add(lblPrice);
-        productBox.getChildren().add(priceBox);
+        lblPrice.getStyleClass().add("related-product-price");
+        StackPane.setAlignment(lblPrice, javafx.geometry.Pos.BOTTOM_RIGHT);
+
+        priceContainer.getChildren().add(lblPrice);
+
+        // Thêm các phần tử vào box chính
+        productBox.getChildren().addAll(detailsBox, priceContainer);
 
         return productBox;
     }

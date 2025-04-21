@@ -1,15 +1,15 @@
 * {
-    -fx-primary: #2563eb; /* Slightly deeper blue for primary */
-    -fx-primary-light: #3b82f6; /* Lighter blue */
-    -fx-primary-dark: #1e40af; /* Darker blue */
-    -fx-secondary: #1e1e2e; /* Deep dark for backgrounds */
-    -fx-grey-light: #313244; /* Light dark for elements */
-    -fx-grey: #45475a; /* Medium dark for borders */
-    -fx-text-dark: #cdd6f4; /* Light text for dark background */
-    -fx-text-light: #ffffff; /* White text for emphasis */
-    -fx-error: #f87171; /* Softer red for errors */
-    -fx-success: #4ade80; /* Green for success states */
-    -fx-warning: #facc15; /* Yellow for warnings */
+    -fx-primary: #2563eb;
+    -fx-primary-light: #3b82f6;
+    -fx-primary-dark: #1e40af;
+    -fx-secondary: #1e1e2e;
+    -fx-grey-light: #313244;
+    -fx-grey: #45475a;
+    -fx-text-dark: #cdd6f4;
+    -fx-text-light: #ffffff;
+    -fx-error: #f87171;
+    -fx-success: #4ade80;
+    -fx-warning: #facc15;
 }
 
 /* General Setup */
@@ -94,7 +94,7 @@
     -fx-font-weight: bold;
     -fx-padding: 10 0 5 0;
     -fx-border-color: -fx-grey;
-    -fx-border-width: 0 0 1 0;
+    -fx-border-width: 0 0 0 0;
 }
 
 /* Summary Cards */
@@ -584,8 +584,6 @@
 /* Dark Mode Button */
 .dark-mode-button {
     -fx-background-color: #181825;
-    -fx-background-radius: 25;
-    -fx-border-radius: 25;
     -fx-min-width: 50px;
     -fx-min-height: 50px;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
@@ -599,15 +597,12 @@
 /* Order Details Dialog */
 .order-details-dialog {
     -fx-background-color: -fx-secondary;
-    -fx-background-radius: 8;
     -fx-border-color: -fx-grey;
-    -fx-border-radius: 8;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 5);
 }
 
 .order-details-header {
     -fx-background-color: -fx-primary;
-    -fx-background-radius: 8 8 0 0;
     -fx-padding: 15;
 }
 
@@ -639,7 +634,6 @@
 
 .order-item-card {
     -fx-background-color: #313244;
-    -fx-background-radius: 5;
     -fx-padding: 15;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 3, 0, 0, 1);
 }
@@ -647,7 +641,6 @@
 .order-footer {
     -fx-background-color: #181825;
     -fx-padding: 15;
-    -fx-background-radius: 0 0 8 8;
 }
 
 /* Action buttons for order details */
@@ -764,10 +757,275 @@
     -fx-control-inner-background: -fx-secondary;
 }
 
+/* Text Area Styling - Fixed */
 .text-area {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 5;
+    -fx-border-color: -fx-grey;
+    -fx-border-radius: 5;
+    -fx-padding: 0;
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-text-dark;
+    -fx-prompt-text-fill: derive(-fx-text-dark, -30%);
     -fx-control-inner-background: -fx-secondary;
 }
 
 .text-area .content {
     -fx-background-color: -fx-secondary;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
 }
+
+.text-area > .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area > .scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.text-area > .scroll-pane > .scroll-bar:vertical,
+.text-area > .scroll-pane > .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.text-area > .scroll-pane > .scroll-bar:vertical .thumb,
+.text-area > .scroll-pane > .scroll-bar:horizontal .thumb {
+    -fx-background-color: -fx-grey;
+    -fx-background-radius: 5;
+}
+
+.text-area > .scroll-pane > .corner {
+    -fx-background-color: transparent;
+}
+
+/* Date Picker Styling */
+.date-picker {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 5;
+    -fx-border-color: -fx-grey;
+    -fx-border-radius: 5;
+    -fx-text-fill: -fx-text-dark;
+    -fx-prompt-text-fill: derive(-fx-text-dark, -30%);
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: -fx-grey-light;
+    -fx-background-radius: 0 5 5 0;
+}
+
+.date-picker .arrow-button:hover {
+    -fx-background-color: -fx-primary;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: -fx-text-dark;
+}
+
+.date-picker .cell {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-text-dark;
+    -fx-border-color: transparent;
+}
+
+.date-picker .cell:hover {
+    -fx-background-color: -fx-grey-light;
+}
+
+.date-picker .cell:focused {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-text-light;
+}
+
+.date-picker .selected {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-text-light;
+}
+
+.date-picker .selected:focused {
+    -fx-background-color: -fx-primary;
+}
+
+.date-picker-popup {
+    -fx-background-color: -fx-secondary;
+    -fx-border-color: -fx-grey;
+}
+
+.date-picker-popup .month-year-pane {
+    -fx-background-color: -fx-primary-dark;
+}
+
+.date-picker-popup .month-year-pane .label {
+    -fx-text-fill: -fx-text-light;
+}
+
+.date-picker-popup .week-number-cell {
+    -fx-text-fill: -fx-grey;
+}
+
+.date-picker-popup .spinner .button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-text-light;
+}
+
+.date-picker-popup .spinner .button:hover {
+    -fx-background-color: -fx-primary-light;
+}
+
+.date-picker-popup .spinner .label {
+    -fx-text-fill: -fx-text-light;
+}
+
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-dark;
+    -fx-prompt-text-fill: derive(-fx-text-dark, -30%);
+}
+
+.date-picker-popup .today {
+    -fx-background-color: -fx-primary-light;
+    -fx-text-fill: -fx-text-light;
+    -fx-font-weight: bold;
+}
+
+.date-picker-popup .today:hover {
+    -fx-background-color: -fx-primary;
+}
+
+.date-picker-popup .spinner .button .left-arrow,
+.date-picker-popup .spinner .button .right-arrow {
+    -fx-background-color: -fx-text-light;
+}
+
+/* Scroll Bar Styling */
+.scroll-bar {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+}
+
+.scroll-bar:vertical {
+    -fx-pref-width: 12;
+}
+
+.scroll-bar:horizontal {
+    -fx-pref-height: 12;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: -fx-grey;
+    -fx-background-radius: 6;
+    -fx-background-insets: 2, 0, 0;
+}
+
+.scroll-bar:vertical .thumb:hover,
+.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: -fx-primary-light;
+}
+
+.scroll-bar:vertical .thumb:pressed,
+.scroll-bar:horizontal .thumb:pressed {
+    -fx-background-color: -fx-primary;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 3;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: -fx-grey;
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+    -fx-shape: "M 0 0 L 4 8 L 8 0 Z";
+}
+
+.scroll-bar:horizontal .increment-arrow,
+.scroll-bar:horizontal .decrement-arrow {
+    -fx-shape: "M 0 0 L 8 4 L 0 8 Z";
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* For TableView specific scrollbars */
+.table-view .scroll-bar:vertical,
+.table-view .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.table-view .scroll-bar:vertical .thumb,
+.table-view .scroll-bar:horizontal .thumb {
+    -fx-background-color: -fx-grey;
+}
+
+.table-view .scroll-bar:vertical .thumb:hover,
+.table-view .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: -fx-primary-light;
+}
+
+.pagination-control .scroll-bar:vertical,
+.pagination-control .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10;
+    -fx-pref-height: 10;
+}
+
+/* Class cho các trường input trong form đơn hàng */
+.order-input {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 5;
+    -fx-border-color: -fx-grey;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-text-dark;
+    -fx-pref-height: 35px;
+}
+
+/* Class cho các trường ComboBox trong form đơn hàng */
+.order-combo-box {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 5;
+    -fx-border-color: -fx-grey;
+    -fx-border-radius: 5;
+    -fx-pref-height: 35px;
+}
+
+
+.order-spinner {
+    -fx-pref-height: 35px;
+}
+
+.info-section {
+    -fx-vgap: 10;
+    -fx-hgap: 10;
+    -fx-padding: 10;
+}
+
+/* Class cho các trường input trong form đơn hàng */
+.order-input {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 5;
+    -fx-border-color: -fx-grey;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-text-dark;
+    -fx-pref-height: 35px;
+}
+

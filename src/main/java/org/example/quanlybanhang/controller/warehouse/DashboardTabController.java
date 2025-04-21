@@ -7,7 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -17,6 +19,7 @@ import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
 import org.example.quanlybanhang.enums.OrderStatus;
 import org.example.quanlybanhang.enums.WarehouseType;
+import org.example.quanlybanhang.utils.ThemeManager;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -123,8 +126,7 @@ public class DashboardTabController {
                         + ", Quantity=" + firstTrans.getQuantity()
                         + ", CreatedAt=" + firstTrans.getCreatedAt());
             }
-        }
-        else {
+        } else {
             System.out.println("Chart controller or transactions is null");
         }
         System.out.println("Transaction data size: " + (allTransactions != null ? allTransactions.size() : "null"));
@@ -391,11 +393,16 @@ public class DashboardTabController {
             dialogStage.setTitle("Giao Dịch Đang Chờ Xử Lí");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(lblTotalProducts.getScene().getWindow());
-            dialogStage.setScene(new Scene(dialogPane));
+
+            Scene scene = new Scene(dialogPane);
+            ThemeManager.applyTheme(scene); // ✅ đúng cú pháp
+            dialogStage.setScene(scene);
+
             dialogStage.showAndWait();
         } catch (IOException e) {
             System.err.println("Lỗi khi mở dialog đơn hàng đang chờ: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 }

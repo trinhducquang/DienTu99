@@ -40,8 +40,8 @@
 
             <HBox alignment="CENTER_LEFT" spacing="10">
                 <TextField fx:id="searchField" styleClass="search-field" promptText="Tìm kiếm đơn hàng" HBox.hgrow="ALWAYS" />
-                <DatePicker fx:id="fromDatePicker" promptText="Từ ngày" />
-                <DatePicker fx:id="toDatePicker" promptText="Đến ngày" />
+                <DatePicker fx:id="fromDatePicker" promptText="Từ ngày" styleClass="date-picker"/>
+                <DatePicker fx:id="toDatePicker" promptText="Đến ngày" styleClass="date-picker"/>
                 <ComboBox fx:id="statusFilterComboBox" promptText="Trạng Thái" />
                 <Button fx:id="addOrderButton" styleClass="save-button" text="Thêm Đơn Hàng" />
             </HBox>

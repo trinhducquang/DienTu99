@@ -11,12 +11,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.controller.interfaces.RefreshableView;
-import org.example.quanlybanhang.controller.warehouse.WarehouseImportDialog;
 import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
 import org.example.quanlybanhang.enums.ExportStatus;
 import org.example.quanlybanhang.enums.OrderStatus;
-import org.example.quanlybanhang.helpers.ButtonTableCell;
 import org.example.quanlybanhang.helpers.DialogHelper;
 import org.example.quanlybanhang.model.Order;
 import org.example.quanlybanhang.utils.PaginationUtils;
@@ -135,10 +133,6 @@ public class PendingOrdersDialogController implements RefreshableView {
                 });
             }
 
-            private RefreshableView getRefreshHandler() {
-                return PendingOrdersDialogController.this;
-            }
-
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -148,7 +142,6 @@ public class PendingOrdersDialogController implements RefreshableView {
                 }
 
                 OrderSummaryDTO order = getTableRow().getItem();
-                // Kiểm tra trạng thái xuất kho để quyết định hiển thị nút xuất kho
                 if (order.exportStatus() == ExportStatus.DA_XUAT_KHO) {
                     setGraphic(new HBox(5, detailsButton));
                 } else {
@@ -160,11 +153,8 @@ public class PendingOrdersDialogController implements RefreshableView {
 
     private void loadAllOrders() {
         try {
-            // Using existing methods to get orders and convert them to OrderSummaryDTO
             List<Order> orders = orderDAO.getAll();
             List<OrderSummaryDTO> orderSummaries = new ArrayList<>();
-
-            // For each order, get its OrderSummaryDTO by ID
             for (Order order : orders) {
                 OrderSummaryDTO summary = orderDAO.getOrderSummaryById(order.getId());
                 if (summary != null) {
