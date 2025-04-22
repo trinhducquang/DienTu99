@@ -50,7 +50,7 @@
                 </padding>
 
                 <HBox alignment="CENTER_LEFT" spacing="10">
-                    <Label prefHeight="27.0" prefWidth="268.0" style="-fx-font-size: 18; -fx-font-weight: bold;" styleClass="subheader-box" text="Danh Sách Sản Phẩm" />
+                    <Label prefHeight="27.0" prefWidth="268.0" style="-fx-font-size: 18; -fx-font-weight: bold;" styleClass="" text="Danh Sách Sản Phẩm" />
                     <Region prefHeight="64.0" prefWidth="126.0" HBox.hgrow="ALWAYS" />
                      <HBox alignment="CENTER" prefHeight="64.0" prefWidth="416.0" spacing="15" styleClass="price-range-container">
                          <padding>

@@ -97,40 +97,91 @@
                                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                                     </padding>
                                     <children>
-                                        <HBox styleClass="stats-container">
+                                        <HBox spacing="20.0">
                                             <children>
-                                                <VBox styleClass="stat-card, total-products-card">
+                                                <VBox alignment="CENTER" style="-fx-background-color: #2196F3; -fx-background-radius: 5;" HBox.hgrow="ALWAYS">
+                                                    <padding>
+                                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                                    </padding>
                                                     <children>
-                                                        <Label styleClass="stat-card-title" text="Tổng Sản Phẩm" />
-                                                        <Label styleClass="stat-card-value" text="511" fx:id="lblTotalProducts" />
+                                                        <Label text="Tổng Sản Phẩm" textFill="WHITE">
+                                                            <font>
+                                                                <Font size="14.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label fx:id="lblTotalProducts" text="100" textFill="WHITE">
+                                                            <font>
+                                                                <Font name="System Bold" size="24.0" />
+                                                            </font>
+                                                        </Label>
                                                     </children>
                                                 </VBox>
-
-                                                <VBox styleClass="stat-card, warehouse-value-card">
+                                                <VBox alignment="CENTER" style="-fx-background-color: #4CAF50; -fx-background-radius: 5;" HBox.hgrow="ALWAYS">
+                                                    <padding>
+                                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                                    </padding>
                                                     <children>
-                                                        <Label styleClass="stat-card-title" text="Giá Trị Kho" />
-                                                        <Label styleClass="stat-card-value" text="1.440.000.000đ" fx:id="lblTotalValue" />
+                                                        <Label text="Giá Trị Kho" textFill="WHITE">
+                                                            <font>
+                                                                <Font size="14.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label fx:id="lblTotalValue" text="1,456,789,000đ" textFill="WHITE">
+                                                            <font>
+                                                                <Font name="System Bold" size="24.0" />
+                                                            </font>
+                                                        </Label>
                                                     </children>
                                                 </VBox>
-
-                                                <VBox styleClass="stat-card, daily-transactions-card">
+                                                <VBox alignment="CENTER" prefHeight="85.0" prefWidth="124.0" style="-fx-background-color: #FF9800; -fx-background-radius: 5;" HBox.hgrow="ALWAYS">
+                                                    <padding>
+                                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                                    </padding>
                                                     <children>
-                                                        <Label styleClass="stat-card-title" text="Giao Dịch Tháng Này" />
-                                                        <Label styleClass="stat-card-value" text="19" fx:id="lblMonthlyTransactions" />
+                                                        <Label text="Giao Dịch Tháng Này" textFill="WHITE">
+                                                            <font>
+                                                                <Font size="14.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label fx:id="lblMonthlyTransactions" text="357" textFill="WHITE">
+                                                            <font>
+                                                                <Font name="System Bold" size="24.0" />
+                                                            </font>
+                                                        </Label>
                                                     </children>
                                                 </VBox>
-
-                                                <VBox styleClass="stat-card, pending-transactions-card">
+                                                <VBox alignment="CENTER" onMouseClicked="#openPendingOrdersDialog" prefHeight="85.0" prefWidth="206.0" style="-fx-background-color: #ffc0cb; -fx-background-radius: 5;">
+                                                    <padding>
+                                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                                    </padding>
                                                     <children>
-                                                        <Label styleClass="stat-card-title" text="Giao Dịch Đang Chờ Xử Lí" />
-                                                        <Label styleClass="stat-card-value" text="1" fx:id="lblPendingOrders" />
+                                                        <Label text="Giao Dịch Đang Chờ Xử Lí" textFill="WHITE">
+                                                            <font>
+                                                                <Font size="14.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label fx:id="lblPendingOrders" text="28" textFill="WHITE">
+                                                            <font>
+                                                                <Font name="System Bold" size="24.0" />
+                                                            </font>
+                                                        </Label>
                                                     </children>
                                                 </VBox>
-
-                                                <VBox styleClass="stat-card, low-stock-card">
+                                                <VBox alignment="CENTER" prefHeight="85.0" prefWidth="78.0" style="-fx-background-color: #F44336; -fx-background-radius: 5;" HBox.hgrow="ALWAYS">
+                                                    <padding>
+                                                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                                    </padding>
                                                     <children>
-                                                        <Label styleClass="stat-card-title" text="Sản Phẩm Sắp Hết" />
-                                                        <Label styleClass="stat-card-value" text="5" fx:id="lblLowStockProducts" />
+                                                        <Label text="Sản Phẩm Sắp Hết" textFill="WHITE">
+                                                            <font>
+                                                                <Font size="14.0" />
+                                                            </font>
+                                                        </Label>
+                                                        <Label fx:id="lblLowStockProducts" text="28" textFill="WHITE">
+                                                            <font>
+                                                                <Font name="System Bold" size="24.0" />
+                                                            </font>
+                                                        </Label>
                                                     </children>
                                                 </VBox>
                                             </children>
@@ -173,9 +224,9 @@
                             </content>
                         </Tab>
                     </tabs>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
                 </TabPane>
             </center>
         </BorderPane>
