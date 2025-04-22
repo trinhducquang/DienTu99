@@ -21,12 +21,12 @@
     <top>
         <VBox spacing="10">
             <children>
-                <BorderPane styleClass="header-pane">
+                <BorderPane styleClass="top-nav">
                     <left>
                         <Label styleClass="header-label" text="Thêm Phiếu Nhập Kho" />
                     </left>
                     <right>
-                        <Button styleClass="back-button" text="Quay Lại" />
+                        <Button styleClass="back-button" style="-fx-background-color: white;" text="Quay Lại" />
                     </right>
                     <padding>
                         <Insets bottom="15" left="15" right="15" top="15" />

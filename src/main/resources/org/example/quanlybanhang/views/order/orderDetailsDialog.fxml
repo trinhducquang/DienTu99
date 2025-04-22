@@ -27,7 +27,7 @@
         <VBox prefHeight="645.0" prefWidth="870.0" spacing="15.0" styleClass="order-details-content">
 
             <!-- Order Header Info -->
-            <GridPane styleClass="order-info-grid" hgap="20" vgap="10">
+            <GridPane hgap="20" styleClass="order-info-grid" vgap="10">
                 <columnConstraints>
                     <ColumnConstraints minWidth="100" />
                     <ColumnConstraints minWidth="200" />
@@ -48,7 +48,7 @@
                 <Label fx:id="orderStatus" styleClass="order-info-value" text="Đang xử lý" GridPane.columnIndex="3" GridPane.rowIndex="1" />
 
                 <Label styleClass="order-info-label" text="Tổng Tiền:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                <Label fx:id="totalAmount" styleClass="order-info-value" text="500,000.0 đ" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label fx:id="totalAmount" style="-fx-text-fill: -fx-error;" styleClass="order-info-value" text="500,000.0 đ" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                 <Label styleClass="order-info-label" text="Nhân viên xử lý:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                 <Label fx:id="processedBy" styleClass="order-info-value" text="ID: 1" GridPane.columnIndex="3" GridPane.rowIndex="2" />
@@ -89,7 +89,7 @@
                     </HBox>
                     <HBox spacing="10">
                         <Label styleClass="order-info-label" text="Tổng thanh toán:" />
-                        <Label fx:id="finalAmount" styleClass="card-value" style="-fx-text-fill: -fx-error;" text="400,000.0 đ" />
+                        <Label fx:id="finalAmount" style="-fx-text-fill: -fx-error;" styleClass="card-value" text="400,000.0 đ" />
                     </HBox>
                 </VBox>
             </HBox>

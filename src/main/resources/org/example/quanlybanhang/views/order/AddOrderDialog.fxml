@@ -20,11 +20,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="686.0" prefWidth="908.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.order.AddOrderDialogController">
+<AnchorPane prefHeight="750.0" prefWidth="1036.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.order.AddOrderDialogController">
     <children>
-        <VBox prefHeight="686.0" prefWidth="908.0">
+        <VBox prefHeight="750.0" prefWidth="1036.0">
             <children>
-                <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="800.0" style="-fx-background-color: #3498db;">
+                <HBox styleClass="top-nav" alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="800.0">
                     <children>
                         <Label text="Thêm Đơn Hàng" textFill="WHITE">
                             <font>

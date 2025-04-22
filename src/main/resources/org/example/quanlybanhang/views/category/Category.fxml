@@ -27,16 +27,15 @@
                 </Label>
 
                 <HBox spacing="10.0">
-                    <TextField fx:id="searchField" styleClass="search-field" promptText="Tìm kiếm danh mục" HBox.hgrow="ALWAYS" />
+                    <TextField fx:id="searchField" promptText="Tìm kiếm danh mục" styleClass="search-field" HBox.hgrow="ALWAYS" />
                     <Button fx:id="addCategoryButton" styleClass="save-button" text="Thêm Danh Mục" />
                 </HBox>
-                <TableView fx:id="categoryTable"  VBox.vgrow="ALWAYS">
+                <TableView fx:id="categoryTable" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="idColumn" prefWidth="50" text="ID" />
                         <TableColumn fx:id="categoryColum" maxWidth="179.0" prefWidth="176.99996948242188" text="Kiểu Danh Mục" />
                         <TableColumn fx:id="nameColumn" prefWidth="231.0" text="Nhóm Sản Phẩm" />
-                        <TableColumn fx:id="descriptionColumn" prefWidth="243.0" text="Mô tả" />
-                        <TableColumn fx:id="actionsColumn" minWidth="0.0" prefWidth="215.0" text="Thao tác" />
+                        <TableColumn fx:id="descriptionColumn" prefWidth="456.0" text="Mô tả" />
                     </columns>
                     <placeholder>
                         <Label text="No content in table" />
@@ -62,7 +61,7 @@
 
                 <Label layoutX="23.0" layoutY="415.0" styleClass="form-label" text="Dòng sản phẩm" />
                 <ComboBox fx:id="childCategoryCombo" layoutX="21.0" layoutY="458.0" prefHeight="35.0" prefWidth="280" styleClass="form-input" />
-                <RadioButton fx:id="radioParent" layoutX="23.0" layoutY="518.0" mnemonicParsing="false"  text="Danh mục cha" />
+                <RadioButton fx:id="radioParent" layoutX="23.0" layoutY="518.0" mnemonicParsing="false" text="Danh mục cha" />
                 <RadioButton fx:id="radioChild" layoutX="177.0" layoutY="518.0" mnemonicParsing="false" text="Danh mục con" />
                 <Button fx:id="saveButton" layoutX="21.0" layoutY="557.0" prefHeight="40.0" prefWidth="281.0" styleClass="save-button" text="Lưu" />
             </children>

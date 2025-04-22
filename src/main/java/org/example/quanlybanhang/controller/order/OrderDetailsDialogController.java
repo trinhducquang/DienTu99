@@ -69,6 +69,9 @@ public class OrderDetailsDialogController implements RefreshableView {
         currentOrderStatus = summary.status().getText();
         orderStatus.setText(currentOrderStatus);
 
+        // Áp dụng style class dựa trên trạng thái đơn hàng
+        applyStatusStyle(orderStatus, currentOrderStatus);
+
         // Thiết lập giá trị mặc định cho ComboBox
         statusComboBox.setValue(currentOrderStatus);
 
@@ -86,6 +89,28 @@ public class OrderDetailsDialogController implements RefreshableView {
 
         // Load danh sách sản phẩm
         loadProductDisplayList();
+    }
+
+    // Phương thức mới để áp dụng style phù hợp cho trạng thái
+    private void applyStatusStyle(Label statusLabel, String status) {
+        // Xóa tất cả các status class cũ
+        statusLabel.getStyleClass().removeAll("status-pending", "status-completed", "status-cancelled");
+
+        // Áp dụng class mới dựa trên trạng thái
+        switch (status.toLowerCase()) {
+            case "đang xử lý":
+                statusLabel.getStyleClass().add("status-pending");
+                break;
+            case "hoàn thành":
+                statusLabel.getStyleClass().add("status-completed");
+                break;
+            case "đã hủy":
+                statusLabel.getStyleClass().add("status-cancelled");
+                break;
+            default:
+                statusLabel.getStyleClass().add("status-pending");
+                break;
+        }
     }
 
     private void loadProductDisplayList() {
@@ -169,27 +194,17 @@ public class OrderDetailsDialogController implements RefreshableView {
     @FXML
     private void handleUpdateStatus() {
         if (!isEditingStatus) {
-            // Chuyển sang chế độ chỉnh sửa
             GridPane parent = (GridPane) orderStatus.getParent();
-            // Xác định vị trí của orderStatus trong GridPane
             Integer columnIndex = GridPane.getColumnIndex(orderStatus);
             Integer rowIndex = GridPane.getRowIndex(orderStatus);
-
             if (columnIndex == null) columnIndex = 0;
             if (rowIndex == null) rowIndex = 0;
-
-            // Xóa Label orderStatus khỏi parent
             parent.getChildren().remove(orderStatus);
-
-            // Thêm ComboBox vào vị trí của Label
             statusComboBox.setValue(currentOrderStatus);
             parent.add(statusComboBox, columnIndex, rowIndex);
-
-            // Đổi text của nút
             updateStatusBtn.setText("Lưu trạng thái");
             isEditingStatus = true;
         } else {
-            // Đã nhấn "Lưu trạng thái"
             saveNewStatus();
         }
     }
@@ -226,6 +241,10 @@ public class OrderDetailsDialogController implements RefreshableView {
 
                 // Cập nhật text cho Label
                 orderStatus.setText(newStatus);
+
+                // Áp dụng style class mới dựa trên trạng thái mới
+                applyStatusStyle(orderStatus, newStatus);
+
                 parent.add(orderStatus, columnIndex, rowIndex);
 
                 updateStatusBtn.setText("Cập nhật trạng thái");
