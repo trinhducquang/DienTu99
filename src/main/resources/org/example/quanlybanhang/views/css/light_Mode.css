@@ -115,10 +115,12 @@
 }
 
 .card-orders {
+    -fx-max-width: 300;
     -fx-background-color: linear-gradient(to bottom right, #ff9800, #f57c00);
 }
 
 .card-product {
+    -fx-max-width: 300;
     -fx-background-color: linear-gradient(to bottom right, #9c27b0, #7b1fa2);
 }
 

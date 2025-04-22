@@ -14,10 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ImagesUtils {
 
-    // 🧠 Cache ảnh đã tải, sử dụng WeakReference để tránh chiếm dụng bộ nhớ lâu dài
     private static final Map<String, WeakReference<Image>> imageCache = new ConcurrentHashMap<>();
 
-    // 🟩 Phương thức tạo ImageView
     public static ImageView createImageView(String imageUrl, double fitWidth, double fitHeight) {
         ImageView imageView = new ImageView();
         imageView.setFitWidth(fitWidth);
@@ -27,7 +25,6 @@ public class ImagesUtils {
 
         try {
             if (imageUrl != null && !imageUrl.trim().isEmpty()) {
-                // Kiểm tra cache trước khi tải ảnh
                 Image cachedImage = getCachedImage(imageUrl);
                 if (cachedImage != null) {
                     imageView.setImage(cachedImage);

@@ -24,24 +24,18 @@ public class TextFieldFormatterUtils {
                 event.consume();
                 return;
             }
-
-            // Lấy raw numeric string từ text hiện tại
             String currentText = textField.getText().replaceAll("[^\\d]", "");
             String newText = currentText + character;
-
             try {
                 long value = Long.parseLong(newText);
                 String formatted = formatter.format(value);
-
                 textField.setText(formatted);
                 textField.positionCaret(formatted.length());
-                event.consume(); // ngăn thêm ký tự thô
+                event.consume();
             } catch (NumberFormatException e) {
-                event.consume(); // tránh crash nếu số quá lớn
+                event.consume();
             }
         });
-
-        // Xử lý phím Backspace
         textField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode().toString().equals("BACK_SPACE")) {
                 String raw = textField.getText().replaceAll("[^\\d]", "");

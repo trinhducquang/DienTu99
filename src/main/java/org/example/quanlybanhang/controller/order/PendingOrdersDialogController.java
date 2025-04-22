@@ -87,7 +87,6 @@ public class PendingOrdersDialogController implements RefreshableView {
     }
 
     private void setupTableColumns() {
-        // For Java records, we need to use lambdas instead of PropertyValueFactory
         orderIdColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().id()));
         customerIdColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().customerId()));
         customerNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().customerName()));
@@ -187,16 +186,10 @@ public class PendingOrdersDialogController implements RefreshableView {
             loadAllOrders();
         }
 
-        List<OrderSummaryDTO> pendingOrders = allOrders.stream()
-                .filter(order -> order.status() == OrderStatus.DANG_XU_LY)
-                .collect(Collectors.toList());
-
-        allOrders.setAll(pendingOrders);
-
         if (pagination != null) {
             pagination.setCurrentPageIndex(0);
         } else {
-            displayedOrders.setAll(pendingOrders);
+            displayedOrders.setAll(allOrders);
         }
     }
 

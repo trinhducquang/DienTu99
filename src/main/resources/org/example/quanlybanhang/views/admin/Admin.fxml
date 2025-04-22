@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="adminContentPane" alignment="TOP_CENTER"  xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.admin.AdminController">
+<VBox fx:id="adminContentPane" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.admin.AdminController">
 
     <!-- Top Navigation Bar -->
     <HBox alignment="CENTER_LEFT" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" styleClass="top-nav" VBox.vgrow="NEVER">
@@ -67,7 +67,7 @@
                     </padding>
                     <Label styleClass="card-title" text="Tổng Doanh Thu" />
                     <Region VBox.vgrow="ALWAYS" />
-                    <Label styleClass="card-value" text="1,234,567 VND" />
+                    <Label styleClass="card-value" fx:id="revenueLabel" text="1,234,567 VND" />
                 </VBox>
 
                 <VBox styleClass="summary-card, card-profit" HBox.hgrow="ALWAYS">
@@ -83,7 +83,7 @@
                     <padding>
                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                     </padding>
-                    <Label styleClass="card-title" text="Số lượng đơn hàng hoàn thành" />
+                    <Label styleClass="card-title" text="Đơn hàng hoàn thành theo tháng" />
                     <Region VBox.vgrow="ALWAYS" />
                     <Label fx:id="completedOrdersLabel" styleClass="card-value" text="1,256" />
                 </VBox>
@@ -101,17 +101,17 @@
             <!-- Recent Orders Section -->
             <VBox spacing="10" VBox.vgrow="ALWAYS">
                 <HBox alignment="CENTER_LEFT">
-                    <Label styleClass="section-title" text="Đơn Hàng Gần Đây" />
+                    <Label styleClass="section-title" text="Nhân viên xuất xắc nhất trong năm" />
                 </HBox>
 
                 <!-- Recent Orders Table -->
                 <TableView styleClass="orders-table" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn prefWidth="150.0" text="Mã Đơn Hàng" />
-                        <TableColumn prefWidth="200.0" text="Khách Hàng" />
-                        <TableColumn prefWidth="150.0" text="Ngày Đặt" />
+                        <TableColumn prefWidth="150.0" text="ID" />
+                        <TableColumn prefWidth="200.0" text="Tên Nhân Viên" />
+                        <TableColumn prefWidth="150.0" text=" Tổng Số Đơn" />
                         <TableColumn prefWidth="150.0" text="Tổng Tiền" />
-                        <TableColumn prefWidth="150.0" text="Trạng Thái" />
+                        <TableColumn prefWidth="150.0" text="Lợi Nhuận" />
                     </columns>
                 </TableView>
             </VBox>

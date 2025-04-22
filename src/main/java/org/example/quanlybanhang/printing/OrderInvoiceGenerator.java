@@ -22,22 +22,15 @@ public class OrderInvoiceGenerator {
             String fileName = "phieu_ban_giao_" + summary.id() + ".pdf";
             PdfWriter.getInstance(document, new FileOutputStream(fileName));
             document.open();
-
-            // Register Arial font with Unicode support for Vietnamese characters
             BaseFont baseFont = BaseFont.createFont("c:/windows/fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-
             Font titleFont = new Font(baseFont, 16, Font.BOLD);
             Font subTitleFont = new Font(baseFont, 11, Font.ITALIC);
             Font boldFont = new Font(baseFont, 11, Font.BOLD);
             Font regularFont = new Font(baseFont, 10);
             Font smallFont = new Font(baseFont, 9);
-
-            // Header section with company info
             PdfPTable headerTable = new PdfPTable(2);
             headerTable.setWidthPercentage(100);
             headerTable.setWidths(new float[]{1, 1});
-
-            // Company info cell
             PdfPCell companyCell = new PdfPCell();
             companyCell.setBorder(Rectangle.NO_BORDER);
             Paragraph companyPara = new Paragraph();

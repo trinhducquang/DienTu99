@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import org.example.quanlybanhang.controller.order.PendingOrdersDialogController;
 import org.example.quanlybanhang.dao.OrderDAO;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
+import org.example.quanlybanhang.enums.ExportStatus;
 import org.example.quanlybanhang.enums.OrderStatus;
 import org.example.quanlybanhang.enums.WarehouseType;
 import org.example.quanlybanhang.utils.ThemeManager;
@@ -193,11 +194,10 @@ public class DashboardTabController {
         }
     }
 
-
     private void updatePendingOrdersCount() {
         OrderDAO orderDAO = new OrderDAO();
         long pendingOrdersCount = orderDAO.getAll().stream()
-                .filter(order -> order.getStatus() == OrderStatus.DANG_XU_LY)
+                .filter(order -> order.getExportStatus() == ExportStatus.CHUA_XUAT_KHO)
                 .count();
 
         String formattedPendingOrders = String.format("%,d", pendingOrdersCount);

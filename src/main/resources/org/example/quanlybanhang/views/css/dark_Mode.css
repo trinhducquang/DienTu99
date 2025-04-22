@@ -1,6 +1,5 @@
 /* Dark Mode Theme - Điện Tử 99 */
 
-/* Color Variables */
 * {
     -fx-primary: #2563eb;
     -fx-primary-light: #3b82f6;
@@ -15,13 +14,11 @@
     -fx-warning: #facc15;
 }
 
-/* General Setup */
 .root {
     -fx-background-color: -fx-secondary;
     -fx-font-family: "Segoe UI", "Arial", sans-serif;
 }
 
-/* Top Navigation Bar */
 .top-nav {
     -fx-background-color: -fx-primary-dark;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 5, 0, 0, 2);
@@ -76,14 +73,12 @@
     -fx-font-weight: bold;
 }
 
-/* Version Label */
 .version-label {
     -fx-text-fill: #a6adc8;
     -fx-font-size: 12px;
     -fx-opacity: 0.8;
 }
 
-/* Dashboard Title */
 .dashboard-title {
     -fx-font-size: 24px;
     -fx-text-fill: -fx-text-light;
@@ -116,10 +111,12 @@
 }
 
 .card-orders {
+    -fx-max-width: 300;
     -fx-background-color: linear-gradient(to bottom right, #f59e0b, #d97706);
 }
 
 .card-product {
+    -fx-max-width: 300;
     -fx-background-color: linear-gradient(to bottom right, #8b5cf6, #7c3aed);
 }
 
@@ -761,29 +758,6 @@
     -fx-background-color: transparent;
 }
 
-/* Date Picker Styling */
-.date-picker {
-    -fx-background-color: rgba(255, 255, 255, 0.05);
-    -fx-background-radius: 5;
-    -fx-border-color: -fx-grey;
-    -fx-border-radius: 5;
-    -fx-text-fill: -fx-text-dark;
-    -fx-prompt-text-fill: derive(-fx-text-dark, -30%);
-}
-
-.date-picker .arrow-button {
-    -fx-background-color: -fx-grey-light;
-    -fx-background-radius: 0 5 5 0;
-}
-
-.date-picker .arrow-button:hover {
-    -fx-background-color: -fx-primary;
-}
-
-.date-picker .arrow-button .arrow {
-    -fx-background-color: -fx-text-dark;
-}
-
 /* Theme Toggle Button */
 .theme-toggle-button {
     -fx-background-color: #1e1e2e;
@@ -813,3 +787,237 @@
 .login-title {
     -fx-text-fill: -fx-text-light;
 }
+
+/* Điều chỉnh TitledPane để phù hợp với chủ đề tối */
+.titled-pane {
+    -fx-text-fill: -fx-text-dark;
+    -fx-background-color: -fx-secondary;
+    -fx-border-color: -fx-grey;
+    -fx-border-radius: 5;
+}
+
+.titled-pane > .title {
+    -fx-background-color: -fx-grey-light;
+    -fx-border-color: -fx-grey;
+    -fx-text-fill: -fx-text-light;
+}
+
+.titled-pane:focused > .title {
+    -fx-background-color: -fx-primary;
+}
+
+.titled-pane > .title > .arrow-button .arrow {
+    -fx-background-color: -fx-text-dark;
+}
+
+.titled-pane:focused > .title > .arrow-button .arrow {
+    -fx-background-color: -fx-text-light;
+}
+
+.titled-pane > *.content {
+    -fx-background-color: -fx-secondary;
+    -fx-border-color: -fx-grey;
+    -fx-border-width: 1;
+}
+
+/* Cải thiện nút trong form */
+#btnAddProduct, #btnAddCustomer, #btnSaveOrder, #btnCancel, #btnback {
+    -fx-background-radius: 5;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+#btnSaveOrder, #btnAddProduct {
+    -fx-background-color: -fx-success;
+    -fx-text-fill: -fx-text-light;
+}
+
+#btnCancel, #btnback {
+    -fx-background-color: -fx-grey;
+    -fx-text-fill: -fx-text-light;
+}
+
+#btnAddCustomer {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-text-light;
+}
+
+/* Điều chỉnh bảng */
+#tableOrderDetails {
+    -fx-background-color: -fx-secondary;
+    -fx-table-cell-border-color: -fx-grey;
+    -fx-border-color: -fx-grey;
+    -fx-border-width: 1;
+}
+
+#tableOrderDetails .column-header-background {
+    -fx-background-color: -fx-primary-dark;
+}
+
+/* GridPane trong TitledPane */
+.titled-pane GridPane {
+    -fx-background-color: -fx-secondary;
+}
+
+/* Điều chỉnh Spinner */
+.spinner {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-border-color: -fx-grey;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.spinner .increment-arrow-button, .spinner .decrement-arrow-button {
+    -fx-background-color: -fx-grey-light;
+}
+
+.spinner .increment-arrow-button:hover, .spinner .decrement-arrow-button:hover {
+    -fx-background-color: -fx-primary;
+}
+
+.spinner .increment-arrow, .spinner .decrement-arrow {
+    -fx-background-color: -fx-text-dark;
+}
+
+/* Căn chỉnh VBox và HBox */
+.vbox, .hbox {
+    -fx-background-color: transparent;
+}
+
+/* Điều chỉnh cho dialog */
+AnchorPane {
+    -fx-background-color: -fx-secondary;
+}
+
+/* Khung tìm kiếm sản phẩm */
+#findProducts, #findProducts1 {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 5;
+    -fx-border-color: -fx-grey;
+    -fx-border-radius: 5;
+    -fx-text-fill: -fx-text-dark;
+    -fx-prompt-text-fill: derive(-fx-text-dark, -30%);
+}
+
+/* Căn chỉnh các nút trong form */
+#btnSaveOrder:hover, #btnAddProduct:hover {
+    -fx-background-color: derive(-fx-success, -10%);
+}
+
+#btnCancel:hover, #btnback:hover {
+    -fx-background-color: derive(-fx-grey, 20%);
+}
+
+/* Cải thiện màu nền của AnchorPane chính */
+AnchorPane {
+    -fx-background-color: -fx-secondary;
+}
+
+/* Điều chỉnh các phần tử trong form đã chọn */
+.text-field:focused, .combo-box:focused, .date-picker:focused {
+    -fx-border-color: -fx-primary;
+    -fx-border-width: 2;
+}
+
+/* Điều chỉnh màu hiển thị giá trị trong các trường đã vô hiệu hóa */
+.text-field:disabled {
+    -fx-opacity: 0.7;
+    -fx-text-fill: -fx-text-dark;
+    -fx-prompt-text-fill: derive(-fx-text-dark, -30%);
+}
+
+/* Điều chỉnh màu cho các label */
+.form-label, .input-label, .field-label {
+    -fx-text-fill: #cdd6f4; /* Sử dụng màu văn bản sáng phù hợp với nền tối */
+}
+
+.date-picker {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 5;
+    -fx-border-color: #45475a;
+    -fx-border-radius: 5;
+}
+
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: #cdd6f4;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #313244;
+}
+
+#thanhToan, #chiTietSanPham, #thongTinDonHang {
+    -fx-text-fill: #cdd6f4;
+}
+
+#maDonHang, #ngayDat, #trangThai, #khachHang, #dienThoai,
+#tongTienHang, #giamGiaValue, #tongThanhToan {
+    -fx-text-fill: #cdd6f4;
+}
+
+
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-dark;
+}
+
+.date-picker-popup {
+    -fx-background-color: -fx-secondary;
+    -fx-border-color: -fx-grey;
+}
+
+.date-picker-popup .month-year-pane {
+    -fx-background-color: -fx-primary-dark;
+}
+
+.date-picker-popup .calendar-grid {
+    -fx-background-color: -fx-secondary;
+}
+
+.date-picker-popup .day-cell {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-text-dark;
+}
+
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: -fx-grey-light;
+}
+
+.date-picker-popup .selected {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-text-light;
+}
+
+
+.text-field, TextField, .text-input {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 5;
+    -fx-border-color: #45475a;
+    -fx-border-radius: 5;
+    -fx-text-fill: #cdd6f4;
+    -fx-prompt-text-fill: derive(#cdd6f4, -30%);
+}
+
+#txtOrderId, #txtTotalPrice, #txtShippingFee, #txtFinalTotal, #findProducts, #findProducts1 {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 5;
+    -fx-border-color: #45475a;
+    -fx-border-radius: 5;
+    -fx-text-fill: #cdd6f4;
+}
+
+.spinner .text-field {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-text-fill: #cdd6f4;
+}
+
+#txtTotalPrice, #txtShippingFee, #txtFinalTotal {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-text-fill: #cdd6f4;
+}
+
+.titled-pane Label, GridPane Label {
+    -fx-text-fill: #cdd6f4;
+}
+

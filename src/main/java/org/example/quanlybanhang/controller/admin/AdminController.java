@@ -28,7 +28,10 @@ public class AdminController {
     @FXML
     private Label topSellingProductLabel;
     @FXML
+    private Label revenueLabel;
+    @FXML
     private TableView<?> ordersTable;
+
 
 
     // Version information
@@ -42,8 +45,22 @@ public class AdminController {
         logoutButton.setOnAction(event -> LogoutHandler.handleLogout(logoutButton));
         currentActiveButton = btnDashboard;
         updateTopSellingProduct();
-        updateCompletedOrdersCount();
         updateAnnualProfit();
+        updateCompletedOrdersThisMonth();
+        updateTotalRevenue();
+    }
+
+    private void updateCompletedOrdersThisMonth() {
+        try {
+            int completedOrders = orderDAO.countCompletedOrdersInCurrentMonth();
+
+            if (completedOrdersLabel != null) {
+                completedOrdersLabel.setText(String.valueOf(completedOrders));
+            }
+        } catch (Exception e) {
+            System.err.println("Lỗi khi cập nhật số đơn hàng hoàn thành: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void updateAnnualProfit() {
@@ -60,14 +77,16 @@ public class AdminController {
         }
     }
 
-    private void updateCompletedOrdersCount() {
+    private void updateTotalRevenue() {
         try {
-            int completedOrders = orderDAO.countCompletedOrders();
-            if (completedOrdersLabel != null) {
-                completedOrdersLabel.setText(String.valueOf(completedOrders));
+            int currentYear = LocalDateTime.now().getYear();
+            BigDecimal totalRevenue = orderDAO.calculateTotalRevenue(currentYear);
+            if (revenueLabel != null) {
+                java.text.NumberFormat format = java.text.NumberFormat.getInstance(new Locale("vi", "VN"));
+                revenueLabel.setText(format.format(totalRevenue));
             }
         } catch (Exception e) {
-            System.err.println("Lỗi khi cập nhật số lượng đơn hàng hoàn thành: " + e.getMessage());
+            System.err.println("Lỗi khi cập nhật tổng doanh thu: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -77,7 +96,6 @@ public class AdminController {
             setActiveButton(btnDashboard);
             NavigatorAdmin.navigate(adminContentPane, "admin/Admin.fxml");
             updateTopSellingProduct();
-            updateCompletedOrdersCount();
             updateAnnualProfit();
         });
 

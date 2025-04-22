@@ -10,6 +10,7 @@ import org.example.quanlybanhang.utils.DatabaseConnection;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -197,18 +198,52 @@ public class OrderDAO implements CrudDao<Order> {
         return orders;
     }
 
-    public int countCompletedOrders() {
-        String sql = "SELECT COUNT(*) FROM orders WHERE status = ?";
+    public int countCompletedOrdersInCurrentMonth() {
+        LocalDateTime now = LocalDateTime.now();
+        int currentMonth = now.getMonthValue();
+        int currentYear = now.getYear();
+        String sql = "SELECT COUNT(*) AS total FROM orders " +
+                "WHERE MONTH(order_date) = ? AND YEAR(order_date) = ? AND status = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, OrderStatus.HOAN_THANH.getText());
+            stmt.setInt(1, currentMonth);
+            stmt.setInt(2, currentYear);
+            stmt.setString(3, OrderStatus.HOAN_THANH.getText());
+
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1);
+                return rs.getInt("total");
             }
         } catch (SQLException e) {
+            System.err.println("Lỗi khi đếm số đơn hàng hoàn thành tháng hiện tại: " + e.getMessage());
             e.printStackTrace();
         }
+
         return 0;
+    }
+
+    public BigDecimal calculateTotalRevenue(int year) {
+        String sql = "SELECT SUM(od.price * od.quantity) AS total_revenue " +
+                "FROM orders o " +
+                "JOIN order_details od ON o.id = od.order_id " +
+                "WHERE YEAR(o.order_date) = ? " +
+                "AND o.status = ?";
+
+        BigDecimal totalRevenue = BigDecimal.ZERO;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, year);
+            stmt.setString(2, OrderStatus.HOAN_THANH.getText());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                BigDecimal productRevenue = rs.getBigDecimal("total_revenue");
+                totalRevenue = productRevenue != null ? productRevenue : BigDecimal.ZERO;
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi tính tổng doanh thu: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return totalRevenue;
     }
 
     public BigDecimal calculateAnnualProfit(int year) {

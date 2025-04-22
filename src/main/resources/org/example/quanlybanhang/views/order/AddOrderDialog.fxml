@@ -20,22 +20,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="678.0" prefWidth="1013.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.order.AddOrderDialogController">
+<AnchorPane prefHeight="750.0" prefWidth="1036.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.order.AddOrderDialogController">
     <children>
-        <VBox prefHeight="711.0" prefWidth="1013.0">
+        <VBox prefHeight="750.0" prefWidth="1036.0">
             <children>
                 <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="800.0" styleClass="top-nav">
                     <children>
                         <Label text="Thêm Đơn Hàng" textFill="WHITE">
                             <font>
-                                <Font name="System Bold" size="24.0" />
+                                <Font name="System Bold"  size="24.0" />
                             </font>
                             <HBox.margin>
                                 <Insets left="20.0" />
                             </HBox.margin>
                         </Label>
                         <Region prefHeight="60.0" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnback" mnemonicParsing="false" onAction="#handleBack" style="-fx-background-color: white;" text="Quay Lại">
+                        <Button fx:id="btnback" mnemonicParsing="false" onAction="#handleBack" styleClass="logout-button" text="Quay Lại">
                             <HBox.margin>
                                 <Insets right="20.0" />
                             </HBox.margin>
@@ -70,7 +70,7 @@
                                         <TextField fx:id="txtOrderId" editable="false" prefHeight="31.0" prefWidth="127.0" promptText="Tự động tạo" GridPane.columnIndex="1" />
 
                                         <Label text="Ngày Đặt:" GridPane.columnIndex="2" />
-                                        <DatePicker fx:id="dateOrderDate" prefHeight="31.0" prefWidth="338.0" promptText="Chọn ngày" GridPane.columnIndex="3" />
+                                        <DatePicker fx:id="dateOrderDate"  prefHeight="31.0" prefWidth="338.0" promptText="Chọn ngày" GridPane.columnIndex="3" />
 
                                         <Label text="Khách Hàng:" GridPane.rowIndex="1" />
                                         <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
