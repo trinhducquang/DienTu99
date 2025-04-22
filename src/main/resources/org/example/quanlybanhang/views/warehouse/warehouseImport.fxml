@@ -17,16 +17,16 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="636.0" prefWidth="898.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.warehouse.WarehouseImportDialog">
+<BorderPane prefHeight="750.0" prefWidth="1045.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.warehouse.WarehouseImportDialog">
     <top>
         <VBox spacing="10">
             <children>
                 <BorderPane styleClass="top-nav">
                     <left>
-                        <Label styleClass="header-label" text="Thêm Phiếu Nhập Kho" />
+                        <Label styleClass="header-title" text="Thêm Phiếu Nhập Kho" />
                     </left>
                     <right>
-                        <Button styleClass="back-button" style="-fx-background-color: white;" text="Quay Lại" />
+                        <Button style="-fx-background-color: white;" styleClass="back-button" text="Quay Lại" />
                     </right>
                     <padding>
                         <Insets bottom="15" left="15" right="15" top="15" />
@@ -90,10 +90,10 @@
                             <TextField fx:id="quantityField" prefWidth="100" />
                             <Label fx:id="unitPriceLabel" text="Đơn Giá:" />
                             <TextField fx:id="unitPriceField" prefWidth="120" />
-                            <Button styleClass="add-button" fx:id="addProductButton" onAction="#onAddProduct" text="Thêm Sản Phẩm" />
+                            <Button fx:id="addProductButton" onAction="#onAddProduct" styleClass="add-button" text="Thêm Sản Phẩm" />
                         </HBox>
 
-                        <TableView fx:id="productTableView" prefHeight="194.0" prefWidth="842.0" VBox.vgrow="ALWAYS">
+                        <TableView fx:id="productTableView" prefHeight="269.0" prefWidth="943.0" VBox.vgrow="ALWAYS">
                             <columns>
                                 <TableColumn fx:id="sttColumn" prefWidth="50" text="STT" />
                                 <TableColumn fx:id="productIdColumn" prefWidth="100" text="Mã SP" />
@@ -125,7 +125,7 @@
 
                         <!-- Row 0 -->
                         <Label fx:id="totalAmountLabel" text="Tổng Tiền:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                        <TextField fx:id="totalAmountField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <TextField fx:id="totalAmountField" style="-fx-text-fill: red" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                         <Label text="Số Lượng Dư:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                         <TextField fx:id="excessQuantityField" GridPane.columnIndex="3" GridPane.rowIndex="0" />
@@ -153,7 +153,7 @@
                 <Insets bottom="15" left="15" right="15" top="15" />
             </padding>
             <Button styleClass="cancel-button" text="Hủy" />
-            <Button styleClass="save-button"  onAction="#onSave" text="Lưu Phiếu Nhập" />
+            <Button onAction="#onSave" styleClass="save-button" text="Lưu Phiếu Nhập" />
         </HBox>
     </bottom>
 </BorderPane>

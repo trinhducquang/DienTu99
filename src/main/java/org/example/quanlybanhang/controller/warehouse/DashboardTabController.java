@@ -120,7 +120,7 @@ public class DashboardTabController {
             System.out.println("Transaction count: " + allTransactions.size());
             // Check a few sample data points
             if (!allTransactions.isEmpty()) {
-                WarehouseDTO firstTrans = allTransactions.get(0);
+                WarehouseDTO firstTrans = allTransactions.getFirst();
                 System.out.println("Sample: ProductID=" + firstTrans.getProductId()
                         + ", Type=" + firstTrans.getType()
                         + ", Quantity=" + firstTrans.getQuantity()
