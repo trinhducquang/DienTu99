@@ -67,11 +67,6 @@ public class CategoryDAO implements CrudDao<Category> {
 
 
     @Override
-    public void delete(Category category) {
-        System.out.println("chưa có gì");
-    }
-
-    @Override
     public Category findById(int id) {
         String sql = "SELECT id, name, description, parent_id, " +
                 "CASE WHEN parent_id IS NULL THEN 'Danh mục cha' ELSE 'Danh mục con' END AS category " +

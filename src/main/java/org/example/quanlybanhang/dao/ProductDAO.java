@@ -113,7 +113,7 @@ public class ProductDAO implements CrudDao<Product> {
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, product.getName());
-            statement.setInt(2, product.getCategoryId()); // 👈 thêm dòng này để cập nhật category_id
+            statement.setInt(2, product.getCategoryId());
             statement.setString(3, product.getDescription());
             statement.setBigDecimal(4, product.getPrice());
             statement.setInt(5, product.getStockQuantity());
@@ -123,16 +123,12 @@ public class ProductDAO implements CrudDao<Product> {
             statement.setString(9, product.getSpecifications());
             statement.setInt(10, product.getId());
 
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0; // Return true if update was successful
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
-    }
-
-    @Override
-    public void delete(Product product) {
-        System.out.println("Chưa có gì");
     }
 
 

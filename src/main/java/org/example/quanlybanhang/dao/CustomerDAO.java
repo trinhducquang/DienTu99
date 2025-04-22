@@ -95,9 +95,4 @@ public class CustomerDAO implements CrudDao<Customer> {
             return false;
         }
     }
-
-    @Override
-    public void delete(Customer customer) {
-        System.out.println("chưa sử dụng");
-    }
 }

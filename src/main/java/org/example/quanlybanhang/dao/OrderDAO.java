@@ -69,16 +69,6 @@ public class OrderDAO implements CrudDao<Order> {
         }
     }
 
-    @Override
-    public void delete(Order order) {
-        String sql = "DELETE FROM orders WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, order.getId());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public int addOrder(Order order, List<OrderDetail> orderDetails) {
         String insertOrderSQL = "INSERT INTO orders (employee_id, customer_id, total_price, shipping_fee, order_date, status, note) VALUES (?, ?, ?, ?, ?, ?, ?)";

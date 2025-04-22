@@ -17,6 +17,7 @@ import org.example.quanlybanhang.dao.UserDAO;
 import org.example.quanlybanhang.model.User;
 import org.example.quanlybanhang.security.auth.AuthService;
 import org.example.quanlybanhang.security.auth.UserSession;
+import org.example.quanlybanhang.utils.AlertUtils;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 import org.example.quanlybanhang.utils.ThemeManager;
 
@@ -46,13 +47,6 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-        UIEffects.applyHoverEffect(
-                dangNhapButton,
-                "-fx-background-color: #2196F3; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 12px;",
-                "-fx-background-color: #1976D2; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 12px;"
-        );
-        UIEffects.applyFocusEffect(tenDangNhapField);
-        UIEffects.applyFocusEffect(matKhauField);
         updateThemeIcon();
         themeButton.setOnAction(event -> toggleTheme());
         Platform.runLater(() -> {
@@ -92,7 +86,6 @@ public class LoginController {
 
     @FXML
     private void xuLyDangNhap() {
-        // Existing code remains the same
         String tenDangNhap = tenDangNhapField.getText();
         String matKhau = matKhauField.getText();
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), dangNhapButton);
@@ -162,21 +155,7 @@ public class LoginController {
     }
 
     private void hienThiThongBaoLoi(String noiDung) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Lỗi Đăng Nhập");
-        alert.setHeaderText(null);
-        alert.setContentText(noiDung);
-
-        try {
-            DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.getStylesheets().add(Objects.requireNonNull(getClass()
-                    .getResource("/org/example/quanlybanhang/views/css/dialog.css")).toExternalForm());
-            dialogPane.getStyleClass().add("dialog-pane");
-        } catch (Exception e) {
-            System.err.println("Không thể tải file CSS: " + e.getMessage());
-        }
-
-        alert.showAndWait();
+        AlertUtils.showError("Lỗi Đăng Nhập", noiDung);
     }
 
     public String getVersion() {

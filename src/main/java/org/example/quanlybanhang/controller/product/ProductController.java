@@ -2,17 +2,23 @@ package org.example.quanlybanhang.controller.product;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
+import org.example.quanlybanhang.controller.interfaces.RefreshableView;
 import org.example.quanlybanhang.enums.ProductStatus;
 import org.example.quanlybanhang.helpers.DialogHelper;
-import org.example.quanlybanhang.model.*;
-import org.example.quanlybanhang.service.*;
-import org.example.quanlybanhang.utils.*;
-import org.example.quanlybanhang.controller.interfaces.RefreshableView;
+import org.example.quanlybanhang.model.Category;
+import org.example.quanlybanhang.model.Product;
+import org.example.quanlybanhang.service.CategoryService;
+import org.example.quanlybanhang.service.ProductService;
+import org.example.quanlybanhang.utils.PaginationUtils;
+import org.example.quanlybanhang.utils.TableCellFactoryUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,20 +26,34 @@ import java.util.stream.Stream;
 
 public class ProductController implements RefreshableView {
 
-    @FXML private TableView<Product> productsTable;
-    @FXML private TableColumn<Product, Integer> idColumn;
-    @FXML private TableColumn<Product, String> nameColumn;
-    @FXML private TableColumn<Product, String> categoryNameColumn;
-    @FXML private TableColumn<Product, BigDecimal> priceColumn;
-    @FXML private TableColumn<Product, Integer> stockQuantityColumn;
-    @FXML private TableColumn<Product, String> descriptionColumn;
-    @FXML private TableColumn<Product, ProductStatus> statusColumn;
-    @FXML private TableColumn<Product, String> imageColumn;
-    @FXML private TableColumn<Product, Void> OperationColumn;
-    @FXML private Pagination pagination;
-    @FXML private ComboBox<Category> categoryFilter;
-    @FXML private TextField searchField;
-    @FXML private Button addProductButton;
+    @FXML
+    private TableView<Product> productsTable;
+    @FXML
+    private TableColumn<Product, Integer> idColumn;
+    @FXML
+    private TableColumn<Product, String> nameColumn;
+    @FXML
+    private TableColumn<Product, String> categoryNameColumn;
+    @FXML
+    private TableColumn<Product, BigDecimal> priceColumn;
+    @FXML
+    private TableColumn<Product, Integer> stockQuantityColumn;
+    @FXML
+    private TableColumn<Product, String> descriptionColumn;
+    @FXML
+    private TableColumn<Product, ProductStatus> statusColumn;
+    @FXML
+    private TableColumn<Product, String> imageColumn;
+    @FXML
+    private TableColumn<Product, Void> OperationColumn;
+    @FXML
+    private Pagination pagination;
+    @FXML
+    private ComboBox<Category> categoryFilter;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Button addProductButton;
 
     private final ObservableList<Product> allProducts = FXCollections.observableArrayList();
     private final ObservableList<Product> filteredProducts = FXCollections.observableArrayList();
@@ -94,18 +114,37 @@ public class ProductController implements RefreshableView {
             productsTable.refresh();
         });
 
-        categoryNameColumn.setCellFactory(ComboBoxTableCell.forTableColumn(
-                FXCollections.observableArrayList(categoryList.stream().map(Category::getName).toList())
-        ));
+        categoryNameColumn.setCellFactory(column -> {
+            ComboBoxTableCell<Product, String> cell = new ComboBoxTableCell<>() {
+                @Override
+                public void startEdit() {
+                    if (getTableColumn().isEditable() && getTableView().isEditable() && getTableRow().getItem() != null) {
+                        getItems().setAll(categoryList.stream().map(Category::getName).toList());
+                        super.startEdit();
+                    }
+                }
+            };
+            cell.getItems().setAll(categoryList.stream().map(Category::getName).toList());
+            return cell;
+        });
+
         categoryNameColumn.setOnEditCommit(event -> {
             Product product = event.getRowValue();
-            String newName = event.getNewValue();
-            product.setCategoryName(newName);
-            categoryList.stream()
-                    .filter(c -> c.getName().equals(newName))
-                    .findFirst()
-                    .ifPresent(c -> product.setCategoryId(c.getId()));
-            updateProduct(product);
+            String oldCategoryName = product.getCategoryName();
+            String newCategoryName = event.getNewValue();
+
+            if (!oldCategoryName.equals(newCategoryName)) {
+                Category selectedCategory = categoryList.stream()
+                        .filter(c -> c.getName().equals(newCategoryName))
+                        .findFirst()
+                        .orElse(null);
+
+                if (selectedCategory != null) {
+                    product.setCategoryName(newCategoryName);
+                    product.setCategoryId(selectedCategory.getId());
+                    updateProduct(product);
+                }
+            }
         });
 
         descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -131,10 +170,9 @@ public class ProductController implements RefreshableView {
         });
     }
 
-    // === Cột nút thao tác "Chi tiết sản phẩm" ===
     private void setupOperationColumn() {
         OperationColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button detailButton = new Button("Chi tiết");
+            private final Button detailButton = new Button("Chi tiết sản phẩm");
 
             {
                 detailButton.setOnAction(event -> {

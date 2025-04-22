@@ -132,19 +132,6 @@ public class EmployeeDAO implements CrudDao<Employee> {
         return true;
     }
 
-
-    @Override
-    public void delete(Employee employee) {
-        String query = "DELETE FROM users WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, employee.getId());
-            statement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public boolean isFullNameOrUsernameExists(String fullName, String username) {
         String query = "SELECT COUNT(*) FROM users WHERE full_name = ? OR username = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {

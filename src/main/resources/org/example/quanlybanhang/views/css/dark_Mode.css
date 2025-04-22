@@ -1,3 +1,6 @@
+/* Dark Mode Theme - Điện Tử 99 */
+
+/* Color Variables */
 * {
     -fx-primary: #2563eb;
     -fx-primary-light: #3b82f6;
@@ -216,7 +219,9 @@
 }
 
 /* Labels */
-.form-label, .input-label, .field-label {
+.form-label,
+.input-label,
+.field-label {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: -fx-text-dark;
@@ -241,7 +246,9 @@
 }
 
 /* Input Fields */
-.form-input, .input-field, .field-input {
+.form-input,
+.input-field,
+.field-input {
     -fx-background-color: rgba(255, 255, 255, 0.05);
     -fx-background-radius: 5;
     -fx-border-color: -fx-grey;
@@ -252,7 +259,9 @@
     -fx-prompt-text-fill: derive(-fx-text-dark, -30%);
 }
 
-.form-input:focused, .input-field:focused, .field-input:focused {
+.form-input:focused,
+.input-field:focused,
+.field-input:focused {
     -fx-background-color: rgba(255, 255, 255, 0.1);
     -fx-border-color: -fx-primary;
     -fx-border-width: 2;
@@ -339,7 +348,8 @@
     -fx-background-color: -fx-primary-dark;
 }
 
-.table-view .column-header, .table-view .filler {
+.table-view .column-header,
+.table-view .filler {
     -fx-background-color: transparent;
     -fx-size: 35;
     -fx-border-width: 0 0 1 0;
@@ -493,7 +503,8 @@
 }
 
 /* Navigation buttons for related products */
-#btnPrevious, #btnNext {
+#btnPrevious,
+#btnNext {
     -fx-background-color: -fx-primary;
     -fx-text-fill: -fx-text-light;
     -fx-background-radius: 50%;
@@ -506,7 +517,8 @@
     -fx-cursor: hand;
 }
 
-#btnPrevious:hover, #btnNext:hover {
+#btnPrevious:hover,
+#btnNext:hover {
     -fx-background-color: -fx-primary-light;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 3, 0, 0, 1);
 }
@@ -537,61 +549,6 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
     -fx-border-color: -fx-primary;
     -fx-cursor: hand;
-}
-
-/* Login Screen Specific */
-.login-background {
-    -fx-background-color: -fx-secondary;
-}
-
-.login-form {
-    -fx-background-color: #181825;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 4);
-    -fx-background-radius: 8;
-    -fx-padding: 30;
-}
-
-.login-title {
-    -fx-font-size: 28px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -fx-text-light;
-}
-
-.login-label {
-    -fx-font-size: 16px;
-    -fx-text-fill: -fx-text-dark;
-}
-
-.login-input {
-    -fx-background-color: rgba(255, 255, 255, 0.05);
-    -fx-border-color: -fx-grey;
-    -fx-text-fill: -fx-text-dark;
-    -fx-prompt-text-fill: derive(-fx-text-dark, -30%);
-}
-
-.login-button {
-    -fx-background-color: -fx-primary;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-font-size: 16px;
-    -fx-background-radius: 5;
-}
-
-.login-button:hover {
-    -fx-background-color: -fx-primary-dark;
-}
-
-/* Dark Mode Button */
-.dark-mode-button {
-    -fx-background-color: #181825;
-    -fx-min-width: 50px;
-    -fx-min-height: 50px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
-    -fx-cursor: hand;
-}
-
-.dark-mode-button:hover {
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 8, 0, 0, 3);
 }
 
 /* Order Details Dialog */
@@ -632,15 +589,20 @@
     -fx-text-fill: -fx-text-dark;
 }
 
-.order-item-card {
-    -fx-background-color: #313244;
-    -fx-padding: 15;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 3, 0, 0, 1);
+.product-list-container {
+    -fx-padding: 10;
+    -fx-spacing: 15;
 }
 
-.order-footer {
-    -fx-background-color: #181825;
-    -fx-padding: 15;
+.product-item {
+    -fx-background-color: -fx-grey-light;
+    -fx-padding: 10;
+    -fx-background-radius: 5;
+    -fx-spacing: 10;
+}
+
+.order-summary {
+    -fx-padding: 10;
 }
 
 /* Action buttons for order details */
@@ -668,7 +630,9 @@
     -fx-cursor: hand;
 }
 
-.print-button:hover, .update-button:hover, .back-button:hover {
+.print-button:hover,
+.update-button:hover,
+.back-button:hover {
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 5, 0, 0, 2);
 }
 
@@ -714,50 +678,48 @@
     -fx-background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Password field and its mask */
-.password-field {
-    -fx-background-color: rgba(255, 255, 255, 0.05);
-    -fx-text-fill: -fx-text-dark;
-    -fx-prompt-text-fill: derive(-fx-text-dark, -30%);
-}
-
-/* Reset password button */
-.reset-button {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-text-fill: -fx-text-dark;
-    -fx-background-radius: 3;
-    -fx-cursor: hand;
-    -fx-font-size: 12px;
-}
-
-.reset-button:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.15);
-}
-
-/* Status indicators */
-.unlock-status {
-    -fx-text-fill: -fx-success;
-    -fx-font-weight: bold;
-}
-
-.lock-status {
-    -fx-text-fill: -fx-error;
-    -fx-font-weight: bold;
-}
-
-.form-input, .input-field, .field-input, .text-area {
+/* ComboBox Styling */
+.combo-box {
     -fx-background-color: rgba(255, 255, 255, 0.05);
     -fx-background-radius: 5;
     -fx-border-color: -fx-grey;
     -fx-border-radius: 5;
-    -fx-padding: 12;
-    -fx-font-size: 14px;
-    -fx-text-fill: -fx-text-dark;
-    -fx-prompt-text-fill: derive(-fx-text-dark, -30%);
-    -fx-control-inner-background: -fx-secondary;
+    -fx-padding: 0;
 }
 
-/* Text Area Styling - Fixed */
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box .arrow {
+    -fx-background-color: -fx-text-dark;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: -fx-text-dark;
+    -fx-padding: 8 12;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: -fx-secondary;
+    -fx-border-color: -fx-grey;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: -fx-secondary;
+    -fx-text-fill: -fx-text-dark;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: -fx-grey-light;
+}
+
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-text-light;
+}
+
+/* Text Area Styling */
 .text-area {
     -fx-background-color: rgba(255, 255, 255, 0.05);
     -fx-background-radius: 5;
@@ -822,263 +784,32 @@
     -fx-background-color: -fx-text-dark;
 }
 
-.date-picker .cell {
-    -fx-background-color: -fx-secondary;
-    -fx-text-fill: -fx-text-dark;
-    -fx-border-color: transparent;
+/* Theme Toggle Button */
+.theme-toggle-button {
+    -fx-background-color: #1e1e2e;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+    -fx-border-color: #45475a;
+    -fx-border-width: 1px;
+    -fx-padding: 8px;
+    -fx-cursor: hand;
 }
 
-.date-picker .cell:hover {
-    -fx-background-color: -fx-grey-light;
+.theme-toggle-button:hover {
+    -fx-background-color: #313244;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 8, 0, 0, 0);
 }
 
-.date-picker .cell:focused {
-    -fx-background-color: -fx-primary;
+.forgot-password {
+    -fx-text-fill: #3b82f6;
+    -fx-cursor: hand;
+}
+
+.forgot-password:hover {
+    -fx-text-fill: #60a5fa;
+    -fx-underline: true;
+}
+
+.login-title {
     -fx-text-fill: -fx-text-light;
 }
-
-.date-picker .selected {
-    -fx-background-color: -fx-primary;
-    -fx-text-fill: -fx-text-light;
-}
-
-.date-picker .selected:focused {
-    -fx-background-color: -fx-primary;
-}
-
-.date-picker-popup {
-    -fx-background-color: -fx-secondary;
-    -fx-border-color: -fx-grey;
-}
-
-.date-picker-popup .month-year-pane {
-    -fx-background-color: -fx-primary-dark;
-}
-
-.date-picker-popup .month-year-pane .label {
-    -fx-text-fill: -fx-text-light;
-}
-
-.date-picker-popup .week-number-cell {
-    -fx-text-fill: -fx-grey;
-}
-
-.date-picker-popup .spinner .button {
-    -fx-background-color: -fx-primary;
-    -fx-text-fill: -fx-text-light;
-}
-
-.date-picker-popup .spinner .button:hover {
-    -fx-background-color: -fx-primary-light;
-}
-
-.date-picker-popup .spinner .label {
-    -fx-text-fill: -fx-text-light;
-}
-
-.date-picker .text-field {
-    -fx-background-color: transparent;
-    -fx-text-fill: -fx-text-dark;
-    -fx-prompt-text-fill: derive(-fx-text-dark, -30%);
-}
-
-.date-picker-popup .today {
-    -fx-background-color: -fx-primary-light;
-    -fx-text-fill: -fx-text-light;
-    -fx-font-weight: bold;
-}
-
-.date-picker-popup .today:hover {
-    -fx-background-color: -fx-primary;
-}
-
-.date-picker-popup .spinner .button .left-arrow,
-.date-picker-popup .spinner .button .right-arrow {
-    -fx-background-color: -fx-text-light;
-}
-
-/* Scroll Bar Styling */
-.scroll-bar {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0;
-}
-
-.scroll-bar:vertical {
-    -fx-pref-width: 12;
-}
-
-.scroll-bar:horizontal {
-    -fx-pref-height: 12;
-}
-
-.scroll-bar:vertical .thumb,
-.scroll-bar:horizontal .thumb {
-    -fx-background-color: -fx-grey;
-    -fx-background-radius: 6;
-    -fx-background-insets: 2, 0, 0;
-}
-
-.scroll-bar:vertical .thumb:hover,
-.scroll-bar:horizontal .thumb:hover {
-    -fx-background-color: -fx-primary-light;
-}
-
-.scroll-bar:vertical .thumb:pressed,
-.scroll-bar:horizontal .thumb:pressed {
-    -fx-background-color: -fx-primary;
-}
-
-.scroll-bar .increment-button,
-.scroll-bar .decrement-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0;
-    -fx-padding: 3;
-}
-
-.scroll-bar .increment-arrow,
-.scroll-bar .decrement-arrow {
-    -fx-background-color: -fx-grey;
-    -fx-shape: " ";
-    -fx-padding: 0;
-}
-
-.scroll-bar:vertical .increment-arrow,
-.scroll-bar:vertical .decrement-arrow {
-    -fx-shape: "M 0 0 L 4 8 L 8 0 Z";
-}
-
-.scroll-bar:horizontal .increment-arrow,
-.scroll-bar:horizontal .decrement-arrow {
-    -fx-shape: "M 0 0 L 8 4 L 0 8 Z";
-}
-
-.scroll-pane {
-    -fx-background-color: transparent;
-    -fx-padding: 0;
-    -fx-background-insets: 0;
-}
-
-.scroll-pane > .viewport {
-    -fx-background-color: transparent;
-}
-
-/* For TableView specific scrollbars */
-.table-view .scroll-bar:vertical,
-.table-view .scroll-bar:horizontal {
-    -fx-background-color: transparent;
-}
-
-.table-view .scroll-bar:vertical .thumb,
-.table-view .scroll-bar:horizontal .thumb {
-    -fx-background-color: -fx-grey;
-}
-
-.table-view .scroll-bar:vertical .thumb:hover,
-.table-view .scroll-bar:horizontal .thumb:hover {
-    -fx-background-color: -fx-primary-light;
-}
-
-.pagination-control .scroll-bar:vertical,
-.pagination-control .scroll-bar:horizontal {
-    -fx-background-color: transparent;
-    -fx-pref-width: 10;
-    -fx-pref-height: 10;
-}
-
-/* Class cho các trường input trong form đơn hàng */
-.order-input {
-    -fx-background-color: rgba(255, 255, 255, 0.05);
-    -fx-background-radius: 5;
-    -fx-border-color: -fx-grey;
-    -fx-border-radius: 5;
-    -fx-padding: 10;
-    -fx-font-size: 14px;
-    -fx-text-fill: -fx-text-dark;
-    -fx-pref-height: 35px;
-}
-
-/* Class cho các trường ComboBox trong form đơn hàng */
-.order-combo-box {
-    -fx-background-color: rgba(255, 255, 255, 0.05);
-    -fx-background-radius: 5;
-    -fx-border-color: -fx-grey;
-    -fx-border-radius: 5;
-    -fx-pref-height: 35px;
-}
-
-
-.order-spinner {
-    -fx-pref-height: 35px;
-}
-
-.info-section {
-    -fx-vgap: 10;
-    -fx-hgap: 10;
-    -fx-padding: 10;
-}
-
-/* Class cho các trường input trong form đơn hàng */
-.order-input {
-    -fx-background-color: rgba(255, 255, 255, 0.05);
-    -fx-background-radius: 5;
-    -fx-border-color: -fx-grey;
-    -fx-border-radius: 5;
-    -fx-padding: 10;
-    -fx-font-size: 14px;
-    -fx-text-fill: -fx-text-dark;
-    -fx-pref-height: 35px;
-}
-
-/* Tab Pane Styling */
-.tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: -fx-secondary;
-    -fx-effect: null;
-}
-
-.tab-pane .tab {
-    -fx-background-color: #181825;
-    -fx-background-radius: 5 5 0 0;
-}
-
-.tab-pane .tab:selected {
-    -fx-background-color: -fx-primary;
-}
-
-.tab-pane .tab .tab-label {
-    -fx-text-fill: -fx-text-dark;
-    -fx-font-size: 14px;
-}
-
-.tab-pane .tab:selected .tab-label {
-    -fx-text-fill: -fx-text-light;
-    -fx-font-weight: bold;
-}
-
-.tab-pane .tab-content-area {
-    -fx-background-color: -fx-secondary;
-}
-
-/* Tab-pane border */
-.tab-pane {
-    -fx-tab-max-height: 30px;
-    -fx-tab-max-width: 160px;
-    -fx-tab-min-height: 30px;
-    -fx-border-color: -fx-grey;
-    -fx-border-width: 0;
-}
-
-.dark-mode-text {
-    -fx-text-fill: -fx-text-light;
-}
-
-.product-list-title {
-    -fx-font-size: 18;
-    -fx-font-weight: bold;
-    -fx-text-fill: -fx-text-dark;
-}
-
-.price-range-text {
-    -fx-text-fill: -fx-text-light;
-}
-
-
