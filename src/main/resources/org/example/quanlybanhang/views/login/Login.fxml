@@ -17,12 +17,12 @@
 <AnchorPane fx:id="rootPane" prefHeight="599.0" prefWidth="989.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.quanlybanhang.controller.login.LoginController">
     <children>
         <HBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-            <!-- Phần hình ảnh bên trái -->
+            <!-- Left image section -->
             <StackPane fx:id="leftPane" prefHeight="599.0" prefWidth="0.0" styleClass="top-nav" HBox.hgrow="ALWAYS">
                 <children>
                     <VBox alignment="CENTER" prefHeight="599.0" prefWidth="496.0" spacing="20.0">
                         <children>
-                            <!-- Logo hiện đại hơn -->
+                            <!-- Modern logo -->
                             <StackPane maxHeight="220.0" maxWidth="220.0" styleClass="logo-container">
                                 <children>
                                     <ImageView fitHeight="180.0" fitWidth="180.0" preserveRatio="true">
@@ -36,7 +36,7 @@
                                 </children>
                             </StackPane>
 
-                            <Label styleClass="title-label" text="Điện Tử 99" textFill="WHITE">
+                            <Label styleClass="title-label" text="Electronics 99" textFill="WHITE">
                                 <font>
                                     <Font name="System Bold" size="42.0" />
                                 </font>
@@ -45,7 +45,7 @@
                                 </effect>
                             </Label>
 
-                            <Label styleClass="page-title" text="Hệ thống quản lý bán hàng" textAlignment="CENTER" textFill="WHITE">
+                            <Label styleClass="page-title" text="Sales Management System" textAlignment="CENTER" textFill="WHITE">
                                 <font>
                                     <Font size="20.0" />
                                 </font>
@@ -58,7 +58,7 @@
                 </children>
             </StackPane>
 
-            <!-- Phần đăng nhập bên phải -->
+            <!-- Right login section -->
             <StackPane fx:id="rightPane" styleClass="content-box" HBox.hgrow="ALWAYS">
                 <children>
                     <VBox alignment="CENTER" maxWidth="479.0" prefHeight="599.0" prefWidth="209.0" spacing="25.0">
@@ -66,7 +66,7 @@
                             <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
                         </padding>
                         <children>
-                            <Label alignment="CENTER" styleClass="login-title" text="Đăng Nhập" textAlignment="CENTER">
+                            <Label alignment="CENTER" styleClass="login-title" text="Login" textAlignment="CENTER">
                                 <font>
                                     <Font name="System Bold" size="32.0" />
                                 </font>
@@ -76,12 +76,12 @@
                             </Label>
 
                             <VBox spacing="8.0">
-                                <Label styleClass="form-label" text="Tên đăng nhập">
+                                <Label styleClass="form-label" text="Username">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </Label>
-                                <TextField fx:id="tenDangNhapField" promptText="Nhập tên đăng nhập" styleClass="form-input">
+                                <TextField fx:id="usernameField" promptText="Enter username" styleClass="form-input">
                                     <effect>
                                         <DropShadow color="#00000010" height="3.0" radius="1.0" width="3.0" />
                                     </effect>
@@ -89,12 +89,12 @@
                             </VBox>
 
                             <VBox spacing="8.0">
-                                <Label styleClass="form-label" text="Mật khẩu">
+                                <Label styleClass="form-label" text="Password">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
                                 </Label>
-                                <PasswordField fx:id="matKhauField" promptText="Nhập mật khẩu" styleClass="form-input">
+                                <PasswordField fx:id="passwordField" promptText="Enter password" styleClass="form-input">
                                     <effect>
                                         <DropShadow color="#00000010" height="3.0" radius="1.0" width="3.0" />
                                     </effect>
@@ -103,7 +103,7 @@
 
                             <HBox alignment="CENTER_RIGHT" />
 
-                            <Button fx:id="dangNhapButton" maxWidth="Infinity" onAction="#xuLyDangNhap" styleClass="save-button" text="Đăng Nhập">
+                            <Button fx:id="loginButton" maxWidth="Infinity" onAction="#handleLogin" styleClass="save-button" text="Login">
                                 <font>
                                     <Font name="System Bold" size="16.0" />
                                 </font>
@@ -115,7 +115,7 @@
                                 </VBox.margin>
                             </Button>
 
-                            <Label alignment="CENTER" contentDisplay="BOTTOM" prefWidth="98.0" styleClass="version-label" text="Phiên bản: 1.0.0">
+                            <Label alignment="CENTER" contentDisplay="BOTTOM" prefWidth="98.0" styleClass="version-label" text="Version: 1.0.0">
                                 <VBox.margin>
                                     <Insets top="20.0" />
                                 </VBox.margin>
@@ -129,7 +129,7 @@
             </StackPane>
         </HBox>
 
-        <!-- Nút chuyển đổi theme được thiết kế lại -->
+        <!-- Redesigned theme toggle button -->
         <StackPane AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
             <children>
                 <Button fx:id="themeButton" mnemonicParsing="false" prefHeight="45.0" prefWidth="45.0" styleClass="theme-toggle-button">

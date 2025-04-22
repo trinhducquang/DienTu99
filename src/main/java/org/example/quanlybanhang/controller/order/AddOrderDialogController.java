@@ -11,7 +11,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import org.example.quanlybanhang.controller.interfaces.RefreshableView;
 import org.example.quanlybanhang.dao.CustomerDAO;
 import org.example.quanlybanhang.dao.EmployeeDAO;
 import org.example.quanlybanhang.dao.OrderDAO;
@@ -42,16 +41,6 @@ import static org.example.quanlybanhang.utils.TableCellFactoryUtils.currencyCell
 
 public class AddOrderDialogController {
 
-    // Thêm biến cho parent controller
-    private RefreshableView parentController;
-
-    // Thêm phương thức setter
-    public void setParentController(RefreshableView parentController) {
-        System.out.println("AddOrderDialogController: Đã nhận parent controller");
-        this.parentController = parentController;
-    }
-
-    //region FXML Components
     @FXML
     private Button btnAddCustomer;
     @FXML
@@ -237,19 +226,13 @@ public class AddOrderDialogController {
         BigDecimal total = orderDetailsList.stream()
                 .map(d -> d.getPrice().multiply(BigDecimal.valueOf(d.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        // Cập nhật trường Tổng Tiền Hàng
         txtTotalPrice.setText(formatVN(total));
-
-        // Điền giá trị vào trường Tổng Tiền Hàng trong phần Thanh Toán
         try {
             BigDecimal shippingFee = BigDecimal.ZERO;
-            // Nếu đã có phí vận chuyển thì lấy giá trị đó
             if (txtShippingFee.getText() != null && !txtShippingFee.getText().isEmpty()) {
                 shippingFee = TextFieldFormatterUtils.parseCurrencyText(txtShippingFee.getText());
             }
 
-            // Cập nhật Tổng Thanh Toán
             BigDecimal finalTotal = total.add(shippingFee);
             txtFinalTotal.setText(formatVN(finalTotal));
         } catch (NumberFormatException e) {

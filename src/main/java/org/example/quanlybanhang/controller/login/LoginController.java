@@ -12,7 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import org.example.quanlybanhang.controller.ui.animation.UIEffects;
 import org.example.quanlybanhang.dao.UserDAO;
 import org.example.quanlybanhang.model.User;
 import org.example.quanlybanhang.security.auth.AuthService;
@@ -29,13 +28,13 @@ import java.util.Objects;
 public class LoginController {
 
     @FXML
-    private TextField tenDangNhapField;
+    private TextField usernameField;
 
     @FXML
-    private PasswordField matKhauField;
+    private PasswordField passwordField;
 
     @FXML
-    private Button dangNhapButton;
+    private Button loginButton;
 
     @FXML
     private Button themeButton;
@@ -80,15 +79,15 @@ public class LoginController {
             Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath)));
             themeIcon.setImage(image);
         } catch (Exception e) {
-            System.err.println("Không thể tải icon theme: " + e.getMessage());
+            System.err.println("Unable to load theme icon: " + e.getMessage());
         }
     }
 
     @FXML
-    private void xuLyDangNhap() {
-        String tenDangNhap = tenDangNhapField.getText();
-        String matKhau = matKhauField.getText();
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), dangNhapButton);
+    private void handleLogin() {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(100), loginButton);
         scaleTransition.setToX(0.95);
         scaleTransition.setToY(0.95);
         scaleTransition.setAutoReverse(true);
@@ -97,37 +96,37 @@ public class LoginController {
         Connection conn = DatabaseConnection.getConnection();
         UserDAO userDAO = new UserDAO(conn);
         AuthService authService = new AuthService(userDAO);
-        User user = authService.login(tenDangNhap, matKhau);
+        User user = authService.login(username, password);
 
         if (user != null) {
             UserSession.setCurrentUser(user);
-            FadeTransition fadeOut = new FadeTransition(Duration.millis(500), dangNhapButton.getScene().getRoot());
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(500), loginButton.getScene().getRoot());
             fadeOut.setFromValue(1.0);
             fadeOut.setToValue(0.0);
-            fadeOut.setOnFinished(e -> chuyenSceneTheoVaiTro(user));
+            fadeOut.setOnFinished(e -> navigateByRole(user));
             fadeOut.play();
         } else {
-            hienThiThongBaoLoi("Tên đăng nhập hoặc mật khẩu không đúng");
+            showErrorMessage("Username or password is incorrect");
         }
     }
 
-    private void chuyenSceneTheoVaiTro(User user) {
+    private void navigateByRole(User user) {
         switch (user.getRole()) {
-            case ADMIN -> chuyenScene("admin/Admin.fxml");
-            case NHAN_VIEN -> chuyenScene("employee/EmployeeManagement.fxml");
-            case BAN_HANG -> chuyenScene("sales/sales.fxml");
-            case NHAN_VIEN_KHO -> chuyenScene("warehouse/warehouse.fxml");
-            case THU_NGAN -> chuyenScene("order/Order.fxml");
-            default -> hienThiThongBaoLoi("Vai trò không hợp lệ!");
+            case ADMIN -> changeScene("admin/Admin.fxml");
+            case NHAN_VIEN -> changeScene("employee/EmployeeManagement.fxml");
+            case BAN_HANG -> changeScene("sales/sales.fxml");
+            case NHAN_VIEN_KHO -> changeScene("warehouse/warehouse.fxml");
+            case THU_NGAN -> changeScene("order/Order.fxml");
+            default -> showErrorMessage("Invalid role!");
         }
     }
 
-    private void chuyenScene(String fxmlFile) {
+    private void changeScene(String fxmlFile) {
         try {
             String fxmlPath = "/org/example/quanlybanhang/views/" + fxmlFile;
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
-            Stage stage = (Stage) tenDangNhapField.getScene().getWindow();
+            Stage stage = (Stage) usernameField.getScene().getWindow();
             root.setOpacity(0);
             Scene scene = new Scene(root);
             ThemeManager.applyTheme(scene);
@@ -150,12 +149,12 @@ public class LoginController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            hienThiThongBaoLoi("Không thể chuyển màn hình: " + e.getMessage());
+            showErrorMessage("Unable to change screen: " + e.getMessage());
         }
     }
 
-    private void hienThiThongBaoLoi(String noiDung) {
-        AlertUtils.showError("Lỗi Đăng Nhập", noiDung);
+    private void showErrorMessage(String content) {
+        AlertUtils.showError("Login Error", content);
     }
 
     public String getVersion() {

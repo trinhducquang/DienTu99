@@ -23,7 +23,7 @@
             <children>
                 <BorderPane styleClass="top-nav">
                     <left>
-                        <Label styleClass="header-title" text="Thêm Phiếu Nhập Kho" />
+                        <Label styleClass="header-title" text="Thêm Phiếu Kho" />
                     </left>
                     <right>
                         <Button style="-fx-background-color: white;" styleClass="back-button" text="Quay Lại" />
