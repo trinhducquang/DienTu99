@@ -404,6 +404,26 @@
     -fx-fill: -fx-text-light;
 }
 
+.table-view .button {
+    -fx-background-color: #1a56db; /* Màu xanh sắc nét */
+    -fx-text-fill: white;
+    -fx-background-radius: 3;
+    -fx-padding: 5 10;
+    -fx-border-width: 0;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.table-view .button:hover {
+    -fx-background-color: #1e429f; /* Màu đậm hơn khi hover */
+}
+
+.table-view .button:pressed {
+    -fx-background-color: #233876; /* Màu đậm nhất khi nhấn */
+}
+
+
+
 /* Đảm bảo khi không còn selected thì màu chữ trở lại đúng */
 .table-cell {
     -fx-text-fill: -fx-text-dark;
