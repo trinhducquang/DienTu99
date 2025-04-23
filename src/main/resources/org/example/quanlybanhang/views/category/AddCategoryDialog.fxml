@@ -75,13 +75,13 @@
             <!-- Save and Cancel buttons -->
             <HBox alignment="BOTTOM_RIGHT" prefHeight="143.0" prefWidth="776.0" spacing="15">
                 <Button fx:id="saveButton" onAction="#saveButton" prefHeight="40" prefWidth="120.0"
-                        style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Lưu">
+                        text="Lưu">
                     <HBox.margin>
                         <Insets/>
                     </HBox.margin>
                 </Button>
                 <Button fx:id="cancelButton" onAction="#cancelButton" prefHeight="40" prefWidth="120"
-                        style="-fx-background-color: #F44336; -fx-text-fill: white;" text="Hủy"/>
+                         text="Hủy"/>
                 <VBox.margin>
                     <Insets/>
                 </VBox.margin>

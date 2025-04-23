@@ -22,24 +22,21 @@
     <center>
         <BorderPane>
             <top>
-                <HBox alignment="CENTER_LEFT" spacing="10.0" BorderPane.alignment="CENTER">
+                <HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="top-nav" BorderPane.alignment="CENTER">
                     <padding>
-                        <Insets bottom="10.0" right="20.0" />
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                     </padding>
                     <children>
-                        <Label prefHeight="35.0" prefWidth="157.0" styleClass="dashboard-title" text="Quản Lý Kho">
+                        <Label prefHeight="35.0" prefWidth="151.0" styleClass="dashboard-title" text="Quản Lý Kho">
                             <font>
                                 <Font name="System Bold" size="24.0" />
                             </font>
                             <HBox.margin>
                                 <Insets />
                             </HBox.margin>
-                            <padding>
-                                <Insets left="10.0" />
-                            </padding>
                         </Label>
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnLogout" mnemonicParsing="false" text="Đăng Xuất">
+                        <Region prefHeight="37.0" prefWidth="664.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnLogout" styleClass="top-nav" mnemonicParsing="false" text="Đăng Xuất">
                             <padding>
                                 <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
                             </padding>

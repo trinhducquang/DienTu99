@@ -1038,24 +1038,7 @@ AnchorPane {
     -fx-background-color: -fx-secondary;
 }
 
-/* Điều chỉnh các phần tử trong form đã chọn */
-.text-field:focused, .combo-box:focused, .date-picker:focused {
-    -fx-border-color: -fx-primary;
-    -fx-border-width: 2;
-}
-
-/* Điều chỉnh màu hiển thị giá trị trong các trường đã vô hiệu hóa */
-.text-field:disabled {
-    -fx-opacity: 0.7;
-    -fx-text-fill: -fx-text-dark;
-    -fx-prompt-text-fill: derive(-fx-text-dark, -30%);
-}
-
-/* Điều chỉnh màu cho các label */
-.form-label, .input-label, .field-label {
-    -fx-text-fill: #cdd6f4; /* Sử dụng màu văn bản sáng phù hợp với nền tối */
-}
-
+/* Update the DatePicker styling for better visibility */
 .date-picker {
     -fx-background-color: rgba(255, 255, 255, 0.05);
     -fx-background-radius: 5;
@@ -1072,6 +1055,183 @@ AnchorPane {
     -fx-background-color: #313244;
 }
 
+.date-picker .arrow-button:hover {
+    -fx-background-color: -fx-primary;
+}
+
+.date-picker .arrow {
+    -fx-background-color: #cdd6f4;
+}
+
+/* Completely revise the date picker popup for better visibility */
+.date-picker-popup {
+    -fx-background-color: #1e1e2e;
+    -fx-border-color: #45475a;
+    -fx-border-width: 1px;
+    -fx-padding: 0;
+}
+
+.date-picker-popup > .month-year-pane {
+    -fx-background-color: -fx-primary-dark;
+    -fx-padding: 5 10;
+}
+
+.date-picker-popup > .month-year-pane > .label {
+    -fx-text-fill: #ffffff;
+}
+
+.date-picker-popup > .month-year-pane > .spinner > .button {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 3;
+}
+
+.date-picker-popup > .month-year-pane > .spinner > .button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+.date-picker-popup > .month-year-pane > .spinner > .button > .left-arrow,
+.date-picker-popup > .month-year-pane > .spinner > .button > .right-arrow {
+    -fx-background-color: #ffffff;
+}
+
+/* Calendar grid styling */
+.date-picker-popup > .calendar-grid {
+    -fx-background-color: #1e1e2e;
+    -fx-padding: 5;
+}
+
+/* Day cell styling */
+.date-picker-popup > .calendar-grid > .day-cell {
+    -fx-background-color: #313244;
+    -fx-border-color: #45475a;
+    -fx-border-width: 0.5px;
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 0;
+    -fx-padding: 5;
+}
+
+.date-picker-popup > .calendar-grid > .day-cell:hover {
+    -fx-background-color: -fx-primary-light;
+}
+
+.date-picker-popup > .calendar-grid > .day-cell.selected {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: #ffffff;
+}
+
+.date-picker-popup > .calendar-grid > .day-name-cell {
+    -fx-background-color: #1e1e2e;
+    -fx-text-fill: #cdd6f4;
+    -fx-font-weight: bold;
+    -fx-padding: 5;
+}
+
+.date-picker-popup > .calendar-grid > .week-number-cell {
+    -fx-background-color: #1e1e2e;
+    -fx-text-fill: #cdd6f4;
+    -fx-padding: 5;
+}
+
+.date-picker-popup > .calendar-grid > .day-cell.previous-month,
+.date-picker-popup > .calendar-grid > .day-cell.next-month {
+    -fx-text-fill: #6c7086;
+}
+
+.date-picker-popup > .calendar-grid > .day-cell.today {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
+/* Improve button styling */
+.save-button, #addOrderButton {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-text-light;
+    -fx-background-radius: 5;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 3, 0, 0, 1);
+    -fx-pref-height: 40px;
+}
+
+.save-button:hover, #addOrderButton:hover {
+    -fx-background-color: derive(-fx-primary, 10%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
+}
+
+.save-button:pressed, #addOrderButton:pressed {
+    -fx-background-color: derive(-fx-primary, -10%);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 2, 0, 0, 0);
+}
+
+/* Logout button style improvement */
+.logout-button {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-text-fill: -fx-text-light;
+    -fx-background-radius: 50;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8 15;
+}
+
+.logout-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
+}
+
+.logout-button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 2, 0, 0, 0);
+}
+
+/* Status filter combo box styling */
+.combo-box {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 5;
+    -fx-border-color: -fx-grey;
+    -fx-border-radius: 5;
+    -fx-text-fill: #cdd6f4;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #cdd6f4;
+    -fx-background-color: transparent;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #1e1e2e;
+    -fx-border-color: #45475a;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: #1e1e2e;
+    -fx-text-fill: #cdd6f4;
+    -fx-padding: 8 12;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: -fx-primary-light;
+    -fx-text-fill: #ffffff;
+}
+
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: #ffffff;
+}
+
+/* Điều chỉnh màu hiển thị giá trị trong các trường đã vô hiệu hóa */
+.text-field:disabled {
+    -fx-opacity: 0.7;
+    -fx-text-fill: -fx-text-dark;
+    -fx-prompt-text-fill: derive(-fx-text-dark, -30%);
+}
+
+/* Điều chỉnh màu cho các label */
+.form-label, .input-label, .field-label {
+    -fx-text-fill: #cdd6f4; /* Sử dụng màu văn bản sáng phù hợp với nền tối */
+}
+
+
 #thanhToan, #chiTietSanPham, #thongTinDonHang {
     -fx-text-fill: #cdd6f4;
 }
@@ -1079,39 +1239,6 @@ AnchorPane {
 #maDonHang, #ngayDat, #trangThai, #khachHang, #dienThoai,
 #tongTienHang, #giamGiaValue, #tongThanhToan {
     -fx-text-fill: #cdd6f4;
-}
-
-
-.date-picker .text-field {
-    -fx-background-color: transparent;
-    -fx-text-fill: -fx-text-dark;
-}
-
-.date-picker-popup {
-    -fx-background-color: -fx-secondary;
-    -fx-border-color: -fx-grey;
-}
-
-.date-picker-popup .month-year-pane {
-    -fx-background-color: -fx-primary-dark;
-}
-
-.date-picker-popup .calendar-grid {
-    -fx-background-color: -fx-secondary;
-}
-
-.date-picker-popup .day-cell {
-    -fx-background-color: -fx-secondary;
-    -fx-text-fill: -fx-text-dark;
-}
-
-.date-picker-popup .day-cell:hover {
-    -fx-background-color: -fx-grey-light;
-}
-
-.date-picker-popup .selected {
-    -fx-background-color: -fx-primary;
-    -fx-text-fill: -fx-text-light;
 }
 
 
@@ -1204,6 +1331,29 @@ Button.action-button:hover, .add-button:hover {
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
 }
 
+.form-label, Label, .label {
+    -fx-text-fill: #ffffff;
+}
 
+#addCategoryDialog .label, #addCategoryDialog Label {
+    -fx-text-fill: #ffffff;
+}
 
+/* RadioButton styling for dark theme */
+.radio-button {
+    -fx-text-fill: #cdd6f4;
+}
 
+.radio-button .radio {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-border-color: #45475a;
+    -fx-border-radius: 50%;
+}
+
+.radio-button:selected .radio .dot {
+    -fx-background-color: -fx-primary;
+}
+
+.radio-button:hover .radio {
+    -fx-border-color: -fx-primary;
+}
