@@ -37,9 +37,9 @@
                 <Button fx:id="orderButton" style="-fx-background-color: white;" text="Quản lí đơn hàng" />
                 <Button fx:id="cartButton" onAction="#toggleCart" style="-fx-background-color: white;" text="Giỏ hàng (0)" />
                 <Button fx:id="logoutButton" onAction="#handleLogout" style="-fx-background-color: white;" text="Đăng Xuất" />
-            <BorderPane.margin>
-               <Insets />
-            </BorderPane.margin>
+                <BorderPane.margin>
+                    <Insets />
+                </BorderPane.margin>
             </HBox>
         </top>
 
@@ -52,36 +52,36 @@
                 <HBox alignment="CENTER_LEFT" spacing="10">
                     <Label prefHeight="27.0" prefWidth="268.0" style="-fx-font-size: 18; -fx-font-weight: bold;" styleClass="" text="Danh Sách Sản Phẩm" />
                     <Region prefHeight="64.0" prefWidth="126.0" HBox.hgrow="ALWAYS" />
-                     <HBox alignment="CENTER" prefHeight="64.0" prefWidth="416.0" spacing="15" styleClass="price-range-container">
-                         <padding>
-                             <Insets bottom="10" left="15" right="15" top="10" />
-                         </padding>
-   
-                         <Label prefHeight="19.0" prefWidth="102.0" text="Khoảng giá:">
-                             <font>
-                                 <Font name="System Bold" size="13" />
-                             </font>
-                         </Label>
-   
-                         <VBox spacing="5" HBox.hgrow="ALWAYS">
-                             <HBox alignment="CENTER_LEFT" spacing="5">
-                                 <Label fx:id="minPriceLabel" minWidth="90" prefHeight="20.0" prefWidth="126.0" styleClass="price-label" text="0đ" />
-                             </HBox>
-   
-                             <Slider fx:id="minPriceSlider" max="50000000" min="0" styleClass="price-slider" value="0" />
-                         </VBox>
-   
-                         <VBox spacing="5" HBox.hgrow="ALWAYS">
-                             <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="0.0" spacing="5">
-                                 <Label fx:id="maxPriceLabel" minWidth="90" prefHeight="20.0" prefWidth="124.0" styleClass="price-label" text="900.000.000">
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin></Label>
-                             </HBox>
-   
-                             <Slider fx:id="maxPriceSlider" max="900000000" min="0" styleClass="price-slider" value="900000000" />
-                         </VBox>
-                     </HBox>
+                    <HBox alignment="CENTER" prefHeight="64.0" prefWidth="416.0" spacing="15" styleClass="price-range-container">
+                        <padding>
+                            <Insets bottom="10" left="15" right="15" top="10" />
+                        </padding>
+
+                        <Label prefHeight="19.0" prefWidth="102.0" text="Khoảng giá:">
+                            <font>
+                                <Font name="System Bold" size="13" />
+                            </font>
+                        </Label>
+
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="5">
+                                <Label fx:id="minPriceLabel" minWidth="90" prefHeight="20.0" prefWidth="126.0" styleClass="price-label" text="0đ" />
+                            </HBox>
+
+                            <Slider fx:id="minPriceSlider" max="50000000" min="0" styleClass="price-slider" value="0" />
+                        </VBox>
+
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="0.0" spacing="5">
+                                <Label fx:id="maxPriceLabel" minWidth="90" prefHeight="20.0" prefWidth="124.0" styleClass="price-label" text="900.000.000">
+                                    <HBox.margin>
+                                        <Insets left="5.0" />
+                                    </HBox.margin></Label>
+                            </HBox>
+
+                            <Slider fx:id="maxPriceSlider" max="900000000" min="0" styleClass="price-slider" value="900000000" />
+                        </VBox>
+                    </HBox>
                     <ComboBox fx:id="categoryFilter" prefHeight="30.0" prefWidth="201.0" promptText="Danh mục">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
@@ -103,11 +103,11 @@
                     <center>
                         <GridPane fx:id="gridPane" alignment="CENTER" hgap="15" prefWidth="1020.0" vgap="15" BorderPane.alignment="CENTER" />
                     </center>
-               <bottom>
-               
-                            <!-- Pagination at the bottom -->
-                      <Pagination fx:id="pagination" pageCount="10" prefHeight="33.0" prefWidth="1060.0" BorderPane.alignment="CENTER" />
-               </bottom>
+                    <bottom>
+
+                        <!-- Pagination at the bottom -->
+                        <Pagination fx:id="pagination" pageCount="10" prefHeight="33.0" prefWidth="1060.0" BorderPane.alignment="CENTER" />
+                    </bottom>
                 </BorderPane>
             </VBox>
         </center>
@@ -121,13 +121,19 @@
             </StackPane.margin>
         </Rectangle>
 
-        <VBox fx:id="cartBox" maxWidth="500" prefWidth="500" style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);" StackPane.alignment="TOP_RIGHT">
+        <VBox fx:id="cartBox" maxWidth="500" prefWidth="500" styleClass="cart-pane" StackPane.alignment="TOP_RIGHT">
             <padding>
                 <Insets bottom="15" left="15" right="15" top="15" />
             </padding>
 
             <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="Giỏ hàng" />
+                <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="Giỏ hàng">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="15.0" top="15.0" />
+               </padding></Label>
                 <Region HBox.hgrow="ALWAYS" />
                 <Button onAction="#closeCart" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="X" />
             </HBox>
@@ -139,20 +145,23 @@
 
             <Separator />
 
-            <VBox style="-fx-border-color: #e0e0e0; -fx-border-radius: 5; -fx-background-color: white;">
+            <VBox>
                 <padding>
-                    <Insets bottom="10" left="10" right="10" top="10" />
+                    <Insets bottom="10" right="10" top="10" />
                 </padding>
                 <HBox>
-                    <Label style="-fx-font-weight: bold;" text="Tổng tiền:" />
+                    <Label style="-fx-font-weight: bold; -fx-text-fill: white" text="Tổng tiền:" />
                     <Region HBox.hgrow="ALWAYS" />
-                    <Label fx:id="totalLabel" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" />
+                    <Label fx:id="totalLabel" styleClass="cart-item-price" />
                 </HBox>
             </VBox>
 
             <HBox spacing="10">
-                <Button fx:id="resetCartButton" maxWidth="Infinity" onAction="#resetCart" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Làm mới giỏ hàng" HBox.hgrow="ALWAYS" />
-                <Button fx:id="createOrderButton" maxWidth="Infinity" onAction="#handleCreateOrder" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Tạo đơn hàng" HBox.hgrow="ALWAYS" />
+                <Button fx:id="resetCartButton" maxWidth="Infinity" onAction="#resetCart" styleClass="cancel-button" text="Làm mới giỏ hàng" HBox.hgrow="ALWAYS" />
+                <Button fx:id="createOrderButton" maxWidth="Infinity" onAction="#handleCreateOrder" styleClass="save-button" text="Tạo đơn hàng" HBox.hgrow="ALWAYS" />
+            <padding>
+               <Insets bottom="10.0" />
+            </padding>
             </HBox>
 
             <Separator />

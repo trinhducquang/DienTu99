@@ -33,73 +33,59 @@ public class CartItemFactory {
         imageView.setPreserveRatio(true);
 
         Label nameLabel = new Label(dto.name());
-        nameLabel.setStyle("-fx-font-weight: bold;");
+        nameLabel.getStyleClass().add("cart-item-label");
 
         Label priceLabel = new Label(formatCurrency(dto.unitPrice()));
-        priceLabel.setStyle("-fx-text-fill: #e74c3c;");
+        priceLabel.getStyleClass().add("cart-item-price");
 
         VBox infoBox = new VBox(nameLabel, priceLabel);
         HBox.setHgrow(infoBox, Priority.ALWAYS);
 
         Button deleteBtn = new Button("X");
-        deleteBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-min-width: 30;");
+        deleteBtn.getStyleClass().addAll("cart-item-button", "delete");
 
         HBox topBox = new HBox(10, imageView, infoBox, deleteBtn);
+        topBox.setAlignment(Pos.CENTER_LEFT);
 
-        // Khởi tạo nút - và +, trường số lượng
         Button minusBtn = new Button("-");
         Button plusBtn = new Button("+");
         TextField quantityField = new TextField(dto.quantity().toPlainString());
         quantityField.setPrefWidth(40);
         quantityField.setAlignment(Pos.CENTER);
 
-        // Tạo label để hiển thị thành tiền
         Label totalItemLabel = new Label(formatCurrency(dto.unitPrice().multiply(dto.quantity())));
-        totalItemLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+        totalItemLabel.getStyleClass().add("cart-item-price");
 
-        // Lấy số lượng tồn kho từ DTO
         int maxStockQuantity = dto.stockQuantity();
 
-        // Kiểm tra ban đầu để vô hiệu hóa nút + nếu đã đạt giới hạn tồn kho
         if (dto.quantity().compareTo(new BigDecimal(maxStockQuantity)) >= 0) {
             plusBtn.setDisable(true);
         }
 
-        // Xử lý sự kiện khi nhấn nút -
         minusBtn.setOnAction(e -> {
             BigDecimal currentQuantity = new BigDecimal(quantityField.getText());
             if (currentQuantity.compareTo(BigDecimal.ONE) > 0) {
                 currentQuantity = currentQuantity.subtract(BigDecimal.ONE);
                 quantityField.setText(currentQuantity.toPlainString());
-                cartManager.updateItemTotal((VBox) minusBtn.getParent().getParent(),
-                        dto.unitPrice(), currentQuantity);
+                cartManager.updateItemTotal((VBox) minusBtn.getParent().getParent(), dto.unitPrice(), currentQuantity);
                 cartManager.decreaseItemQuantity(dto.id());
-
-                // Nếu giảm xuống dưới số lượng tồn kho, enable nút +
                 if (currentQuantity.compareTo(new BigDecimal(maxStockQuantity)) < 0) {
                     plusBtn.setDisable(false);
                 }
             }
         });
 
-        // Xử lý sự kiện khi nhấn nút +
         plusBtn.setOnAction(e -> {
             BigDecimal currentQuantity = new BigDecimal(quantityField.getText());
-
-            // Kiểm tra nếu đã đạt giới hạn tồn kho
             if (currentQuantity.compareTo(new BigDecimal(maxStockQuantity)) < 0) {
                 currentQuantity = currentQuantity.add(BigDecimal.ONE);
                 quantityField.setText(currentQuantity.toPlainString());
-                cartManager.updateItemTotal((VBox) plusBtn.getParent().getParent(),
-                        dto.unitPrice(), currentQuantity);
+                cartManager.updateItemTotal((VBox) plusBtn.getParent().getParent(), dto.unitPrice(), currentQuantity);
                 cartManager.increaseItemQuantity(dto.id());
-
-                // Nếu đạt tới số lượng tối đa, vô hiệu hóa nút +
                 if (currentQuantity.compareTo(new BigDecimal(maxStockQuantity)) >= 0) {
                     plusBtn.setDisable(true);
                 }
             } else {
-                // Sử dụng AlertUtils thay vì Alert trực tiếp
                 AlertUtils.showWarning(
                         "Giới hạn tồn kho",
                         "Tồn kho chỉ còn " + maxStockQuantity + " sản phẩm. Không thể thêm số lượng nhiều hơn số lượng tồn kho."
@@ -107,7 +93,6 @@ public class CartItemFactory {
             }
         });
 
-        // Xử lý sự kiện khi thay đổi số lượng trực tiếp trong TextField
         quantityField.textProperty().addListener((obs, oldText, newText) -> {
             if (!newText.matches("\\d*")) {
                 quantityField.setText(oldText);
@@ -120,24 +105,16 @@ public class CartItemFactory {
                     if (newQuantity.compareTo(BigDecimal.ZERO) <= 0) {
                         quantityField.setText("1");
                         newQuantity = BigDecimal.ONE;
-                    }
-                    // Kiểm tra giới hạn tồn kho
-                    else if (newQuantity.compareTo(new BigDecimal(maxStockQuantity)) > 0) {
+                    } else if (newQuantity.compareTo(new BigDecimal(maxStockQuantity)) > 0) {
                         quantityField.setText(String.valueOf(maxStockQuantity));
                         newQuantity = new BigDecimal(maxStockQuantity);
-
-                        // Sử dụng AlertUtils thay vì Alert trực tiếp
                         AlertUtils.showWarning(
                                 "Giới hạn tồn kho",
                                 "Tồn kho chỉ còn " + maxStockQuantity + " sản phẩm. Số lượng đã được điều chỉnh về mức tối đa."
                         );
                     }
-
-                    // Cập nhật trạng thái nút + dựa trên số lượng hiện tại
                     plusBtn.setDisable(newQuantity.compareTo(new BigDecimal(maxStockQuantity)) >= 0);
-
-                    cartManager.updateItemTotal((VBox) quantityField.getParent().getParent(),
-                            dto.unitPrice(), newQuantity);
+                    cartManager.updateItemTotal((VBox) quantityField.getParent().getParent(), dto.unitPrice(), newQuantity);
                     cartManager.updateCartTotal();
                 }
             } catch (NumberFormatException e) {
@@ -150,10 +127,13 @@ public class CartItemFactory {
         quantityBox.setAlignment(Pos.CENTER_LEFT);
 
         VBox itemBox = new VBox(5, topBox, quantityBox);
-        itemBox.setStyle("-fx-border-color: #e0e0e0; -fx-border-radius: 5; -fx-background-color: white;");
+        itemBox.getStyleClass().add("cart-item");
         itemBox.setPadding(new Insets(10));
 
-        // Xử lý khi nhấn nút X để xóa sản phẩm
+        quantityField.getStyleClass().add("cart-item-textfield");
+        minusBtn.getStyleClass().add("cart-item-button");
+        plusBtn.getStyleClass().add("cart-item-button");
+
         deleteBtn.setOnAction(e -> {
             cartManager.removeCartItem(dto.id());
             VBox parentBox = (VBox) deleteBtn.getParent().getParent();
