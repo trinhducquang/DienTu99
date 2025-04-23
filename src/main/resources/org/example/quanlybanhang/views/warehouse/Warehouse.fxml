@@ -36,7 +36,7 @@
                             </HBox.margin>
                         </Label>
                         <Region prefHeight="37.0" prefWidth="664.0" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="btnLogout" styleClass="top-nav" mnemonicParsing="false" text="Đăng Xuất">
+                        <Button fx:id="btnLogout" styleClass="logout-button" mnemonicParsing="false" text="Đăng Xuất">
                             <padding>
                                 <Insets bottom="8.0" left="15.0" right="15.0" top="8.0" />
                             </padding>

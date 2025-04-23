@@ -228,13 +228,13 @@
 }
 
 .required-mark {
-    -fx-text-fill: -fx-error;
+    -fx-text-fill: #ef4444 !important; /* Changed to a bright red */
     -fx-font-weight: bold;
     -fx-font-size: 16px;
 }
 
 .note-text {
-    -fx-text-fill: -fx-error;
+    -fx-text-fill: #ef4444 !important; /* Changed to the same bright red */
     -fx-font-size: 14px;
     -fx-font-style: italic;
     -fx-padding: 15 0 0 0;

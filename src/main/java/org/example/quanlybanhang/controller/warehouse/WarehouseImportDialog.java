@@ -4,7 +4,9 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
@@ -459,4 +461,10 @@ public class WarehouseImportDialog {
             AlertUtils.showError("Lỗi", "Lỗi không xác định: " + e.getMessage());
         }
     }
+
+    public void cancelButton(ActionEvent actionEvent) {
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
+    }
+
 }

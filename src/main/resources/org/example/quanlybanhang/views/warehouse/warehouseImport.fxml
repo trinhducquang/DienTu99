@@ -26,7 +26,7 @@
                         <Label styleClass="header-title" text="Thêm Phiếu Kho" />
                     </left>
                     <right>
-                        <Button style="-fx-background-color: white;" styleClass="back-button" text="Quay Lại" />
+                        <Button styleClass="back-button" text="Quay Lại" />
                     </right>
                     <padding>
                         <Insets bottom="15" left="15" right="15" top="15" />
@@ -125,7 +125,7 @@
 
                         <!-- Row 0 -->
                         <Label fx:id="totalAmountLabel" text="Tổng Tiền:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                        <TextField fx:id="totalAmountField" style="-fx-text-fill: red" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <TextField fx:id="totalAmountField" editable="false" style="-fx-text-fill: red" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
                         <Label text="Số Lượng Dư:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
                         <TextField fx:id="excessQuantityField" GridPane.columnIndex="3" GridPane.rowIndex="0" />
@@ -152,7 +152,7 @@
             <padding>
                 <Insets bottom="15" left="15" right="15" top="15" />
             </padding>
-            <Button styleClass="cancel-button" text="Hủy" />
+            <Button styleClass="cancel-button" onAction="#cancelButton" text="Hủy" />
             <Button onAction="#onSave" styleClass="save-button" text="Lưu Phiếu Nhập" />
         </HBox>
     </bottom>
