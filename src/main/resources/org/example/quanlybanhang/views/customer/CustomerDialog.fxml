@@ -55,8 +55,6 @@
         <Label styleClass="note-text" text="(*) Thông tin bắt buộc" />
     </VBox>
 
-    <VBox alignment="CENTER" VBox.vgrow="ALWAYS" />
-
     <!-- Nút thao tác -->
     <HBox alignment="CENTER" prefHeight="70.0" prefWidth="550.0" spacing="20" styleClass="button-container">
         <Button fx:id="cancelButton" prefHeight="40.0" prefWidth="130.0" styleClass="cancel-button" text="Hủy" />

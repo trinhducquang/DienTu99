@@ -238,7 +238,7 @@
     -fx-text-fill: #ef4444 !important; /* Changed to the same bright red */
     -fx-font-size: 14px;
     -fx-font-style: italic;
-    -fx-padding: 15 0 0 0;
+    -fx-padding: 10 0 0 0;
 }
 
 /* Input Fields */
@@ -435,7 +435,7 @@
 }
 
 /* Product Information Styles */
-.product-name {
+.product-name-details {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-text-fill: -fx-text-light;
@@ -466,6 +466,11 @@
     -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-text-fill: -fx-error !important;
+}
+
+.label-text-details {
+    -fx-font-size: 16px;
+    -fx-text-fill: #757575;
 }
 
 .product-status {

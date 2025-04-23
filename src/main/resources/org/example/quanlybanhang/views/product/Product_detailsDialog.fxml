@@ -23,7 +23,7 @@
                 </padding>
                 <Label styleClass="header-title" text="Điện Tử 99" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Button fx:id="backButton" onAction="#handleBackAction" prefHeight="29.0" prefWidth="80.0" styleClass="logout-button" text="Quay Lại" />
+                <Button fx:id="backButton" onAction="#handleBackAction" styleClass="logout-button" text="Quay Lại" />
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="subheader-box">
                 <padding>
@@ -57,14 +57,14 @@
                     </padding>
 
                     <VBox prefHeight="170.0" prefWidth="393.0" spacing="10.0" styleClass="info-section">
-                        <Label fx:id="productNameLabel" alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="99.0" prefWidth="463.0" styleClass="product-name" text="Tên Sản phẩm" wrapText="true" />
+                        <Label fx:id="productNameLabel" alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="99.0" prefWidth="463.0" styleClass="product-name-details" text="Tên Sản phẩm" wrapText="true" />
                         <Label fx:id="productIdLabel" styleClass="product-id" text="Mã SP: 1" />
                         <Label fx:id="categoryLabel" styleClass="product-category" text="Danh Mục: Laptop" />
                     </VBox>
 
                     <VBox prefHeight="100.0" prefWidth="310.0" spacing="10.0" styleClass="info-section">
                         <HBox alignment="CENTER_LEFT" spacing="10">
-                            <Label styleClass="label-text" text="Giá:" />
+                            <Label styleClass="label-text-details" text="Giá:" />
                             <Label fx:id="priceLabel" styleClass="product-price" text="5,000,000 VND" />
                         </HBox>
 

@@ -126,16 +126,16 @@
                 <Insets bottom="15" left="15" right="15" top="15" />
             </padding>
 
-            <HBox alignment="CENTER_LEFT" spacing="10">
+            <HBox alignment="CENTER_LEFT">
                 <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="Giỏ hàng">
                <HBox.margin>
                   <Insets />
-               </HBox.margin>
-               <padding>
-                  <Insets bottom="15.0" top="15.0" />
-               </padding></Label>
+               </HBox.margin></Label>
                 <Region HBox.hgrow="ALWAYS" />
                 <Button onAction="#closeCart" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="X" />
+            <padding>
+               <Insets bottom="15.0" />
+            </padding>
             </HBox>
 
             <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
@@ -150,9 +150,9 @@
                     <Insets bottom="10" right="10" top="10" />
                 </padding>
                 <HBox>
-                    <Label style="-fx-font-weight: bold; -fx-text-fill: white" text="Tổng tiền:" />
+                    <Label styleClass="order-info-label" text="Tổng tiền:" />
                     <Region HBox.hgrow="ALWAYS" />
-                    <Label fx:id="totalLabel" styleClass="cart-item-price" />
+                    <Label fx:id="totalLabel" styleClass="product-price" />
                 </HBox>
             </VBox>
 
