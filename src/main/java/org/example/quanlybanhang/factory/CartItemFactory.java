@@ -28,8 +28,8 @@ public class CartItemFactory {
 
     public VBox createCartItemBox(ProductDisplayInfoDTO dto) {
         ImageView imageView = new ImageView(new Image(dto.imageUrl()));
-        imageView.setFitWidth(60);
-        imageView.setFitHeight(60);
+        imageView.setFitWidth(70);
+        imageView.setFitHeight(70);
         imageView.setPreserveRatio(true);
 
         Label nameLabel = new Label(dto.name());

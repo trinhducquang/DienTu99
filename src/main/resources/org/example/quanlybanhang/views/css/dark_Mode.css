@@ -367,9 +367,14 @@
 }
 
 /* Rows */
+/* Rows */
 .table-row-cell {
     -fx-background-color: -fx-secondary;
     -fx-table-cell-border-color: -fx-grey;
+}
+
+.table-row-cell .text {
+    -fx-fill: -fx-text-dark; /* Đảm bảo màu chữ mặc định */
 }
 
 .table-row-cell:odd {
@@ -390,13 +395,18 @@
     -fx-fill: -fx-text-light;
 }
 
-/* Row selected but NOT focused — restore to normal */
+/* Row selected but NOT focused */
 .table-row-cell:selected {
-    -fx-background-color: transparent;
+    -fx-background-color: derive(-fx-primary, -20%);
 }
 
 .table-row-cell:selected .text {
-    -fx-fill: -fx-text-dark;
+    -fx-fill: -fx-text-light;
+}
+
+/* Đảm bảo khi không còn selected thì màu chữ trở lại đúng */
+.table-cell {
+    -fx-text-fill: -fx-text-dark;
 }
 
 /* Header Styles */

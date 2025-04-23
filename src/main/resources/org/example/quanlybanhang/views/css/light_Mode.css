@@ -788,7 +788,7 @@
 
 .date-picker .arrow-button {
     -fx-background-color: -fx-grey;
-    -fx-background-radius: 0 5 5 0;
+    -fx-background-radius: 5;
 }
 
 .date-picker .arrow-button:hover {
@@ -846,7 +846,8 @@
 }
 
 .date-picker-popup .spinner .button:hover {
-    -fx-border-color: 5px;
+    -fx-border-color: -fx-primary; /* Thay thế bằng một màu */
+    -fx-border-width: 5px; /* Nếu bạn muốn đường viền dày 5px */
     -fx-background-color: -fx-primary-light;
 }
 
