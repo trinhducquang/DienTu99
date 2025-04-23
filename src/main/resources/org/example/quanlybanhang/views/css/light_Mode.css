@@ -840,6 +840,7 @@
 }
 
 .date-picker-popup .spinner .button:hover {
+    -fx-border-color: 5px;
     -fx-background-color: -fx-primary-light;
 }
 

@@ -132,15 +132,6 @@ public class LoginController {
             ThemeManager.applyTheme(scene);
             stage.setScene(scene);
             stage.setMaximized(true);
-
-            stage.maximizedProperty().addListener((obs, wasMaximized, isNowMaximized) -> {
-                if (!isNowMaximized) {
-                    stage.setWidth(1024);
-                    stage.setHeight(768);
-                    stage.centerOnScreen();
-                }
-            });
-
             FadeTransition fadeIn = new FadeTransition(Duration.millis(500), root);
             fadeIn.setFromValue(0.0);
             fadeIn.setToValue(1.0);

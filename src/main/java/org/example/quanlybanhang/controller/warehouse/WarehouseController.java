@@ -16,6 +16,7 @@ import org.example.quanlybanhang.dao.WarehouseDAO;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
 import org.example.quanlybanhang.enums.WarehouseType;
 import org.example.quanlybanhang.helpers.DialogHelper;
+import org.example.quanlybanhang.helpers.LogoutHandler;
 import org.example.quanlybanhang.model.User;
 import org.example.quanlybanhang.security.auth.UserSession;
 import org.example.quanlybanhang.service.SearchService;
@@ -108,31 +109,12 @@ public class WarehouseController {
     }
 
     private void handleLogout() {
-        try {
-            UserSession.clearSession();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/quanlybanhang/views/login/Login.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) btnLogout.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.centerOnScreen();
-            stage.setMaximized(false);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Hiển thị thông báo lỗi
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Lỗi");
-            alert.setHeaderText(null);
-            alert.setContentText("Không thể đăng xuất: " + e.getMessage());
-            alert.showAndWait();
-        }
+        UserSession.clearSession();
+        LogoutHandler.handleLogout(btnLogout);
     }
 
     private void initializeTabControllers() {
-        // Khởi tạo TransactionTabController
         initializeTransactionTab();
-
-        // Khởi tạo DashboardTabController
         initializeDashboardTab();
     }
 
