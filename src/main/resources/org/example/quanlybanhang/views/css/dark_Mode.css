@@ -1,5 +1,3 @@
-/* Dark Mode Theme - Điện Tử 99 */
-
 * {
     -fx-primary: #2563eb;
     -fx-primary-light: #3b82f6;
@@ -735,27 +733,154 @@
     -fx-border-radius: 5;
 }
 
-.text-area > .scroll-pane {
+/* Comprehensive ScrollPane Styling for Dark Theme */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
 
-.text-area > .scroll-pane > .viewport {
+/* Vertical ScrollBar styling */
+.scroll-pane .scroll-bar:vertical,
+.scroll-bar:vertical {
     -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 0 0 0 1;
 }
 
-.text-area > .scroll-pane > .scroll-bar:vertical,
-.text-area > .scroll-pane > .scroll-bar:horizontal {
-    -fx-background-color: transparent;
-}
-
-.text-area > .scroll-pane > .scroll-bar:vertical .thumb,
-.text-area > .scroll-pane > .scroll-bar:horizontal .thumb {
-    -fx-background-color: -fx-grey;
+.scroll-pane .scroll-bar:vertical .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: rgba(69, 71, 90, 0.3);
     -fx-background-radius: 5;
 }
 
-.text-area > .scroll-pane > .corner {
+.scroll-pane .scroll-bar:vertical .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #45475a;
+    -fx-background-radius: 5;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb:hover,
+.scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #7c7f9b;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb:pressed,
+.scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: #2563eb;
+}
+
+.scroll-pane .scroll-bar:vertical .increment-button,
+.scroll-pane .scroll-bar:vertical .decrement-button,
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
     -fx-background-color: transparent;
+    -fx-padding: 5;
+}
+
+.scroll-pane .scroll-bar:vertical .increment-arrow,
+.scroll-pane .scroll-bar:vertical .decrement-arrow,
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+    -fx-background-color: #cdd6f4;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 3, 0, 0, 0);
+}
+
+/* Horizontal ScrollBar styling */
+.scroll-pane .scroll-bar:horizontal,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 1 0 0 0;
+}
+
+.scroll-pane .scroll-bar:horizontal .track,
+.scroll-bar:horizontal .track {
+    -fx-background-color: rgba(69, 71, 90, 0.3);
+    -fx-background-radius: 5;
+}
+
+.scroll-pane .scroll-bar:horizontal .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #45475a;
+    -fx-background-radius: 5;
+}
+
+.scroll-pane .scroll-bar:horizontal .thumb:hover,
+.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #7c7f9b;
+}
+
+.scroll-pane .scroll-bar:horizontal .thumb:pressed,
+.scroll-bar:horizontal .thumb:pressed {
+    -fx-background-color: #2563eb;
+}
+
+.scroll-pane .scroll-bar:horizontal .increment-button,
+.scroll-pane .scroll-bar:horizontal .decrement-button,
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+}
+
+.scroll-pane .scroll-bar:horizontal .increment-arrow,
+.scroll-pane .scroll-bar:horizontal .decrement-arrow,
+.scroll-bar:horizontal .increment-arrow,
+.scroll-bar:horizontal .decrement-arrow {
+    -fx-background-color: #cdd6f4;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 3, 0, 0, 0);
+}
+
+/* ScrollPane corner where the scrollbars meet */
+.scroll-pane .corner,
+.corner {
+    -fx-background-color: transparent;
+}
+
+/* Specific styling for the TableView scrollpane */
+.table-view .virtual-flow .scroll-bar:vertical,
+.table-view .virtual-flow .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical .thumb,
+.table-view .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color: #45475a;
+    -fx-background-radius: 5;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical .thumb:hover,
+.table-view .virtual-flow .scroll-bar:horizontal .thumb:hover {
+    -fx-background-color: #7c7f9b;
+}
+
+/* Application-specific ScrollPane for your employee management table */
+#employeeTableScrollPane {
+    -fx-background-color: transparent;
+}
+
+#employeeTableScrollPane .viewport {
+    -fx-background-color: transparent;
+}
+
+#employeeTableScrollPane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 1;
+}
+
+#employeeTableScrollPane .scroll-bar:vertical .thumb {
+    -fx-background-color: #45475a;
+    -fx-background-radius: 5;
+}
+
+#employeeTableScrollPane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #2563eb;
 }
 
 /* Theme Toggle Button */
@@ -1020,4 +1145,65 @@ AnchorPane {
 .titled-pane Label, GridPane Label {
     -fx-text-fill: #cdd6f4;
 }
+
+/* TabPane in dark theme */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: -fx-secondary;
+    -fx-border-color: -fx-grey;
+    -fx-border-width: 0 0 1 0;
+}
+
+.tab-pane .tab {
+    -fx-background-color: -fx-grey-light;
+    -fx-background-radius: 5 5 0 0;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: -fx-primary;
+}
+
+.tab-pane .tab .tab-label {
+    -fx-text-fill: -fx-text-dark;
+    -fx-font-weight: normal;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: -fx-text-light;
+    -fx-font-weight: bold;
+}
+
+.tab-pane .tab-content-area {
+    -fx-background-color: -fx-secondary;
+}
+
+/* Styling for the import/export button */
+#btnCreateTransaction, .add-button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-text-light;
+    -fx-background-radius: 5;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+#btnCreateTransaction:hover, .add-button:hover {
+    -fx-background-color: -fx-primary-light;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
+}
+
+/* For the "Nhập Kho / Xuất Kho" button */
+Button.action-button, .add-button {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-text-light;
+    -fx-background-radius: 5;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+Button.action-button:hover, .add-button:hover {
+    -fx-background-color: -fx-primary-light;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 5, 0, 0, 2);
+}
+
+
+
 

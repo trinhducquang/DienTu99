@@ -9,7 +9,9 @@ import org.example.quanlybanhang.utils.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserDAO {
     private final Connection connection;
@@ -66,4 +68,52 @@ public class UserDAO {
 
         return warehouseStaff;
     }
+
+    public List<Map<String, Object>> getTopSalesEmployees(int limit) {
+        List<Map<String, Object>> topEmployees = new ArrayList<>();
+
+        String sql = "SELECT u.id, u.full_name, " +
+                "COUNT(o.id) AS total_orders, " +
+                "SUM(o.total_price) AS total_revenue, " +
+                "SUM(o.total_price) - SUM(COALESCE(wt.unit_price, 0) * od.quantity) AS total_profit " +
+                "FROM users u " +
+                "JOIN orders o ON u.id = o.employee_id " +
+                "JOIN order_details od ON o.id = od.order_id " +
+                "LEFT JOIN (" +
+                "    SELECT product_id, AVG(unit_price) as unit_price " +
+                "    FROM warehouse_transactions " +
+                "    WHERE type = 'Nhập Kho' " +
+                "    GROUP BY product_id" +
+                ") wt ON od.product_id = wt.product_id " +
+                "WHERE u.role = ? AND YEAR(o.order_date) = ? " +  // Sửa tại đây
+                "GROUP BY u.id, u.full_name " +
+                "ORDER BY total_orders DESC " +
+                "LIMIT ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            int currentYear = java.time.Year.now().getValue();
+
+            stmt.setString(1, UserRole.BAN_HANG.getValue());
+            stmt.setInt(2, currentYear);
+            stmt.setInt(3, limit);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Map<String, Object> employeeData = new HashMap<>();
+                employeeData.put("id", rs.getInt("id"));
+                employeeData.put("fullName", rs.getString("full_name"));
+                employeeData.put("totalOrders", rs.getInt("total_orders"));
+                employeeData.put("totalRevenue", rs.getBigDecimal("total_revenue"));
+                employeeData.put("totalProfit", rs.getBigDecimal("total_profit"));
+
+                topEmployees.add(employeeData);
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy danh sách nhân viên bán hàng xuất sắc theo năm: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return topEmployees;
+    }
+
 }

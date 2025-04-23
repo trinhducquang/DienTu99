@@ -48,9 +48,17 @@ public class WarehouseDTO {
     public void setProductId(int productId) {
         this.productId = productId;
     }
-    
+
+    public BigDecimal getSellPrice() {
+        return sellPrice;
+    }
+
     public void setSellPrice(BigDecimal sellPrice) {
         this.sellPrice = sellPrice;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
@@ -103,9 +111,15 @@ public class WarehouseDTO {
     }
 
 
+
+
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
         updateTotalAmount();
+    }
+
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
     private void updateTotalAmount() {
@@ -122,12 +136,18 @@ public class WarehouseDTO {
         this.type = type;
     }
 
+
+
     public String getNote() {
         return note;
     }
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getCreatedByName() {
+        return createdByName;
     }
 
     public void setCreatedByName(String createdByName) {
@@ -142,9 +162,60 @@ public class WarehouseDTO {
         this.createdAt = createdAt;
     }
 
+    public LocalDateTime getInventoryDate() {
+        return inventoryDate;
+    }
+
+    public void setInventoryDate(LocalDateTime inventoryDate) {
+        this.inventoryDate = inventoryDate;
+    }
+
+    public String getInventoryNote() {
+        return inventoryNote;
+    }
+
+    public void setInventoryNote(String inventoryNote) {
+        this.inventoryNote = inventoryNote;
+    }
+
+    public InventoryStatus getInventoryStatus() {
+        return inventoryStatus;
+    }
+
+    public void setInventoryStatus(InventoryStatus inventoryStatus) {
+        this.inventoryStatus = inventoryStatus;
+    }
+
+    public int getExcessQuantity() {
+        return excessQuantity;
+    }
+
+    public void setExcessQuantity(int excessQuantity) {
+        this.excessQuantity = excessQuantity;
+    }
+
+    public int getDeficientQuantity() {
+        return deficientQuantity;
+    }
+
+    public void setDeficientQuantity(int deficientQuantity) {
+        this.deficientQuantity = deficientQuantity;
+    }
+
+    public int getMissing() {
+        return missing;
+    }
+
+    public void setMissing(int missing) {
+        this.missing = missing;
+    }
+
     public int getStock() {
         return stock;
     }
 
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
 
 }

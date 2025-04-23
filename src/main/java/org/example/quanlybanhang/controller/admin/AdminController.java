@@ -1,18 +1,31 @@
 package org.example.quanlybanhang.controller.admin;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import org.example.quanlybanhang.dao.OrderDAO;
+import org.example.quanlybanhang.dao.UserDAO;
 import org.example.quanlybanhang.dao.WarehouseDAO;
+import org.example.quanlybanhang.dto.EmployeeDTO.TopEmployee;
 import org.example.quanlybanhang.dto.warehouseDTO.WarehouseDTO;
 import org.example.quanlybanhang.enums.WarehouseType;
 import org.example.quanlybanhang.helpers.LogoutHandler;
 import org.example.quanlybanhang.helpers.NavigatorAdmin;
+import org.example.quanlybanhang.utils.DatabaseConnection;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+
+import static org.example.quanlybanhang.utils.MoneyUtils.formatVN;
 
 public class AdminController {
     @FXML
@@ -30,25 +43,84 @@ public class AdminController {
     @FXML
     private Label revenueLabel;
     @FXML
-    private TableView<?> ordersTable;
-
+    private TableView<TopEmployee> ordersTable;
+    @FXML
+    private TableColumn<TopEmployee, Integer> idColumn;
+    @FXML
+    private TableColumn<TopEmployee, String> nameColumn;
+    @FXML
+    private TableColumn<TopEmployee, Integer> totalOrdersColumn;
+    @FXML
+    private TableColumn<TopEmployee, String> totalRevenueColumn;
+    @FXML
+    private TableColumn<TopEmployee, String> totalProfitColumn;
 
 
     // Version information
     private final OrderDAO orderDAO = new OrderDAO();
     private final WarehouseDAO warehouseDAO = new WarehouseDAO();
+    private final UserDAO userDAO = new UserDAO(DatabaseConnection.getConnection());
     private Button currentActiveButton;
 
     @FXML
     private void initialize() {
         setupNavigation();
+        setupTableColumns();
         logoutButton.setOnAction(event -> LogoutHandler.handleLogout(logoutButton));
         currentActiveButton = btnDashboard;
         updateTopSellingProduct();
         updateAnnualProfit();
         updateCompletedOrdersThisMonth();
         updateTotalRevenue();
+        updateDashboardData();
     }
+
+    private void updateDashboardData() {
+        updateTopSellingProduct();
+        updateAnnualProfit();
+        updateCompletedOrdersThisMonth();
+        updateTotalRevenue();
+        updateTopEmployees(); // Thêm cập nhật top nhân viên
+    }
+
+    private void updateTopEmployees() {
+        try {
+            List<Map<String, Object>> topEmployeesList = userDAO.getTopSalesEmployees(5); // Lấy top 5 nhân viên
+
+            ObservableList<TopEmployee> employees = FXCollections.observableArrayList();
+            for (Map<String, Object> data : topEmployeesList) {
+                employees.add(new TopEmployee(
+                        (Integer) data.get("id"),
+                        (String) data.get("fullName"),
+                        (Integer) data.get("totalOrders"),
+                        (BigDecimal) data.get("totalRevenue"),
+                        (BigDecimal) data.get("totalProfit")
+                ));
+            }
+
+            ordersTable.setItems(employees);
+        } catch (Exception e) {
+            System.err.println("Lỗi khi cập nhật danh sách nhân viên xuất sắc: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void setupTableColumns() {
+        idColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().id()).asObject());
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().fullName()));
+        totalOrdersColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().totalOrders()).asObject());
+
+        // Định dạng tiền tệ cho totalRevenueColumn và totalProfitColumn
+        totalRevenueColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(formatVN(cellData.getValue().totalRevenue()))
+        );
+        totalProfitColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(formatVN(cellData.getValue().totalProfit()))
+        );
+    }
+
+
+
 
     private void updateCompletedOrdersThisMonth() {
         try {
@@ -97,6 +169,7 @@ public class AdminController {
             NavigatorAdmin.navigate(adminContentPane, "admin/Admin.fxml");
             updateTopSellingProduct();
             updateAnnualProfit();
+            updateDashboardData();
         });
 
         btnEmployee.setOnAction(event -> {

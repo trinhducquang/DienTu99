@@ -105,13 +105,13 @@
                 </HBox>
 
                 <!-- Recent Orders Table -->
-                <TableView styleClass="orders-table" VBox.vgrow="ALWAYS">
+                <TableView fx:id="ordersTable" styleClass="orders-table" VBox.vgrow="ALWAYS">
                     <columns>
-                        <TableColumn prefWidth="150.0" text="ID" />
-                        <TableColumn prefWidth="200.0" text="Tên Nhân Viên" />
-                        <TableColumn prefWidth="150.0" text=" Tổng Số Đơn" />
-                        <TableColumn prefWidth="150.0" text="Tổng Tiền" />
-                        <TableColumn prefWidth="150.0" text="Lợi Nhuận" />
+                        <TableColumn fx:id="idColumn" prefWidth="150.0" text="ID" />
+                        <TableColumn fx:id="nameColumn" prefWidth="200.0" text="Tên Nhân Viên" />
+                        <TableColumn fx:id="totalOrdersColumn" prefWidth="150.0" text="Tổng Số Đơn" />
+                        <TableColumn fx:id="totalRevenueColumn" prefWidth="150.0" text="Tổng Tiền" />
+                        <TableColumn fx:id="totalProfitColumn" prefWidth="150.0" text="Lợi Nhuận" />
                     </columns>
                 </TableView>
             </VBox>
