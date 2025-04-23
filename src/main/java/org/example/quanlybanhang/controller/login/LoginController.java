@@ -126,23 +126,26 @@ public class LoginController {
             String fxmlPath = "/org/example/quanlybanhang/views/" + fxmlFile;
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
-            Stage stage = (Stage) usernameField.getScene().getWindow();
-            root.setOpacity(0);
+
+            // Tạo stage mới thay vì dùng stage cũ từ usernameField
+            Stage newStage = new Stage();
             Scene scene = new Scene(root);
             ThemeManager.applyTheme(scene);
-            stage.setScene(scene);
-            stage.setMaximized(true);
-            FadeTransition fadeIn = new FadeTransition(Duration.millis(500), root);
-            fadeIn.setFromValue(0.0);
-            fadeIn.setToValue(1.0);
-            fadeIn.play();
 
-            stage.show();
+            newStage.setScene(scene);
+            newStage.setMaximized(true); // ✅ Phóng to luôn
+            newStage.show();
+
+            // Đóng stage cũ (màn hình login)
+            Stage currentStage = (Stage) usernameField.getScene().getWindow();
+            currentStage.close();
+
         } catch (IOException e) {
             e.printStackTrace();
             showErrorMessage("Unable to change screen: " + e.getMessage());
         }
     }
+
 
     private void showErrorMessage(String content) {
         AlertUtils.showError("Login Error", content);
