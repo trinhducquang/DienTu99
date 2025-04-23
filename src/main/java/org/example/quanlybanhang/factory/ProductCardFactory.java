@@ -11,6 +11,7 @@ import org.example.quanlybanhang.dto.productDTO.ProductDisplayInfoDTO;
 import org.example.quanlybanhang.model.Product;
 import org.example.quanlybanhang.utils.ImagesUtils;
 import org.example.quanlybanhang.utils.MoneyUtils;
+import org.example.quanlybanhang.utils.ThemeManager;
 
 import java.math.BigDecimal;
 
@@ -24,26 +25,24 @@ public class ProductCardFactory {
 
     public VBox createProductCard(Product product) {
         VBox card = new VBox(10);
-        card.setStyle("-fx-border-color: #e0e0e0; -fx-background-color: white; -fx-padding: 10;");
-
+        card.getStyleClass().add("product-card");
 
         ImageView imageView = ImagesUtils.createCroppedImageView(
                 product.getImageUrl(), 260, 220, 220, 160);
         StackPane imagePane = new StackPane(imageView);
         imagePane.setPrefHeight(130);
-        imagePane.setStyle("-fx-alignment: center;");
+        imagePane.getStyleClass().add("product-image-pane");
 
         Label name = new Label(product.getName());
         name.setWrapText(true);
-        name.setStyle("-fx-font-weight: bold; -fx-font-size: 14;");
+        name.getStyleClass().add("product-name");
 
         Label price = new Label(MoneyUtils.formatVN(product.getPrice()));
-        price.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-font-size: 13;");
+        price.getStyleClass().add("product-price");
 
         Button addToCart = new Button("Thêm vào giỏ");
         addToCart.setMaxWidth(Double.MAX_VALUE);
-        addToCart.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; " +
-                "-fx-font-weight: bold;");
+        addToCart.getStyleClass().add("add-to-cart-button");
 
         addToCart.setOnAction(e -> {
             ProductDisplayInfoDTO dto = new ProductDisplayInfoDTO(

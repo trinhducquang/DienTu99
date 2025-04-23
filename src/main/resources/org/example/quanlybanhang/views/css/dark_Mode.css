@@ -1394,3 +1394,41 @@ Button.action-button:hover, .add-button:hover {
 .radio-button:hover .radio {
     -fx-border-color: -fx-primary;
 }
+
+/* Product Card Styles for Dark Mode */
+.product-card {
+    -fx-border-color: #45475a;
+    -fx-background-color: #313244;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}
+
+.product-image-pane {
+    -fx-alignment: center;
+}
+
+.product-name {
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+    -fx-text-fill: #cdd6f4;
+}
+
+.product-price {
+    -fx-text-fill: #f87171;
+    -fx-font-weight: bold;
+    -fx-font-size: 13;
+}
+
+.add-to-cart-button {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.add-to-cart-button:hover {
+    -fx-background-color: #3b82f6;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}

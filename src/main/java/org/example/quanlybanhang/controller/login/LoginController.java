@@ -126,17 +126,12 @@ public class LoginController {
             String fxmlPath = "/org/example/quanlybanhang/views/" + fxmlFile;
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
-
-            // Tạo stage mới thay vì dùng stage cũ từ usernameField
             Stage newStage = new Stage();
             Scene scene = new Scene(root);
             ThemeManager.applyTheme(scene);
-
             newStage.setScene(scene);
             newStage.setMaximized(true); // ✅ Phóng to luôn
             newStage.show();
-
-            // Đóng stage cũ (màn hình login)
             Stage currentStage = (Stage) usernameField.getScene().getWindow();
             currentStage.close();
 

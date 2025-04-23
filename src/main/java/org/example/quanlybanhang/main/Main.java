@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.utils.DatabaseConnection;
 import org.example.quanlybanhang.utils.ThreadManager;
-
 import java.sql.Connection;
 import java.util.Objects;
 
