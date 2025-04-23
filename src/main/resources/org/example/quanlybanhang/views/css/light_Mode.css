@@ -776,27 +776,28 @@
     -fx-border-width: 2;
 }
 
-/* Date Picker Styling */
+/* Date Picker Styling - Fixed */
 .date-picker {
     -fx-background-color: -fx-grey-light;
     -fx-background-radius: 5;
     -fx-border-color: -fx-grey;
     -fx-border-radius: 5;
     -fx-text-fill: -fx-text-dark;
-    -fx-prompt-text-fill: derive(-fx-text-dark, 50%);
 }
 
 .date-picker .arrow-button {
     -fx-background-color: -fx-grey;
-    -fx-background-radius: 5;
+    -fx-background-radius: 0 6 6 0;
 }
 
 .date-picker .arrow-button:hover {
-    -fx-background-color: -fx-primary;
+    -fx-background-color: -fx-primary-light;
 }
 
 .date-picker .arrow-button .arrow {
     -fx-background-color: -fx-text-dark;
+    -fx-background-insets: 1;
+    -fx-padding: 4;
 }
 
 .date-picker .cell {
@@ -820,7 +821,7 @@
 }
 
 .date-picker .selected:focused {
-    -fx-background-color: -fx-primary;
+    -fx-background-color: -fx-primary-dark;
 }
 
 .date-picker-popup {
@@ -829,46 +830,62 @@
 }
 
 .date-picker-popup .month-year-pane {
-    -fx-background-color: -fx-primary-dark;
+    -fx-background-color: -fx-primary;
 }
 
 .date-picker-popup .month-year-pane .label {
     -fx-text-fill: -fx-text-light;
-}
-
-.date-picker-popup .week-number-cell {
-    -fx-text-fill: -fx-grey;
+    -fx-font-weight: bold;
 }
 
 .date-picker-popup .spinner .button {
     -fx-background-color: -fx-primary;
     -fx-text-fill: -fx-text-light;
+    -fx-background-radius: 0;
 }
 
 .date-picker-popup .spinner .button:hover {
-    -fx-border-color: -fx-primary; /* Thay thế bằng một màu */
-    -fx-border-width: 5px; /* Nếu bạn muốn đường viền dày 5px */
-    -fx-background-color: -fx-primary-light;
+    -fx-background-color: -fx-primary-dark;
+}
+
+.date-picker-popup .spinner .button .left-arrow,
+.date-picker-popup .spinner .button .right-arrow {
+    -fx-background-color: -fx-text-light;
 }
 
 .date-picker-popup .spinner .label {
-    -fx-text-fill: -fx-text-light;
+    -fx-text-fill: -fx-text-dark; /* or #000000 */
+    -fx-font-weight: bold;
 }
 
 .date-picker .text-field {
-    -fx-background-color: transparent;
+    -fx-background-color: -fx-grey-light;
     -fx-text-fill: -fx-text-dark;
     -fx-prompt-text-fill: derive(-fx-text-dark, 50%);
+}
+
+.date-picker-popup .calendar-grid {
+    -fx-background-color: -fx-secondary;
 }
 
 .date-picker-popup .today {
     -fx-background-color: -fx-primary-light;
     -fx-text-fill: -fx-text-light;
-    -fx-font-weight: bold;
 }
 
 .date-picker-popup .today:hover {
     -fx-background-color: -fx-primary;
+}
+
+
+.date-picker-popup .day-name-cell {
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-primary-dark;
+}
+
+.date-picker-popup .spinner .button:hover {
+    -fx-background-color: derive(-fx-primary-dark, -10%);
+    -fx-cursor: hand;
 }
 
 /* Radio Button Styling */
