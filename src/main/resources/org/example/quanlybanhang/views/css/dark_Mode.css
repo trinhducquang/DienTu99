@@ -333,12 +333,15 @@
     -fx-background-color: derive(-fx-grey, 20%);
 }
 
-/* Table Styles */
+/* ========== TableView Styles (Dark Theme) ========== */
+
 .table-view {
     -fx-background-color: -fx-secondary;
     -fx-table-cell-border-color: -fx-grey;
+    -fx-text-fill: -fx-text-dark;
 }
 
+/* Header */
 .table-view .column-header-background {
     -fx-background-color: -fx-primary-dark;
 }
@@ -356,6 +359,13 @@
     -fx-font-weight: bold;
 }
 
+/* Cells */
+.table-view .cell {
+    -fx-text-fill: -fx-text-dark;
+    -fx-alignment: center-left;
+}
+
+/* Rows */
 .table-row-cell {
     -fx-background-color: -fx-secondary;
     -fx-table-cell-border-color: -fx-grey;
@@ -365,17 +375,27 @@
     -fx-background-color: derive(-fx-secondary, 5%);
 }
 
-.table-row-cell:selected {
+/* Hover effect */
+.table-row-cell:hover {
+    -fx-background-color: derive(-fx-secondary, -5%);
+}
+
+/* Row selected + focused */
+.table-row-cell:selected:focused {
     -fx-background-color: derive(-fx-primary, -20%);
 }
 
-.table-row-cell:selected .text {
+.table-row-cell:selected:focused .text {
     -fx-fill: -fx-text-light;
 }
 
-.table-view .cell {
-    -fx-text-fill: -fx-text-dark;
-    -fx-alignment: center-left;
+/* Row selected but NOT focused — restore to normal */
+.table-row-cell:selected {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell:selected .text {
+    -fx-fill: -fx-text-dark;
 }
 
 /* Header Styles */
@@ -848,6 +868,8 @@
 .table-view .virtual-flow .scroll-bar:horizontal {
     -fx-background-color: transparent;
 }
+
+
 
 .table-view .virtual-flow .scroll-bar:vertical .thumb,
 .table-view .virtual-flow .scroll-bar:horizontal .thumb {
