@@ -1134,7 +1134,6 @@
     -fx-background-radius: 8;
     -fx-padding: 10;
     -fx-spacing: 10;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 5, 0.1, 0, 2);
 }
 
 .cart-item-label {
@@ -1161,12 +1160,14 @@
 }
 
 .cart-item-textfield {
-    -fx-background-color: #ffffff;
+    -fx-background-color: -fx-secondary;
     -fx-text-fill: #212121;
     -fx-border-color: #e0e0e0;
     -fx-background-radius: 5;
     -fx-alignment: center;
 }
+
+
 
 .cart-item:hover {
     -fx-border-color: #64b5f6;

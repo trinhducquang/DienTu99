@@ -11,7 +11,7 @@ import org.example.quanlybanhang.dto.productDTO.ProductDisplayInfoDTO;
 import org.example.quanlybanhang.model.Product;
 import org.example.quanlybanhang.utils.ImagesUtils;
 import org.example.quanlybanhang.utils.MoneyUtils;
-import org.example.quanlybanhang.utils.ThemeManager;
+
 
 import java.math.BigDecimal;
 

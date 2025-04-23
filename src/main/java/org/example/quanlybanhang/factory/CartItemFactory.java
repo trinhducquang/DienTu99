@@ -46,6 +46,9 @@ public class CartItemFactory {
 
         HBox topBox = new HBox(10, imageView, infoBox, deleteBtn);
         topBox.setAlignment(Pos.CENTER_LEFT);
+        HBox.setMargin(deleteBtn, new Insets(0, 0, 50, 0)); // Add margin to push it right
+        HBox.setHgrow(infoBox, Priority.ALWAYS); // Make info box take all available space
+        deleteBtn.setAlignment(Pos.CENTER_RIGHT); // Align the button itself to the right
 
         Button minusBtn = new Button("-");
         Button plusBtn = new Button("+");
