@@ -444,7 +444,7 @@
 .product-price {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-    -fx-text-fill: -fx-error;
+    -fx-text-fill: -fx-error !important;
 }
 
 .product-status {
@@ -536,7 +536,7 @@
 
 .related-product-price {
     -fx-font-size: 14px;
-    -fx-text-fill: -fx-error;
+    -fx-text-fill: -fx-error !important;
     -fx-font-weight: bold;
 }
 
@@ -1274,10 +1274,24 @@ AnchorPane {
 }
 
 /* TabPane in dark theme */
+
+.tab-pane .tab-header-area {
+    -fx-padding: 10 0 0 10px;
+    -fx-start-margin: 0;
+}
+
+
+#tabPaneContainer {
+    -fx-padding: 0;
+    -fx-margin: 0;
+}
+
 .tab-pane .tab-header-area .tab-header-background {
     -fx-background-color: -fx-secondary;
     -fx-border-color: -fx-grey;
     -fx-border-width: 0 0 1 0;
+    -fx-border-insets: 0 0 0 10px;
+    -fx-padding: 0;
 }
 
 .tab-pane .tab {
@@ -1302,6 +1316,7 @@ AnchorPane {
 .tab-pane .tab-content-area {
     -fx-background-color: -fx-secondary;
 }
+
 
 /* Styling for the import/export button */
 #btnCreateTransaction, .add-button {
