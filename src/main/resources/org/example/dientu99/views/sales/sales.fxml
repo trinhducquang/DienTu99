@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<StackPane prefHeight="800.0" prefWidth="1090.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dientu99.controller.sale.SaleController">
+
+    <BorderPane prefHeight="479.0" prefWidth="1090.0">
+        <top>
+            <HBox alignment="CENTER_LEFT" prefWidth="1090.0" spacing="20" styleClass="header-box">
+                <padding>
+                    <Insets bottom="10" left="15" right="15" top="10" />
+                </padding>
+                <Label text="Điện Tử 99" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="orderButton" styleClass="print-button" text="Quản lí đơn hàng" />
+                <Button fx:id="cartButton" onAction="#toggleCart" styleClass="cart-button"  text="Giỏ hàng (0)" />
+                <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="back-button" text="Đăng Xuất" />
+                <BorderPane.margin>
+                    <Insets />
+                </BorderPane.margin>
+            </HBox>
+        </top>
+
+        <center>
+            <VBox spacing="10">
+                <padding>
+                    <Insets bottom="15" left="15" right="15" top="15" />
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label prefHeight="27.0" prefWidth="268.0" style="-fx-font-size: 18; -fx-font-weight: bold;" styleClass="" text="Danh Sách Sản Phẩm" />
+                    <Region prefHeight="64.0" prefWidth="126.0" HBox.hgrow="ALWAYS" />
+                    <HBox alignment="CENTER" prefHeight="64.0" prefWidth="416.0" spacing="15" styleClass="price-range-container">
+                        <padding>
+                            <Insets bottom="10" left="15" right="15" top="10" />
+                        </padding>
+
+                        <Label prefHeight="19.0" prefWidth="102.0" text="Khoảng giá:">
+                            <font>
+                                <Font name="System Bold" size="13" />
+                            </font>
+                        </Label>
+
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="5">
+                                <Label fx:id="minPriceLabel" minWidth="90" prefHeight="20.0" prefWidth="126.0" styleClass="price-label" text="0đ" />
+                            </HBox>
+
+                            <Slider fx:id="minPriceSlider" max="50000000" min="0" styleClass="price-slider" value="0" />
+                        </VBox>
+
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="0.0" spacing="5">
+                                <Label fx:id="maxPriceLabel" minWidth="90" prefHeight="20.0" prefWidth="124.0" styleClass="price-label" text="900.000.000">
+                                    <HBox.margin>
+                                        <Insets left="5.0" />
+                                    </HBox.margin></Label>
+                            </HBox>
+
+                            <Slider fx:id="maxPriceSlider" max="900000000" min="0" styleClass="price-slider" value="900000000" />
+                        </VBox>
+                    </HBox>
+                    <ComboBox fx:id="categoryFilter" prefHeight="30.0" prefWidth="201.0" promptText="Danh mục">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Tất cả" />
+                                <String fx:value="Điện thoại" />
+                                <String fx:value="Laptop" />
+                                <String fx:value="Đồng hồ thông minh" />
+                                <String fx:value="TV" />
+                                <String fx:value="Máy tính bảng" />
+                            </FXCollections>
+                        </items>
+                    </ComboBox>
+                    <VBox alignment="CENTER" spacing="5" />
+                    <TextField fx:id="searchField" prefHeight="30.0" prefWidth="216.0" promptText="Tìm kiếm sản phẩm" />
+                </HBox>
+
+                <!-- Container for products -->
+                <BorderPane VBox.vgrow="ALWAYS">
+                    <center>
+                        <GridPane fx:id="gridPane" alignment="CENTER" hgap="15" prefWidth="1020.0" vgap="15" BorderPane.alignment="CENTER" />
+                    </center>
+                    <bottom>
+
+                        <!-- Pagination at the bottom -->
+                        <Pagination fx:id="pagination" pageCount="10" prefHeight="33.0" prefWidth="1060.0" BorderPane.alignment="CENTER" />
+                    </bottom>
+                </BorderPane>
+            </VBox>
+        </center>
+    </BorderPane>
+
+    <!-- Panel giỏ hàng sẽ trượt ra từ bên phải -->
+    <StackPane fx:id="cartPane" alignment="TOP_RIGHT" maxWidth="2000" prefHeight="756.0" prefWidth="1090.0" visible="false">
+        <Rectangle fill="#80000000" onMouseClicked="#closeCart">
+            <StackPane.margin>
+                <Insets bottom="-50" left="-50" right="-50" top="-50" />
+            </StackPane.margin>
+        </Rectangle>
+
+        <VBox fx:id="cartBox" maxWidth="500" prefWidth="500" styleClass="cart-pane" StackPane.alignment="TOP_RIGHT">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="15" />
+            </padding>
+
+            <HBox alignment="CENTER_LEFT">
+                <Label style="-fx-font-size: 18; -fx-font-weight: bold;" text="Giỏ hàng">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin></Label>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button onAction="#closeCart" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="X" />
+            <padding>
+               <Insets bottom="15.0" />
+            </padding>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+                <VBox fx:id="cartItemsContainer" spacing="10">
+                </VBox>
+            </ScrollPane>
+
+            <Separator />
+
+            <VBox>
+                <padding>
+                    <Insets bottom="10" right="10" top="10" />
+                </padding>
+                <HBox>
+                    <Label styleClass="order-info-label" text="Tổng tiền:" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Label fx:id="totalLabel" styleClass="product-price" />
+                </HBox>
+            </VBox>
+
+            <HBox spacing="10">
+                <Button fx:id="resetCartButton" maxWidth="Infinity" onAction="#resetCart" styleClass="cancel-button" text="Làm mới giỏ hàng" HBox.hgrow="ALWAYS" />
+                <Button fx:id="createOrderButton" maxWidth="Infinity" onAction="#handleCreateOrder" styleClass="save-button" text="Tạo đơn hàng" HBox.hgrow="ALWAYS" />
+            <padding>
+               <Insets bottom="10.0" />
+            </padding>
+            </HBox>
+
+            <Separator />
+        </VBox>
+    </StackPane>
+</StackPane>

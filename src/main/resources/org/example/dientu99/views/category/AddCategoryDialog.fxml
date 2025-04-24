@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<BorderPane prefHeight="550.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.dientu99.controller.category.AddCategoryDialogController">
+    <top>
+        <VBox styleClass="top-nav" spacing="10">
+            <padding>
+                <Insets bottom="10" left="20" right="20" top="20"/>
+            </padding>
+            <Label text="Thêm Danh Mục" textFill="White">
+                <font>
+                    <Font name="System Bold" size="24.0"/>
+                </font>
+            </Label>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox prefHeight="458.0" prefWidth="800.0" spacing="15">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="10"/>
+            </padding>
+
+            <!-- Category Name -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label prefWidth="120" text="Tên Danh Mục:"/>
+                <TextField fx:id="categoryNameField" prefHeight="31.0" prefWidth="632.0"/>
+            </HBox>
+
+            <!-- Description -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label prefWidth="120" text="Mô tả:"/>
+                <TextArea fx:id="descriptionField" prefHeight="100" prefWidth="633.0"/>
+            </HBox>
+
+            <!-- Parent Category (Always displayed) -->
+            <VBox spacing="10">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label prefWidth="120" text="Danh mục cha:"/>
+                    <ComboBox fx:id="parentCategoryComboBox" disable="${rootCategoryRadio.selected}" prefHeight="31.0"
+                              prefWidth="633.0"/>
+                </HBox>
+            </VBox>
+
+            <!-- Category Type -->
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <Label prefWidth="120" text="Kiểu danh mục:">
+                    <HBox.margin>
+                        <Insets/>
+                    </HBox.margin>
+                </Label>
+                <HBox alignment="CENTER_LEFT" spacing="145.0">
+                    <RadioButton fx:id="rootCategoryRadio" prefHeight="21.0" prefWidth="150.0" selected="true"
+                                 text="Nhóm sản phẩm">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="categoryTypeGroup"/>
+                        </toggleGroup>
+                        <HBox.margin>
+                            <Insets/>
+                        </HBox.margin>
+                    </RadioButton>
+                    <RadioButton fx:id="subCategoryRadio" prefHeight="21.0" prefWidth="337.0" text="Dòng sản phẩm"
+                                 toggleGroup="$categoryTypeGroup"/>
+                </HBox>
+                <VBox.margin>
+                    <Insets top="10.0"/>
+                </VBox.margin>
+            </HBox>
+
+            <!-- Save and Cancel buttons -->
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="143.0" prefWidth="776.0" spacing="15">
+                <Button fx:id="saveButton" onAction="#saveButton" styleClass="save-button" prefHeight="40"
+                        text="Lưu">
+                    <HBox.margin>
+                        <Insets/>
+                    </HBox.margin>
+                </Button>
+                <Button fx:id="cancelButton" onAction="#cancelButton" styleClass="cancel-button" prefHeight="40" prefWidth="120"
+                         text="Hủy"/>
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+            </HBox>
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox alignment="CENTER" prefHeight="47.0" prefWidth="800.0" spacing="5">
+            <padding>
+                <Insets bottom="15"/>
+            </padding>
+            <Label text="Chú ý: Cả nhóm sản phẩm và dòng sản phẩm cần được thêm bằng tay" textFill="#555555"/>
+            <Label text="Ví dụ: Tạo 'Laptop' là nhóm sản phẩm, sau đó tạo 'Laptop Gaming' là dòng sản phẩm của 'Laptop'"
+                   textFill="#555555" wrapText="true"/>
+        </VBox>
+    </bottom>
+</BorderPane>

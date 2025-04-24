@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="850.0"  xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dientu99.controller.product.ProductDialogController">
+
+    <!-- Header -->
+    <VBox alignment="CENTER" prefHeight="80.0" styleClass="dialog-header">
+        <Label styleClass="dialog-title" text="Thêm Sản Phẩm Mới" />
+    </VBox>
+
+    <!-- Scrollable Content -->
+    <ScrollPane fitToWidth="true" styleClass="content-scroll" VBox.vgrow="ALWAYS">
+        <VBox spacing="20" styleClass="form-container">
+            <padding>
+                <Insets bottom="20" left="30" right="30" top="20" />
+            </padding>
+
+            <!-- Thông tin cơ bản -->
+            <VBox spacing="10">
+                <Label styleClass="section-title" text="Thông tin cơ bản" />
+
+                <GridPane hgap="20" vgap="15">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50.0" />
+                        <ColumnConstraints percentWidth="50.0" />
+                    </columnConstraints>
+
+                    <!-- Tên sản phẩm -->
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <HBox alignment="CENTER_LEFT" spacing="5">
+                            <Label styleClass="field-label" text="Tên Sản Phẩm" />
+                            <Label styleClass="required-mark" text="*" />
+                        </HBox>
+                        <TextField fx:id="productNameField" promptText="Nhập tên sản phẩm" styleClass="field-input" />
+                    </VBox>
+
+                    <!-- Danh mục -->
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <HBox alignment="CENTER_LEFT" spacing="5">
+                            <Label styleClass="field-label" text="Danh Mục" />
+                            <Label styleClass="required-mark" text="*" />
+                        </HBox>
+                        <ComboBox fx:id="categoryComboBox" maxWidth="Infinity" promptText="Chọn danh mục" styleClass="field-input">
+                            <items>
+                                <FXCollections fx:factory="observableArrayList" />
+                            </items>
+                        </ComboBox>
+                    </VBox>
+
+                    <!-- Giá -->
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <HBox alignment="CENTER_LEFT" spacing="5">
+                            <Label styleClass="field-label" text="Giá" />
+                            <Label styleClass="required-mark" text="*" />
+                        </HBox>
+                        <TextField fx:id="priceField" promptText="Nhập giá" styleClass="field-input" />
+                    </VBox>
+
+                    <!-- URL Hình ảnh -->
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label styleClass="field-label" text="URL Hình Ảnh" />
+                        <TextField fx:id="imageUrlField" promptText="Nhập URL hình ảnh" styleClass="field-input" />
+                    </VBox>
+
+                    <!-- Mô tả -->
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                        <Label styleClass="field-label" text="Mô Tả" />
+                        <TextField fx:id="descriptionField" promptText="Nhập mô tả sản phẩm" styleClass="field-input" />
+                    </VBox>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
+            </VBox>
+
+            <!-- Thông số kỹ thuật -->
+            <VBox spacing="10">
+                <Label styleClass="section-title" text="Thông số kỹ thuật" />
+
+                <GridPane hgap="20" vgap="15">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50.0" />
+                        <ColumnConstraints percentWidth="50.0" />
+                    </columnConstraints>
+
+                    <!-- Cấu hình & Bộ nhớ -->
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label styleClass="field-label" text="Cấu hình &amp; Bộ nhớ" />
+                        <TextField fx:id="configMemoryField" promptText="Nhập cấu hình &amp; bộ nhớ" styleClass="field-input" />
+                    </VBox>
+
+                    <!-- Camera & Màn hình -->
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label styleClass="field-label" text="Camera &amp; Màn hình" />
+                        <TextField fx:id="cameraField" promptText="Nhập camera &amp; màn hình" styleClass="field-input" />
+                    </VBox>
+
+                    <!-- Pin & Sạc -->
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label styleClass="field-label" text="Pin &amp; Sạc" />
+                        <TextField fx:id="batteryField" promptText="Nhập pin &amp; sạc" styleClass="field-input" />
+                    </VBox>
+
+                    <!-- Tiện ích -->
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label styleClass="field-label" text="Tiện ích" />
+                        <TextField fx:id="featuresField" promptText="Nhập tiện ích" styleClass="field-input" />
+                    </VBox>
+
+                    <!-- Kết nối -->
+                    <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                        <Label styleClass="field-label" text="Kết nối" />
+                        <TextField fx:id="connectivityField" promptText="Nhập kết nối" styleClass="field-input" />
+                    </VBox>
+
+                    <!-- Thiết kế & Chất liệu -->
+                    <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label styleClass="field-label" text="Thiết kế &amp; Chất liệu" />
+                        <TextField fx:id="designMaterialsField" promptText="Nhập thiết kế &amp; chất liệu" styleClass="field-input" />
+                    </VBox>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
+                </GridPane>
+            </VBox>
+
+            <!-- Ghi chú -->
+            <Label styleClass="note-text" text="(*) Thông tin bắt buộc" />
+        </VBox>
+    </ScrollPane>
+
+    <!-- Buttons -->
+    <HBox alignment="CENTER" prefHeight="70.0" spacing="20" styleClass="button-container">
+        <Button fx:id="cancelButton" prefHeight="40.0" prefWidth="130.0" styleClass="cancel-button" text="Hủy" />
+        <Button fx:id="saveButton" prefHeight="40.0" prefWidth="130.0" styleClass="save-button" text="Lưu" />
+        <padding>
+            <Insets bottom="15.0" top="15.0" />
+        </padding>
+    </HBox>
+</VBox>

@@ -1,4 +1,4 @@
-module org.example.quanlybanhang {
+module org.example.dientu99 {
     requires javafx.controls;
     requires javafx.fxml;
     requires mysql.connector.j;
@@ -13,34 +13,34 @@ module org.example.quanlybanhang {
     requires java.prefs;
 
 
-    exports org.example.quanlybanhang.enums;
-    opens org.example.quanlybanhang.main to javafx.fxml;
-    exports org.example.quanlybanhang.main to javafx.graphics;
-    exports org.example.quanlybanhang.model;
-    opens org.example.quanlybanhang.controller.warehouse to javafx.fxml;
-    opens org.example.quanlybanhang.model to javafx.fxml;
-    exports org.example.quanlybanhang.controller.login;
-    opens org.example.quanlybanhang.controller.login to javafx.fxml;
-    exports org.example.quanlybanhang.controller.category;
-    opens org.example.quanlybanhang.controller.category to javafx.fxml;
-    exports org.example.quanlybanhang.controller.customer;
-    opens org.example.quanlybanhang.controller.customer to javafx.fxml;
-    exports org.example.quanlybanhang.controller.employee;
-    opens org.example.quanlybanhang.controller.employee to javafx.fxml;
-    exports org.example.quanlybanhang.controller.order;
-    opens org.example.quanlybanhang.controller.order to javafx.fxml;
-    exports org.example.quanlybanhang.controller.product;
-    opens org.example.quanlybanhang.controller.product to javafx.fxml;
-    exports org.example.quanlybanhang.controller.admin;
-    opens org.example.quanlybanhang.controller.admin to javafx.fxml;
-    exports org.example.quanlybanhang.controller.report;
-    opens org.example.quanlybanhang.controller.report to javafx.fxml;
-    opens org.example.quanlybanhang.dto.orderDTO to com.google.gson, javafx.base;
-    opens org.example.quanlybanhang.dto.warehouseDTO to com.google.gson, javafx.base;
-    exports org.example.quanlybanhang.controller.sale;  // Thêm dòng này
-    opens org.example.quanlybanhang.controller.sale to javafx.fxml;
-    exports org.example.quanlybanhang.dto.productDTO;
-    opens org.example.quanlybanhang.dto.productDTO to com.google.gson, javafx.base, javafx.fxml;
+    exports org.example.dientu99.enums;
+    opens org.example.dientu99.main to javafx.fxml;
+    exports org.example.dientu99.main to javafx.graphics;
+    exports org.example.dientu99.model;
+    opens org.example.dientu99.controller.warehouse to javafx.fxml;
+    opens org.example.dientu99.model to javafx.fxml;
+    exports org.example.dientu99.controller.login;
+    opens org.example.dientu99.controller.login to javafx.fxml;
+    exports org.example.dientu99.controller.category;
+    opens org.example.dientu99.controller.category to javafx.fxml;
+    exports org.example.dientu99.controller.customer;
+    opens org.example.dientu99.controller.customer to javafx.fxml;
+    exports org.example.dientu99.controller.employee;
+    opens org.example.dientu99.controller.employee to javafx.fxml;
+    exports org.example.dientu99.controller.order;
+    opens org.example.dientu99.controller.order to javafx.fxml;
+    exports org.example.dientu99.controller.product;
+    opens org.example.dientu99.controller.product to javafx.fxml;
+    exports org.example.dientu99.controller.admin;
+    opens org.example.dientu99.controller.admin to javafx.fxml;
+    exports org.example.dientu99.controller.report;
+    opens org.example.dientu99.controller.report to javafx.fxml;
+    opens org.example.dientu99.dto.orderDTO to com.google.gson, javafx.base;
+    opens org.example.dientu99.dto.warehouseDTO to com.google.gson, javafx.base;
+    exports org.example.dientu99.controller.sale;  // Thêm dòng này
+    opens org.example.dientu99.controller.sale to javafx.fxml;
+    exports org.example.dientu99.dto.productDTO;
+    opens org.example.dientu99.dto.productDTO to com.google.gson, javafx.base, javafx.fxml;
 
 
 }
