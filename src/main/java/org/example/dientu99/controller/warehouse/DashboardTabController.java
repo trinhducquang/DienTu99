@@ -20,6 +20,7 @@ import org.example.dientu99.dto.warehouseDTO.WarehouseDTO;
 import org.example.dientu99.enums.ExportStatus;
 import org.example.dientu99.enums.WarehouseType;
 import org.example.dientu99.utils.ThemeManager;
+import org.example.dientu99.utils.ThreadManager;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -102,34 +103,33 @@ public class DashboardTabController {
         chartPane.getChildren().add(chartContainer);
     }
 
-    public void updateDashboard(Map<Integer, Integer> productStockMap) {
-        updatePendingOrdersCount();
-        int totalStockQuantity = calculateTotalStockQuantity(productStockMap);
-        BigDecimal totalWarehouseValue = calculateTotalWarehouseValue(productStockMap);
-        long monthlyTransactionCount = calculateMonthlyTransactions();
-        long lowStockCount = calculateLowStockCount();
-        updateStatisticsUI(totalStockQuantity, totalWarehouseValue, monthlyTransactionCount, lowStockCount);
-        updateLowStockProducts();
-        loadTopExportedProducts();
+    // In DashboardTabController.java
+    void updateDashboard(Map<Integer, Integer> productStockMap) {
+        // Run heavy calculations in background
+        ThreadManager.runBackground(() -> {
+            int totalStockQuantity = calculateTotalStockQuantity(productStockMap);
+            BigDecimal totalWarehouseValue = calculateTotalWarehouseValue(productStockMap);
+            long monthlyTransactionCount = calculateMonthlyTransactions();
+            long lowStockCount = calculateLowStockCount();
 
-        // Re-setup chart controller after data has been set
-        setupChartController();
+            // Update UI on JavaFX thread
+            ThreadManager.runOnUiThread(() -> {
+                updateStatisticsUI(totalStockQuantity, totalWarehouseValue, monthlyTransactionCount, lowStockCount);
+                updateLowStockProducts();
+                loadTopExportedProducts();
+                setupChartController();
+            });
 
-        // Debug output
-        if (allTransactions != null) {
-            System.out.println("Transaction count: " + allTransactions.size());
-            // Check a few sample data points
-            if (!allTransactions.isEmpty()) {
+            // Debug output
+            System.out.println("Transaction count: " + (allTransactions != null ? allTransactions.size() : "null"));
+            if (allTransactions != null && !allTransactions.isEmpty()) {
                 WarehouseDTO firstTrans = allTransactions.getFirst();
                 System.out.println("Sample: ProductID=" + firstTrans.getProductId()
                         + ", Type=" + firstTrans.getType()
                         + ", Quantity=" + firstTrans.getQuantity()
                         + ", CreatedAt=" + firstTrans.getCreatedAt());
             }
-        } else {
-            System.out.println("Chart controller or transactions is null");
-        }
-        System.out.println("Transaction data size: " + (allTransactions != null ? allTransactions.size() : "null"));
+        });
     }
 
     public void setMainController(WarehouseController controller) {
@@ -337,46 +337,50 @@ public class DashboardTabController {
         }
     }
 
+    // In DashboardTabController.java
     public void loadTopExportedProducts() {
-        // Create a map to track total export quantity by product
-        Map<Integer, WarehouseDTO> productExportMap = new HashMap<>();
+        ThreadManager.runBackground(() -> {
+            // Create a map to track total export quantity by product
+            Map<Integer, WarehouseDTO> productExportMap = new HashMap<>();
 
-        // Calculate export statistics for each product if transactions are available
-        if (allTransactions != null) {
-            // Calculate export statistics for each product
-            for (WarehouseDTO transaction : allTransactions) {
-                if (transaction.getType() == WarehouseType.XUAT_KHO) {
-                    int productId = transaction.getProductId();
-                    String productName = transaction.getProductName();
+            // Calculate export statistics for each product if transactions are available
+            if (allTransactions != null) {
+                for (WarehouseDTO transaction : allTransactions) {
+                    if (transaction.getType() == WarehouseType.XUAT_KHO) {
+                        int productId = transaction.getProductId();
+                        String productName = transaction.getProductName();
 
-                    // Create or update the record for this product
-                    WarehouseDTO exportSummary = productExportMap.computeIfAbsent(
-                            productId,
-                            k -> {
-                                WarehouseDTO dto = new WarehouseDTO();
-                                dto.setProductId(productId);
-                                dto.setProductName(productName);
-                                dto.setQuantity(0);
-                                return dto;
-                            }
-                    );
+                        // Create or update the record for this product
+                        WarehouseDTO exportSummary = productExportMap.computeIfAbsent(
+                                productId,
+                                k -> {
+                                    WarehouseDTO dto = new WarehouseDTO();
+                                    dto.setProductId(productId);
+                                    dto.setProductName(productName);
+                                    dto.setQuantity(0);
+                                    return dto;
+                                }
+                        );
 
-                    exportSummary.setQuantity(exportSummary.getQuantity() + transaction.getQuantity());
+                        exportSummary.setQuantity(exportSummary.getQuantity() + transaction.getQuantity());
+                    }
                 }
             }
-        }
 
-        // Sort by export quantity (descending) and get top 20
-        List<WarehouseDTO> topExportProducts = new ArrayList<>(productExportMap.values());
-        topExportProducts.sort(Comparator.comparing(WarehouseDTO::getQuantity).reversed());
+            // Sort by export quantity (descending) and get top 20
+            List<WarehouseDTO> topExportProducts = new ArrayList<>(productExportMap.values());
+            topExportProducts.sort(Comparator.comparing(WarehouseDTO::getQuantity).reversed());
 
-        int limit = Math.min(20, topExportProducts.size());
-        List<WarehouseDTO> top20ExportProducts = topExportProducts.subList(0, limit);
+            int limit = Math.min(20, topExportProducts.size());
+            List<WarehouseDTO> top20ExportProducts = topExportProducts.subList(0, limit);
 
-        // Update table
-        if (tblTopExportProducts != null) {
-            tblTopExportProducts.setItems(FXCollections.observableArrayList(top20ExportProducts));
-        }
+            // Update table on UI thread
+            ThreadManager.runOnUiThread(() -> {
+                if (tblTopExportProducts != null) {
+                    tblTopExportProducts.setItems(FXCollections.observableArrayList(top20ExportProducts));
+                }
+            });
+        });
     }
 
     @FXML

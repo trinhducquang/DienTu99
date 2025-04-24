@@ -326,6 +326,50 @@ public class OrderDAO implements CrudDao<Order> {
         }
     }
 
+    // Thêm các phương thức này vào OrderDAO
+
+    /**
+     * Đếm tổng số đơn hàng trong cơ sở dữ liệu
+     */
+    public int countTotalOrders() {
+        String sql = "SELECT COUNT(*) FROM order_summary";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    /**
+     * Lấy danh sách OrderSummaryDTO với phân trang
+     */
+    public List<OrderSummaryDTO> getOrderSummariesPaginated(int pageIndex, int pageSize) {
+        List<OrderSummaryDTO> results = new ArrayList<>();
+
+        String sql = "SELECT * FROM order_summary ORDER BY order_id DESC LIMIT ? OFFSET ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, pageSize);
+            stmt.setInt(2, pageIndex * pageSize);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    results.add(extractOrderSummaryDTO(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return results;
+    }
+
 }
 
 

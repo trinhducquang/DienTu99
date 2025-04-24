@@ -15,13 +15,12 @@ import org.example.dientu99.dao.OrderDAO;
 import org.example.dientu99.dto.orderDTO.OrderSummaryDTO;
 import org.example.dientu99.enums.ExportStatus;
 import org.example.dientu99.helpers.DialogHelper;
-import org.example.dientu99.model.Order;
-import org.example.dientu99.utils.PaginationUtils;
+import org.example.dientu99.utils.AsyncDataLoader;
+import org.example.dientu99.utils.ThreadManager;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class PendingOrdersDialogController implements RefreshableView {
 
@@ -64,24 +63,108 @@ public class PendingOrdersDialogController implements RefreshableView {
     @FXML
     private Pagination pagination;
 
-    private ObservableList<OrderSummaryDTO> allOrders;
-    private ObservableList<OrderSummaryDTO> displayedOrders;
+    @FXML
+    private ProgressIndicator loadingIndicator;
+
+    private final ObservableList<OrderSummaryDTO> displayedOrders = FXCollections.observableArrayList();
     private final OrderDAO orderDAO = new OrderDAO();
     private final IntegerProperty currentPage = new SimpleIntegerProperty(0);
+    private final IntegerProperty totalPages = new SimpleIntegerProperty(0);
+    private final IntegerProperty totalItems = new SimpleIntegerProperty(0);
+    private final int PAGE_SIZE = 18;
+    private boolean isLoading = false;
+    private CompletableFuture<Void> currentLoadTask = null;
 
     @FXML
     public void initialize() {
-        displayedOrders = FXCollections.observableArrayList();
-        allOrders = FXCollections.observableArrayList();
         setupTableColumns();
-        loadAllOrders();
+        ordersTable.setItems(displayedOrders);
 
+        // Thiết lập sự kiện cho nút đóng
         if (closeButton != null) {
             closeButton.setOnAction(event -> {
                 Stage stage = (Stage) closeButton.getScene().getWindow();
                 stage.close();
             });
         }
+
+        // Thiết lập phân trang
+        if (pagination != null) {
+            setupPagination();
+        }
+
+        // Tải trang đầu tiên
+        loadInitialData();
+    }
+
+    private void setupPagination() {
+        pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) -> {
+            if (!isLoading) {
+                currentPage.set(newIndex.intValue());
+                loadPage(currentPage.get());
+            }
+        });
+    }
+
+    private void loadInitialData() {
+        // Kiểm tra null trước khi sử dụng loadingIndicator
+        if (loadingIndicator != null) {
+            loadingIndicator.setVisible(true);
+        }
+
+        ThreadManager.runBackground(() -> {
+            int count = orderDAO.countTotalOrders();
+            ThreadManager.runOnUiThread(() -> {
+                totalItems.set(count);
+                int pages = (count + PAGE_SIZE - 1) / PAGE_SIZE;
+                totalPages.set(pages);
+
+                if (pagination != null) {
+                    pagination.setPageCount(pages > 0 ? pages : 1);
+                }
+
+                // Tải trang đầu tiên
+                loadPage(0);
+            });
+        });
+    }
+
+    private void loadPage(int pageIndex) {
+        if (isLoading && currentLoadTask != null) {
+            currentLoadTask.cancel(true);
+        }
+
+        isLoading = true;
+        displayedOrders.clear();
+
+        // Kiểm tra null trước khi sử dụng loadingIndicator
+        if (loadingIndicator != null) {
+            loadingIndicator.setVisible(true);
+        }
+
+        currentLoadTask = AsyncDataLoader.loadPageAsync(
+                pageIndex,
+                PAGE_SIZE,
+                orderDAO::getOrderSummariesPaginated,
+                orders -> {
+                    ThreadManager.runOnUiThread(() -> {
+                        displayedOrders.setAll(orders);
+                        if (loadingIndicator != null) {
+                            loadingIndicator.setVisible(false);
+                        }
+                        isLoading = false;
+                    });
+                },
+                error -> {
+                    ThreadManager.runOnUiThread(() -> {
+                        if (loadingIndicator != null) {
+                            loadingIndicator.setVisible(false);
+                        }
+                        isLoading = false;
+                        showErrorDialog("Không thể tải dữ liệu", error.getMessage());
+                    });
+                }
+        );
     }
 
     private void setupTableColumns() {
@@ -148,51 +231,30 @@ public class PendingOrdersDialogController implements RefreshableView {
         });
     }
 
-    private void loadAllOrders() {
-        try {
-            List<Order> orders = orderDAO.getAll();
-            List<OrderSummaryDTO> orderSummaries = new ArrayList<>();
-            for (Order order : orders) {
-                OrderSummaryDTO summary = orderDAO.getOrderSummaryById(order.getId());
-                if (summary != null) {
-                    orderSummaries.add(summary);
-                }
-            }
-
-            allOrders.setAll(orderSummaries);
-            ordersTable.setItems(displayedOrders);
-
-            if (pagination != null) {
-                PaginationUtils.setup(
-                        pagination,
-                        allOrders,
-                        displayedOrders,
-                        currentPage,
-                        18,
-                        null
-                );
-            } else {
-                displayedOrders.setAll(allOrders);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void filterPendingOrders() {
-        if (allOrders == null) {
-            loadAllOrders();
-        }
-
+        // Đặt lại phân trang và tải dữ liệu mới
         if (pagination != null) {
             pagination.setCurrentPageIndex(0);
         } else {
-            displayedOrders.setAll(allOrders);
+            loadPage(0);
         }
     }
 
     @Override
     public void refresh() {
-        loadAllOrders();
+        currentPage.set(0);
+        if (pagination != null) {
+            pagination.setCurrentPageIndex(0);
+        } else {
+            loadPage(0);
+        }
+    }
+
+    private void showErrorDialog(String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Lỗi");
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

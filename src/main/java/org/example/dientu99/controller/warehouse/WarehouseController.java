@@ -14,6 +14,7 @@ import org.example.dientu99.enums.WarehouseType;
 import org.example.dientu99.helpers.LogoutHandler;
 import org.example.dientu99.model.User;
 import org.example.dientu99.security.auth.UserSession;
+import org.example.dientu99.utils.ThreadManager;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -23,18 +24,11 @@ import static org.example.dientu99.enums.UserRole.NHAN_VIEN_KHO;
 
 public class WarehouseController {
     // Constants
-    private static final int ITEMS_PER_PAGE = 18;
     private static final int LOW_STOCK_THRESHOLD = 10;
 
     // Tab controllers
     private TransactionTabController transactionTabController;
     private DashboardTabController dashboardTabController;
-
-    // Products tab components - now directly in main controller
-    @FXML private TableView<WarehouseDTO> tblProducts;
-    @FXML private TextField txtSearchProduct;
-    @FXML private DatePicker dpStartDateProduct;
-    @FXML private DatePicker dpEndDateProduct;
 
     // Dashboard components
     @FXML private Label lblTotalProducts;
@@ -207,24 +201,31 @@ public class WarehouseController {
     }
 
     private void loadNonTransactionData() {
-        try {
-            allProducts.setAll(warehouseDAO.getAllWarehouseProducts());
+        ThreadManager.runBackground(() -> {
+            try {
+                List<WarehouseDTO> products = warehouseDAO.getAllWarehouseProducts();
 
-            // Cập nhật dữ liệu cho Dashboard nếu đã khởi tạo
-            if (dashboardTabController != null) {
-                dashboardTabController.setProductData(allProducts);
-                if (transactionTabController != null) {
-                    dashboardTabController.setTransactionData(transactionTabController.getAllTransactions());
-                }
-            } else {
-                // Fallback nếu chưa khởi tạo dashboard controller
-                updateLowStockProducts();
+                // Update UI on JavaFX thread
+                ThreadManager.runOnUiThread(() -> {
+                    allProducts.setAll(products);
+
+                    // Update Dashboard if initialized
+                    if (dashboardTabController != null) {
+                        dashboardTabController.setProductData(allProducts);
+                        if (transactionTabController != null) {
+                            dashboardTabController.setTransactionData(transactionTabController.getAllTransactions());
+                        }
+                    } else {
+                        // Fallback if dashboard controller not initialized
+                        updateLowStockProducts();
+                    }
+
+                    updateStatistics();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            updateStatistics();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     private void updateLowStockProducts() {
@@ -245,7 +246,7 @@ public class WarehouseController {
         FXCollections.sort(lowStockProducts, Comparator.comparing(WarehouseDTO::getStock));
     }
 
-    // In WarehouseController.java, modify the setupTabChangeListener method:
+    // In WarehouseController.java
     private void setupTabChangeListener() {
         tabPane.getSelectionModel().selectedIndexProperty().addListener((obs, oldIndex, newIndex) -> {
             switch (newIndex.intValue()) {
@@ -257,15 +258,20 @@ public class WarehouseController {
                     switchPaginationToTransactions();
                     break;
                 case 1:
-                    updateStatistics();
-                    updateLowStockProducts();
-                    loadTopExportedProducts();
+                    // Run dashboard updates in background when switching to dashboard tab
+                    ThreadManager.runBackground(() -> {
+                        // When switching to dashboard, ensure all data is shown regardless of filter
+                        ThreadManager.runOnUiThread(() -> {
+                            if (transactionTabController != null && transactionTabController.cboTransactionType != null) {
+                                transactionTabController.cboTransactionType.setValue(null); // Reset to "Tất cả"
+                                transactionTabController.applyTransactionFilters(); // Refresh with all data
+                            }
+                        });
 
-                    // When switching to dashboard, ensure all data is shown regardless of filter
-                    if (transactionTabController != null && transactionTabController.cboTransactionType != null) {
-                        transactionTabController.cboTransactionType.setValue(null); // Reset to "Tất cả"
-                        transactionTabController.applyTransactionFilters(); // Refresh with all data
-                    }
+                        updateStatistics();
+                        updateLowStockProducts();
+                        dashboardTabController.loadTopExportedProducts();
+                    });
                     break;
                 default:
                     break;
@@ -301,22 +307,27 @@ public class WarehouseController {
             case 1:
                 updateStatistics();
                 updateLowStockProducts();
-                loadTopExportedProducts();
+                dashboardTabController.loadTopExportedProducts();
                 break;
         }
     }
 
-    // In DashboardTabController.java (or within the updateStatistics method in WarehouseController):
     private void updateStatistics() {
-        // Get all transactions from DAO directly instead of using filtered data
-        List<WarehouseDTO> allTransactionData = warehouseDAO.getAllWarehouseDetails();
+        // Run database operations in background
+        ThreadManager.runBackground(() -> {
+            // Get all transactions from DAO directly instead of using filtered data
+            List<WarehouseDTO> allTransactionData = warehouseDAO.getAllWarehouseDetails();
 
-        // Use this complete data for calculations instead of relying on filtered data
-        Map<Integer, Integer> productStockMap = calculateProductStock(allTransactionData);
+            // Use this complete data for calculations instead of relying on filtered data
+            Map<Integer, Integer> productStockMap = calculateProductStock(allTransactionData);
 
-        if (dashboardTabController != null) {
-            dashboardTabController.updateDashboard(productStockMap);
-        }
+            // Update dashboard on UI thread
+            ThreadManager.runOnUiThread(() -> {
+                if (dashboardTabController != null) {
+                    dashboardTabController.updateDashboard(productStockMap);
+                }
+            });
+        });
     }
 
     // Update the calculateProductStock method to accept the transaction list:
@@ -351,85 +362,7 @@ public class WarehouseController {
         return productStockMap;
     }
 
-    private Map<Integer, Integer> calculateProductStock() {
-        Map<Integer, Integer> productStockMap = new HashMap<>();
 
-        // Initialize all products with zero stock
-        for (WarehouseDTO product : allProducts) {
-            productStockMap.put(product.getProductId(), 0);
-        }
-
-        // Calculate stock based on transactions from transaction controller
-        if (transactionTabController != null) {
-            ObservableList<WarehouseDTO> allTransactions = transactionTabController.getAllTransactions();
-
-            // Sort transactions by creation time
-            allTransactions.sort(Comparator.comparing(
-                    dto -> dto.getCreatedAt() != null ? dto.getCreatedAt() : LocalDateTime.MIN
-            ));
-
-            // Calculate stock based on transactions
-            for (WarehouseDTO transaction : allTransactions) {
-                int productId = transaction.getProductId();
-                int currentStock = productStockMap.getOrDefault(productId, 0);
-
-                // Clear distinction between import and export
-                if (transaction.getType() == WarehouseType.NHAP_KHO) {
-                    currentStock += transaction.getQuantity();
-                    System.out.println("Nhập kho: " + productId + ", SL: " + transaction.getQuantity() + ", Tồn mới: " + currentStock);
-                } else if (transaction.getType() == WarehouseType.XUAT_KHO) {
-                    currentStock -= transaction.getQuantity();
-                    System.out.println("Xuất kho: " + productId + ", SL: " + transaction.getQuantity() + ", Tồn mới: " + currentStock);
-                }
-
-                productStockMap.put(productId, currentStock);
-            }
-        }
-
-        return productStockMap;
-    }
-
-    private void loadTopExportedProducts() {
-        // Create a map to track total export quantity by product
-        Map<Integer, WarehouseDTO> productExportMap = new HashMap<>();
-
-        // Calculate export statistics for each product if transaction controller is available
-        if (transactionTabController != null) {
-            ObservableList<WarehouseDTO> allTransactions = transactionTabController.getAllTransactions();
-
-            // Calculate export statistics for each product
-            for (WarehouseDTO transaction : allTransactions) {
-                if (transaction.getType() == WarehouseType.XUAT_KHO) {
-                    int productId = transaction.getProductId();
-                    String productName = transaction.getProductName();
-
-                    // Create or update the record for this product
-                    WarehouseDTO exportSummary = productExportMap.computeIfAbsent(
-                            productId,
-                            k -> {
-                                WarehouseDTO dto = new WarehouseDTO();
-                                dto.setProductId(productId);
-                                dto.setProductName(productName);
-                                dto.setQuantity(0);
-                                return dto;
-                            }
-                    );
-
-                    exportSummary.setQuantity(exportSummary.getQuantity() + transaction.getQuantity());
-                }
-            }
-        }
-
-        // Sort by export quantity (descending) and get top 20
-        List<WarehouseDTO> topExportProducts = new ArrayList<>(productExportMap.values());
-        topExportProducts.sort(Comparator.comparing(WarehouseDTO::getQuantity).reversed());
-
-        int limit = Math.min(20, topExportProducts.size());
-        List<WarehouseDTO> top20ExportProducts = topExportProducts.subList(0, limit);
-
-        // Update table
-        tblTopExportProducts.setItems(FXCollections.observableArrayList(top20ExportProducts));
-    }
 
     @FXML
     public void openPendingOrdersDialog() {
