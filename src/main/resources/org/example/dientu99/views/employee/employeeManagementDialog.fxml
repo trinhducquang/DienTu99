@@ -115,4 +115,5 @@
             <Insets bottom="20.0"/>
         </padding>
     </HBox>
+    <HBox></HBox>
 </VBox>
