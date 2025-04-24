@@ -36,7 +36,6 @@ public class ProductDetailDialogController {
 
     public void setProductById(int productId) {
         showLoadingState();
-
         // Sử dụng CompletableFuture để tối ưu chuỗi các tác vụ bất đồng bộ
         CompletableFuture.supplyAsync(() -> productService.getProductById(productId))
                 .thenAccept(fetched -> {
