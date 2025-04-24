@@ -76,8 +76,8 @@ public class EmployeeManagementDialogController {
         try (Connection connection = DatabaseConnection.getConnection()) {
             EmployeeDAO employeeDAO = new EmployeeDAO(connection);
 
-            if (employeeDAO.isFullNameOrUsernameExists(name, username)) {
-                AlertUtils.showError("Lỗi nhập liệu", "Tên đầy đủ hoặc tên tài khoản đã tồn tại. Vui lòng chọn tên khác.");
+            if (employeeDAO.isFullNameOrUsernameExists(username)) {
+                AlertUtils.showError("Lỗi nhập liệu", "Tên tài khoản đã tồn tại. Vui lòng chọn tên khác.");
                 return;
             }
 

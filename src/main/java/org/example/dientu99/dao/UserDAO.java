@@ -1,6 +1,5 @@
 package org.example.dientu99.dao;
 
-
 import io.github.cdimascio.dotenv.Dotenv;
 import org.example.dientu99.enums.UserRole;
 import org.example.dientu99.enums.UserStatus;
@@ -116,4 +115,7 @@ public class UserDAO {
         return topEmployees;
     }
 
+    public String getPEPPER() {
+        return PEPPER;
+    }
 }

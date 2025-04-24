@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import org.example.dientu99.helpers.DialogHelper;
 import org.example.dientu99.model.Customer;
 import org.example.dientu99.service.CustomerService;
-import org.example.dientu99.service.SearchService;
+import org.example.dientu99.utils.SearchUtils;
 import org.example.dientu99.utils.PaginationUtils;
 
 import java.util.List;
@@ -84,7 +84,7 @@ public class CustomerController {
     }
 
     private void filterBySearch(String keyword) {
-        List<Customer> filtered = SearchService.search(
+        List<Customer> filtered = SearchUtils.search(
                 allCustomers,
                 keyword,
                 Customer::getName,

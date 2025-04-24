@@ -12,7 +12,7 @@ import org.example.dientu99.controller.interfaces.RefreshableView;
 import org.example.dientu99.helpers.DialogHelper;
 import org.example.dientu99.model.Category;
 import org.example.dientu99.service.CategoryService;
-import org.example.dientu99.service.SearchService;
+import org.example.dientu99.utils.SearchUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -118,7 +118,7 @@ public class CategoryController implements RefreshableView {
             return;
         }
 
-        List<Category> filtered = SearchService.search(fullCategoryList, keyword,
+        List<Category> filtered = SearchUtils.search(fullCategoryList, keyword,
                 Category::getName, Category::getDescription);
         pagedCategoryList.setAll(filtered);
         categoryTable.setItems(pagedCategoryList);

@@ -22,7 +22,7 @@ import org.example.dientu99.model.Product;
 import org.example.dientu99.service.CartService;
 import org.example.dientu99.service.CategoryService;
 import org.example.dientu99.service.ProductService;
-import org.example.dientu99.service.SearchService;
+import org.example.dientu99.utils.SearchUtils;
 import org.example.dientu99.utils.PaginationUtils;
 
 import java.util.List;
@@ -197,7 +197,7 @@ public class SaleController {
                     .collect(Collectors.toList());
         }
         if (keyword != null && !keyword.trim().isEmpty()) {
-            filtered = SearchService.search(
+            filtered = SearchUtils.search(
                     filtered,
                     keyword,
                     Product::getName,

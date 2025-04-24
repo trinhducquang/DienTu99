@@ -17,7 +17,7 @@ import org.example.dientu99.controller.interfaces.RefreshableView;
 import org.example.dientu99.model.Employee;
 import org.example.dientu99.security.password.PasswordEncoder;
 import org.example.dientu99.service.EmployeeService;
-import org.example.dientu99.service.SearchService;
+import org.example.dientu99.utils.SearchUtils;
 import org.example.dientu99.utils.DatabaseConnection;
 import org.example.dientu99.utils.PaginationUtils;
 import java.util.*;
@@ -144,7 +144,7 @@ public class EmployeeManagementController implements RefreshableView {
         if (keyword == null || keyword.trim().isEmpty()) {
             employeeList.setAll(allEmployees); // Show all when search is empty
         } else {
-            List<Employee> filtered = SearchService.search(
+            List<Employee> filtered = SearchUtils.search(
                     allEmployees,
                     keyword,
                     e -> String.valueOf(e.getId()),

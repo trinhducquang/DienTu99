@@ -12,7 +12,7 @@ import org.example.dientu99.dao.WarehouseDAO;
 import org.example.dientu99.dto.warehouseDTO.WarehouseDTO;
 import org.example.dientu99.enums.WarehouseType;
 import org.example.dientu99.helpers.DialogHelper;
-import org.example.dientu99.service.SearchService;
+import org.example.dientu99.utils.SearchUtils;
 import org.example.dientu99.utils.PaginationUtils;
 
 import java.math.BigDecimal;
@@ -177,7 +177,7 @@ public class TransactionTabController {
         // If selectedType is null, no filtering by type is needed (show all)
 
         // Continue filtering by other search conditions
-        List<WarehouseDTO> filteredData = SearchService.search(
+        List<WarehouseDTO> filteredData = SearchUtils.search(
                 allData,
                 searchText,
                 startDate,

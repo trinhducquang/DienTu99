@@ -77,7 +77,7 @@
                                             <children>
                                                 <ComboBox fx:id="cbCustomer" prefHeight="31.0" prefWidth="206.0" promptText="Chọn khách hàng" />
                                                 <Button fx:id="btnAddCustomer" mnemonicParsing="false" prefHeight="31.0" prefWidth="78.0" text="+" />
-                                                <TextField fx:id="findProducts1" editable="true" prefHeight="491.0" prefWidth="175.0" promptText="Sô Điện Thoại" />
+                                                <TextField fx:id="findProducts1" prefHeight="491.0" prefWidth="175.0" promptText="Số Điện Thoại" />
                                             </children>
                                         </HBox>
 

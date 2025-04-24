@@ -22,7 +22,7 @@ import org.example.dientu99.enums.UserRole;
 import org.example.dientu99.helpers.DialogHelper;
 import org.example.dientu99.model.*;
 import org.example.dientu99.security.auth.UserSession;
-import org.example.dientu99.service.SearchService;
+import org.example.dientu99.utils.SearchUtils;
 import org.example.dientu99.utils.AlertUtils;
 import org.example.dientu99.utils.DatabaseConnection;
 import org.example.dientu99.utils.TextFieldFormatterUtils;
@@ -41,6 +41,8 @@ import static org.example.dientu99.utils.TableCellFactoryUtils.currencyCellFacto
 
 public class AddOrderDialogController {
 
+    @FXML
+    private TextField findProducts1;
     @FXML
     private Button btnAddCustomer;
     @FXML
@@ -117,8 +119,9 @@ public class AddOrderDialogController {
     }
 
     private void setupSearch() {
+        // Existing product search code
         findProducts.textProperty().addListener((obs, oldText, newText) -> {
-            List<Product> filtered = SearchService.search(
+            List<Product> filtered = SearchUtils.search(
                     allProducts, newText, Product::getName,
                     product -> String.valueOf(product.getId())
             );
@@ -128,6 +131,32 @@ public class AddOrderDialogController {
 
             cbProduct.getItems().setAll(valid);
             if (!valid.isEmpty()) cbProduct.setValue(valid.getFirst());
+        });
+
+        // New customer phone search code
+        findProducts1.textProperty().addListener((obs, oldText, newText) -> {
+            if (newText == null || newText.isEmpty()) {
+                loadCustomers(); // Reset to show all customers
+                return;
+            }
+
+            // Get all customers
+            List<Customer> allCustomers = customerDAO.getAll();
+
+            // Search by phone number
+            List<Customer> filteredCustomers = SearchUtils.search(
+                    allCustomers,
+                    newText,
+                    Customer::getPhone
+            );
+
+            cbCustomer.getItems().clear();
+            filteredCustomers.forEach(c ->
+                    cbCustomer.getItems().add(c.getId() + " - " + c.getName())
+            );
+            if (!cbCustomer.getItems().isEmpty()) {
+                cbCustomer.setValue(cbCustomer.getItems().getFirst());
+            }
         });
     }
 
@@ -372,4 +401,5 @@ public class AddOrderDialogController {
         // Cập nhật tổng tiền ngay sau khi thêm các sản phẩm từ giỏ hàng
         updateTotalPrices();
     }
+
 }

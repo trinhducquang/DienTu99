@@ -1,11 +1,11 @@
-package org.example.dientu99.service;
+package org.example.dientu99.utils;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class SearchService {
+public class SearchUtils {
 
     /**
      * ✅ Hàm search cũ – Tìm theo từ khóa, không cần lọc theo ngày
