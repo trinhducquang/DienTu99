@@ -4,18 +4,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.quanlybanhang.controller.interfaces.RefreshableView;
 import org.example.quanlybanhang.dto.orderDTO.OrderSummaryDTO;
 import org.example.quanlybanhang.dto.productDTO.ProductDisplayInfoDTO;
 import org.example.quanlybanhang.enums.OrderStatus;
+import org.example.quanlybanhang.factory.OrderUIFactory;
 import org.example.quanlybanhang.model.Order;
 import org.example.quanlybanhang.printing.OrderInvoiceGenerator;
 import org.example.quanlybanhang.service.OrderService;
 import org.example.quanlybanhang.utils.AlertUtils;
-import org.example.quanlybanhang.utils.ImagesUtils;
 import org.example.quanlybanhang.utils.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -41,7 +42,6 @@ public class OrderDetailsDialogController implements RefreshableView {
     private boolean isEditingStatus = false;
 
     public void initialize() {
-        // Khởi tạo ComboBox trạng thái đơn hàng
         statusComboBox = new ComboBox<>();
         for (OrderStatus status : OrderStatus.values()) {
             statusComboBox.getItems().add(status.getText());
@@ -70,7 +70,7 @@ public class OrderDetailsDialogController implements RefreshableView {
         orderStatus.setText(currentOrderStatus);
 
         // Áp dụng style class dựa trên trạng thái đơn hàng
-        applyStatusStyle(orderStatus, currentOrderStatus);
+        OrderUIFactory.applyOrderStatusStyle(orderStatus, currentOrderStatus);
 
         // Thiết lập giá trị mặc định cho ComboBox
         statusComboBox.setValue(currentOrderStatus);
@@ -91,28 +91,6 @@ public class OrderDetailsDialogController implements RefreshableView {
         loadProductDisplayList();
     }
 
-    // Phương thức mới để áp dụng style phù hợp cho trạng thái
-    private void applyStatusStyle(Label statusLabel, String status) {
-        // Xóa tất cả các status class cũ
-        statusLabel.getStyleClass().removeAll("status-pending", "status-completed", "status-cancelled");
-
-        // Áp dụng class mới dựa trên trạng thái
-        switch (status.toLowerCase()) {
-            case "đang xử lý":
-                statusLabel.getStyleClass().add("status-pending");
-                break;
-            case "hoàn thành":
-                statusLabel.getStyleClass().add("status-completed");
-                break;
-            case "đã hủy":
-                statusLabel.getStyleClass().add("status-cancelled");
-                break;
-            default:
-                statusLabel.getStyleClass().add("status-pending");
-                break;
-        }
-    }
-
     private void loadProductDisplayList() {
         List<ProductDisplayInfoDTO> productList = orderService.getProductDisplayInfoList(currentOrderId);
         productListContainer.getChildren().clear();
@@ -121,14 +99,8 @@ public class OrderDetailsDialogController implements RefreshableView {
         BigDecimal totalOrderValue = BigDecimal.ZERO;
 
         for (ProductDisplayInfoDTO product : productList) {
-            HBox productBox = createProductBox(
-                    product.id(),
-                    product.name(),
-                    product.imageUrl(),
-                    product.quantity(),
-                    product.unitPrice(),
-                    product.totalPrice()
-            );
+            // Sử dụng factory để tạo box sản phẩm
+            HBox productBox = OrderUIFactory.createOrderProductBox(product);
 
             totalItems += product.quantity().intValue();
             totalOrderValue = totalOrderValue.add(product.totalPrice());
@@ -137,51 +109,6 @@ public class OrderDetailsDialogController implements RefreshableView {
 
         totalProducts.setText(String.valueOf(totalItems));
         subtotalAmount.setText(MoneyUtils.formatVN(totalOrderValue));
-    }
-
-    private HBox createProductBox(int productId, String name, String imageUrl, BigDecimal quantity, BigDecimal price, BigDecimal total) {
-        HBox productBox = new HBox();
-        productBox.setSpacing(15);
-        productBox.getStyleClass().add("related-product-item");
-
-        // Phần hình ảnh sản phẩm
-        if (imageUrl != null && !imageUrl.trim().isEmpty()) {
-            ImageView imageView = ImagesUtils.createImageView(imageUrl, 80, 80);
-            productBox.getChildren().add(imageView);
-        }
-
-        // Phần thông tin sản phẩm
-        VBox detailsBox = new VBox();
-        detailsBox.setSpacing(5);
-
-        Label lblName = new Label(name);
-        lblName.getStyleClass().add("related-product-name");
-
-        Label lblProductId = new Label("Mã sản phẩm: " + productId);
-        lblProductId.getStyleClass().add("product-id");
-
-        Label lblQuantity = new Label("Số lượng: " + quantity);
-        lblQuantity.getStyleClass().add("product-quantity");
-
-        Label lblTotal = new Label("Thành tiền: " + MoneyUtils.formatVN(total));
-        lblTotal.getStyleClass().add("spec-value");
-
-        detailsBox.getChildren().addAll(lblName, lblProductId, lblQuantity, lblTotal);
-
-        // Phần giá tiền - góc phải dưới cùng
-        StackPane priceContainer = new StackPane();
-        HBox.setHgrow(priceContainer, Priority.ALWAYS);
-
-        Label lblPrice = new Label(MoneyUtils.formatVN(price));
-        lblPrice.getStyleClass().add("related-product-price");
-        StackPane.setAlignment(lblPrice, javafx.geometry.Pos.BOTTOM_RIGHT);
-
-        priceContainer.getChildren().add(lblPrice);
-
-        // Thêm các phần tử vào box chính
-        productBox.getChildren().addAll(detailsBox, priceContainer);
-
-        return productBox;
     }
 
     @FXML
@@ -212,12 +139,9 @@ public class OrderDetailsDialogController implements RefreshableView {
     private void saveNewStatus() {
         String newStatus = statusComboBox.getValue();
         if (newStatus != null && !newStatus.equals(currentOrderStatus)) {
-            // Cập nhật vào database
             Order order = new Order();
             order.setId(currentOrderId);
             order.setStatus(OrderStatus.fromString(newStatus));
-
-            // Giữ lại note hiện tại
             OrderSummaryDTO summary = orderService.getOrderSummaryById(currentOrderId);
             if (summary != null) {
                 order.setNote(summary.note());
@@ -226,10 +150,7 @@ public class OrderDetailsDialogController implements RefreshableView {
             boolean success = orderService.updateOrderStatus(order);
 
             if (success) {
-                // Cập nhật thành công
                 currentOrderStatus = newStatus;
-
-                // Chuyển từ ComboBox về Label
                 GridPane parent = (GridPane) statusComboBox.getParent();
                 Integer columnIndex = GridPane.getColumnIndex(statusComboBox);
                 Integer rowIndex = GridPane.getRowIndex(statusComboBox);
@@ -243,7 +164,7 @@ public class OrderDetailsDialogController implements RefreshableView {
                 orderStatus.setText(newStatus);
 
                 // Áp dụng style class mới dựa trên trạng thái mới
-                applyStatusStyle(orderStatus, newStatus);
+                OrderUIFactory.applyOrderStatusStyle(orderStatus, newStatus);
 
                 parent.add(orderStatus, columnIndex, rowIndex);
 
@@ -255,7 +176,6 @@ public class OrderDetailsDialogController implements RefreshableView {
                 AlertUtils.showError("Lỗi", "Không thể cập nhật trạng thái đơn hàng. Vui lòng thử lại!");
             }
         } else if (isEditingStatus) {
-
             GridPane parent = (GridPane) statusComboBox.getParent();
             Integer columnIndex = GridPane.getColumnIndex(statusComboBox);
             Integer rowIndex = GridPane.getRowIndex(statusComboBox);

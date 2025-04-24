@@ -36,7 +36,7 @@ public class CartItemFactory {
         nameLabel.getStyleClass().add("cart-item-label");
 
         Label priceLabel = new Label(formatCurrency(dto.unitPrice()));
-        priceLabel.getStyleClass().add("cart-item-price");
+        priceLabel.getStyleClass().add("related-product-price");
 
         VBox infoBox = new VBox(nameLabel, priceLabel);
         HBox.setHgrow(infoBox, Priority.ALWAYS);
@@ -57,7 +57,7 @@ public class CartItemFactory {
         quantityField.setAlignment(Pos.CENTER);
 
         Label totalItemLabel = new Label(formatCurrency(dto.unitPrice().multiply(dto.quantity())));
-        totalItemLabel.getStyleClass().add("cart-item-price");
+        totalItemLabel.getStyleClass().add("related-product-price");
 
         int maxStockQuantity = dto.stockQuantity();
 

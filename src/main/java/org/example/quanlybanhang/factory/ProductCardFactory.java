@@ -38,7 +38,7 @@ public class ProductCardFactory {
         name.getStyleClass().add("product-name");
 
         Label price = new Label(MoneyUtils.formatVN(product.getPrice()));
-        price.getStyleClass().add("product-price");
+        price.getStyleClass().add("related-product-price");
 
         Button addToCart = new Button("Thêm vào giỏ");
         addToCart.setMaxWidth(Double.MAX_VALUE);

@@ -34,9 +34,9 @@
                     </font>
                 </Label>
                 <Region HBox.hgrow="ALWAYS" />
-                <Button fx:id="orderButton" style="-fx-background-color: white;" text="Quản lí đơn hàng" />
-                <Button fx:id="cartButton" onAction="#toggleCart" style="-fx-background-color: white;" text="Giỏ hàng (0)" />
-                <Button fx:id="logoutButton" onAction="#handleLogout" style="-fx-background-color: white;" text="Đăng Xuất" />
+                <Button fx:id="orderButton" styleClass="print-button" text="Quản lí đơn hàng" />
+                <Button fx:id="cartButton" onAction="#toggleCart" styleClass="cart-button"  text="Giỏ hàng (0)" />
+                <Button fx:id="logoutButton" onAction="#handleLogout" styleClass="back-button" text="Đăng Xuất" />
                 <BorderPane.margin>
                     <Insets />
                 </BorderPane.margin>

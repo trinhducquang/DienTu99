@@ -1123,12 +1123,6 @@
     -fx-text-fill: #212121;
 }
 
-.product-price {
-    -fx-text-fill: #f44336;
-    -fx-font-weight: bold;
-    -fx-font-size: 15;
-}
-
 .add-to-cart-button {
     -fx-background-color: #2196f3;
     -fx-text-fill: white;
@@ -1189,3 +1183,14 @@
     -fx-border-color: #64b5f6;
     -fx-border-width: 1;
 }
+
+.cart-button {
+    -fx-background-color: #f44336;
+    -fx-text-fill: -fx-text-light;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+}
+
+

@@ -423,7 +423,6 @@
 }
 
 
-
 /* Đảm bảo khi không còn selected thì màu chữ trở lại đúng */
 .table-cell {
     -fx-text-fill: -fx-text-dark;
@@ -493,7 +492,7 @@
 }
 
 .product-price {
-    -fx-font-size: 18px;
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-text-fill: -fx-error !important;
 }
@@ -1211,6 +1210,7 @@ AnchorPane {
 .date-picker-popup .today:hover {
     -fx-background-color: -fx-primary;
 }
+
 /* Improve button styling */
 .save-button, #addOrderButton {
     -fx-background-color: -fx-primary;
@@ -1461,11 +1461,6 @@ Button.action-button:hover, .add-button:hover {
     -fx-text-fill: #cdd6f4;
 }
 
-.product-price {
-    -fx-text-fill: #f87171;
-    -fx-font-weight: bold;
-    -fx-font-size: 13;
-}
 
 .add-to-cart-button {
     -fx-background-color: #2563eb;
@@ -1482,6 +1477,16 @@ Button.action-button:hover, .add-button:hover {
 .cart-pane {
     -fx-background-color: -fx-secondary;
 }
+
+.cart-button {
+    -fx-background-color: -fx-grey-light;
+    -fx-text-fill: -fx-text-light;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+}
+
 
 .cart-item {
     -fx-background-color: -fx-grey-light;
@@ -1529,5 +1534,81 @@ Button.action-button:hover, .add-button:hover {
 }
 
 
+/* ==== Enhancement: Nét như màn hình Samsung - Bản sửa lỗi ==== */
+
+/* Nét hơn cho chữ */
+.label, .text, .text-field, .text-input, .combo-box, .combo-box .list-cell {
+    -fx-font-smoothing-type: lcd;
+    -fx-text-fill: -fx-text-dark;
+}
+
+/* Nét và chắc tay hơn cho button */
+.button, .save-button, .cancel-button, .add-button, .action-button, .print-button, .update-button, .back-button {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 2, 0, 0, 1);
+    -fx-font-weight: bold;
+    -fx-border-width: 0;
+}
+
+/* Nét cho TableView */
+.table-view .cell, .table-row-cell .text {
+    -fx-font-weight: normal;
+    -fx-text-fill: -fx-text-dark;
+}
+
+/* Tăng tương phản cho hover button */
+.button:hover, .save-button:hover, .cancel-button:hover, .add-button:hover, .action-button:hover {
+    -fx-brightness: 1.05;
+}
+
+/* Loại bỏ opacity mờ không cần thiết */
+.label, .table-cell, .text-field, .combo-box .list-cell {
+    -fx-opacity: 1.0;
+}
 
 
+/* ==== Bản tăng độ sáng chữ - trắng rõ toàn diện ==== */
+
+/* Tất cả text liên quan hiển thị màu trắng rõ */
+.label,
+.text,
+.text-field,
+.text-input,
+.table-cell,
+.table-row-cell .text,
+.combo-box,
+.combo-box .list-cell,
+.chart,
+.button,
+.header-title,
+.page-title,
+.dashboard-title,
+.section-title,
+.card-title,
+.card-value,
+.table-view .column-header .label,
+.dialog-title,
+.form-label,
+.input-label,
+.field-label,
+.table-view .cell,
+.tab-pane .tab .tab-label,
+.product-name,
+.product-price,
+.related-product-name,
+.related-product-price,
+.order-info-label,
+.order-info-value,
+.date-picker .arrow-button .arrow,
+.date-picker .text-field,
+.date-picker-popup .day-cell,
+.date-picker-popup .day-name-cell,
+.date-picker-popup .week-number-cell {
+    -fx-text-fill: #ffffff;
+    -fx-opacity: 1.0;
+}
+
+/* Chữ trong trạng thái selected (highlighted) cũng phải trắng */
+.table-row-cell:selected .text,
+.table-row-cell:selected:focused .text {
+    -fx-fill: #ffffff;
+}

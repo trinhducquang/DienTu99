@@ -17,6 +17,10 @@ public class ImagesUtils {
     private static final Map<String, WeakReference<Image>> imageCache = new ConcurrentHashMap<>();
 
     public static ImageView createImageView(String imageUrl, double fitWidth, double fitHeight) {
+        if (imageUrl == null || imageUrl.trim().isEmpty()) {
+            return null;
+        }
+
         ImageView imageView = new ImageView();
         imageView.setFitWidth(fitWidth);
         imageView.setFitHeight(fitHeight);
@@ -24,29 +28,29 @@ public class ImagesUtils {
         imageView.setSmooth(true);
 
         try {
-            if (imageUrl != null && !imageUrl.trim().isEmpty()) {
-                Image cachedImage = getCachedImage(imageUrl);
-                if (cachedImage != null) {
-                    imageView.setImage(cachedImage);
+            Image cachedImage = getCachedImage(imageUrl);
+            if (cachedImage != null) {
+                imageView.setImage(cachedImage);
+            } else {
+                if (imageUrl.startsWith("http") || imageUrl.startsWith("file:/")) {
+                    imageView.setImage(new Image(imageUrl));
                 } else {
-                    if (imageUrl.startsWith("http") || imageUrl.startsWith("file:/")) {
-                        imageView.setImage(new Image(imageUrl));
-                    } else {
-                        imageView.setImage(new Image(new File(imageUrl).toURI().toString()));
-                    }
+                    imageView.setImage(new Image(new File(imageUrl).toURI().toString()));
                 }
             }
         } catch (Exception e) {
             System.err.println("Không thể tải hình ảnh: " + imageUrl);
+            return null; // Nếu lỗi thì cũng bỏ qua không render
         }
 
         return imageView;
     }
 
+
     // 🟩 Phương thức cắt ảnh và load background nhanh
     public static ImageView createCroppedImageView(String imageUrl, double sourceWidth, double sourceHeight, double fitWidth, double fitHeight) {
         // Đảm bảo ảnh được cache nếu đã tải trước đó
-        String cacheKey = imageUrl + "_" + (int)sourceWidth + "x" + (int)sourceHeight;
+        String cacheKey = imageUrl + "_" + (int) sourceWidth + "x" + (int) sourceHeight;
         Image cachedImage = getCachedImage(cacheKey);
 
         // Nếu ảnh đã được cache
