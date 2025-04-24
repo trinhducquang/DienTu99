@@ -52,7 +52,7 @@
         </TableView>
     </center>
     <bottom>
-        <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER" BorderPane.alignment="CENTER">
             <children>
                 <Pagination fx:id="pagination" />
             </children>
