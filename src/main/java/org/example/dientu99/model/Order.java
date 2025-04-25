@@ -143,10 +143,4 @@ public class Order {
         return orderDate;
     }
 
-    public String getFormattedOrderDate() {
-        if (orderDate == null) {
-            return "";
-        }
-        return orderDate.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
-    }
 }

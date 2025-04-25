@@ -189,11 +189,7 @@ public class OrderController implements RefreshableView {
         noteColumn.setCellValueFactory(new PropertyValueFactory<>("note"));
         exportStatusColum.setCellValueFactory(new PropertyValueFactory<>("exportStatus"));
 
-        orderDateColumn.setCellValueFactory(cell ->
-                javafx.beans.binding.Bindings.createStringBinding(() ->
-                        cell.getValue().getFormattedOrderDate()
-                )
-        );
+        orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
 
         shippingFeeColumn.setCellValueFactory(new PropertyValueFactory<>("shippingFee"));
         shippingFeeColumn.setCellFactory(currencyCellFactory());
