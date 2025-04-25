@@ -435,10 +435,8 @@ public class WarehouseImportDialog {
             };
 
             if (success) {
-                // Thêm đoạn cập nhật trạng thái đơn hàng nếu đây là xuất kho cho đơn hàng
                 if (type == WarehouseType.XUAT_KHO && orderId != null) {
                     OrderService orderService = new OrderService();
-                    // Cập nhật trạng thái ExportStatus thành ĐÃ_XUẤT_KHO
                     boolean updated = orderService.updateOrderExportStatus(orderId, ExportStatus.DA_XUAT_KHO);
                     if (updated) {
                         AlertUtils.showInfo("Thành công", "Xuất kho đơn hàng #" + orderId + " thành công!");
@@ -449,8 +447,6 @@ public class WarehouseImportDialog {
                     AlertUtils.showInfo("Thành công", "Tạo phiếu " + type.getValue().toLowerCase() + " thành công!");
                 }
                 resetCommonFields();
-
-                // Đóng cửa sổ sau khi lưu thành công
                 ((Stage) transactionCodeField.getScene().getWindow()).close();
             } else {
                 AlertUtils.showError("Lỗi", "Lỗi khi tạo phiếu " + type.getValue().toLowerCase());

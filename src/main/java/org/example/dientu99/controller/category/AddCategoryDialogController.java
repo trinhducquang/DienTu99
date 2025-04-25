@@ -23,16 +23,7 @@ public class AddCategoryDialogController {
     private RadioButton rootCategoryRadio;
 
     private final CategoryService categoryService = new CategoryService();
-
-    // Thêm tham chiếu đến parent controller
-    private RefreshableView parentController;
-
-    // Phương thức để đặt parent controller
-    public void setParentController(RefreshableView parentController) {
-        this.parentController = parentController;
-        System.out.println("Đã nhận parentController trong AddCategoryDialogController");
-    }
-
+    
     @FXML
     public void initialize() {
         if (parentCategoryComboBox != null) {

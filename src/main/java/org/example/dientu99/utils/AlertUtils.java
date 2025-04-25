@@ -55,19 +55,12 @@ public class AlertUtils {
         DialogPane dialogPane = alert.getDialogPane();
 
         try {
-            // Tạo một Scene tạm thời nếu cần
             Scene tempScene = dialogPane.getScene();
             if (tempScene == null) {
-                // Điều này thường không xảy ra, nhưng để phòng ngừa
                 tempScene = new Scene(dialogPane);
             }
-
-            // Áp dụng theme thông qua ThemeManager
             ThemeManager.applyTheme(tempScene);
-
-            // Thêm class để có thể tùy chỉnh thêm trong CSS nếu cần
             dialogPane.getStyleClass().add("dialog-pane");
-
         } catch (Exception e) {
             System.err.println("Không thể áp dụng theme cho dialog: " + e.getMessage());
             e.printStackTrace();

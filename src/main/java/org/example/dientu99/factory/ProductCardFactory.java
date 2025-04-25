@@ -29,7 +29,7 @@ public class ProductCardFactory {
         card.setSpacing(10);
         VBox contentBox = new VBox(10);
         contentBox.getStyleClass().add("product-content");
-        VBox.setVgrow(contentBox, Priority.ALWAYS); // This allows content to expand
+        VBox.setVgrow(contentBox, Priority.ALWAYS);
 
         // Image view setup
         ImageView imageView = ImagesUtils.createCroppedImageView(

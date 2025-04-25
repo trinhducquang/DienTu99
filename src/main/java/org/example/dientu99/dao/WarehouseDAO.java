@@ -247,8 +247,6 @@ public class WarehouseDAO {
                     if (product.getQuantity() <= 0 || product.getProductId() <= 0) {
                         continue;
                     }
-
-                    // Lấy danh sách các lô nhập kho theo thứ tự thời gian (cũ nhất trước)
                     List<WarehouseDTO> importBatches = getProductImportedByDateAsc(product.getProductId());
                     int remainingQuantity = product.getQuantity();
 
