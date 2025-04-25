@@ -1,6 +1,4 @@
 package org.example.dientu99.dao;
-
-import io.github.cdimascio.dotenv.Dotenv;
 import org.example.dientu99.enums.UserRole;
 import org.example.dientu99.enums.UserStatus;
 import org.example.dientu99.model.User;
@@ -14,9 +12,6 @@ import java.util.Map;
 
 public class UserDAO {
     private final Connection connection;
-    private final Dotenv dotenv = Dotenv.load();
-    private final String PEPPER = dotenv.get("PEPPER_KEY");
-
     public UserDAO(Connection connection) {
         this.connection = connection;
     }
@@ -113,9 +108,5 @@ public class UserDAO {
         }
 
         return topEmployees;
-    }
-
-    public String getPEPPER() {
-        return PEPPER;
     }
 }

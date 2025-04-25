@@ -16,9 +16,7 @@ public class Warehouse {
     private LocalDateTime updatedAt;
     private String transactionCode;
     private int createdBy;
-    private int excessQuantity;
-    private int missing;
-    private int deficientQuantity;
+
 
 
     public Warehouse() {
@@ -26,7 +24,7 @@ public class Warehouse {
 
     public Warehouse(int id, int productId, int quantity, BigDecimal unitPrice, WarehouseType type,
                      String note, LocalDateTime createdAt, LocalDateTime updatedAt, String transactionCode,
-                     int createdBy, int excessQuantity, int missing, int deficientQuantity) {
+                     int createdBy) {
         this.id = id;
         this.productId = productId;
         this.quantity = quantity;
@@ -37,9 +35,6 @@ public class Warehouse {
         this.updatedAt = updatedAt;
         this.transactionCode = transactionCode;
         this.createdBy = createdBy;
-        this.excessQuantity = excessQuantity;
-        this.missing = missing;
-        this.deficientQuantity = deficientQuantity;
     }
 
     // Getters & Setters
@@ -123,27 +118,4 @@ public class Warehouse {
         this.createdBy = createdBy;
     }
 
-    public int getExcessQuantity() {
-        return excessQuantity;
-    }
-
-    public void setExcessQuantity(int excessQuantity) {
-        this.excessQuantity = excessQuantity;
-    }
-
-    public int getMissing() {
-        return missing;
-    }
-
-    public void setMissing(int missing) {
-        this.missing = missing;
-    }
-
-    public int getDeficientQuantity() {
-        return deficientQuantity;
-    }
-
-    public void setDeficientQuantity(int deficientQuantity) {
-        this.deficientQuantity = deficientQuantity;
-    }
 }
