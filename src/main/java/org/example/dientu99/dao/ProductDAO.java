@@ -124,7 +124,7 @@ public class ProductDAO implements CrudDao<Product> {
             statement.setInt(10, product.getId());
 
             int rowsAffected = statement.executeUpdate();
-            return rowsAffected > 0; // Return true if update was successful
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
