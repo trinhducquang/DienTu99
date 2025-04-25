@@ -261,9 +261,7 @@ public class OrderDAO implements CrudDao<Order> {
                 ") wt ON od.product_id = wt.product_id " +
                 "WHERE YEAR(o.order_date) = ? " +
                 "AND o.status = ?";
-
         BigDecimal profit = BigDecimal.ZERO;
-
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, year);
             stmt.setString(2, OrderStatus.HOAN_THANH.getText());
@@ -271,14 +269,9 @@ public class OrderDAO implements CrudDao<Order> {
             if (rs.next()) {
                 BigDecimal totalRevenue = rs.getBigDecimal("total_revenue");
                 BigDecimal totalCost = rs.getBigDecimal("total_cost");
-                BigDecimal totalShipping = rs.getBigDecimal("total_shipping");
 
                 totalRevenue = totalRevenue != null ? totalRevenue : BigDecimal.ZERO;
                 totalCost = totalCost != null ? totalCost : BigDecimal.ZERO;
-                totalShipping = totalShipping != null ? totalShipping : BigDecimal.ZERO;
-
-                // Profit = Revenue - Cost
-                // Note: Shipping fee is already included in total_price (revenue)
                 profit = totalRevenue.subtract(totalCost);
             }
         } catch (SQLException e) {

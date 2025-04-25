@@ -1,4 +1,5 @@
 package org.example.dientu99.dao;
+
 import org.example.dientu99.enums.UserRole;
 import org.example.dientu99.enums.UserStatus;
 import org.example.dientu99.model.User;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 public class UserDAO {
     private final Connection connection;
+
     public UserDAO(Connection connection) {
         this.connection = connection;
     }
@@ -79,7 +81,7 @@ public class UserDAO {
                 "    WHERE type = 'Nhập Kho' " +
                 "    GROUP BY product_id" +
                 ") wt ON od.product_id = wt.product_id " +
-                "WHERE u.role = ? AND YEAR(o.order_date) = ? " +  // Sửa tại đây
+                "WHERE u.role = ? AND YEAR(o.order_date) = ? " +
                 "GROUP BY u.id, u.full_name " +
                 "ORDER BY total_orders DESC " +
                 "LIMIT ?";

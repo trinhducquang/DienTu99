@@ -76,7 +76,7 @@ public class WarehouseDAO {
                     dto.setCategoryName(categoryName);
                     dto.setUnitPrice(unitPrice);
                     dto.setSellPrice(sellPrice);
-//                    System.out.println("✅ Product ID: " + productId + ", Set sell price: " + dto.getSellPrice());
+//                    System.out.println("product ID: " + productId + ",sellprice: " + dto.getSellPrice());
                     dto.setUpdatedAt(updatedAt);
                     productList.add(dto);
                 }
