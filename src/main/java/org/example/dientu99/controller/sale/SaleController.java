@@ -128,7 +128,7 @@ public class SaleController {
             allCategories.setName("Tất cả");
             allCategories.setId(0);
             categoryFilter.getItems().addFirst(allCategories);
-            categoryFilter.setValue(allCategories); // Set default value
+            categoryFilter.setValue(allCategories);
         } catch (Exception e) {
             System.out.println("Không thể tải danh mục: " + e.getMessage());
             e.printStackTrace();

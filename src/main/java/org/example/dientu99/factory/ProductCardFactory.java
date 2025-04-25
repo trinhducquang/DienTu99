@@ -37,22 +37,20 @@ public class ProductCardFactory {
         StackPane imagePane = new StackPane(imageView);
         imagePane.setPrefHeight(130);
         imagePane.getStyleClass().add("product-image-pane");
-
-        // Product details
         Label name = new Label(product.getName());
         name.setWrapText(true);
         name.getStyleClass().add("product-name");
-
         Label price = new Label(MoneyUtils.formatVN(product.getPrice()));
         price.getStyleClass().add("related-product-price");
-
-        // Add all content items to the content box
         contentBox.getChildren().addAll(imagePane, name, price);
-
-        // Create the button that will always be at the bottom
         Button addToCart = new Button("Thêm vào giỏ");
         addToCart.setMaxWidth(Double.MAX_VALUE);
         addToCart.getStyleClass().add("add-to-cart-button");
+        if (product.getStockQuantity() <= 0) {
+            addToCart.setDisable(true);
+            addToCart.setOpacity(0.5);
+            addToCart.setText("Hết hàng");
+        }
 
         addToCart.setOnAction(e -> {
             ProductDisplayInfoDTO dto = new ProductDisplayInfoDTO(

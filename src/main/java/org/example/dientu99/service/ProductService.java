@@ -13,12 +13,10 @@ import java.util.List;
 public class ProductService {
 
     private final ProductDAO productDAO;
-    private final WarehouseDAO warehouseDAO; // ✅ Thêm dòng này
 
     public ProductService() {
         Connection connection = DatabaseConnection.getConnection();
         this.productDAO = new ProductDAO(connection);
-        this.warehouseDAO = new WarehouseDAO(); // ✅ Và dòng này
     }
 
     public ObservableList<Product> getAllProducts() {
