@@ -67,13 +67,17 @@ public class CartManager {
         }
 
         if (!exists) {
-            // Nếu sản phẩm chưa có trong giỏ, tạo mới và thêm vào
             VBox itemBox = cartItemFactory.createCartItemBox(dto);
             cartItemsContainer.getChildren().add(itemBox);
 
-            // Cập nhật danh sách CartItem
+            Product product = new Product();
+            product.setId(dto.id());
+            product.setName(dto.name());
+            product.setImageUrl(dto.imageUrl());
+            product.setPrice(dto.unitPrice());
+
             CartItem cartItem = new CartItem(
-                    new Product(dto.id(), dto.name(), dto.imageUrl(), dto.unitPrice()),
+                    product,
                     dto.quantity()
             );
             cartItems.add(cartItem);

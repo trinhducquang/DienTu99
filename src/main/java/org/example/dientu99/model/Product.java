@@ -40,13 +40,6 @@ public class Product {
 
     }
 
-    public Product(int id, String name, String imageUrl, BigDecimal price) {
-        this.id = id;
-        this.name = name;
-        this.imageUrl = imageUrl;
-        this.price = price;
-    }
-    
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
