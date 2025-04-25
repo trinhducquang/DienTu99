@@ -24,12 +24,9 @@ public class ProductCardFactory {
     }
 
     public VBox createProductCard(Product product) {
-        // Main card container
         VBox card = new VBox();
         card.getStyleClass().add("product-card");
         card.setSpacing(10);
-
-        // Create a content VBox to hold everything except the button
         VBox contentBox = new VBox(10);
         contentBox.getStyleClass().add("product-content");
         VBox.setVgrow(contentBox, Priority.ALWAYS); // This allows content to expand
@@ -69,10 +66,7 @@ public class ProductCardFactory {
             );
             cartManager.addToCart(dto);
         });
-
-        // Add the content box and button to the main card container
         card.getChildren().addAll(contentBox, addToCart);
-
         return card;
     }
 }
