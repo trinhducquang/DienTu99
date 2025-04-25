@@ -29,13 +29,8 @@ import java.util.*;
 
 
 public class DashboardTabController {
-    // Constants
     private static final int LOW_STOCK_THRESHOLD = 10;
-
-    // Main controller reference
     private WarehouseController mainController;
-
-    // Dashboard components
     @FXML
     Label lblTotalProducts;
     @FXML

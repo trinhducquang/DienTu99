@@ -137,7 +137,6 @@ public class PendingOrdersDialogController implements RefreshableView {
         isLoading = true;
         displayedOrders.clear();
 
-        // Kiểm tra null trước khi sử dụng loadingIndicator
         if (loadingIndicator != null) {
             loadingIndicator.setVisible(true);
         }

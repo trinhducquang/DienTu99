@@ -127,12 +127,8 @@
                         <Label fx:id="totalAmountLabel" text="Tổng Tiền:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <TextField fx:id="totalAmountField" editable="false" style="-fx-text-fill: red" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                        <Label text="Số Lượng Dư:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                        <TextField fx:id="excessQuantityField" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-
                         <!-- Row 1 -->
-                        <Label text="Số Lượng Thiếu:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <TextField fx:id="deficientQuantityField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label GridPane.columnIndex="0" GridPane.rowIndex="1" />
 
                         <Label text="Ghi Chú:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                         <TextArea fx:id="noteTextArea" prefHeight="60" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.rowSpan="2" />
@@ -152,7 +148,7 @@
             <padding>
                 <Insets bottom="15" left="15" right="15" top="15" />
             </padding>
-            <Button styleClass="cancel-button" onAction="#cancelButton" text="Hủy" />
+            <Button onAction="#cancelButton" styleClass="cancel-button" text="Hủy" />
             <Button onAction="#onSave" styleClass="save-button" text="Lưu Phiếu Nhập" />
         </HBox>
     </bottom>

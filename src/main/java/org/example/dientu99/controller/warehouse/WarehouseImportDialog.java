@@ -462,9 +462,11 @@ public class WarehouseImportDialog {
         }
     }
 
-    public void cancelButton(ActionEvent actionEvent) {
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+    @FXML
+    public void cancelButton(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
+
 
 }
