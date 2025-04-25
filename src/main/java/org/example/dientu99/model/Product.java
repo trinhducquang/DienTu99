@@ -46,11 +46,7 @@ public class Product {
         this.imageUrl = imageUrl;
         this.price = price;
     }
-
-    public Product(String name, BigDecimal price, String imageUrl) {
-    }
-
-
+    
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
