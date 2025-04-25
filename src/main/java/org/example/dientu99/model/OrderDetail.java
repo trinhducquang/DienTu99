@@ -16,6 +16,11 @@ public class OrderDetail {
         this.productId = productId;
         this.quantity = quantity;
         this.price = price;
+        this.total = calculateTotal();
+    }
+
+    private BigDecimal calculateTotal() {
+        return price.multiply(BigDecimal.valueOf(quantity));
     }
 
     public int getId() { return id; }
@@ -30,11 +35,13 @@ public class OrderDetail {
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+        this.total = calculateTotal();
     }
 
     public BigDecimal getPrice() { return price; }
     public void setPrice(BigDecimal price) {
         this.price = price;
+        this.total = calculateTotal();
     }
 
     public BigDecimal getTotal() { return total; }
