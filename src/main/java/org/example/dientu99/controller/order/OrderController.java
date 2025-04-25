@@ -23,6 +23,7 @@ import org.example.dientu99.service.OrderService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -243,8 +244,9 @@ public class OrderController implements RefreshableView {
                 .filter(order -> matchesSearchKeyword(order, keyword))
                 .filter(order -> status == null || order.getStatus() == status)
                 .filter(order -> {
-                    LocalDate date = order.getOrderDateAsLocalDate();
-                    if (date == null) return true;
+                    LocalDateTime dateTime = order.getOrderDate();
+                    if (dateTime == null) return true;
+                    LocalDate date = dateTime.toLocalDate();
                     boolean afterFrom = (from == null || !date.isBefore(from));
                     boolean beforeTo = (to == null || !date.isAfter(to));
                     return afterFrom && beforeTo;

@@ -139,11 +139,8 @@ public class Order {
         return exportStatus;
     }
 
-    public LocalDate getOrderDateAsLocalDate() {
-        if (orderDate == null) {
-            return null;
-        }
-        return orderDate.toLocalDate();
+    public LocalDateTime getOrderDateTime() {
+        return orderDate;
     }
 
     public String getFormattedOrderDate() {
