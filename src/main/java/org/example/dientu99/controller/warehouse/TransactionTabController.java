@@ -23,10 +23,7 @@ import java.util.stream.Collectors;
 import static org.example.dientu99.utils.TableCellFactoryUtils.currencyCellFactory;
 
 public class TransactionTabController {
-    // Constants
     private static final int ITEMS_PER_PAGE = 18;
-
-    // Transaction tab components
     @FXML
     Button btnCreateTransaction;
     @FXML
@@ -61,22 +58,12 @@ public class TransactionTabController {
     TableColumn<WarehouseDTO, LocalDate> colCreatedDate;
     @FXML
     ComboBox<WarehouseType> cboTransactionType;
-
-    // Pagination
     @FXML
     Pagination pagination;
-
-    // Data collections
     private ObservableList<WarehouseDTO> allTransactions;
     private ObservableList<WarehouseDTO> displayedTransactions;
-
-    // Pagination state
     private final IntegerProperty currentTransactionPage = new SimpleIntegerProperty(0);
-
-    // Data access
     private final WarehouseDAO warehouseDAO = new WarehouseDAO();
-
-    // Reference to main controller
     private WarehouseController mainController;
 
     public void initialize() {
@@ -89,14 +76,9 @@ public class TransactionTabController {
     }
 
     private void setupTransactionTypeComboBox() {
-        // Clear existing items
         cboTransactionType.getItems().clear();
-
-        // Add "TẤT CẢ" option first, then the two transaction types
-        cboTransactionType.getItems().add(null); // Null will represent "TẤT CẢ"
+        cboTransactionType.getItems().add(null);
         cboTransactionType.getItems().addAll(WarehouseType.NHAP_KHO, WarehouseType.XUAT_KHO);
-
-        // Set cell factory to display text properly
         cboTransactionType.setCellFactory(cell -> new ListCell<WarehouseType>() {
             @Override
             protected void updateItem(WarehouseType item, boolean empty) {
@@ -125,15 +107,10 @@ public class TransactionTabController {
                 }
             }
         });
-
-        // Default value - set to null which represents "TẤT CẢ"
         cboTransactionType.setValue(null);
-
         cboTransactionType.valueProperty().addListener((obs, oldVal, newVal) -> {
             applyTransactionFilters();
             updateColumnVisibility(newVal);
-
-            // Notify main controller to refresh dashboard data when filter changes
             if (mainController != null) {
                 mainController.refreshData();
             }
@@ -141,9 +118,7 @@ public class TransactionTabController {
     }
 
     private void updateColumnVisibility(WarehouseType type) {
-        // Cập nhật tiêu đề và hiển thị cột dựa trên loại giao dịch
         if (type == WarehouseType.NHAP_KHO) {
-            // Hiển thị cột liên quan đến nhập kho
             colUnitPrice.setVisible(true);
             colTotalAmount.setVisible(true);
         } else if (type == WarehouseType.XUAT_KHO) {
@@ -163,20 +138,12 @@ public class TransactionTabController {
         LocalDate startDate = dpStartDateTransaction.getValue();
         LocalDate endDate = dpEndDateTransaction.getValue();
         WarehouseType selectedType = cboTransactionType.getValue();
-
-        // Get all data from DAO
         List<WarehouseDTO> allData = warehouseDAO.getAllWarehouseDetails();
-
-        // Filter by selected transaction type
         if (selectedType != null) {
-            // If a specific type is selected (not "TẤT CẢ")
             allData = allData.stream()
                     .filter(dto -> dto.getType() == selectedType)
                     .collect(Collectors.toList());
         }
-        // If selectedType is null, no filtering by type is needed (show all)
-
-        // Continue filtering by other search conditions
         List<WarehouseDTO> filteredData = SearchUtils.search(
                 allData,
                 searchText,
