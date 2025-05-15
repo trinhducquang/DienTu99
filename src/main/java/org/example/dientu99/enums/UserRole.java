@@ -2,7 +2,6 @@ package org.example.dientu99.enums;
 
 public enum UserRole {
     ADMIN("Admin"),
-    NHAN_VIEN("Nhân Viên"),
     NHAN_VIEN_KHO("Nhân viên kho"),
     THU_NGAN("Nhân viên thu ngân"),
     BAN_HANG("Nhân viên bán hàng");

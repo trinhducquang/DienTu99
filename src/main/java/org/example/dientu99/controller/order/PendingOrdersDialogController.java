@@ -80,7 +80,6 @@ public class PendingOrdersDialogController implements RefreshableView {
         setupTableColumns();
         ordersTable.setItems(displayedOrders);
 
-        // Thiết lập sự kiện cho nút đóng
         if (closeButton != null) {
             closeButton.setOnAction(event -> {
                 Stage stage = (Stage) closeButton.getScene().getWindow();
@@ -88,12 +87,10 @@ public class PendingOrdersDialogController implements RefreshableView {
             });
         }
 
-        // Thiết lập phân trang
         if (pagination != null) {
             setupPagination();
         }
 
-        // Tải trang đầu tiên
         loadInitialData();
     }
 
@@ -107,7 +104,6 @@ public class PendingOrdersDialogController implements RefreshableView {
     }
 
     private void loadInitialData() {
-        // Kiểm tra null trước khi sử dụng loadingIndicator
         if (loadingIndicator != null) {
             loadingIndicator.setVisible(true);
         }
@@ -123,7 +119,6 @@ public class PendingOrdersDialogController implements RefreshableView {
                     pagination.setPageCount(pages > 0 ? pages : 1);
                 }
 
-                // Tải trang đầu tiên
                 loadPage(0);
             });
         });
@@ -231,7 +226,6 @@ public class PendingOrdersDialogController implements RefreshableView {
     }
 
     public void filterPendingOrders() {
-        // Đặt lại phân trang và tải dữ liệu mới
         if (pagination != null) {
             pagination.setCurrentPageIndex(0);
         } else {

@@ -36,21 +36,17 @@ public class ProductDetailDialogController {
 
     public void setProductById(int productId) {
         showLoadingState();
-        // Sử dụng CompletableFuture để tối ưu chuỗi các tác vụ bất đồng bộ
         CompletableFuture.supplyAsync(() -> productService.getProductById(productId))
                 .thenAccept(fetched -> {
                     if (fetched != null) {
                         this.product = fetched;
                         Platform.runLater(this::updateProductDetails);
-
-                        // Bắt đầu tải các sản phẩm liên quan sau khi hoàn thành chi tiết sản phẩm
                         setupRelatedProducts();
                     }
                 });
     }
 
     private void showLoadingState() {
-        // Tất cả các thao tác này là đơn giản nên không cần thread riêng
         productNameLabel.setText("Đang tải...");
         productIdLabel.setText("");
         categoryLabel.setText("");
@@ -65,7 +61,6 @@ public class ProductDetailDialogController {
     private void updateProductDetails() {
         if (product == null) return;
 
-        // Không cần thread cho các thao tác UI đơn giản này
         productNameLabel.setText(product.getName());
         productIdLabel.setText("Mã SP: " + product.getId());
         categoryLabel.setText("Danh Mục: " + product.getCategoryName());
@@ -73,10 +68,7 @@ public class ProductDetailDialogController {
         statusLabel.setText(product.getStatus() != null ? product.getStatus().toString() : "N/A");
         quantityLabel.setText("Kho: " + product.getStockQuantity());
 
-        // Tải hình ảnh bất đồng bộ
         loadMainImage(product.getImageUrl());
-
-        // Xử lý thông số kỹ thuật
         loadSpecifications(product.getSpecifications());
     }
 
@@ -86,7 +78,6 @@ public class ProductDetailDialogController {
             return;
         }
 
-        // Cải thiện việc tải hình ảnh bằng CompletableFuture
         CompletableFuture.runAsync(() -> {
             try {
                 Image image = new Image(imageUrl, true);
@@ -133,7 +124,6 @@ public class ProductDetailDialogController {
     }
 
     private void playSlideAnimation(boolean slideFromLeft) {
-        // Animation đã xử lý trên luồng UI
         TranslateTransition transition = new TranslateTransition(Duration.millis(300), relatedProductsContainer);
         transition.setFromX(slideFromLeft ? -800 : 800);
         transition.setToX(0);
@@ -158,8 +148,6 @@ public class ProductDetailDialogController {
             return;
         }
 
-        // Phân tích JSON có thể tốn thời gian cho các đối tượng lớn, nhưng trong trường hợp này
-        // nó khá nhỏ nên chúng ta có thể giữ nó trong luồng UI
         try {
             ProductDetailSpecificationsDTO specs = new Gson().fromJson(specifications, ProductDetailSpecificationsDTO.class);
             configMemoryField.setText(nullToNA(specs.configMemory()));
@@ -169,7 +157,6 @@ public class ProductDetailDialogController {
             connectivityField.setText(nullToNA(specs.connectivity()));
             designMaterialsField.setText(nullToNA(specs.designMaterials()));
         } catch (Exception e) {
-            // Xử lý nếu JSON không hợp lệ
             setAllSpecsNA();
         }
     }

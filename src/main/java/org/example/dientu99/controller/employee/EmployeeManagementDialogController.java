@@ -50,7 +50,6 @@ public class EmployeeManagementDialogController {
         saveButton.setOnAction(event -> saveEmployee());
         cancelButton.setOnAction(event -> closeDialog());
         roleComboBox.getItems().addAll(UserRole.values());
-        roleComboBox.setValue(UserRole.NHAN_VIEN);
     }
 
     private void setPhoneFieldFormatter() {

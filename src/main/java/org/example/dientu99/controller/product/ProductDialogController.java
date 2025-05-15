@@ -20,7 +20,6 @@ public class ProductDialogController {
     private final ProductService productService = new ProductService();
     private final CategoryService categoryService = new CategoryService();
 
-    // Store parentController
     private RefreshableView parentController;
 
     @FXML
@@ -39,7 +38,6 @@ public class ProductDialogController {
         System.out.println("ProductDialogController đã khởi tạo");
     }
 
-    // Setter để nhận parentController từ DialogHelper
     public void setParentController(RefreshableView parentController) {
         System.out.println("setParentController được gọi với controller: " +
                 (parentController != null ? parentController.getClass().getName() : "null"));
@@ -90,7 +88,6 @@ public class ProductDialogController {
             productService.saveProduct(newProduct);
             System.out.println("Đã lưu sản phẩm thành công");
 
-            // Đóng dialog - refresh sẽ được xử lý bởi DialogHelper sau khi dialog đóng
             closeDialog();
 
         } catch (Exception e) {

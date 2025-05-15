@@ -80,12 +80,12 @@ public class AdminController {
         updateAnnualProfit();
         updateCompletedOrdersThisMonth();
         updateTotalRevenue();
-        updateTopEmployees(); // Thêm cập nhật top nhân viên
+        updateTopEmployees();
     }
 
     private void updateTopEmployees() {
         try {
-            List<Map<String, Object>> topEmployeesList = userDAO.getTopSalesEmployees(5); // Lấy top 5 nhân viên
+            List<Map<String, Object>> topEmployeesList = userDAO.getTopSalesEmployees(5);
 
             ObservableList<TopEmployee> employees = FXCollections.observableArrayList();
             for (Map<String, Object> data : topEmployeesList) {

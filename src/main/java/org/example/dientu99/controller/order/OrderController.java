@@ -70,9 +70,8 @@ public class OrderController implements RefreshableView {
         searchField.textProperty().addListener((obs, oldVal, newVal) -> applyFilters());
         statusFilterComboBox.setOnAction(e -> applyFilters());
 
-        // Xử lý riêng cho DatePicker
         fromDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
-            // Nếu người dùng xóa ngày
+
             if (oldVal != null && newVal == null) {
                 applyFilters();
             } else {
@@ -81,7 +80,7 @@ public class OrderController implements RefreshableView {
         });
 
         toDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
-            // Nếu người dùng xóa ngày
+
             if (oldVal != null && newVal == null) {
                 applyFilters();
             } else {
@@ -206,7 +205,6 @@ public class OrderController implements RefreshableView {
         setupActionColumn();
     }
 
-    // Tạo phương thức riêng để thiết lập cột hành động
     private void setupActionColumn() {
         actionsColumn.setCellFactory(param ->
                 new ButtonTableCell<>("Chi tiết đơn hàng", order ->

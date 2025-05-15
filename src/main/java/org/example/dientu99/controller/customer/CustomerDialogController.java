@@ -29,8 +29,6 @@ public class CustomerDialogController {
     public void initialize() {
         saveButton.setOnAction(event -> saveCustomer());
         cancelButton.setOnAction(event -> closeDialog());
-
-        // Thêm kiểm tra số điện thoại chỉ được nhập số
         phoneField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 phoneField.setText(newValue.replaceAll("[^\\d]", ""));

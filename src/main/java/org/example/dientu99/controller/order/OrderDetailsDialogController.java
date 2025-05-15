@@ -62,20 +62,16 @@ public class OrderDetailsDialogController implements RefreshableView {
         OrderSummaryDTO summary = orderService.getOrderSummaryById(currentOrderId);
         if (summary == null) return;
 
-        // Thiết lập thông tin đơn hàng
         orderId.setText(String.valueOf(summary.id()));
         orderDate.setText(summary.orderDate().toString());
         customerName.setText(summary.customerName());
         currentOrderStatus = summary.status().getText();
         orderStatus.setText(currentOrderStatus);
 
-        // Áp dụng style class dựa trên trạng thái đơn hàng
         OrderUIFactory.applyOrderStatusStyle(orderStatus, currentOrderStatus);
 
-        // Thiết lập giá trị mặc định cho ComboBox
         statusComboBox.setValue(currentOrderStatus);
 
-        // Đặt thông tin giá tiền
         BigDecimal total = summary.totalPrice();
         BigDecimal shipping = summary.shippingFee();
         BigDecimal finalTotal = total.add(shipping);
@@ -84,10 +80,8 @@ public class OrderDetailsDialogController implements RefreshableView {
         shippingFee.setText(MoneyUtils.formatVN(shipping));
         finalAmount.setText(MoneyUtils.formatVN(finalTotal));
 
-        // Đặt thông tin người xử lý
         processedBy.setText("ID: " + summary.employeeId());
 
-        // Load danh sách sản phẩm
         loadProductDisplayList();
     }
 
@@ -99,7 +93,7 @@ public class OrderDetailsDialogController implements RefreshableView {
         BigDecimal totalOrderValue = BigDecimal.ZERO;
 
         for (ProductDisplayInfoDTO product : productList) {
-            // Sử dụng factory để tạo box sản phẩm
+
             HBox productBox = OrderUIFactory.createOrderProductBox(product);
 
             totalItems += product.quantity().intValue();
@@ -160,10 +154,9 @@ public class OrderDetailsDialogController implements RefreshableView {
 
                 parent.getChildren().remove(statusComboBox);
 
-                // Cập nhật text cho Label
                 orderStatus.setText(newStatus);
 
-                // Áp dụng style class mới dựa trên trạng thái mới
+
                 OrderUIFactory.applyOrderStatusStyle(orderStatus, newStatus);
 
                 parent.add(orderStatus, columnIndex, rowIndex);

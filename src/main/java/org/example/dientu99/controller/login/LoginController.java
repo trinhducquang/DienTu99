@@ -113,7 +113,6 @@ public class LoginController {
     private void navigateByRole(User user) {
         switch (user.getRole()) {
             case ADMIN -> changeScene("admin/Admin.fxml");
-            case NHAN_VIEN -> changeScene("employee/EmployeeManagement.fxml");
             case BAN_HANG -> changeScene("sales/sales.fxml");
             case NHAN_VIEN_KHO -> changeScene("warehouse/warehouse.fxml");
             case THU_NGAN -> changeScene("order/Order.fxml");
@@ -130,7 +129,7 @@ public class LoginController {
             Scene scene = new Scene(root);
             ThemeManager.applyTheme(scene);
             newStage.setScene(scene);
-            newStage.setMaximized(true); // ✅ Phóng to luôn
+            newStage.setMaximized(true);
             newStage.show();
             Stage currentStage = (Stage) usernameField.getScene().getWindow();
             currentStage.close();

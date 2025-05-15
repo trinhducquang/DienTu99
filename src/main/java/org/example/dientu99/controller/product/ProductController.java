@@ -68,16 +68,12 @@ public class ProductController implements RefreshableView {
 
     @FXML
     public void initialize() {
-        System.out.println("🔄 Đang khởi tạo ProductController");
-
         setupTable();
         loadInitialData();
         setupBindings();
         setupPagination();
         setupAddProductButton();
         setupSearchAndFilter();
-
-        System.out.println("✅ Đã khởi tạo xong ProductController");
     }
 
     private void setupTable() {

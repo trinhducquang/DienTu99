@@ -73,16 +73,14 @@ public class AddOrderDialogController {
     private TableColumn<OrderDetail, BigDecimal> colPrice, colTotal;
     @FXML
     private TableColumn<OrderDetail, Button> colAction;
-    //endregion
 
-    //region Services and Data
     private OrderDAO orderDAO;
     private ProductDAO productDAO;
     private Map<Integer, String> productMap = new HashMap<>();
     private ObservableList<OrderDetail> orderDetailsList = FXCollections.observableArrayList();
     private List<Product> allProducts = new ArrayList<>();
     private CustomerDAO customerDAO;
-    //endregion
+
 
     @FXML
     private void initialize() {
@@ -119,7 +117,6 @@ public class AddOrderDialogController {
     }
 
     private void setupSearch() {
-        // Existing product search code
         findProducts.textProperty().addListener((obs, oldText, newText) -> {
             List<Product> filtered = SearchUtils.search(
                     allProducts, newText, Product::getName,
@@ -132,18 +129,12 @@ public class AddOrderDialogController {
             cbProduct.getItems().setAll(valid);
             if (!valid.isEmpty()) cbProduct.setValue(valid.getFirst());
         });
-
-        // New customer phone search code
         findProducts1.textProperty().addListener((obs, oldText, newText) -> {
             if (newText == null || newText.isEmpty()) {
                 loadCustomers(); // Reset to show all customers
                 return;
             }
-
-            // Get all customers
             List<Customer> allCustomers = customerDAO.getAll();
-
-            // Search by phone number
             List<Customer> filteredCustomers = SearchUtils.search(
                     allCustomers,
                     newText,
@@ -292,20 +283,13 @@ public class AddOrderDialogController {
     private void loadEmployees() {
         Connection connection = DatabaseConnection.getConnection();
         User currentUser = UserSession.getCurrentUser();
-
         List<Employee> employees = new EmployeeDAO(connection).getAll();
-
-        // Lọc và hiển thị chỉ những nhân viên có vai trò bán hàng
         List<Employee> salesEmployees = employees.stream()
                 .filter(e -> e.getRole() == UserRole.BAN_HANG)
                 .toList();
-
         cbEmployee.getItems().clear();
         cbEmployee.getItems().addAll(salesEmployees);
-
-        // Nếu người dùng hiện tại là nhân viên bán hàng, chọn họ trong combobox
         if (currentUser != null && currentUser.getRole() == UserRole.BAN_HANG) {
-            // Tìm nhân viên tương ứng với user hiện tại
             for (Employee emp : salesEmployees) {
                 if (emp.getId() == currentUser.getId() || emp.getUsername().equals(currentUser.getUsername())) {
                     cbEmployee.setValue(emp);
@@ -350,10 +334,6 @@ public class AddOrderDialogController {
             int newId = orderDAO.addOrder(order, details);
             if (newId > 0) {
                 AlertUtils.showInfo("Thành công", "Đơn hàng đã được lưu.");
-
-                // Không cần gọi refresh ở đây vì DialogHelper đã xử lý
-                // mà sẽ thực hiện refresh khi dialog đóng
-
                 closeDialogFromEvent(null);
             } else {
                 AlertUtils.showError("Lỗi", "Không thể lưu đơn hàng.");
@@ -397,8 +377,6 @@ public class AddOrderDialogController {
                 productMap.put(product.getId(), product.getName());
             }
         }
-
-        // Cập nhật tổng tiền ngay sau khi thêm các sản phẩm từ giỏ hàng
         updateTotalPrices();
     }
 

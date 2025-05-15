@@ -41,7 +41,6 @@ public class CustomerController {
         setEditableColumns();
         setupAddCustomerButton();
         setupSearchAndFilter();
-
         loadAllCustomers();
         setupPagination();
     }
@@ -75,7 +74,7 @@ public class CustomerController {
                     "Thêm Khách Hàng Mới",
                     (Stage) addCustomerButton.getScene().getWindow()
             );
-            loadAllCustomers(); // Reload sau khi thêm
+            loadAllCustomers();
         });
     }
 
@@ -103,7 +102,7 @@ public class CustomerController {
             case "address" -> customer.setAddress(newValue);
         }
         customerService.updateCustomer(customer);
-        loadAllCustomers(); // Tải lại toàn bộ sau khi cập nhật
+        loadAllCustomers();
     }
 
     private void loadAllCustomers() {

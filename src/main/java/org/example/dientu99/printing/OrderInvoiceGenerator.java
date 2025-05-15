@@ -92,12 +92,10 @@ public class OrderInvoiceGenerator {
             document.add(customerTable);
             document.add(new Paragraph(" "));
 
-            // Products table
             PdfPTable productsTable = new PdfPTable(5);
             productsTable.setWidthPercentage(100);
             productsTable.setWidths(new float[]{5, 1, 1, 1, 1});
 
-            // Table headers
             PdfPCell cell1 = new PdfPCell(new Phrase("Tên hàng hóa, dịch vụ", boldFont));
             PdfPCell cell2 = new PdfPCell(new Phrase("ĐVT", boldFont));
             PdfPCell cell3 = new PdfPCell(new Phrase("Số lượng", boldFont));
@@ -110,9 +108,7 @@ public class OrderInvoiceGenerator {
             productsTable.addCell(cell4);
             productsTable.addCell(cell5);
 
-            // Add products with warranty info
             for (ProductDisplayInfoDTO product : productList) {
-                // Product name with warranty info
                 String productWithWarranty = product.id() + " - " + product.name() + "\n";
                 productsTable.addCell(new Phrase(productWithWarranty, regularFont));
                 productsTable.addCell(new Phrase("Cái", regularFont));
@@ -123,7 +119,6 @@ public class OrderInvoiceGenerator {
 
             document.add(productsTable);
 
-            // Total section
             PdfPTable totalTable = new PdfPTable(5);
             totalTable.setWidthPercentage(100);
             totalTable.setWidths(new float[]{5, 1, 1, 1, 1});
@@ -136,14 +131,12 @@ public class OrderInvoiceGenerator {
             PdfPCell totalAmountCell = new PdfPCell(new Phrase(MoneyUtils.formatVN(summary.totalPrice().add(summary.shippingFee())), boldFont));
             totalTable.addCell(totalAmountCell);
 
-            // Add amount in words
             PdfPCell amountInWordsCell = new PdfPCell(new Phrase("Số tiền bằng chữ: " + MoneyUtils.convertToWords(summary.totalPrice().add(summary.shippingFee())) + " đồng chẵn", smallFont));
             amountInWordsCell.setColspan(5);
             totalTable.addCell(amountInWordsCell);
 
             document.add(totalTable);
 
-            // Warranty terms
             Paragraph warrantyTitle = new Paragraph("ĐIỀU KIỆN BẢO HÀNH:", boldFont);
             document.add(warrantyTitle);
 
@@ -157,7 +150,6 @@ public class OrderInvoiceGenerator {
 
             document.add(new Paragraph(" "));
 
-            // Signatures
             PdfPTable signatureTable = new PdfPTable(2);
             signatureTable.setWidthPercentage(100);
 

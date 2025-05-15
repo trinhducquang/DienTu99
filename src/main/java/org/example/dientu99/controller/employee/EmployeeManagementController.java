@@ -129,7 +129,7 @@ public class EmployeeManagementController implements RefreshableView {
                         "/org/example/dientu99/views/employee/employeeManagementDialog.fxml",
                         "Thêm Nhân Viên Mới",
                         (Stage) addEmployeeButton.getScene().getWindow(),
-                        this  // Pass the current controller as the refreshable view
+                        this
                 )
         );
     }
@@ -142,7 +142,7 @@ public class EmployeeManagementController implements RefreshableView {
 
     private void filterEmployees(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
-            employeeList.setAll(allEmployees); // Show all when search is empty
+            employeeList.setAll(allEmployees);
         } else {
             List<Employee> filtered = SearchUtils.search(
                     allEmployees,

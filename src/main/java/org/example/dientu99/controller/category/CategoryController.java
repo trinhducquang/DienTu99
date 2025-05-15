@@ -122,8 +122,6 @@ public class CategoryController implements RefreshableView {
                 Category::getName, Category::getDescription);
         pagedCategoryList.setAll(filtered);
         categoryTable.setItems(pagedCategoryList);
-
-        // Optional: update pagination
         pagination.setPageCount(1);
         pagination.setCurrentPageIndex(0);
     }
